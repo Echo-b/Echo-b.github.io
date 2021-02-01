@@ -8,15 +8,15 @@
   <link rel="dns-prefetch" href="http://example.com">
   <title>mathjax配置markdown | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="mathjax配置markdownmathjax简介：(官网)[https:&#x2F;&#x2F;www.mathjax.org&#x2F;](中文文档)[https:&#x2F;&#x2F;mathjax-chinese-doc.readthedocs.io&#x2F;en&#x2F;latest&#x2F;configuration.html] 解决的问题网页无法正常显示latex公式 配置过程将以下代码拷贝至markdown文件末尾即可 1234567891011&amp;l">
+  <meta name="description" content="mathjax配置markdownmathjax简介：官网中文文档 解决的问题网页无法正常显示latex公式 配置过程将以下代码拷贝至markdown文件末尾即可 1234567891011&lt;script type&#x3D;&quot;text&#x2F;javascript&quot; async  src&#x3D;&quot;https:&#x2F;&#x2F;cdnjs.cloudflare.com&#x2F;ajax&#x2F;libs&#x2F;mathj">
 <meta property="og:type" content="article">
 <meta property="og:title" content="mathjax配置markdown">
 <meta property="og:url" content="http://example.com/2021/02/01/mathjax%E9%85%8D%E7%BD%AEmarkdown/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="mathjax配置markdownmathjax简介：(官网)[https:&#x2F;&#x2F;www.mathjax.org&#x2F;](中文文档)[https:&#x2F;&#x2F;mathjax-chinese-doc.readthedocs.io&#x2F;en&#x2F;latest&#x2F;configuration.html] 解决的问题网页无法正常显示latex公式 配置过程将以下代码拷贝至markdown文件末尾即可 1234567891011&amp;l">
+<meta property="og:description" content="mathjax配置markdownmathjax简介：官网中文文档 解决的问题网页无法正常显示latex公式 配置过程将以下代码拷贝至markdown文件末尾即可 1234567891011&lt;script type&#x3D;&quot;text&#x2F;javascript&quot; async  src&#x3D;&quot;https:&#x2F;&#x2F;cdnjs.cloudflare.com&#x2F;ajax&#x2F;libs&#x2F;mathj">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2021-02-01T08:24:25.000Z">
-<meta property="article:modified_time" content="2021-02-01T08:31:50.171Z">
+<meta property="article:modified_time" content="2021-02-01T09:01:29.536Z">
 <meta property="article:author" content="Echo">
 <meta name="twitter:card" content="summary">
   
@@ -174,11 +174,11 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="mathjax配置markdown"><a href="#mathjax配置markdown" class="headerlink" title="mathjax配置markdown"></a>mathjax配置markdown</h2><h3 id="mathjax简介："><a href="#mathjax简介：" class="headerlink" title="mathjax简介："></a>mathjax简介：</h3><p>(官网)[<a target="_blank" rel="noopener" href="https://www.mathjax.org/]">https://www.mathjax.org/]</a><br>(中文文档)[<a target="_blank" rel="noopener" href="https://mathjax-chinese-doc.readthedocs.io/en/latest/configuration.html]">https://mathjax-chinese-doc.readthedocs.io/en/latest/configuration.html]</a></p>
+        <h2 id="mathjax配置markdown"><a href="#mathjax配置markdown" class="headerlink" title="mathjax配置markdown"></a>mathjax配置markdown</h2><h3 id="mathjax简介："><a href="#mathjax简介：" class="headerlink" title="mathjax简介："></a>mathjax简介：</h3><p><a target="_blank" rel="noopener" href="https://www.mathjax.org/">官网</a><br><a target="_blank" rel="noopener" href="https://mathjax-chinese-doc.readthedocs.io/en/latest/configuration.html">中文文档</a></p>
 <h3 id="解决的问题"><a href="#解决的问题" class="headerlink" title="解决的问题"></a>解决的问题</h3><p>网页无法正常显示latex公式</p>
 <h3 id="配置过程"><a href="#配置过程" class="headerlink" title="配置过程"></a>配置过程</h3><p>将以下代码拷贝至markdown文件末尾即可</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;script type=<span class="string">&quot;text/javascript&quot;</span> <span class="keyword">async</span></span><br><span class="line">  src=<span class="string">&quot;https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML&quot;</span>&gt;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line">&lt;script type=<span class="string">&quot;text/x-mathjax-config&quot;</span>&gt;</span><br><span class="line">  MathJax.Hub.Config(&#123;</span><br><span class="line">    tex2jax: &#123;</span><br><span class="line">      inlineMath: [ [<span class="string">&#x27;$&#x27;</span>,<span class="string">&#x27;$&#x27;</span>], [<span class="string">&quot;\\(&quot;</span>,<span class="string">&quot;\\)&quot;</span>] ],</span><br><span class="line">      displayMath: [ [<span class="string">&#x27;$$&#x27;</span>,<span class="string">&#x27;$$&#x27;</span>], [<span class="string">&quot;\\[&quot;</span>,<span class="string">&quot;\\]&quot;</span>] ]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
-<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p>(简书)[<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/906c7675b16a]">https://www.jianshu.com/p/906c7675b16a]</a></p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/906c7675b16a">简书</a></p>
 
       
 
