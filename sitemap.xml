@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://echobai.cn/bangumis/index.html</loc>
+    <loc>http://echobai.cn/spinalHDL/index.html</loc>
     
     <lastmod>2022-01-14</lastmod>
     
@@ -11,18 +11,9 @@
   </url>
   
   <url>
-    <loc>http://echobai.cn/2022/01/06/Hello-My-First-Blog/</loc>
+    <loc>http://echobai.cn/bangumis/index.html</loc>
     
-    <lastmod>2022-01-06</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://echobai.cn/2022/01/06/hello-world/</loc>
-    
-    <lastmod>2022-01-06</lastmod>
+    <lastmod>2022-01-14</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
