@@ -38,24 +38,4 @@
     
   </entry>
   
-  <entry>
-    <title>hello world</title>
-    <link href="http://echobai.cn/2022/01/14/hello-world/"/>
-    <id>http://echobai.cn/2022/01/14/hello-world/</id>
-    <published>2022-01-14T09:22:12.000Z</published>
-    <updated>2022-01-14T09:22:31.693Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="hello-world"><a href="#hello-world" class="headerlink" title="hello world"></a>hello world</h3>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h3 id=&quot;hello-world&quot;&gt;&lt;a href=&quot;#hello-world&quot; class=&quot;headerlink&quot; title=&quot;hello world&quot;&gt;&lt;/a&gt;hello world&lt;/h3&gt;</summary>
-      
-    
-    
-    
-    
-  </entry>
-  
 </feed>
