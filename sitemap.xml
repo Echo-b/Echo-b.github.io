@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://echobai.cn/categories/index.html</loc>
+    <loc>http://echobai.cn/tags/index.html</loc>
     
     <lastmod>2022-01-14</lastmod>
     
@@ -12,6 +12,15 @@
   
   <url>
     <loc>http://echobai.cn/2022/01/14/spinalHDL%E7%AE%80%E4%BB%8B/</loc>
+    
+    <lastmod>2022-01-14</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://echobai.cn/categories/index.html</loc>
     
     <lastmod>2022-01-14</lastmod>
     
@@ -36,6 +45,13 @@
     <priority>1.0</priority>
   </url>
 
+  
+  <url>
+    <loc>http://echobai.cn/tags/spinalHDL/</loc>
+    <lastmod>2022-01-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
   
 
   
