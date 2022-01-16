@@ -219,7 +219,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2022-01-16 20:14:20" itemprop="dateModified" datetime="2022-01-16T20:14:20+08:00">2022-01-16</time>
+      <time title="修改时间：2022-01-16 21:33:13" itemprop="dateModified" datetime="2022-01-16T21:33:13+08:00">2022-01-16</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -242,10 +242,14 @@
     
     <div class="post-body" itemprop="articleBody">
           <h3 id="spinalHDL-简介"><a href="#spinalHDL-简介" class="headerlink" title="spinalHDL 简介"></a>spinalHDL 简介</h3><p>引用官方的简介如下：<br><code>SpinalHDL is a hardware description language written in Scala, a statically-typed functional language using the Java virtual machine (JVM). In order to start programming with SpinalHDL, you must have a JVM as well as the Scala compiler.</code></p>
-<h3 id="spinalHDL优势"><a href="#spinalHDL优势" class="headerlink" title="spinalHDL优势"></a>spinalHDL优势</h3><p>这就要谈到<code>verilog</code>的劣势了，写过<code>verilog</code>的同学可能多多少少都会有这样的体会，那就是<code>verilog</code>在编译时，并不会提供很严格的语法检查，这也就意味着如果你粗心写错一个位宽，那么后期排错是相对比较困难的，当然要避免这种困难，就得时刻提醒自己声明或者使用变量的时候要严格的加上位宽的声明，比如声明常量1，大部分同学可能都会只写一个1，但是比较严谨的写法还是显式的声明它的位宽。<code>verilog</code>最最令人头疼的当属连线了，当你去写一个<code>cpu</code>的时候，你就会发现你大部分的时间会花在连线上，而且不一定就能够一次保证连对。因此我们此次介绍的<code>spinalHDL</code>语言不仅有很好的语法检查，而且避免了重复时间的连线，这一点在我们之后的学习中一定也能够身有体会。当然<code>verilog</code>语言本身还有其他的问题，也有许多的博客总结过，在次不做赘述。感兴趣的同学可以自行百度。</p>
-<h3 id="spinalHDL入门途径"><a href="#spinalHDL入门途径" class="headerlink" title="spinalHDL入门途径"></a>spinalHDL入门途径</h3><p>学习<code>spinalHDL</code>你需要有一定的<code>scala</code>和计算机组成原理的基础，当然只是简单的<code>scala</code>基础就行,能够对一个单周期<code>cpu</code>的取指，译码等过程有简单的认识和理解，如果还不熟悉的同学可以去查阅相关的资料补补课，比如菜鸟之类的网站的基础知识就做的挺好的。当你有了一定的基础之后，一定要仔细的阅读官方的英文文档，虽然是英文，但是精下心来对于各位来说也不是什么大问题。至于为什么一定要阅读官方的文档呢？这是因为官方文档提供了各种工具的安装使用的过程，基本的语法介绍，这些东西在我们前期入门学习的过程中都能起到很大的帮助作用，在者就是熟悉官方文档可以为我们的排错或者查阅问题提供一个很好的帮助。避免大家因为在其他的地方查询浪费了太多的时间，而其也不一定能过保证其正确性。<br><a target="_blank" rel="noopener" href="https://spinalhdl.github.io/SpinalDoc-RTD/master/SpinalHDL/Getting%20Started/getting_started.html">官方文档入口</a><br><a target="_blank" rel="noopener" href="https://github.com/SpinalHDL/SpinalHDL">github项目地址</a></p>
-<h3 id="我们的目标"><a href="#我们的目标" class="headerlink" title="我们的目标"></a>我们的目标</h3><p>在说明我们此次的目标之前，我想说明一下自己为什么想要出这么一期教程，一是兴趣使然，二是国内使用这门语言的同学应该也比较少，入门的途径或者资料是很稀缺的，因此为了使自己能够更加专心的学习<code>spinalHDL</code>，也为了能够给后来者提供一个相对比较粗浅的入门，因此决心写这么一期文章。那么言归正传，我们将会带大家从0开始，尝试用<code>spinalHDL</code>语言构建一个简单的<code>mips</code>单周期的<code>cpu</code>。希望看到这里的各位最终都能够坚持下来。</p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/01/14/spinalHDL%E7%AE%80%E4%BB%8B/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -296,7 +300,7 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2022-01-16 20:08:02 / 修改时间：21:03:32" itemprop="dateCreated datePublished" datetime="2022-01-16T20:08:02+08:00">2022-01-16</time>
+      <time title="创建时间：2022-01-16 20:08:02 / 修改时间：21:33:23" itemprop="dateCreated datePublished" datetime="2022-01-16T20:08:02+08:00">2022-01-16</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -324,17 +328,14 @@
 <li>A Scala 2.11.X distribution,<a target="_blank" rel="noopener" href="https://scala-lang.org/download/">下载链接</a><br>如果使用<code>sbt</code>进行项目构建也不用下载，但是为了熟悉<code>scala</code>语法建议安装用于练习</li>
 <li>The SBT build tool, <a target="_blank" rel="noopener" href="https://www.scala-sbt.org/download.html">下载链接</a></li>
 </ul>
-<p>另外我此次使用的系统是<code>ubuntu20.04LTS</code>,<code>windows</code>系统的同学其实只要把这几个工具安装成功，也是可以使用的，我早期就是在<code>windows</code>上折磨了一阵才配置好环境。</p>
-<h3 id="Java-JDK安装"><a href="#Java-JDK安装" class="headerlink" title="Java JDK安装"></a>Java JDK安装</h3><p>在<code>ubuntu</code>中安装<code>java jdk</code>也是比较简单的，只需要输入以下命令安装即可</p>
-<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-<span class="builtin-name">get</span> install openjdk-8-jdk</span><br></pre></td></tr></table></figure>
-<h3 id="scala安装"><a href="#scala安装" class="headerlink" title="scala安装"></a>scala安装</h3><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-<span class="builtin-name">get</span> install scala</span><br></pre></td></tr></table></figure>
-<h3 id="sbt安装"><a href="#sbt安装" class="headerlink" title="sbt安装"></a>sbt安装</h3><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">echo <span class="string">&quot;deb https://repo.scala-sbt.org/scalasbt/debian all main&quot;</span> | sudo tee <span class="regexp">/etc/</span>apt<span class="regexp">/sources.list.d/</span>sbt.list</span><br><span class="line">echo <span class="string">&quot;deb https://repo.scala-sbt.org/scalasbt/debian /&quot;</span> | sudo tee <span class="regexp">/etc/</span>apt<span class="regexp">/sources.list.d/</span>sbt_old.list</span><br><span class="line">curl -sL <span class="string">&quot;https://keyserver.ubuntu.com/pks/lookup?op=get&amp;search=0x2EE0EA64E40A89B84B2DF73499E82A75642AC823&quot;</span> | sudo apt-key add</span><br><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install sbt</span><br></pre></td></tr></table></figure>
-<h3 id="下载官方样例测试环境"><a href="#下载官方样例测试环境" class="headerlink" title="下载官方样例测试环境"></a>下载官方样例测试环境</h3><p>在你自己的工作目录下执行下列命令</p>
-<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git clone https:<span class="regexp">//gi</span>thub.com<span class="regexp">/SpinalHDL/</span>SpinalTemplateSbt.git SpinalTemplateSbt</span><br><span class="line">cd SpinalTemplateSbt</span><br><span class="line">sbt run   <span class="comment"># 等待一段时间后选择 &quot;mylib.MyTopLevelVerilog&quot; 对应的序号</span></span><br></pre></td></tr></table></figure>
-<p>如果出现下列的显示，说明我们的环境搭建没问题，之后我们就在官方样例的基础上进行开发</p>
-<p><img src="../images/spinalHDLtest.png"></p>
-<p>自此，我们的开发环境就搭建完毕，下一期我们将用<code>spinalHDL</code>实现一个简单的二选一电路。之所以选这个是因为多路选择器在我们的单周期<code>cpu</code>中是一个很具有代表性也很重要的器件，同时它也相对简单。</p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/01/16/spinalHDL%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
