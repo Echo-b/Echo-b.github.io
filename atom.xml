@@ -6,7 +6,7 @@
   <link href="http://echobai.cn/atom.xml" rel="self"/>
   
   <link href="http://echobai.cn/"/>
-  <updated>2022-01-17T12:23:17.001Z</updated>
+  <updated>2022-01-17T12:32:20.418Z</updated>
   <id>http://echobai.cn/</id>
   
   <author>
@@ -15,6 +15,27 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>飘</title>
+    <link href="http://echobai.cn/2022/01/17/%E9%A3%98/"/>
+    <id>http://echobai.cn/2022/01/17/%E9%A3%98/</id>
+    <published>2022-01-17T12:26:42.000Z</published>
+    <updated>2022-01-17T12:32:20.418Z</updated>
+    
+    <content type="html"><![CDATA[<p>《飘》是美国作家玛格丽特·米切尔创作的长篇小说。我不记得自己是什么时候看完的了，再次回忆起只依稀记得大概是高二的时候。某个中午意外的在二手书店淘到的书，虽说是二手书店，但当时买来的时候却是全新的。</p><span id="more"></span>]]></content>
+    
+    
+    <summary type="html">&lt;p&gt;《飘》是美国作家玛格丽特·米切尔创作的长篇小说。我不记得自己是什么时候看完的了，再次回忆起只依稀记得大概是高二的时候。某个中午意外的在二手书店淘到的书，虽说是二手书店，但当时买来的时候却是全新的。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="bookrecommend" scheme="http://echobai.cn/categories/bookrecommend/"/>
+    
+    
+    <category term="《飘》" scheme="http://echobai.cn/tags/%E3%80%8A%E9%A3%98%E3%80%8B/"/>
+    
+  </entry>
   
   <entry>
     <title>从二选一多路选择器开始</title>

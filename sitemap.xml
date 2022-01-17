@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://echobai.cn/2022/01/17/%E9%A3%98/</loc>
+    
+    <lastmod>2022-01-17</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>http://echobai.cn/2022/01/17/%E4%BB%8E%E4%BA%8C%E9%80%89%E4%B8%80%E5%A4%9A%E8%B7%AF%E9%80%89%E6%8B%A9%E5%99%A8%E5%BC%80%E5%A7%8B/</loc>
     
     <lastmod>2022-01-17</lastmod>
@@ -89,10 +98,24 @@
     <priority>0.2</priority>
   </url>
   
+  <url>
+    <loc>http://echobai.cn/tags/%E3%80%8A%E9%A3%98%E3%80%8B/</loc>
+    <lastmod>2022-01-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
 
   
   <url>
     <loc>http://echobai.cn/categories/spinalHDL/</loc>
+    <lastmod>2022-01-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://echobai.cn/categories/bookrecommend/</loc>
     <lastmod>2022-01-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
