@@ -6,7 +6,7 @@
   <link href="http://echobai.cn/atom.xml" rel="self"/>
   
   <link href="http://echobai.cn/"/>
-  <updated>2022-04-27T16:02:31.675Z</updated>
+  <updated>2022-04-27T16:08:59.448Z</updated>
   <id>http://echobai.cn/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="http://echobai.cn/2022/04/27/%E8%B4%B9%E6%9B%BC%E7%A7%AF%E5%88%86%E6%B3%95/"/>
     <id>http://echobai.cn/2022/04/27/%E8%B4%B9%E6%9B%BC%E7%A7%AF%E5%88%86%E6%B3%95/</id>
     <published>2022-04-27T07:47:30.000Z</published>
-    <updated>2022-04-27T16:02:31.675Z</updated>
+    <updated>2022-04-27T16:08:59.448Z</updated>
     
     <content type="html"><![CDATA[<h1 id="“费曼积分法”简介"><a href="#“费曼积分法”简介" class="headerlink" title="“费曼积分法”简介"></a>“费曼积分法”简介</h1><p>该方法最早是由费曼提出的，一般被称为”积分符号内取微分”或者”费曼积分法”，费曼先生在《别闹了，费曼先生》一书中曾做过部分解释，感兴趣可自行查阅资料，在此不做赘述。</p><span id="more"></span><h1 id="“费曼积分法”证明"><a href="#“费曼积分法”证明" class="headerlink" title="“费曼积分法”证明"></a>“费曼积分法”证明</h1><p>详细证明请参考以下链接<br><a href="https://zh.wikipedia.org/wiki/%E7%A7%AF%E5%88%86%E7%AC%A6%E5%8F%B7%E5%86%85%E5%8F%96%E5%BE%AE%E5%88%86">定理证明链接</a></p><h1 id="“费曼积分法”实例"><a href="#“费曼积分法”实例" class="headerlink" title="“费曼积分法”实例"></a>“费曼积分法”实例</h1><p>下面我们以其为例，来进行讲解<br>$$<br>\int_0^{\infty}\frac{sinx}{x}dx<br>$$<br>首先我们知道这个积分是在有理函数内是不可积分的，但是如果我们想办法消去分母$x$，原式就会变成一个较为简单的积分式子。根据这样的思路，我们可以这样来分析求解<br>$$<br>设I(a)=\int_0^{\infty}\frac{sinax}{x}dx<br>$$<br>两边同时对a取微分，需要注意的一点是积分符号内由于函数同时含有x,a两个变量，因此左边实际上是对a做一个偏微分<br>$$<br> I’(a)=\int_0^{\infty}\frac{cosax}{x}\times xdx<br> =\int_0^{\infty}cosaxdx<br>$$<br>但可以发现$cosax$最后又变成了一个在$[0,\infty]$上不可积分的式子，因此我们要重新进行函数的构造，一种理想的构造方式是引入$e^{-ax}$这样在求积分的时候我们就也可以消去分母的$x$，最后在利用分部积分就可以求出原积分<br>具体求解过程如下：<br>$$<br> 设I(a)=\int_0^{\infty}\frac{sinx}{x}e^{-ax}dx<br>$$<br>等式两边同时对a取微分<br>$$<br> I’(a) = - \int_0^{\infty}\frac{sinx}{x}e^{-ax}\times xdx=- \int_0^{\infty}sinxe^{-ax}dx<br>$$<br>$$设G=\int_0^{\infty}sinxe^{-ax}dx$$<br>分部积分得<br>$$G=[-e^{-ax}cosx]_0^{\infty}-a\int_0^{\infty}cosxe^{-ax}dx$$<br>$$G=[-e^{-ax}cosx]_0^{\infty}-a([sinxe^{-ax}]_0^{\infty} + aG)$$<br>$$(1+a^2)G=[-e^{-ax}(asinx+cosx)]_0^{\infty}=1$$<br>$$G=\frac{1}{1+a^2}$$<br>那么有$$I’(a)=-\frac{1}{1+a^2}$$<br>两边同时对$a$积分<br>$$I(a)=-arctana+C$$<br> 令$a\to \infty$<br>$$-\frac{\pi}{2}+C=\int_0^{\infty}\frac{sinx}{x}\times 0dx=0$$<br>所以<br>$$C=\frac{\pi}{2}$$<br>故我们得到一个关于$a$的式子即<br>$$<br>I(a)=-arctana+\frac{\pi}{2}$$<br>令$a=0$<br>得到<br>$$<br>I(a)=\int_0^{\infty}\frac{sinx}{x}=\frac{\pi}{2}<br>$$</p><p>利用积分符号内取微分的方法，我们就可以解决大部分用普通方法解不出来的积分题目，这种方法的的关键在于我们需要去找到一个积分的式子，并求出，在进行赋值求出原式的解，多加练习自然可以掌握。</p><h1 id="“费曼积分法”例题及答案"><a href="#“费曼积分法”例题及答案" class="headerlink" title="“费曼积分法”例题及答案"></a>“费曼积分法”例题及答案</h1><ul><li>1 $$\int_0^1\frac{x^5-1}{lnx}dx=ln6$$</li><li>2 $$\int_0^{\pi}ln(1+\alpha cos(x))dx=\pi ln\frac{1+\sqrt{1-\alpha^2}}{2}$$</li><li>3 $$\int_0^{\pi}\frac{ln(1+cos(\alpha)cos(x))}{cos(x)}dx=\frac{1}{2}(\frac{\pi^2}{4}-\alpha^2)$$<br>可自行演算求解</li></ul>]]></content>
     
