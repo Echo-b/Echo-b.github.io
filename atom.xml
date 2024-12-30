@@ -3,11 +3,11 @@
   <title>EchoBai Blog</title>
   
   
-  <link href="http://echobai.cn/atom.xml" rel="self"/>
+  <link href="https://echo-b.github.io/atom.xml" rel="self"/>
   
-  <link href="http://echobai.cn/"/>
-  <updated>2022-05-06T15:05:22.563Z</updated>
-  <id>http://echobai.cn/</id>
+  <link href="https://echo-b.github.io/"/>
+  <updated>2022-05-06T15:05:24.000Z</updated>
+  <id>https://echo-b.github.io/</id>
   
   <author>
     <name>EchoBai</name>
@@ -18,10 +18,10 @@
   
   <entry>
     <title>词法分析器与正则表达式窥探</title>
-    <link href="http://echobai.cn/2022/04/28/%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90%E5%99%A8%E4%B8%8E%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E7%AA%A5%E6%8E%A2/"/>
-    <id>http://echobai.cn/2022/04/28/%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90%E5%99%A8%E4%B8%8E%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E7%AA%A5%E6%8E%A2/</id>
+    <link href="https://echo-b.github.io/2022/04/28/%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90%E5%99%A8%E4%B8%8E%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E7%AA%A5%E6%8E%A2/"/>
+    <id>https://echo-b.github.io/2022/04/28/%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90%E5%99%A8%E4%B8%8E%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E7%AA%A5%E6%8E%A2/</id>
     <published>2022-04-27T16:33:12.000Z</published>
-    <updated>2022-05-06T15:05:22.563Z</updated>
+    <updated>2022-05-06T15:05:24.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="正则表达式介绍"><a href="#正则表达式介绍" class="headerlink" title="正则表达式介绍"></a>正则表达式介绍</h3><p><a href="https://zh.wikipedia.org/wiki/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F">正则表达式</a>（英语：<code>Regular Expression</code>，常简写为<code>regex</code>、<code>regexp</code>或<code>RE</code>），又称正则表示式、正则表示法、规则表达式、常规表示法，是计算机科学的一个概念。正则表达式使用单个字符串来描述、匹配一系列匹配某个句法规则的字符串。在很多文本编辑器里，正则表达式通常被用来检索、替换那些匹配某个模式的文本。</p><span id="more"></span><h3 id="正则表达式常见规则"><a href="#正则表达式常见规则" class="headerlink" title="正则表达式常见规则"></a>正则表达式常见规则</h3><p>构造正则表达式的方法：用多种元字符与运算符将小的表达式结合在一起来创建更大的表达式。正则表达式的组件可以是单个的字符、字符集合、字符范围、字符间的选择或者所有这些组件的任意组合。</p><p>正则表达式是由普通字符（例如字符 <code>a</code> 到 <code>z</code>）以及特殊字符（称为”元字符”）组成的文字模式。模式描述在搜索文本时要匹配的一个或多个字符串。正则表达式作为一个模板，将某个字符模式与所搜索的字符串进行匹配。</p><h4 id="普通字符"><a href="#普通字符" class="headerlink" title="普通字符"></a>普通字符</h4><table><thead><tr><th>字符</th><th>描述</th><th>实例</th></tr></thead><tbody><tr><td><code>[ABC]</code></td><td>匹配<code>ABC</code>串内的所有字符</td><td>用[ogl]匹配<code>google</code>可以匹配<code>googl</code></td></tr><tr><td><code>[^ABC]</code></td><td>匹配除了<code>ABC</code>串内的所有字符</td><td>用<code>[^ogl]</code>匹配<code>google</code>可以匹配<code>e</code></td></tr><tr><td><code>[A-Z]</code></td><td><code>[A-Z]</code> 表示一个区间，匹配该区间内的所有符号</td><td><code>[0-9]</code>匹配<code>0</code>到<code>9</code>的数字</td></tr><tr><td>.</td><td>匹配除换行符（<code>\n、\r</code>）之外的任何单个字符，相等于 [^\n\r]</td><td>用<code>[ogl]</code>匹配<code>google</code>可以匹配<code>google</code>不包括换行符</td></tr><tr><td><code>[\s\S]</code></td><td>匹配所有。<code>\s</code> 是匹配所有空白符，包括换行，<code>\S</code> 非空白符，不包括换行</td><td>用其匹配<code>google</code>可以匹配<code>google</code>包括换行符</td></tr><tr><td><code>[\w]</code></td><td>匹配数字，字母，下划线。等价于[A-Za-z0-9]</td><td>例如可以匹配类似<code>Ax0</code></td></tr></tbody></table><h4 id="非打印字符"><a href="#非打印字符" class="headerlink" title="非打印字符"></a>非打印字符</h4><table><thead><tr><th>字符</th><th>描述</th></tr></thead><tbody><tr><td><code>\cx</code></td><td>匹配由<code>x</code>指明的字符，如<code>\cM</code>匹配<code>Control-M</code>或回车符</td></tr><tr><td><code>\f</code></td><td>匹配一个换页符</td></tr><tr><td><code>\n</code></td><td>匹配一个换行符</td></tr><tr><td><code>\r</code></td><td>匹配一个回车符</td></tr><tr><td><code>\s</code></td><td>匹配任何空白字符，包括空格，制表符，换页符等等</td></tr><tr><td><code>\S</code></td><td>匹配任何非空白字符</td></tr><tr><td><code>\t</code></td><td>匹配一个制表符</td></tr><tr><td><code>\v</code></td><td>匹配一个垂直制表符</td></tr></tbody></table><h4 id="特殊字符"><a href="#特殊字符" class="headerlink" title="特殊字符"></a>特殊字符</h4><table><thead><tr><th>字符</th><th>描述</th></tr></thead><tbody><tr><td><code>$</code></td><td>匹配输入字符串的结尾位置</td></tr><tr><td><code>()</code></td><td>标记一个子表达式的开始和结束位置</td></tr><tr><td><code>*</code></td><td>匹配前面的子表达式零次或多次</td></tr><tr><td><code>+</code></td><td>匹配前面的子表达式一次或多次</td></tr><tr><td><code>.</code></td><td>匹配除换行符 \n 之外的任何单字符</td></tr><tr><td><code>[</code></td><td>标记一个中括号表达式的开始</td></tr><tr><td><code>?</code></td><td>匹配前面的子表达式零次或一次</td></tr><tr><td><code>\</code></td><td>将下一个字符标记为或特殊字符、或原义字符、或向后引用、或八进制转义符</td></tr><tr><td><code>^</code></td><td>匹配输入字符串的开始位置，当在方括号表达式中使用时，表示不接受方括号表达式中的字符集合</td></tr><tr><td><code>&#123;</code></td><td>标记限定符表达式的始</td></tr><tr><td>`</td><td>`</td></tr></tbody></table><h4 id="限定符"><a href="#限定符" class="headerlink" title="限定符"></a>限定符</h4><table><thead><tr><th>字符</th><th>描述</th></tr></thead><tbody><tr><td><code>*</code></td><td>匹配前面的子表达式零次或多次</td></tr><tr><td><code>+</code></td><td>匹配前面的子表达式一次或多次</td></tr><tr><td><code>?</code></td><td>匹配前面的子表达式零次或一次</td></tr><tr><td><code>&#123;n&#125;</code></td><td><code>n </code>是一个非负整数。匹配确定的 <code>n</code> 次</td></tr><tr><td><code>&#123;n,&#125;</code></td><td><code>n</code> 是一个非负整数。至少匹配<code>n</code> 次</td></tr><tr><td><code>&#123;n,m&#125;</code></td><td><code>m</code> 和 <code>n</code> 均为非负整数，其中<code>n &lt;= m</code>。最少匹配 <code>n</code> 次且最多匹配 <code>m</code> 次</td></tr></tbody></table><h3 id="从状态机的视角来审视正则表达式"><a href="#从状态机的视角来审视正则表达式" class="headerlink" title="从状态机的视角来审视正则表达式"></a>从状态机的视角来审视正则表达式</h3><p>以邮箱表达式的匹配规则对应生成的状态图为例</p><p><img src="/images/regex.png" alt="regex"></p><p>从状态图来看，首先我们会进入第一个匹配环节，可以匹配数字，字母和下划线一次或者多次，其实这里写代码的话就会对应着一个<code>while</code>循环。紧接着是<code>@</code>的匹配，然后类似第一个的循环。最后是两个循环的匹配，因为邮箱的格式可以有一个或者多个<code>.xxx</code>的形式。通过图形我们可以很直观的看到整个识别的过程。</p><p>另外其实也可以说明我们的每一个正则表达式都可以转化为一个状态图。</p><h3 id="C语言对应的正则表达式函数结构概览"><a href="#C语言对应的正则表达式函数结构概览" class="headerlink" title="C语言对应的正则表达式函数结构概览"></a>C语言对应的正则表达式函数结构概览</h3><p><code>C</code>语言也对正则表达式的识别进行了封装，使用时，我们只需要引入头文件<code>&lt;regex.h&gt;</code>即可。<br>主要包括以下几个函数</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">regcomp</span><span class="params">(<span class="keyword">regex_t</span> *preg, <span class="keyword">const</span> <span class="keyword">char</span> *regex, <span class="keyword">int</span> cflags)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">regexec</span><span class="params">(<span class="keyword">const</span> <span class="keyword">regex_t</span> *preg, <span class="keyword">const</span> <span class="keyword">char</span> *<span class="built_in">string</span>, <span class="keyword">size_t</span> nmatch,</span></span></span><br><span class="line"><span class="params"><span class="function">            <span class="keyword">regmatch_t</span> pmatch[], <span class="keyword">int</span> eflags)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">size_t</span> <span class="title">regerror</span><span class="params">(<span class="keyword">int</span> errcode, <span class="keyword">const</span> <span class="keyword">regex_t</span> *preg, <span class="keyword">char</span> *errbuf,</span></span></span><br><span class="line"><span class="params"><span class="function">            <span class="keyword">size_t</span> errbuf_size)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">regfree</span><span class="params">(<span class="keyword">regex_t</span> *preg)</span></span>;</span><br><span class="line"></span><br></pre></td></tr></table></figure><h4 id="regcomp-函数"><a href="#regcomp-函数" class="headerlink" title="regcomp()函数"></a><code>regcomp()</code>函数</h4><h4 id="pmatch结构"><a href="#pmatch结构" class="headerlink" title="pmatch结构"></a><code>pmatch</code>结构</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">  <span class="keyword">regoff_t</span> rm_so;</span><br><span class="line">  <span class="keyword">regoff_t</span> rm_eo;</span><br><span class="line">&#125; <span class="keyword">regmatch_t</span>;</span><br></pre></td></tr></table></figure><h4 id="regerror-函数"><a href="#regerror-函数" class="headerlink" title="regerror()函数"></a><code>regerror()</code>函数</h4><h4 id="regexec-函数"><a href="#regexec-函数" class="headerlink" title="regexec()函数"></a><code>regexec()</code>函数</h4><h4 id="regfree-函数"><a href="#regfree-函数" class="headerlink" title="regfree()函数"></a><code>regfree()</code>函数</h4><h3 id="词法分析"><a href="#词法分析" class="headerlink" title="词法分析"></a>词法分析</h3><h4 id="词法分析的具体任务"><a href="#词法分析的具体任务" class="headerlink" title="词法分析的具体任务"></a>词法分析的具体任务</h4>]]></content>
     
@@ -30,19 +30,19 @@
     
     
     
-    <category term="lexical analysis" scheme="http://echobai.cn/categories/lexical-analysis/"/>
+    <category term="lexical analysis" scheme="https://echo-b.github.io/categories/lexical-analysis/"/>
     
     
-    <category term="正则表达式与词法分析" scheme="http://echobai.cn/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E4%B8%8E%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90/"/>
+    <category term="正则表达式与词法分析" scheme="https://echo-b.github.io/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E4%B8%8E%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90/"/>
     
   </entry>
   
   <entry>
     <title>费曼积分法</title>
-    <link href="http://echobai.cn/2022/04/27/%E8%B4%B9%E6%9B%BC%E7%A7%AF%E5%88%86%E6%B3%95/"/>
-    <id>http://echobai.cn/2022/04/27/%E8%B4%B9%E6%9B%BC%E7%A7%AF%E5%88%86%E6%B3%95/</id>
+    <link href="https://echo-b.github.io/2022/04/27/%E8%B4%B9%E6%9B%BC%E7%A7%AF%E5%88%86%E6%B3%95/"/>
+    <id>https://echo-b.github.io/2022/04/27/%E8%B4%B9%E6%9B%BC%E7%A7%AF%E5%88%86%E6%B3%95/</id>
     <published>2022-04-27T07:47:30.000Z</published>
-    <updated>2022-04-27T16:08:59.448Z</updated>
+    <updated>2022-04-27T16:09:00.000Z</updated>
     
     <content type="html"><![CDATA[<h1 id="“费曼积分法”简介"><a href="#“费曼积分法”简介" class="headerlink" title="“费曼积分法”简介"></a>“费曼积分法”简介</h1><p>该方法最早是由费曼提出的，一般被称为”积分符号内取微分”或者”费曼积分法”，费曼先生在《别闹了，费曼先生》一书中曾做过部分解释，感兴趣可自行查阅资料，在此不做赘述。</p><span id="more"></span><h1 id="“费曼积分法”证明"><a href="#“费曼积分法”证明" class="headerlink" title="“费曼积分法”证明"></a>“费曼积分法”证明</h1><p>详细证明请参考以下链接<br><a href="https://zh.wikipedia.org/wiki/%E7%A7%AF%E5%88%86%E7%AC%A6%E5%8F%B7%E5%86%85%E5%8F%96%E5%BE%AE%E5%88%86">定理证明链接</a></p><h1 id="“费曼积分法”实例"><a href="#“费曼积分法”实例" class="headerlink" title="“费曼积分法”实例"></a>“费曼积分法”实例</h1><p>下面我们以其为例，来进行讲解<br>$$<br>\int_0^{\infty}\frac{sinx}{x}dx<br>$$<br>首先我们知道这个积分是在有理函数内是不可积分的，但是如果我们想办法消去分母$x$，原式就会变成一个较为简单的积分式子。根据这样的思路，我们可以这样来分析求解<br>$$<br>设I(a)=\int_0^{\infty}\frac{sinax}{x}dx<br>$$<br>两边同时对a取微分，需要注意的一点是积分符号内由于函数同时含有x,a两个变量，因此左边实际上是对a做一个偏微分<br>$$<br> I’(a)=\int_0^{\infty}\frac{cosax}{x}\times xdx<br> =\int_0^{\infty}cosaxdx<br>$$<br>但可以发现$cosax$最后又变成了一个在$[0,\infty]$上不可积分的式子，因此我们要重新进行函数的构造，一种理想的构造方式是引入$e^{-ax}$这样在求积分的时候我们就也可以消去分母的$x$，最后在利用分部积分就可以求出原积分<br>具体求解过程如下：<br>$$<br> 设I(a)=\int_0^{\infty}\frac{sinx}{x}e^{-ax}dx<br>$$<br>等式两边同时对a取微分<br>$$<br> I’(a) = - \int_0^{\infty}\frac{sinx}{x}e^{-ax}\times xdx=- \int_0^{\infty}sinxe^{-ax}dx<br>$$<br>$$设G=\int_0^{\infty}sinxe^{-ax}dx$$<br>分部积分得<br>$$G=[-e^{-ax}cosx]_0^{\infty}-a\int_0^{\infty}cosxe^{-ax}dx$$<br>$$G=[-e^{-ax}cosx]_0^{\infty}-a([sinxe^{-ax}]_0^{\infty} + aG)$$<br>$$(1+a^2)G=[-e^{-ax}(asinx+cosx)]_0^{\infty}=1$$<br>$$G=\frac{1}{1+a^2}$$<br>那么有$$I’(a)=-\frac{1}{1+a^2}$$<br>两边同时对$a$积分<br>$$I(a)=-arctana+C$$<br> 令$a\to \infty$<br>$$-\frac{\pi}{2}+C=\int_0^{\infty}\frac{sinx}{x}\times 0dx=0$$<br>所以<br>$$C=\frac{\pi}{2}$$<br>故我们得到一个关于$a$的式子即<br>$$<br>I(a)=-arctana+\frac{\pi}{2}$$<br>令$a=0$<br>得到<br>$$<br>I(a)=\int_0^{\infty}\frac{sinx}{x}=\frac{\pi}{2}<br>$$</p><p>利用积分符号内取微分的方法，我们就可以解决大部分用普通方法解不出来的积分题目，这种方法的的关键在于我们需要去找到一个积分的式子，并求出，在进行赋值求出原式的解，多加练习自然可以掌握。</p><h1 id="“费曼积分法”例题及答案"><a href="#“费曼积分法”例题及答案" class="headerlink" title="“费曼积分法”例题及答案"></a>“费曼积分法”例题及答案</h1><ul><li>1 $$\int_0^1\frac{x^5-1}{lnx}dx=ln6$$</li><li>2 $$\int_0^{\pi}ln(1+\alpha cos(x))dx=\pi ln\frac{1+\sqrt{1-\alpha^2}}{2}$$</li><li>3 $$\int_0^{\pi}\frac{ln(1+cos(\alpha)cos(x))}{cos(x)}dx=\frac{1}{2}(\frac{\pi^2}{4}-\alpha^2)$$<br>可自行演算求解</li></ul>]]></content>
     
@@ -51,19 +51,19 @@
     
     
     
-    <category term="Math" scheme="http://echobai.cn/categories/Math/"/>
+    <category term="Math" scheme="https://echo-b.github.io/categories/Math/"/>
     
     
-    <category term="math" scheme="http://echobai.cn/tags/math/"/>
+    <category term="math" scheme="https://echo-b.github.io/tags/math/"/>
     
   </entry>
   
   <entry>
     <title>飘</title>
-    <link href="http://echobai.cn/2022/01/17/%E9%A3%98/"/>
-    <id>http://echobai.cn/2022/01/17/%E9%A3%98/</id>
+    <link href="https://echo-b.github.io/2022/01/17/%E9%A3%98/"/>
+    <id>https://echo-b.github.io/2022/01/17/%E9%A3%98/</id>
     <published>2022-01-17T12:26:42.000Z</published>
-    <updated>2022-01-18T13:04:16.328Z</updated>
+    <updated>2022-01-18T13:04:18.000Z</updated>
     
     <content type="html"><![CDATA[<p>《飘》是美国作家玛格丽特·米切尔创作的长篇小说。我不记得自己是什么时候看完的了，再次回忆起只依稀记得大概是高二的时候。某个中午意外的在二手书店淘到的书，虽说是二手书店，但当时买来的时候却是全新的。当然最后几度辗转，在高三的分班时期，送给了一个很好的朋友，不知今昔，它可安好。</p><span id="more"></span><p>推荐《飘》的原因其实很简单，只是喜欢而已。看过的朋友应该都对主人公斯佳丽的那一句：“还是留给明天去想吧……不管怎么说，明天又是新的一天……”。</p>]]></content>
     
@@ -72,19 +72,19 @@
     
     
     
-    <category term="bookrecommend" scheme="http://echobai.cn/categories/bookrecommend/"/>
+    <category term="bookrecommend" scheme="https://echo-b.github.io/categories/bookrecommend/"/>
     
     
-    <category term="《飘》" scheme="http://echobai.cn/tags/%E3%80%8A%E9%A3%98%E3%80%8B/"/>
+    <category term="《飘》" scheme="https://echo-b.github.io/tags/%E3%80%8A%E9%A3%98%E3%80%8B/"/>
     
   </entry>
   
   <entry>
     <title>从二选一多路选择器开始</title>
-    <link href="http://echobai.cn/2022/01/17/%E4%BB%8E%E4%BA%8C%E9%80%89%E4%B8%80%E5%A4%9A%E8%B7%AF%E9%80%89%E6%8B%A9%E5%99%A8%E5%BC%80%E5%A7%8B/"/>
-    <id>http://echobai.cn/2022/01/17/%E4%BB%8E%E4%BA%8C%E9%80%89%E4%B8%80%E5%A4%9A%E8%B7%AF%E9%80%89%E6%8B%A9%E5%99%A8%E5%BC%80%E5%A7%8B/</id>
+    <link href="https://echo-b.github.io/2022/01/17/%E4%BB%8E%E4%BA%8C%E9%80%89%E4%B8%80%E5%A4%9A%E8%B7%AF%E9%80%89%E6%8B%A9%E5%99%A8%E5%BC%80%E5%A7%8B/"/>
+    <id>https://echo-b.github.io/2022/01/17/%E4%BB%8E%E4%BA%8C%E9%80%89%E4%B8%80%E5%A4%9A%E8%B7%AF%E9%80%89%E6%8B%A9%E5%99%A8%E5%BC%80%E5%A7%8B/</id>
     <published>2022-01-17T11:19:44.000Z</published>
-    <updated>2022-01-29T08:50:00.868Z</updated>
+    <updated>2022-01-29T08:50:02.000Z</updated>
     
     <content type="html"><![CDATA[<p>在<code>verilog</code>中，我们往往通过一个三目运算符或者一个<code>if...else</code>语句来实现二选一的电路，大家在写硬件的时候一定要摒弃软件的思考方式，我们要时刻清楚的认识到自己正在描述的是一个硬件的电路，当你对自己写的每一部分<code>verilog</code>代码都能很清晰的在脑中抽象为具体的电路硬件的时候，你的硬件水平肯定是更上一层楼的。当然这是一个长期的过程，非一日之功，贵在坚持。</p><span id="more"></span><p>下面我们用<code>spinalHDL</code>来描述下面的硬件电路。</p><p><img src="/images/gatemux21.png" alt="gatemux"></p><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cpu </span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> spinal.core._ <span class="comment">//两句import导入spinalHDL的核心库</span></span><br><span class="line"><span class="keyword">import</span> spinal.lib._</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MUX21</span> <span class="keyword">extends</span> <span class="title">Component</span></span>&#123; <span class="comment">//Component类比verilog中的module</span></span><br><span class="line">  <span class="keyword">val</span> io = <span class="keyword">new</span> <span class="type">Bundle</span>&#123;  <span class="comment">//定义输入输出，可以看成是一个电路的输入输出接口</span></span><br><span class="line">    <span class="keyword">val</span> in1 = in <span class="type">Bool</span>() <span class="comment">//定义两个输入，一个选择信号</span></span><br><span class="line">    <span class="keyword">val</span> in2 = in <span class="type">Bool</span>()</span><br><span class="line">    <span class="keyword">val</span> sel = in <span class="type">Bool</span>()</span><br><span class="line">    <span class="keyword">val</span> res = out <span class="type">Bool</span>()<span class="comment">//定义输出</span></span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">  此处不能使用if...else</span></span><br><span class="line"><span class="comment">  官方定义的说明是在表示选择的时候，我们使用的是</span></span><br><span class="line"><span class="comment">  when...otherwise的搭配</span></span><br><span class="line"><span class="comment">  我前期用if...else试，结果生成的verilg代码并不是自己所想，然后去官方项目</span></span><br><span class="line"><span class="comment">  提了个issue，结果作者回复说要用 when...otherwise的搭配，顺道提醒我官方文档</span></span><br><span class="line"><span class="comment">  中有所说明，这就再次证明了读文档的重要性</span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line">  when(io.sel)&#123;  </span><br><span class="line">    io.res := io.in1</span><br><span class="line">  &#125;otherwise&#123;</span><br><span class="line">    io.res := io.in2</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">MUX</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args:<span class="type">Array</span>[<span class="type">String</span>])&#123;</span><br><span class="line">    <span class="type">SpinalVerilog</span>(<span class="keyword">new</span> <span class="type">MUX21</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>此时我们的项目结构如下<br>在官方的项目结构下，我们首先建立一个<code>cpu</code>的文件夹，在下面建立一个<code>mux21.scala</code>的文件，之后我们的文件就都放在这里实现。</p><p><img src="/images/content.png" alt="content.png"></p><p>书写完成后，我们用在项目文件夹下打开terminal，输入下列命令将我们的代码转化为对应的<code>verilog</code>代码。结果如下图所示</p><p><img src="/images/cpumux.png" alt="cpumux.png"></p><p>此时我们的工程文件下就会生成一个编译好的MUX21.v文件，内容如下：</p><figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> MUX21 (</span><br><span class="line">  <span class="keyword">input</span>               io_in1,</span><br><span class="line">  <span class="keyword">input</span>               io_in2,</span><br><span class="line">  <span class="keyword">input</span>               io_sel,</span><br><span class="line">  <span class="keyword">output</span> <span class="keyword">reg</span>          io_res</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">always</span> @(*) <span class="keyword">begin</span></span><br><span class="line">    <span class="keyword">if</span>(io_sel) <span class="keyword">begin</span></span><br><span class="line">      io_res = io_in1;</span><br><span class="line">    <span class="keyword">end</span> <span class="keyword">else</span> <span class="keyword">begin</span></span><br><span class="line">      io_res = io_in2;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br><span class="line"></span><br></pre></td></tr></table></figure><p>注电路图绘制工具为<code>logisim</code>，安装方式也很简单，在<code>terminal</code>输入下列命令即可<br><code>sudo apt install logisim</code></p>]]></content>
     
@@ -93,19 +93,19 @@
     
     
     
-    <category term="spinalHDL" scheme="http://echobai.cn/categories/spinalHDL/"/>
+    <category term="spinalHDL" scheme="https://echo-b.github.io/categories/spinalHDL/"/>
     
     
-    <category term="spinalHDL" scheme="http://echobai.cn/tags/spinalHDL/"/>
+    <category term="spinalHDL" scheme="https://echo-b.github.io/tags/spinalHDL/"/>
     
   </entry>
   
   <entry>
     <title>spinalHDL环境搭建</title>
-    <link href="http://echobai.cn/2022/01/16/spinalHDL%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/"/>
-    <id>http://echobai.cn/2022/01/16/spinalHDL%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/</id>
+    <link href="https://echo-b.github.io/2022/01/16/spinalHDL%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/"/>
+    <id>https://echo-b.github.io/2022/01/16/spinalHDL%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/</id>
     <published>2022-01-16T12:08:02.000Z</published>
-    <updated>2022-01-16T14:38:57.215Z</updated>
+    <updated>2022-01-16T14:38:58.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>在开始编写<code>spinalHDL</code>之前，我们需要先安装以下三个工具。</p><ul><li>A Java JDK，<a href="https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html">下载链接</a></li><li>A Scala 2.11.X distribution,<a href="https://scala-lang.org/download/">下载链接</a><br>如果使用<code>sbt</code>进行项目构建也不用下载，但是为了熟悉<code>scala</code>语法建议安装用于练习</li><li>The SBT build tool, <a href="https://www.scala-sbt.org/download.html">下载链接</a></li></ul><span id="more"></span><p>另外我此次使用的系统是<code>ubuntu20.04LTS</code>,<code>windows</code>系统的同学其实只要把这几个工具安装成功，也是可以使用的，我早期就是在<code>windows</code>上折磨了一阵才配置好环境。</p><h3 id="Java-JDK安装"><a href="#Java-JDK安装" class="headerlink" title="Java JDK安装"></a>Java JDK安装</h3><p>在<code>ubuntu</code>中安装<code>java jdk</code>也是比较简单的，只需要输入以下命令安装即可</p><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-<span class="builtin-name">get</span> install openjdk-8-jdk</span><br></pre></td></tr></table></figure><h3 id="scala安装"><a href="#scala安装" class="headerlink" title="scala安装"></a>scala安装</h3><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-<span class="builtin-name">get</span> install scala</span><br></pre></td></tr></table></figure><h3 id="sbt安装"><a href="#sbt安装" class="headerlink" title="sbt安装"></a>sbt安装</h3><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">echo <span class="string">&quot;deb https://repo.scala-sbt.org/scalasbt/debian all main&quot;</span> | sudo tee <span class="regexp">/etc/</span>apt<span class="regexp">/sources.list.d/</span>sbt.list</span><br><span class="line">echo <span class="string">&quot;deb https://repo.scala-sbt.org/scalasbt/debian /&quot;</span> | sudo tee <span class="regexp">/etc/</span>apt<span class="regexp">/sources.list.d/</span>sbt_old.list</span><br><span class="line">curl -sL <span class="string">&quot;https://keyserver.ubuntu.com/pks/lookup?op=get&amp;search=0x2EE0EA64E40A89B84B2DF73499E82A75642AC823&quot;</span> | sudo apt-key add</span><br><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install sbt</span><br></pre></td></tr></table></figure><h3 id="下载官方样例测试环境"><a href="#下载官方样例测试环境" class="headerlink" title="下载官方样例测试环境"></a>下载官方样例测试环境</h3><p>在你自己的工作目录下执行下列命令</p><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git clone https:<span class="regexp">//gi</span>thub.com<span class="regexp">/SpinalHDL/</span>SpinalTemplateSbt.git SpinalTemplateSbt</span><br><span class="line">cd SpinalTemplateSbt</span><br><span class="line">sbt run   <span class="comment"># 等待一段时间后选择 &quot;mylib.MyTopLevelVerilog&quot; 对应的序号</span></span><br></pre></td></tr></table></figure><p>如果出现下列的显示，说明我们的环境搭建没问题，之后我们就在官方样例的基础上进行开发</p><p><img src="https://s2.loli.net/2022/01/16/lfaBOFbe28uyxCz.png" alt="spinalHDLtest.png"></p><p>自此，我们的开发环境就搭建完毕，下一期我们将用<code>spinalHDL</code>实现一个简单的二选一电路。之所以选这个是因为多路选择器在我们的单周期<code>cpu</code>中是一个很具有代表性也很重要的器件，同时它也相对简单。</p>]]></content>
     
@@ -119,19 +119,19 @@
     
     
     
-    <category term="spinalHDL" scheme="http://echobai.cn/categories/spinalHDL/"/>
+    <category term="spinalHDL" scheme="https://echo-b.github.io/categories/spinalHDL/"/>
     
     
-    <category term="spinalHDL" scheme="http://echobai.cn/tags/spinalHDL/"/>
+    <category term="spinalHDL" scheme="https://echo-b.github.io/tags/spinalHDL/"/>
     
   </entry>
   
   <entry>
     <title>spinalHDL简介</title>
-    <link href="http://echobai.cn/2022/01/14/spinalHDL%E7%AE%80%E4%BB%8B/"/>
-    <id>http://echobai.cn/2022/01/14/spinalHDL%E7%AE%80%E4%BB%8B/</id>
+    <link href="https://echo-b.github.io/2022/01/14/spinalHDL%E7%AE%80%E4%BB%8B/"/>
+    <id>https://echo-b.github.io/2022/01/14/spinalHDL%E7%AE%80%E4%BB%8B/</id>
     <published>2022-01-14T09:25:54.000Z</published>
-    <updated>2022-01-16T13:33:13.109Z</updated>
+    <updated>2022-01-16T13:33:14.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="spinalHDL-简介"><a href="#spinalHDL-简介" class="headerlink" title="spinalHDL 简介"></a>spinalHDL 简介</h3><p>引用官方的简介如下：<br><code>SpinalHDL is a hardware description language written in Scala, a statically-typed functional language using the Java virtual machine (JVM). In order to start programming with SpinalHDL, you must have a JVM as well as the Scala compiler.</code></p><span id="more"></span><h3 id="spinalHDL优势"><a href="#spinalHDL优势" class="headerlink" title="spinalHDL优势"></a>spinalHDL优势</h3><p>这就要谈到<code>verilog</code>的劣势了，写过<code>verilog</code>的同学可能多多少少都会有这样的体会，那就是<code>verilog</code>在编译时，并不会提供很严格的语法检查，这也就意味着如果你粗心写错一个位宽，那么后期排错是相对比较困难的，当然要避免这种困难，就得时刻提醒自己声明或者使用变量的时候要严格的加上位宽的声明，比如声明常量1，大部分同学可能都会只写一个1，但是比较严谨的写法还是显式的声明它的位宽。<code>verilog</code>最最令人头疼的当属连线了，当你去写一个<code>cpu</code>的时候，你就会发现你大部分的时间会花在连线上，而且不一定就能够一次保证连对。因此我们此次介绍的<code>spinalHDL</code>语言不仅有很好的语法检查，而且避免了重复时间的连线，这一点在我们之后的学习中一定也能够身有体会。当然<code>verilog</code>语言本身还有其他的问题，也有许多的博客总结过，在次不做赘述。感兴趣的同学可以自行百度。</p><h3 id="spinalHDL入门途径"><a href="#spinalHDL入门途径" class="headerlink" title="spinalHDL入门途径"></a>spinalHDL入门途径</h3><p>学习<code>spinalHDL</code>你需要有一定的<code>scala</code>和计算机组成原理的基础，当然只是简单的<code>scala</code>基础就行,能够对一个单周期<code>cpu</code>的取指，译码等过程有简单的认识和理解，如果还不熟悉的同学可以去查阅相关的资料补补课，比如菜鸟之类的网站的基础知识就做的挺好的。当你有了一定的基础之后，一定要仔细的阅读官方的英文文档，虽然是英文，但是精下心来对于各位来说也不是什么大问题。至于为什么一定要阅读官方的文档呢？这是因为官方文档提供了各种工具的安装使用的过程，基本的语法介绍，这些东西在我们前期入门学习的过程中都能起到很大的帮助作用，在者就是熟悉官方文档可以为我们的排错或者查阅问题提供一个很好的帮助。避免大家因为在其他的地方查询浪费了太多的时间，而其也不一定能过保证其正确性。<br><a href="https://spinalhdl.github.io/SpinalDoc-RTD/master/SpinalHDL/Getting%20Started/getting_started.html">官方文档入口</a><br><a href="https://github.com/SpinalHDL/SpinalHDL">github项目地址</a></p><h3 id="我们的目标"><a href="#我们的目标" class="headerlink" title="我们的目标"></a>我们的目标</h3><p>在说明我们此次的目标之前，我想说明一下自己为什么想要出这么一期教程，一是兴趣使然，二是国内使用这门语言的同学应该也比较少，入门的途径或者资料是很稀缺的，因此为了使自己能够更加专心的学习<code>spinalHDL</code>，也为了能够给后来者提供一个相对比较粗浅的入门，因此决心写这么一期文章。那么言归正传，我们将会带大家从0开始，尝试用<code>spinalHDL</code>语言构建一个简单的<code>mips</code>单周期的<code>cpu</code>。希望看到这里的各位最终都能够坚持下来。</p>]]></content>
     
@@ -140,10 +140,10 @@
     
     
     
-    <category term="spinalHDL" scheme="http://echobai.cn/categories/spinalHDL/"/>
+    <category term="spinalHDL" scheme="https://echo-b.github.io/categories/spinalHDL/"/>
     
     
-    <category term="spinalHDL" scheme="http://echobai.cn/tags/spinalHDL/"/>
+    <category term="spinalHDL" scheme="https://echo-b.github.io/tags/spinalHDL/"/>
     
   </entry>
   
