@@ -1,0 +1,3898 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../chapter-09-structured-data/">
+      
+      
+        <link rel="next" href="../chapter-11-common-filters/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>第十章 数据I/O - Echo-b's Tech Notes</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#iodata-io" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Echo-b&#39;s Tech Notes" class="md-header__button md-logo" aria-label="Echo-b's Tech Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Echo-b's Tech Notes
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              第十章 数据I/O
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Echo-b&#39;s Tech Notes" class="md-nav__button md-logo" aria-label="Echo-b's Tech Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Echo-b's Tech Notes
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VTK 教程
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    VTK 教程
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    入门篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    入门篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-01-vtk-overview-and-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第一章 VTK概述与环境搭建
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-02-visualization-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二章 可视化管线
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-03-data-model-basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第三章 数据模型基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-04-geometry-and-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第四章 基本几何体与数据源
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-05-rendering-and-interactor/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第五章 渲染与交互机
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-06-volume1-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第六章 入门篇综合实战——3D几何画廊
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    实战篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    实战篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-07-polydata/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第七章 PolyData详解
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-08-unstructured-grid/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第八章 非结构化网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-09-structured-data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第九章 结构化数据
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十章 数据I/O
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十章 数据I/O
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        本章导读
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#101-vtk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.1 VTK的文件格式体系
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10.1 VTK的文件格式体系">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1011" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.1.1 两大文件格式家族
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10.1.1 两大文件格式家族">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#legacy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Legacy格式
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XML格式
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1012" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.1.2 推荐策略
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1013" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.1.3 扩展名与数据集类型映射
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#102-polydata-io" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.2 多边形数据读写（PolyData I/O）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10.2 多边形数据读写（PolyData I/O）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1021" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.2.1 格式概览
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1022-vtk-xml-polydata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.2.2 VTK XML PolyData读写
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1023-stl" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.2.3 STL格式
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1024" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.2.4 格式转换示例
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#103" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.3 非结构化网格读写
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10.3 非结构化网格读写">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1031-xml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.3.1 XML格式（推荐）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1032-legacy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.3.2 Legacy格式（向后兼容）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1033" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.3.3 完整示例：创建、写入、读回、验证
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#104" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.4 结构化数据与图像读写
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10.4 结构化数据与图像读写">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1041-xml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.4.1 XML格式的结构化数据读写
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1042" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.4.2 图像格式读写
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1043-dicom" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.4.3 DICOM医学影像
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1044-3d" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.4.4 从图像到3D表面：等值面提取示例
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#105" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.5 复合数据集读写
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10.5 复合数据集读写">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1051-multiblock" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.5.1 MultiBlock数据集概念
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1052-vtm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.5.2 .vtm格式的读写
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1053" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.5.3 关键注意事项
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#106" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.6 文件格式选择指南
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10.6 文件格式选择指南">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1061" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.6.1 决策表
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1062-binary-vs-ascii" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.6.2 Binary vs ASCII 权衡
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1063-xml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.6.3 XML格式的压缩选项
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#107" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.7 代码示例：数据管线
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10.7 代码示例：数据管线">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1071" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.7.1 程序设计
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1072" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.7.2 完整源代码
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1073-cmakeliststxt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.7.3 CMakeLists.txt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1074" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.7.4 所需模块说明
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1075" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.7.5 代码详解
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10.7.5 代码详解">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        管道分支的概念
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        双视口与共享相机
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1076" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.7.6 扩展方向
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#108" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.8 本章小结
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10.8 本章小结">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        要点速览
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#io" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        从I/O到全书
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        与后续章节的衔接
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-11-common-filters/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十一章 常用过滤器
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-12-color-mapping/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十二章 颜色映射与标量可视化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-13-advanced-rendering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十三章 高级渲染技术
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-14-multi-dataset/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十四章 多个数据集处理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-15-volume2-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十五章 实战篇综合实战——CFD后处理可视化工具
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    进阶篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    进阶篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-16-volume-rendering-basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十六章 体渲染基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-17-volume-rendering-advanced/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十七章 体渲染高级技术
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-18-charts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十八章 2D图表系统
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-19-annotation-and-widgets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十九章 三维标注与交互组件
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-20-custom-interaction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十章 自定义交互与Widget
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-21-qt-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十一章 Qt集成
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-22-smp-parallel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十二章 SMP并行入门
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-23-volume3-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十三章 进阶篇综合实战
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        本章导读
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#101-vtk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.1 VTK的文件格式体系
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10.1 VTK的文件格式体系">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1011" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.1.1 两大文件格式家族
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10.1.1 两大文件格式家族">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#legacy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Legacy格式
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XML格式
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1012" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.1.2 推荐策略
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1013" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.1.3 扩展名与数据集类型映射
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#102-polydata-io" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.2 多边形数据读写（PolyData I/O）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10.2 多边形数据读写（PolyData I/O）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1021" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.2.1 格式概览
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1022-vtk-xml-polydata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.2.2 VTK XML PolyData读写
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1023-stl" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.2.3 STL格式
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1024" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.2.4 格式转换示例
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#103" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.3 非结构化网格读写
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10.3 非结构化网格读写">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1031-xml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.3.1 XML格式（推荐）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1032-legacy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.3.2 Legacy格式（向后兼容）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1033" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.3.3 完整示例：创建、写入、读回、验证
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#104" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.4 结构化数据与图像读写
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10.4 结构化数据与图像读写">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1041-xml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.4.1 XML格式的结构化数据读写
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1042" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.4.2 图像格式读写
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1043-dicom" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.4.3 DICOM医学影像
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1044-3d" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.4.4 从图像到3D表面：等值面提取示例
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#105" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.5 复合数据集读写
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10.5 复合数据集读写">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1051-multiblock" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.5.1 MultiBlock数据集概念
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1052-vtm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.5.2 .vtm格式的读写
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1053" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.5.3 关键注意事项
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#106" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.6 文件格式选择指南
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10.6 文件格式选择指南">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1061" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.6.1 决策表
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1062-binary-vs-ascii" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.6.2 Binary vs ASCII 权衡
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1063-xml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.6.3 XML格式的压缩选项
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#107" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.7 代码示例：数据管线
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10.7 代码示例：数据管线">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1071" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.7.1 程序设计
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1072" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.7.2 完整源代码
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1073-cmakeliststxt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.7.3 CMakeLists.txt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1074" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.7.4 所需模块说明
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1075" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.7.5 代码详解
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10.7.5 代码详解">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        管道分支的概念
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        双视口与共享相机
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1076" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.7.6 扩展方向
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#108" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.8 本章小结
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10.8 本章小结">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        要点速览
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#io" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        从I/O到全书
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        与后续章节的衔接
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="iodata-io">第十章 数据I/O（Data I/O）</h1>
+<h2 id="_1">本章导读</h2>
+<p>你在前九章中学习了VTK的完整管道架构、五种核心数据类型（PolyData、UnstructuredGrid、ImageData、RectilinearGrid、StructuredGrid）的创建与操作，以及渲染与交互的全部基础知识。但所有这些章节中，数据都是在程序内部创建的——你使用<code>vtkSphereSource</code>生成球体，用<code>vtkPoints</code>手动构建网格，用数学函数填充标量场。</p>
+<p>然而在真实世界的科学可视化工作中，数据几乎从来不是在程序内部产生的。它可能来自：</p>
+<ul>
+<li><strong>CT/MRI扫描仪</strong>导出的DICOM序列（医学影像）</li>
+<li><strong>CFD求解器</strong>输出的计算结果（计算流体力学）</li>
+<li><strong>3D扫描仪</strong>捕获的点云和网格（逆向工程与文物保护）</li>
+<li><strong>地理信息系统</strong>导出的高程数据（数字地形模型）</li>
+<li><strong>CAD软件</strong>保存的几何模型（工程设计与制造）</li>
+<li><strong>合作伙伴或公开数据集</strong>提供的标准格式文件</li>
+</ul>
+<p>本章就是连接"自己造数据"与"读取真实数据"之间的桥梁。你将学习VTK的文件I/O体系——如何将内存中的数据集持久化到磁盘，以及如何从磁盘加载数据进入VTK的可视化管线。</p>
+<p>本章的核心目标有四个：</p>
+<ol>
+<li><strong>理解VTK的两大文件格式体系</strong>——Legacy格式与XML格式的设计理念、文件扩展名与数据集类型的映射关系，以及各自的适用场景。</li>
+<li><strong>掌握各类型数据的读写API</strong>——PolyData（.vtp/.stl/.obj/.ply）、UnstructuredGrid（.vtu）、结构化数据（.vti/.vtr/.vts），以及常用图像格式（PNG/JPEG/BMP/DICOM）。</li>
+<li><strong>学会在实际工作流中选择合适的文件格式</strong>——根据数据类型、文件大小、可调试性、压缩需求等因素作出判断。</li>
+<li><strong>通过一个完整的数据管线示例整合所有知识</strong>——创建数据、写入文件、读回、施加过滤器、双视口对比渲染。</li>
+</ol>
+<p>读完本章后，你将能够自信地处理VTK项目中的文件I/O需求——无论是保存计算结果、加载外部数据，还是在不同格式之间进行转换。</p>
+<hr />
+<h2 id="101-vtk">10.1 VTK的文件格式体系</h2>
+<h3 id="1011">10.1.1 两大文件格式家族</h3>
+<p>VTK拥有两套主要的数据文件格式体系：<strong>Legacy格式</strong>（也称为"VTK Simple格式"或"Old格式"）和<strong>XML格式</strong>（也称为"VTK XML格式"或"New格式"）。理解这两种格式的区别是使用VTK I/O的第一步。</p>
+<h4 id="legacy">Legacy格式</h4>
+<p>Legacy格式是VTK最古老的文件格式，至今仍被广泛支持。它的特征是：</p>
+<ul>
+<li><strong>文件扩展名</strong>：统一使用<code>.vtk</code>，无论存储的是哪种数据集类型。</li>
+<li><strong>文本可读性</strong>：默认使用ASCII文本格式，可以用任何文本编辑器打开和查看。</li>
+<li><strong>简单结构</strong>：文件包含一个头部（版本号和描述字符串），后跟按关键字分节的数据块（<code>POINTS</code>、<code>CELLS</code>、<code>CELL_TYPES</code>、<code>POINT_DATA</code>、<code>CELL_DATA</code>等）。</li>
+<li><strong>单数据集</strong>：每个<code>.vtk</code>文件只能存储一个数据集。</li>
+<li><strong>支持的格式变体</strong>：<code>vtkPolyDataReader/Writer</code>、<code>vtkUnstructuredGridReader/Writer</code>、<code>vtkStructuredPointsReader/Writer</code>、<code>vtkRectilinearGridReader/Writer</code>、<code>vtkStructuredGridReader/Writer</code>。</li>
+</ul>
+<p>一个典型Legacy格式文件的简化结构如下：</p>
+<pre><code># vtk DataFile Version 3.0
+My Data
+ASCII
+DATASET POLYDATA
+POINTS 4 float
+0.0 0.0 0.0
+1.0 0.0 0.0
+...
+</code></pre>
+<p><strong>优点</strong>：人类可读、易于调试、向后兼容性好、几乎所有VTK版本和ParaView版本都支持。</p>
+<p><strong>缺点</strong>：ASCII大文件读写慢（文件体积可以是二进制的5-10倍），不支持随机访问，不支持并行I/O，不支持内联压缩。每个文件只能存储一个数据集——如果要存储多个相关的网格（例如流体仿真的多区域网格），需要使用多个文件。</p>
+<h4 id="xml">XML格式</h4>
+<p>XML格式是VTK的现代文件格式，推荐用于所有新项目。它的特征是：</p>
+<ul>
+<li><strong>文件扩展名多样</strong>：根据数据类型使用不同的扩展名（<code>.vtp</code>、<code>.vtu</code>、<code>.vti</code>、<code>.vtr</code>、<code>.vts</code>、<code>.vtm</code>），从扩展名可以直接判断文件内容的数据类型。</li>
+<li><strong>XML结构</strong>：基于XML标记语言，支持层级嵌套的数据组织。</li>
+<li><strong>多编码方式</strong>：支持ASCII、Binary、Appended（二进制数据集中附加在XML末尾，支持随机访问）三种编码模式。</li>
+<li><strong>内置压缩</strong>：支持zlib压缩（通过<code>compressor="vtkZLibDataCompressor"</code>属性），可显著减小文件体积。</li>
+<li><strong>并行I/O支持</strong>：通过<code>.pvti</code>、<code>.pvtu</code>等并行格式，每个进程可以读写文件的一个分块。</li>
+<li><strong>多块支持</strong>：<code>.vtm</code>格式可以包含多个不同子数据集的引用。</li>
+</ul>
+<p><strong>优点</strong>：文件体积小（二进制+压缩），支持并行I/O，随机访问能力（Appended模式），扩展名即文档（一眼就知道数据类型），适合大型数据集和生产环境。</p>
+<p><strong>缺点</strong>：ASCII模式下XML标签本身会占据可观的冗余空间（这一点上Legacy格式更简洁）。格式较Legacy更复杂，手工编写XML文件较为繁琐。</p>
+<h3 id="1012">10.1.2 推荐策略</h3>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>推荐格式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>新项目、大型数据集、生产环境</td>
+<td>XML格式（二进制 + zlib压缩）</td>
+</tr>
+<tr>
+<td>快速原型、手工编辑数据、与旧版VTK互操作</td>
+<td>Legacy格式（ASCII）</td>
+</tr>
+<tr>
+<td>并行计算、分布式可视化</td>
+<td>XML并行格式（.pvti/.pvtu/.pvtr/.pvts）</td>
+</tr>
+<tr>
+<td>ParaView数据管线导出/导入</td>
+<td>XML格式（ParaView原生支持）</td>
+</tr>
+<tr>
+<td>需要肉眼检查数据内容进行调试</td>
+<td>Legacy ASCII 或 XML ASCII</td>
+</tr>
+</tbody>
+</table>
+<p><strong>一般原则</strong>：为所有新项目使用XML格式，只有在需要与旧版工具链互操作时才使用Legacy格式。</p>
+<h3 id="1013">10.1.3 扩展名与数据集类型映射</h3>
+<table>
+<thead>
+<tr>
+<th>XML扩展名</th>
+<th>Legacy格式</th>
+<th>数据集类型</th>
+<th>典型应用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.vtp</code></td>
+<td><code>DATASET POLYDATA</code></td>
+<td><code>vtkPolyData</code></td>
+<td>表面网格、点云、CAD模型、等值面</td>
+</tr>
+<tr>
+<td><code>.vtu</code></td>
+<td><code>DATASET UNSTRUCTURED_GRID</code></td>
+<td><code>vtkUnstructuredGrid</code></td>
+<td>有限元网格、任意拓扑CFD结果</td>
+</tr>
+<tr>
+<td><code>.vti</code></td>
+<td><code>DATASET STRUCTURED_POINTS</code></td>
+<td><code>vtkImageData</code></td>
+<td>CT/MRI体数据、气象均匀网格</td>
+</tr>
+<tr>
+<td><code>.vtr</code></td>
+<td><code>DATASET RECTILINEAR_GRID</code></td>
+<td><code>vtkRectilinearGrid</code></td>
+<td>CFD边界层网格、海洋分层模型</td>
+</tr>
+<tr>
+<td><code>.vts</code></td>
+<td><code>DATASET STRUCTURED_GRID</code></td>
+<td><code>vtkStructuredGrid</code></td>
+<td>CFD贴体网格、变形/弯曲网格</td>
+</tr>
+<tr>
+<td><code>.vtm</code></td>
+<td>（无Legacy对应）</td>
+<td><code>vtkMultiBlockDataSet</code></td>
+<td>多区域仿真结果、装配体</td>
+</tr>
+<tr>
+<td><code>.vtk</code></td>
+<td>（所有Legacy类型共用）</td>
+<td>任意类型（由文件内DATASET关键字指定）</td>
+<td>Legacy互操作</td>
+</tr>
+</tbody>
+</table>
+<p><strong>记忆诀窍</strong>：XML扩展名的中间字母表示数据类型——<code>p</code>=PolyData, <code>u</code>=UnstructuredGrid, <code>i</code>=ImageData, <code>r</code>=RectilinearGrid, <code>s</code>=StructuredGrid, <code>m</code>=MultiBlock。</p>
+<hr />
+<h2 id="102-polydata-io">10.2 多边形数据读写（PolyData I/O）</h2>
+<p><code>vtkPolyData</code>是最常用的数据类型，也是拥有最多文件格式支持的数据类型。本节涵盖VTK原生XML格式、工业标准STL格式、通用图形学OBJ格式，以及点云常用PLY格式的读写。</p>
+<h3 id="1021">10.2.1 格式概览</h3>
+<table>
+<thead>
+<tr>
+<th>格式</th>
+<th>扩展名</th>
+<th>Reader类</th>
+<th>Writer类</th>
+<th>编码</th>
+<th>适用领域</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>VTK XML PolyData</td>
+<td><code>.vtp</code></td>
+<td><code>vtkXMLPolyDataReader</code></td>
+<td><code>vtkXMLPolyDataWriter</code></td>
+<td>ASCII/Binary/Appended</td>
+<td>VTK原生互操作</td>
+</tr>
+<tr>
+<td>VTK Legacy PolyData</td>
+<td><code>.vtk</code></td>
+<td><code>vtkPolyDataReader</code></td>
+<td><code>vtkPolyDataWriter</code></td>
+<td>ASCII/Binary</td>
+<td>Legacy互操作</td>
+</tr>
+<tr>
+<td>STL（Stereolithography）</td>
+<td><code>.stl</code></td>
+<td><code>vtkSTLReader</code></td>
+<td><code>vtkSTLWriter</code></td>
+<td>ASCII/Binary</td>
+<td>3D打印、CAD</td>
+</tr>
+<tr>
+<td>OBJ（Wavefront）</td>
+<td><code>.obj</code></td>
+<td><code>vtkOBJReader</code></td>
+<td><code>vtkOBJWriter</code></td>
+<td>ASCII</td>
+<td>图形学、材质纹理</td>
+</tr>
+<tr>
+<td>PLY（Stanford Polygon）</td>
+<td><code>.ply</code></td>
+<td><code>vtkPLYReader</code></td>
+<td><code>vtkPLYWriter</code></td>
+<td>ASCII/Binary</td>
+<td>点云、3D扫描</td>
+</tr>
+</tbody>
+</table>
+<h3 id="1022-vtk-xml-polydata">10.2.2 VTK XML PolyData读写</h3>
+<p>这是VTK生态中最推荐的PolyData I/O方式：</p>
+<pre><code class="language-cpp">#include &quot;vtkXMLPolyDataReader.h&quot;
+#include &quot;vtkXMLPolyDataWriter.h&quot;
+#include &quot;vtkPolyData.h&quot;
+#include &quot;vtkNew.h&quot;
+
+// === 写入 .vtp 文件 ===
+void WritePolyData(vtkPolyData* data, const char* filename)
+{
+  vtkNew&lt;vtkXMLPolyDataWriter&gt; writer;
+  writer-&gt;SetFileName(filename);
+  writer-&gt;SetInputData(data);
+  // writer-&gt;SetDataModeToBinary();      // 默认二进制，体积最小
+  // writer-&gt;SetDataModeToAscii();       // ASCII模式，可读
+  // writer-&gt;SetDataModeToAppended();    // Appended二进制，支持随机访问
+  // writer-&gt;SetCompressorTypeToZLib();  // 启用zlib压缩（仅Binary和Appended模式）
+  writer-&gt;Write();
+  std::cout &lt;&lt; &quot;Written: &quot; &lt;&lt; filename &lt;&lt; std::endl;
+}
+
+// === 读取 .vtp 文件 ===
+vtkSmartPointer&lt;vtkPolyData&gt; ReadPolyData(const char* filename)
+{
+  vtkNew&lt;vtkXMLPolyDataReader&gt; reader;
+  reader-&gt;SetFileName(filename);
+  reader-&gt;Update();
+  vtkSmartPointer&lt;vtkPolyData&gt; data = reader-&gt;GetOutput();
+  std::cout &lt;&lt; &quot;Read: &quot; &lt;&lt; filename
+            &lt;&lt; &quot; (&quot; &lt;&lt; data-&gt;GetNumberOfPoints() &lt;&lt; &quot; points, &quot;
+            &lt;&lt; data-&gt;GetNumberOfCells() &lt;&lt; &quot; cells)&quot; &lt;&lt; std::endl;
+  return data;
+}
+</code></pre>
+<p><strong>Writer关键选项说明</strong>：</p>
+<ul>
+<li><strong><code>SetDataModeToBinary()</code></strong>：二进制编码，文件体积最小。默认模式。数据以Base64编码内嵌在XML中（但本质仍是二进制）。</li>
+<li><strong><code>SetDataModeToAscii()</code></strong>：ASCII编码，文件可直接用文本编辑器阅读，适合调试和教学场景。</li>
+<li><strong><code>SetDataModeToAppended()</code></strong>：将数据以二进制形式集中附加在XML末尾，实现随机数据块的访问能力。适合需要只读取文件中某一部分数据的高级场景。</li>
+<li><strong><code>SetCompressorTypeToZLib()</code></strong>：启用zlib压缩（需要VTK_COMMON_COMPUTATIONAL_GEOMETRY模块的编译支持）。配合Binary/Appended模式使用，可显著减小文件体积（通常压缩比可达3-10倍）。</li>
+</ul>
+<h3 id="1023-stl">10.2.3 STL格式</h3>
+<p>STL（STereoLithography）是3D打印和快速成型领域最通用的格式。一个STL文件存储一个三角形面片的集合——即一个<code>vtkPolyData</code>，其中所有单元都是<code>VTK_TRIANGLE</code>。</p>
+<pre><code class="language-cpp">#include &quot;vtkSTLReader.h&quot;
+#include &quot;vtkSTLWriter.h&quot;
+#include &quot;vtkPolyDataMapper.h&quot;
+#include &quot;vtkActor.h&quot;
+#include &quot;vtkRenderer.h&quot;
+#include &quot;vtkRenderWindow.h&quot;
+#include &quot;vtkRenderWindowInteractor.h&quot;
+#include &quot;vtkInteractorStyleTrackballCamera.h&quot;
+#include &quot;vtkNew.h&quot;
+#include &quot;vtkProperty.h&quot;
+
+// === 完整的STL文件读取与渲染示例 ===
+int main()
+{
+  // ---------- 步骤1：读取STL文件 ----------
+  vtkNew&lt;vtkSTLReader&gt; reader;
+  reader-&gt;SetFileName(&quot;example.stl&quot;);
+  // 注意：如果STL文件不使用标准三角形顶点的法向量约定，
+  // 可以在读取后通过vtkPolyDataNormals重新计算法向量。
+  reader-&gt;Update();
+
+  vtkPolyData* mesh = reader-&gt;GetOutput();
+  std::cout &lt;&lt; &quot;STL Model: &quot; &lt;&lt; mesh-&gt;GetNumberOfPoints() &lt;&lt; &quot; points, &quot;
+            &lt;&lt; mesh-&gt;GetNumberOfCells() &lt;&lt; &quot; triangles&quot; &lt;&lt; std::endl;
+
+  // ---------- 步骤2：渲染管线 ----------
+  vtkNew&lt;vtkPolyDataMapper&gt; mapper;
+  mapper-&gt;SetInputData(mesh);
+  // 如果STL文件不包含法向量，取消下面这行的注释：
+  // mapper-&gt;SetInputConnection(reader-&gt;GetOutputPort());
+  // 并在reader和mapper之间插入vtkPolyDataNormals
+
+  vtkNew&lt;vtkActor&gt; actor;
+  actor-&gt;SetMapper(mapper);
+  actor-&gt;GetProperty()-&gt;SetColor(0.6, 0.6, 0.7);     // 银灰色
+  actor-&gt;GetProperty()-&gt;SetSpecular(0.5);             // 金属高光
+  actor-&gt;GetProperty()-&gt;SetSpecularPower(40);          // 高光集中
+  actor-&gt;GetProperty()-&gt;SetEdgeVisibility(0);
+
+  vtkNew&lt;vtkRenderer&gt; renderer;
+  renderer-&gt;AddActor(actor);
+  renderer-&gt;SetBackground(0.15, 0.15, 0.18);
+
+  vtkNew&lt;vtkRenderWindow&gt; renderWindow;
+  renderWindow-&gt;AddRenderer(renderer);
+  renderWindow-&gt;SetSize(800, 600);
+  renderWindow-&gt;SetWindowName(&quot;STL Viewer&quot;);
+
+  vtkNew&lt;vtkRenderWindowInteractor&gt; interactor;
+  interactor-&gt;SetRenderWindow(renderWindow);
+
+  vtkNew&lt;vtkInteractorStyleTrackballCamera&gt; style;
+  style-&gt;SetDefaultRenderer(renderer);
+  interactor-&gt;SetInteractorStyle(style);
+
+  renderWindow-&gt;Render();
+  std::cout &lt;&lt; &quot;Rotate to inspect the model. Close window to exit.&quot; &lt;&lt; std::endl;
+  interactor-&gt;Start();
+
+  return 0;
+}
+</code></pre>
+<h3 id="1024">10.2.4 格式转换示例</h3>
+<p>将一种PolyData格式转换为另一种是常见的操作需求。以下是最小化的格式转换程序——从任意支持的格式读取，写入任意支持的格式。</p>
+<pre><code class="language-cpp">// format_converter.cxx
+// 通用PolyData格式转换器：STL &lt;-&gt; OBJ &lt;-&gt; PLY &lt;-&gt; VTP
+//
+// 用法：FormatConverter input.stl output.obj
+
+#include &quot;vtkNew.h&quot;
+#include &quot;vtkPolyData.h&quot;
+#include &quot;vtkSTLReader.h&quot;
+#include &quot;vtkSTLWriter.h&quot;
+#include &quot;vtkOBJReader.h&quot;
+#include &quot;vtkOBJWriter.h&quot;
+#include &quot;vtkPLYReader.h&quot;
+#include &quot;vtkPLYWriter.h&quot;
+#include &quot;vtkXMLPolyDataReader.h&quot;
+#include &quot;vtkXMLPolyDataWriter.h&quot;
+
+#include &lt;algorithm&gt;
+#include &lt;cstring&gt;
+#include &lt;iostream&gt;
+#include &lt;string&gt;
+
+// 根据扩展名获取字符串的小写版本
+std::string GetExtension(const std::string&amp; filename)
+{
+  auto pos = filename.find_last_of('.');
+  if (pos == std::string::npos) return &quot;&quot;;
+  std::string ext = filename.substr(pos);
+  std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
+  return ext;
+}
+
+// 根据扩展名选择合适的Reader
+vtkSmartPointer&lt;vtkPolyData&gt; ReadFile(const std::string&amp; filename)
+{
+  std::string ext = GetExtension(filename);
+  if (ext == &quot;.vtp&quot;)
+  {
+    vtkNew&lt;vtkXMLPolyDataReader&gt; reader;
+    reader-&gt;SetFileName(filename.c_str());
+    reader-&gt;Update();
+    return reader-&gt;GetOutput();
+  }
+  else if (ext == &quot;.stl&quot;)
+  {
+    vtkNew&lt;vtkSTLReader&gt; reader;
+    reader-&gt;SetFileName(filename.c_str());
+    reader-&gt;Update();
+    return reader-&gt;GetOutput();
+  }
+  else if (ext == &quot;.obj&quot;)
+  {
+    vtkNew&lt;vtkOBJReader&gt; reader;
+    reader-&gt;SetFileName(filename.c_str());
+    reader-&gt;Update();
+    return reader-&gt;GetOutput();
+  }
+  else if (ext == &quot;.ply&quot;)
+  {
+    vtkNew&lt;vtkPLYReader&gt; reader;
+    reader-&gt;SetFileName(filename.c_str());
+    reader-&gt;Update();
+    return reader-&gt;GetOutput();
+  }
+  else
+  {
+    std::cerr &lt;&lt; &quot;Unsupported input format: &quot; &lt;&lt; ext &lt;&lt; std::endl;
+    return nullptr;
+  }
+}
+
+// 根据扩展名选择合适的Writer
+bool WriteFile(vtkPolyData* data, const std::string&amp; filename)
+{
+  std::string ext = GetExtension(filename);
+  if (ext == &quot;.vtp&quot;)
+  {
+    vtkNew&lt;vtkXMLPolyDataWriter&gt; writer;
+    writer-&gt;SetFileName(filename.c_str());
+    writer-&gt;SetInputData(data);
+    writer-&gt;Write();
+  }
+  else if (ext == &quot;.stl&quot;)
+  {
+    vtkNew&lt;vtkSTLWriter&gt; writer;
+    writer-&gt;SetFileName(filename.c_str());
+    writer-&gt;SetInputData(data);
+    writer-&gt;Write();
+  }
+  else if (ext == &quot;.obj&quot;)
+  {
+    vtkNew&lt;vtkOBJWriter&gt; writer;
+    writer-&gt;SetFileName(filename.c_str());
+    writer-&gt;SetInputData(data);
+    writer-&gt;Write();
+  }
+  else if (ext == &quot;.ply&quot;)
+  {
+    vtkNew&lt;vtkPLYWriter&gt; writer;
+    writer-&gt;SetFileName(filename.c_str());
+    writer-&gt;SetInputData(data);
+    writer-&gt;Write();
+  }
+  else
+  {
+    std::cerr &lt;&lt; &quot;Unsupported output format: &quot; &lt;&lt; ext &lt;&lt; std::endl;
+    return false;
+  }
+  return true;
+}
+
+int main(int argc, char* argv[])
+{
+  if (argc != 3)
+  {
+    std::cout &lt;&lt; &quot;Usage: FormatConverter &lt;input&gt; &lt;output&gt;\n&quot;
+              &lt;&lt; &quot;  Supports: .vtp, .stl, .obj, .ply\n&quot;
+              &lt;&lt; &quot;  Example: FormatConverter model.stl model.obj\n&quot;;
+    return 1;
+  }
+
+  std::string inputFile  = argv[1];
+  std::string outputFile = argv[2];
+
+  std::cout &lt;&lt; &quot;Converting: &quot; &lt;&lt; inputFile &lt;&lt; &quot; -&gt; &quot; &lt;&lt; outputFile &lt;&lt; std::endl;
+
+  auto data = ReadFile(inputFile);
+  if (!data)
+  {
+    std::cerr &lt;&lt; &quot;Failed to read input file.&quot; &lt;&lt; std::endl;
+    return 1;
+  }
+
+  std::cout &lt;&lt; &quot;  Input:  &quot; &lt;&lt; data-&gt;GetNumberOfPoints() &lt;&lt; &quot; points, &quot;
+            &lt;&lt; data-&gt;GetNumberOfCells() &lt;&lt; &quot; cells&quot; &lt;&lt; std::endl;
+
+  if (!WriteFile(data, outputFile))
+  {
+    std::cerr &lt;&lt; &quot;Failed to write output file.&quot; &lt;&lt; std::endl;
+    return 1;
+  }
+
+  std::cout &lt;&lt; &quot;Conversion complete.&quot; &lt;&lt; std::endl;
+  return 0;
+}
+</code></pre>
+<p><strong>说明</strong>：VTK对STL、OBJ、PLY格式的支持非常成熟。<code>vtkSTLReader</code>能够自动检测ASCII或Binary编码的STL文件。<code>vtkOBJReader</code>读取Wavefront .obj文件（包括顶点、面、纹理坐标和法向量），<code>vtkOBJWriter</code>输出时也可保留材质库引用。<code>vtkPLYReader</code>和<code>vtkPLYWriter</code>支持Stanford PLY格式的ASCII和Binary两种变体，广泛用于3D扫描数据的交换。</p>
+<hr />
+<h2 id="103">10.3 非结构化网格读写</h2>
+<p><code>vtkUnstructuredGrid</code>的读写遵循与PolyData相同的模式，但使用专用的类。</p>
+<h3 id="1031-xml">10.3.1 XML格式（推荐）</h3>
+<pre><code class="language-cpp">#include &quot;vtkXMLUnstructuredGridReader.h&quot;
+#include &quot;vtkXMLUnstructuredGridWriter.h&quot;
+#include &quot;vtkUnstructuredGrid.h&quot;
+
+// === 写入 .vtu 文件 ===
+void WriteUnstructuredGrid(vtkUnstructuredGrid* grid, const char* filename)
+{
+  vtkNew&lt;vtkXMLUnstructuredGridWriter&gt; writer;
+  writer-&gt;SetFileName(filename);
+  writer-&gt;SetInputData(grid);
+  // writer-&gt;SetDataModeToBinary();    // 可选
+  // writer-&gt;SetCompressorTypeToZLib();
+  writer-&gt;Write();
+}
+
+// === 读取 .vtu 文件 ===
+vtkSmartPointer&lt;vtkUnstructuredGrid&gt; ReadUnstructuredGrid(const char* filename)
+{
+  vtkNew&lt;vtkXMLUnstructuredGridReader&gt; reader;
+  reader-&gt;SetFileName(filename);
+  reader-&gt;Update();
+  return reader-&gt;GetOutput();
+}
+</code></pre>
+<h3 id="1032-legacy">10.3.2 Legacy格式（向后兼容）</h3>
+<pre><code class="language-cpp">#include &quot;vtkUnstructuredGridReader.h&quot;
+#include &quot;vtkUnstructuredGridWriter.h&quot;
+
+// Legacy .vtk 文件读写——API与XML版本一致
+vtkNew&lt;vtkUnstructuredGridWriter&gt; writer;
+writer-&gt;SetFileName(&quot;grid_legacy.vtk&quot;);
+writer-&gt;SetInputData(grid);
+writer-&gt;Write();
+</code></pre>
+<h3 id="1033">10.3.3 完整示例：创建、写入、读回、验证</h3>
+<pre><code class="language-cpp">// ugrid_roundtrip.cxx
+// 演示：创建UnstructuredGrid -&gt; 写入.vtu -&gt; 读回 -&gt; 验证数据完整性
+
+#include &quot;vtkNew.h&quot;
+#include &quot;vtkSmartPointer.h&quot;
+#include &quot;vtkUnstructuredGrid.h&quot;
+#include &quot;vtkXMLUnstructuredGridReader.h&quot;
+#include &quot;vtkXMLUnstructuredGridWriter.h&quot;
+#include &quot;vtkPoints.h&quot;
+#include &quot;vtkTetra.h&quot;
+#include &quot;vtkHexahedron.h&quot;
+#include &quot;vtkDoubleArray.h&quot;
+#include &quot;vtkPointData.h&quot;
+#include &quot;vtkCellData.h&quot;
+
+#include &lt;iostream&gt;
+
+int main()
+{
+  // ================================================================
+  // 第一步：手工构建一个混合单元的UnstructuredGrid
+  // ================================================================
+  vtkNew&lt;vtkPoints&gt; points;
+  points-&gt;InsertNextPoint(0.0, 0.0, 0.0);   // 0
+  points-&gt;InsertNextPoint(1.0, 0.0, 0.0);   // 1
+  points-&gt;InsertNextPoint(0.0, 1.0, 0.0);   // 2
+  points-&gt;InsertNextPoint(0.0, 0.0, 1.0);   // 3
+  points-&gt;InsertNextPoint(1.0, 1.0, 0.0);   // 4
+  points-&gt;InsertNextPoint(1.0, 0.0, 1.0);   // 5
+  points-&gt;InsertNextPoint(0.0, 1.0, 1.0);   // 6
+  points-&gt;InsertNextPoint(1.0, 1.0, 1.0);   // 7
+
+  vtkNew&lt;vtkUnstructuredGrid&gt; grid;
+  grid-&gt;SetPoints(points);
+
+  // 添加一个四面体 (nodes 0,1,2,3)
+  vtkNew&lt;vtkTetra&gt; tetra;
+  tetra-&gt;GetPointIds()-&gt;SetId(0, 0);
+  tetra-&gt;GetPointIds()-&gt;SetId(1, 1);
+  tetra-&gt;GetPointIds()-&gt;SetId(2, 2);
+  tetra-&gt;GetPointIds()-&gt;SetId(3, 3);
+  grid-&gt;InsertNextCell(tetra-&gt;GetCellType(), tetra-&gt;GetPointIds());
+
+  // 添加一个六面体 (nodes 0,1,4,2,3,5,7,6)
+  vtkNew&lt;vtkHexahedron&gt; hex;
+  hex-&gt;GetPointIds()-&gt;SetId(0, 0);
+  hex-&gt;GetPointIds()-&gt;SetId(1, 1);
+  hex-&gt;GetPointIds()-&gt;SetId(2, 4);
+  hex-&gt;GetPointIds()-&gt;SetId(3, 2);
+  hex-&gt;GetPointIds()-&gt;SetId(4, 3);
+  hex-&gt;GetPointIds()-&gt;SetId(5, 5);
+  hex-&gt;GetPointIds()-&gt;SetId(6, 7);
+  hex-&gt;GetPointIds()-&gt;SetId(7, 6);
+  grid-&gt;InsertNextCell(hex-&gt;GetCellType(), hex-&gt;GetPointIds());
+
+  // 添加点数据
+  vtkNew&lt;vtkDoubleArray&gt; pointScalars;
+  pointScalars-&gt;SetName(&quot;Temperature&quot;);
+  pointScalars-&gt;SetNumberOfTuples(8);
+  for (int i = 0; i &lt; 8; ++i)
+    pointScalars-&gt;SetValue(i, 20.0 + i * 5.0);   // 20, 25, 30, ..., 55
+  grid-&gt;GetPointData()-&gt;SetScalars(pointScalars);
+
+  // 添加单元数据
+  vtkNew&lt;vtkDoubleArray&gt; cellScalars;
+  cellScalars-&gt;SetName(&quot;MaterialID&quot;);
+  cellScalars-&gt;SetNumberOfTuples(2);
+  cellScalars-&gt;SetValue(0, 1.0);   // 四面体 = 材料1
+  cellScalars-&gt;SetValue(1, 2.0);   // 六面体 = 材料2
+  grid-&gt;GetCellData()-&gt;SetScalars(cellScalars);
+
+  std::cout &lt;&lt; &quot;Original grid:\n&quot;
+            &lt;&lt; &quot;  Points: &quot; &lt;&lt; grid-&gt;GetNumberOfPoints() &lt;&lt; &quot;\n&quot;
+            &lt;&lt; &quot;  Cells:  &quot; &lt;&lt; grid-&gt;GetNumberOfCells() &lt;&lt; &quot;\n&quot;
+            &lt;&lt; &quot;  Cell 0 type: &quot; &lt;&lt; grid-&gt;GetCellType(0)
+            &lt;&lt; &quot; (VTK_TETRA=&quot; &lt;&lt; VTK_TETRA &lt;&lt; &quot;)\n&quot;
+            &lt;&lt; &quot;  Cell 1 type: &quot; &lt;&lt; grid-&gt;GetCellType(1)
+            &lt;&lt; &quot; (VTK_HEXAHEDRON=&quot; &lt;&lt; VTK_HEXAHEDRON &lt;&lt; &quot;)\n&quot;
+            &lt;&lt; &quot;  Point Data arrays: &quot;
+            &lt;&lt; grid-&gt;GetPointData()-&gt;GetNumberOfArrays() &lt;&lt; &quot;\n&quot;
+            &lt;&lt; &quot;  Cell Data arrays:  &quot;
+            &lt;&lt; grid-&gt;GetCellData()-&gt;GetNumberOfArrays() &lt;&lt; std::endl;
+
+  // ================================================================
+  // 第二步：写入 .vtu 文件
+  // ================================================================
+  const char* filename = &quot;test_grid.vtu&quot;;
+  vtkNew&lt;vtkXMLUnstructuredGridWriter&gt; writer;
+  writer-&gt;SetFileName(filename);
+  writer-&gt;SetInputData(grid);
+  writer-&gt;SetDataModeToBinary();
+  writer-&gt;Write();
+  std::cout &lt;&lt; &quot;\nWritten to: &quot; &lt;&lt; filename &lt;&lt; std::endl;
+
+  // ================================================================
+  // 第三步：读回文件
+  // ================================================================
+  vtkNew&lt;vtkXMLUnstructuredGridReader&gt; reader;
+  reader-&gt;SetFileName(filename);
+  reader-&gt;Update();
+
+  vtkUnstructuredGrid* loaded = reader-&gt;GetOutput();
+
+  // ================================================================
+  // 第四步：验证数据完整性
+  // ================================================================
+  std::cout &lt;&lt; &quot;\nLoaded grid:\n&quot;
+            &lt;&lt; &quot;  Points: &quot; &lt;&lt; loaded-&gt;GetNumberOfPoints() &lt;&lt; &quot;\n&quot;
+            &lt;&lt; &quot;  Cells:  &quot; &lt;&lt; loaded-&gt;GetNumberOfCells() &lt;&lt; &quot;\n&quot;
+            &lt;&lt; &quot;  Cell 0 type: &quot; &lt;&lt; loaded-&gt;GetCellType(0) &lt;&lt; &quot;\n&quot;
+            &lt;&lt; &quot;  Cell 1 type: &quot; &lt;&lt; loaded-&gt;GetCellType(1) &lt;&lt; &quot;\n&quot;
+            &lt;&lt; &quot;  Point Data arrays: &quot;
+            &lt;&lt; loaded-&gt;GetPointData()-&gt;GetNumberOfArrays() &lt;&lt; &quot;\n&quot;
+            &lt;&lt; &quot;  Cell Data arrays:  &quot;
+            &lt;&lt; loaded-&gt;GetCellData()-&gt;GetNumberOfArrays() &lt;&lt; std::endl;
+
+  // 验证点数据
+  vtkDataArray* loadedPointScalars =
+    loaded-&gt;GetPointData()-&gt;GetScalars();
+  if (loadedPointScalars)
+  {
+    std::cout &lt;&lt; &quot;  Point scalar name: &quot; &lt;&lt; loadedPointScalars-&gt;GetName()
+              &lt;&lt; &quot; (expected: Temperature)\n&quot;;
+    std::cout &lt;&lt; &quot;  Sample values: &quot;;
+    for (int i = 0; i &lt; 3; ++i)
+      std::cout &lt;&lt; loadedPointScalars-&gt;GetTuple1(i) &lt;&lt; &quot; &quot;;
+    std::cout &lt;&lt; &quot;...\n&quot;;
+  }
+
+  // 验证单元数据
+  vtkDataArray* loadedCellScalars =
+    loaded-&gt;GetCellData()-&gt;GetScalars();
+  if (loadedCellScalars)
+  {
+    std::cout &lt;&lt; &quot;  Cell scalar name: &quot; &lt;&lt; loadedCellScalars-&gt;GetName()
+              &lt;&lt; &quot; (expected: MaterialID)\n&quot;;
+    std::cout &lt;&lt; &quot;  Values: &quot;
+              &lt;&lt; loadedCellScalars-&gt;GetTuple1(0) &lt;&lt; &quot;, &quot;
+              &lt;&lt; loadedCellScalars-&gt;GetTuple1(1) &lt;&lt; &quot;\n&quot;;
+  }
+
+  // 验证边界
+  double bounds[6];
+  loaded-&gt;GetBounds(bounds);
+  std::cout &lt;&lt; &quot;  Bounds: [&quot;
+            &lt;&lt; bounds[0] &lt;&lt; &quot;, &quot; &lt;&lt; bounds[1] &lt;&lt; &quot;] x [&quot;
+            &lt;&lt; bounds[2] &lt;&lt; &quot;, &quot; &lt;&lt; bounds[3] &lt;&lt; &quot;] x [&quot;
+            &lt;&lt; bounds[4] &lt;&lt; &quot;, &quot; &lt;&lt; bounds[5] &lt;&lt; &quot;]\n&quot;;
+
+  // 完整性断言
+  bool ok = true;
+  if (loaded-&gt;GetNumberOfPoints() != 8)  { ok = false; std::cerr &lt;&lt; &quot;ERROR: point count mismatch\n&quot;; }
+  if (loaded-&gt;GetNumberOfCells() != 2)   { ok = false; std::cerr &lt;&lt; &quot;ERROR: cell count mismatch\n&quot;; }
+  if (loaded-&gt;GetCellType(0) != VTK_TETRA) { ok = false; std::cerr &lt;&lt; &quot;ERROR: cell 0 type mismatch\n&quot;; }
+  if (loaded-&gt;GetCellType(1) != VTK_HEXAHEDRON) { ok = false; std::cerr &lt;&lt; &quot;ERROR: cell 1 type mismatch\n&quot;; }
+
+  if (ok)
+    std::cout &lt;&lt; &quot;\n*** Round-trip verification PASSED ***&quot; &lt;&lt; std::endl;
+  else
+    std::cout &lt;&lt; &quot;\n*** Round-trip verification FAILED ***&quot; &lt;&lt; std::endl;
+
+  return ok ? 0 : 1;
+}
+</code></pre>
+<p><strong>关键点</strong>：上述示例验证了UnstructuredGrid的完整数据保真度——点坐标、单元类型（四面体+六面体）、单元连接关系、点属性数据和单元属性数据都通过写入-读回循环完整保留。这是VTK XML格式的核心优势之一。</p>
+<hr />
+<h2 id="104">10.4 结构化数据与图像读写</h2>
+<h3 id="1041-xml">10.4.1 XML格式的结构化数据读写</h3>
+<p>三种结构化数据类型各有其专用的XML读者和写者：</p>
+<pre><code class="language-cpp">// === vtkImageData (.vti) ===
+#include &quot;vtkXMLImageDataReader.h&quot;
+#include &quot;vtkXMLImageDataWriter.h&quot;
+
+vtkNew&lt;vtkXMLImageDataWriter&gt; imageWriter;
+imageWriter-&gt;SetFileName(&quot;volume.vti&quot;);
+imageWriter-&gt;SetInputData(imageData);
+imageWriter-&gt;Write();
+
+vtkNew&lt;vtkXMLImageDataReader&gt; imageReader;
+imageReader-&gt;SetFileName(&quot;volume.vti&quot;);
+imageReader-&gt;Update();
+
+// === vtkRectilinearGrid (.vtr) ===
+#include &quot;vtkXMLRectilinearGridReader.h&quot;
+#include &quot;vtkXMLRectilinearGridWriter.h&quot;
+
+vtkNew&lt;vtkXMLRectilinearGridWriter&gt; rectWriter;
+rectWriter-&gt;SetFileName(&quot;cfd_grid.vtr&quot;);
+rectWriter-&gt;SetInputData(rectilinearGrid);
+rectWriter-&gt;Write();
+
+// === vtkStructuredGrid (.vts) ===
+#include &quot;vtkXMLStructuredGridReader.h&quot;
+#include &quot;vtkXMLStructuredGridWriter.h&quot;
+
+vtkNew&lt;vtkXMLStructuredGridWriter&gt; structWriter;
+structWriter-&gt;SetFileName(&quot;body_fitted.vts&quot;);
+structWriter-&gt;SetInputData(structuredGrid);
+structWriter-&gt;Write();
+</code></pre>
+<p>所有XML格式的Writer都支持<code>SetDataModeToBinary()</code>、<code>SetDataModeToAscii()</code>和<code>SetCompressorTypeToZLib()</code>选项，API一致。</p>
+<h3 id="1042">10.4.2 图像格式读写</h3>
+<p>VTK提供了对常见光栅图像格式的读写支持，这些类直接输出或输入<code>vtkImageData</code>（对于2D图像，Dimensions为[width, height, 1]）：</p>
+<table>
+<thead>
+<tr>
+<th>格式</th>
+<th>Reader</th>
+<th>Writer</th>
+<th>通道支持</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PNG</td>
+<td><code>vtkPNGReader</code></td>
+<td><code>vtkPNGWriter</code></td>
+<td>1(Grayscale), 2(Gray+Alpha), 3(RGB), 4(RGBA)</td>
+</tr>
+<tr>
+<td>JPEG</td>
+<td><code>vtkJPEGReader</code></td>
+<td><code>vtkJPEGWriter</code></td>
+<td>1(Grayscale), 3(RGB)</td>
+</tr>
+<tr>
+<td>BMP</td>
+<td><code>vtkBMPReader</code></td>
+<td><code>vtkBMPWriter</code></td>
+<td>1, 3, 4</td>
+</tr>
+<tr>
+<td>TIFF</td>
+<td><code>vtkTIFFReader</code></td>
+<td><code>vtkTIFFWriter</code></td>
+<td>1, 3, 4 (多页)</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-cpp">#include &quot;vtkPNGReader.h&quot;
+#include &quot;vtkPNGWriter.h&quot;
+#include &quot;vtkJPEGReader.h&quot;
+#include &quot;vtkJPEGWriter.h&quot;
+#include &quot;vtkBMPReader.h&quot;
+#include &quot;vtkBMPWriter.h&quot;
+
+// === 读取PNG图像 ===
+vtkNew&lt;vtkPNGReader&gt; pngReader;
+pngReader-&gt;SetFileName(&quot;input.png&quot;);
+pngReader-&gt;Update();
+vtkImageData* image = pngReader-&gt;GetOutput();
+
+// === 写入JPEG图像（转换） ===
+vtkNew&lt;vtkJPEGWriter&gt; jpgWriter;
+jpgWriter-&gt;SetFileName(&quot;output.jpg&quot;);
+jpgWriter-&gt;SetInputData(image);    // 也可以使用SetInputConnection
+jpgWriter-&gt;SetQuality(95);         // JPEG质量 0-100，默认95
+jpgWriter-&gt;Write();
+
+// === 写入PNG图像 ===
+vtkNew&lt;vtkPNGWriter&gt; pngWriter;
+pngWriter-&gt;SetFileName(&quot;output.png&quot;);
+pngWriter-&gt;SetInputData(image);
+pngWriter-&gt;Write();
+</code></pre>
+<h3 id="1043-dicom">10.4.3 DICOM医学影像</h3>
+<p>DICOM（Digital Imaging and Communications in Medicine）是医学影像的标准格式。VTK提供<code>vtkDICOMImageReader</code>用于读取DICOM文件序列：</p>
+<pre><code class="language-cpp">#include &quot;vtkDICOMImageReader.h&quot;
+
+vtkNew&lt;vtkDICOMImageReader&gt; dicomReader;
+// 方式1：指定目录（读取目录中的所有DICOM文件）
+dicomReader-&gt;SetDirectoryName(&quot;C:/Data/CT_Scan/&quot;);
+// 方式2：指定单个文件（读取单张切片）
+// dicomReader-&gt;SetFileName(&quot;C:/Data/CT_Scan/slice001.dcm&quot;);
+dicomReader-&gt;Update();
+
+vtkImageData* volume = dicomReader-&gt;GetOutput();
+int dims[3];
+volume-&gt;GetDimensions(dims);
+std::cout &lt;&lt; &quot;DICOM volume: &quot; &lt;&lt; dims[0] &lt;&lt; &quot; x &quot; &lt;&lt; dims[1]
+          &lt;&lt; &quot; x &quot; &lt;&lt; dims[2] &lt;&lt; &quot; (slices)&quot; &lt;&lt; std::endl;
+std::cout &lt;&lt; &quot;Patient Name: &quot; &lt;&lt; dicomReader-&gt;GetPatientName() &lt;&lt; std::endl;
+std::cout &lt;&lt; &quot;Study UID:    &quot; &lt;&lt; dicomReader-&gt;GetStudyUID() &lt;&lt; std::endl;
+</code></pre>
+<p><strong>特别提示</strong>：DICOM数据通常以<code>vtkImageData</code>的形式读入，其中<code>dims[2]</code>等于切片数量。关于DICOM体数据的完整渲染管线（包括体渲染和传递函数），将在后续的体渲染章节中详细讲解。</p>
+<h3 id="1044-3d">10.4.4 从图像到3D表面：等值面提取示例</h3>
+<p>这是一个常见的可视化工作流——读取2D图像，将其转换为3D高程表面：</p>
+<pre><code class="language-cpp">// image_to_surface.cxx
+// 读取PNG灰度图像 -&gt; 将像素亮度映射为Z高度 -&gt; 生成3D表面
+
+#include &quot;vtkNew.h&quot;
+#include &quot;vtkSmartPointer.h&quot;
+#include &quot;vtkPNGReader.h&quot;
+#include &quot;vtkImageData.h&quot;
+#include &quot;vtkImageDataGeometryFilter.h&quot;
+#include &quot;vtkWarpScalar.h&quot;
+#include &quot;vtkPolyDataNormals.h&quot;
+#include &quot;vtkPolyDataMapper.h&quot;
+#include &quot;vtkActor.h&quot;
+#include &quot;vtkRenderer.h&quot;
+#include &quot;vtkRenderWindow.h&quot;
+#include &quot;vtkRenderWindowInteractor.h&quot;
+#include &quot;vtkInteractorStyleTrackballCamera.h&quot;
+#include &quot;vtkProperty.h&quot;
+#include &quot;vtkCamera.h&quot;
+
+int main(int argc, char* argv[])
+{
+  const char* filename = (argc &gt; 1) ? argv[1] : &quot;heightmap.png&quot;;
+
+  // ---------- 步骤1：读取图像 ----------
+  vtkNew&lt;vtkPNGReader&gt; reader;
+  reader-&gt;SetFileName(filename);
+  reader-&gt;Update();
+
+  vtkImageData* image = reader-&gt;GetOutput();
+  int dims[3];
+  image-&gt;GetDimensions(dims);
+  double spacing[3];
+  image-&gt;GetSpacing(spacing);
+  std::cout &lt;&lt; &quot;Image: &quot; &lt;&lt; dims[0] &lt;&lt; &quot; x &quot; &lt;&lt; dims[1]
+            &lt;&lt; &quot; (spacing: &quot; &lt;&lt; spacing[0] &lt;&lt; &quot; x &quot; &lt;&lt; spacing[1] &lt;&lt; &quot;)&quot; &lt;&lt; std::endl;
+
+  // ---------- 步骤2：将图像像素转换为几何网格 ----------
+  // vtkImageDataGeometryFilter 将ImageData的每个像素中心转化为结构化网格的顶点
+  vtkNew&lt;vtkImageDataGeometryFilter&gt; geometryFilter;
+  geometryFilter-&gt;SetInputData(image);
+
+  // ---------- 步骤3：将标量值（像素亮度）映射为Z方向位移 ----------
+  vtkNew&lt;vtkWarpScalar&gt; warp;
+  warp-&gt;SetInputConnection(geometryFilter-&gt;GetOutputPort());
+  warp-&gt;SetScaleFactor(0.5);   // 位移放大因子——根据你的数据范围调整
+  warp-&gt;SetUseNormal(0);       // 使用标量值直接位移，而非沿法向位移
+  warp-&gt;SetXYPlane(1);         // 在Z方向位移（1表示Z方向）
+
+  // ---------- 步骤4：计算法向量 ----------
+  vtkNew&lt;vtkPolyDataNormals&gt; normals;
+  normals-&gt;SetInputConnection(warp-&gt;GetOutputPort());
+  normals-&gt;SetFeatureAngle(50.0);
+  normals-&gt;ConsistencyOn();
+
+  // ---------- 步骤5：渲染 ----------
+  vtkNew&lt;vtkPolyDataMapper&gt; mapper;
+  mapper-&gt;SetInputConnection(normals-&gt;GetOutputPort());
+  mapper-&gt;ScalarVisibilityOn();
+
+  vtkNew&lt;vtkActor&gt; actor;
+  actor-&gt;SetMapper(mapper);
+  actor-&gt;GetProperty()-&gt;SetAmbient(0.2);
+  actor-&gt;GetProperty()-&gt;SetDiffuse(0.8);
+
+  vtkNew&lt;vtkRenderer&gt; renderer;
+  renderer-&gt;AddActor(actor);
+  renderer-&gt;SetBackground(0.1, 0.1, 0.15);
+  renderer-&gt;GetActiveCamera()-&gt;SetPosition(dims[0]/2, -dims[1], dims[1]/2);
+  renderer-&gt;GetActiveCamera()-&gt;SetFocalPoint(dims[0]/2, dims[1]/2, 0);
+  renderer-&gt;GetActiveCamera()-&gt;SetViewUp(0, 0, 1);
+
+  vtkNew&lt;vtkRenderWindow&gt; renderWindow;
+  renderWindow-&gt;AddRenderer(renderer);
+  renderWindow-&gt;SetSize(900, 700);
+  renderWindow-&gt;SetWindowName(&quot;Image Heightmap to 3D Surface&quot;);
+
+  vtkNew&lt;vtkRenderWindowInteractor&gt; interactor;
+  interactor-&gt;SetRenderWindow(renderWindow);
+  vtkNew&lt;vtkInteractorStyleTrackballCamera&gt; style;
+  interactor-&gt;SetInteractorStyle(style);
+
+  renderWindow-&gt;Render();
+  std::cout &lt;&lt; &quot;Heightmap surface rendered.&quot; &lt;&lt; std::endl;
+  interactor-&gt;Start();
+
+  return 0;
+}
+</code></pre>
+<p>这个管线是地理高程可视化的基本模板。任何灰度图像（包括真实的高程图、CT切片或数学纹理）都可以通过此管线被转化为可交互旋转的3D曲面。</p>
+<hr />
+<h2 id="105">10.5 复合数据集读写</h2>
+<h3 id="1051-multiblock">10.5.1 MultiBlock数据集概念</h3>
+<p>在复杂的工程仿真中，计算结果通常包含多个区域（Zone）或部件（Part）——例如飞机的外部气动网格（PolyData）与发动机的内部流道网格（UnstructuredGrid）并存。<code>vtkMultiBlockDataSet</code>就是VTK中管理这种"数据集集合"的容器。</p>
+<h3 id="1052-vtm">10.5.2 .vtm格式的读写</h3>
+<p><code>.vtm</code>（VTK MultiBlock）格式用于读写<code>vtkMultiBlockDataSet</code>：</p>
+<pre><code class="language-cpp">#include &quot;vtkXMLMultiBlockDataReader.h&quot;
+#include &quot;vtkXMLMultiBlockDataWriter.h&quot;
+#include &quot;vtkMultiBlockDataSet.h&quot;
+#include &quot;vtkPolyData.h&quot;
+#include &quot;vtkUnstructuredGrid.h&quot;
+#include &quot;vtkSphereSource.h&quot;
+#include &quot;vtkNew.h&quot;
+
+// === 创建并写入MultiBlock数据集 ===
+void WriteMultiBlock(const char* filename)
+{
+  // 创建数据块1：球体PolyData
+  vtkNew&lt;vtkSphereSource&gt; sphere;
+  sphere-&gt;SetThetaResolution(32);
+  sphere-&gt;SetPhiResolution(32);
+  sphere-&gt;Update();
+
+  // 创建数据块2：从第10.3.3节的示例中复制或导入的UnstructuredGrid
+  // （此处省略具体的网格构建代码，实际使用中替换为你的数据）
+
+  // 组装MultiBlock数据集
+  vtkNew&lt;vtkMultiBlockDataSet&gt; multiBlock;
+  multiBlock-&gt;SetNumberOfBlocks(2);
+  multiBlock-&gt;SetBlock(0, sphere-&gt;GetOutput());     // 块索引从0开始
+  multiBlock-&gt;SetBlock(1, someUnstructuredGrid);
+  // 可选：为每个块设置名称（ParaView会在Pipeline Browser中显示）
+  multiBlock-&gt;GetMetaData(0)-&gt;Set(vtkCompositeDataSet::NAME(), &quot;Sphere Surface&quot;);
+  multiBlock-&gt;GetMetaData(1)-&gt;Set(vtkCompositeDataSet::NAME(), &quot;Volume Mesh&quot;);
+
+  // 写入
+  vtkNew&lt;vtkXMLMultiBlockDataWriter&gt; writer;
+  writer-&gt;SetFileName(filename);
+  writer-&gt;SetInputData(multiBlock);
+  writer-&gt;Write();
+  std::cout &lt;&lt; &quot;MultiBlock written to: &quot; &lt;&lt; filename &lt;&lt; std::endl;
+}
+
+// === 读取MultiBlock数据集 ===
+vtkSmartPointer&lt;vtkMultiBlockDataSet&gt; ReadMultiBlock(const char* filename)
+{
+  vtkNew&lt;vtkXMLMultiBlockDataReader&gt; reader;
+  reader-&gt;SetFileName(filename);
+  reader-&gt;Update();
+
+  auto multiBlock = vtkSmartPointer&lt;vtkMultiBlockDataSet&gt;::New();
+  multiBlock-&gt;ShallowCopy(reader-&gt;GetOutput());
+
+  unsigned int numBlocks = multiBlock-&gt;GetNumberOfBlocks();
+  std::cout &lt;&lt; &quot;Read MultiBlock with &quot; &lt;&lt; numBlocks &lt;&lt; &quot; blocks:&quot; &lt;&lt; std::endl;
+  for (unsigned int i = 0; i &lt; numBlocks; ++i)
+  {
+    vtkDataObject* block = multiBlock-&gt;GetBlock(i);
+    if (block)
+    {
+      std::cout &lt;&lt; &quot;  Block &quot; &lt;&lt; i &lt;&lt; &quot;: &quot;
+                &lt;&lt; block-&gt;GetClassName() &lt;&lt; std::endl;
+    }
+  }
+  return multiBlock;
+}
+</code></pre>
+<h3 id="1053">10.5.3 关键注意事项</h3>
+<ul>
+<li><strong>块的可混合数据类型</strong>：一个<code>.vtm</code>文件的各个块可以是不同的数据类型。块0可以是<code>vtkPolyData</code>，块1可以是<code>vtkUnstructuredGrid</code>，块2可以是<code>vtkImageData</code>。</li>
+<li><strong>块名称元数据</strong>：使用<code>GetMetaData(i)-&gt;Set(vtkCompositeDataSet::NAME(), "名称")</code>为每个块设置描述性名称，这在ParaView和VTK的Pipeline Browser中非常有用。</li>
+<li><strong>实际存储机制</strong>：<code>.vtm</code>文件不直接内嵌所有数据。标准的做法是：<code>.vtm</code>文件包含对各子数据集文件的引用，每个子数据集（.vtp、.vtu等）作为独立文件存储在同一目录下。这种方式允许多个处理器并行读写各自的子文件。</li>
+</ul>
+<hr />
+<h2 id="106">10.6 文件格式选择指南</h2>
+<h3 id="1061">10.6.1 决策表</h3>
+<table>
+<thead>
+<tr>
+<th>你的情况</th>
+<th>推荐格式</th>
+<th>理由</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PolyData（表面网格），新项目</td>
+<td><code>.vtp</code></td>
+<td>VTK原生，支持压缩和多编码方式</td>
+</tr>
+<tr>
+<td>PolyData，3D打印/制造</td>
+<td><code>.stl</code></td>
+<td>工业标准，所有切片软件都支持</td>
+</tr>
+<tr>
+<td>PolyData，需要材质和纹理信息</td>
+<td><code>.obj</code></td>
+<td>携带材质库(.mtl)引用，图形学工具链广泛支持</td>
+</tr>
+<tr>
+<td>PolyData，3D扫描点云/网格</td>
+<td><code>.ply</code></td>
+<td>学术界和扫描设备的通用格式</td>
+</tr>
+<tr>
+<td>UnstructuredGrid，新项目</td>
+<td><code>.vtu</code></td>
+<td>VTK原生XML格式，推荐</td>
+</tr>
+<tr>
+<td>UnstructuredGrid，需要与旧版VTK互操作</td>
+<td><code>.vtk</code> (Legacy)</td>
+<td>最广泛的向后兼容性</td>
+</tr>
+<tr>
+<td>ImageData（均匀体数据）</td>
+<td><code>.vti</code></td>
+<td>XML格式，支持压缩</td>
+</tr>
+<tr>
+<td>RectilinearGrid（直线网格）</td>
+<td><code>.vtr</code></td>
+<td>XML格式</td>
+</tr>
+<tr>
+<td>StructuredGrid（结构化网格）</td>
+<td><code>.vts</code></td>
+<td>XML格式</td>
+</tr>
+<tr>
+<td>多区域/多部件仿真结果</td>
+<td><code>.vtm</code></td>
+<td>VTK MultiBlock XML格式</td>
+</tr>
+<tr>
+<td>2D光栅图像</td>
+<td><code>.png</code></td>
+<td>无损压缩，支持alpha通道</td>
+</tr>
+<tr>
+<td>照片级输出/材质贴图</td>
+<td><code>.jpg</code></td>
+<td>有损压缩，文件体积小</td>
+</tr>
+<tr>
+<td>医学影像</td>
+<td>DICOM (<code>.dcm</code>)</td>
+<td>医学标准格式，携带患者元数据</td>
+</tr>
+<tr>
+<td>需要人工检查/调试数据内容</td>
+<td>Legacy <code>.vtk</code> (ASCII)</td>
+<td>纯文本，人类可直接阅读</td>
+</tr>
+<tr>
+<td>大规模并行计算I/O</td>
+<td><code>.pvti</code>/<code>.pvtu</code>/<code>.pvtr</code>/<code>.pvts</code></td>
+<td>VTK XML并行格式</td>
+</tr>
+</tbody>
+</table>
+<h3 id="1062-binary-vs-ascii">10.6.2 Binary vs ASCII 权衡</h3>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>Binary（二进制）</th>
+<th>ASCII（文本）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>文件大小</td>
+<td>最小</td>
+<td>通常大5-10倍</td>
+</tr>
+<tr>
+<td>读写速度</td>
+<td>最快</td>
+<td>较慢</td>
+</tr>
+<tr>
+<td>人类可读性</td>
+<td>不可读</td>
+<td>可用文本编辑器直接查看和修改</td>
+</tr>
+<tr>
+<td>调试便利性</td>
+<td>差</td>
+<td>好——可以grep、diff、手工修正</td>
+</tr>
+<tr>
+<td>数值精度</td>
+<td>精确（无文本转换损失）</td>
+<td>受文本表示的精度限制</td>
+</tr>
+<tr>
+<td>适用场景</td>
+<td>生产环境、大型数据</td>
+<td>教学、开发、调试</td>
+</tr>
+</tbody>
+</table>
+<p><strong>实践建议</strong>：在开发和调试阶段使用ASCII模式，以确保你能验证写入的数据内容。一旦确信管线正确，切换到Binary模式以减小文件体积和提高读写速度。XML格式的Appended模式是折中方案：数据以二进制格式集中存储，但XML头部保留可读的结构描述。</p>
+<h3 id="1063-xml">10.6.3 XML格式的压缩选项</h3>
+<pre><code class="language-cpp">writer-&gt;SetDataModeToBinary();
+writer-&gt;SetCompressorTypeToZLib();
+</code></pre>
+<p>zlib压缩的效果取决于数据的特征：</p>
+<ul>
+<li><strong>规则网格（ImageData/RectilinearGrid）</strong>：压缩效果通常最佳（压缩比可达5-20倍），因为相邻点的标量值高度相关（空间冗余高）。</li>
+<li><strong>仿真结果（带标量场）</strong>：压缩比通常在3-8倍，取决于标量值的分布。</li>
+<li><strong>纯几何数据（只有Points和Cells，无标量场）</strong>：压缩比通常在2-4倍，因为坐标值通常比较随机。</li>
+</ul>
+<p><strong>注意</strong>：压缩和解压缩会产生CPU开销。对于交互式可视化应用，如果I/O性能是关键瓶颈，可以考虑跳过压缩（文件更大但读取更快）。对于归档和传输，压缩是最佳选择。</p>
+<hr />
+<h2 id="107">10.7 代码示例：数据管线</h2>
+<p>本节是本章的综合实战。我们将构建一个完整的数据管线程序，演示从数据生成到文件持久化、从文件读回到过滤器应用、再到双视口对比渲染的全流程。</p>
+<h3 id="1071">10.7.1 程序设计</h3>
+<p>程序将执行以下步骤：</p>
+<ol>
+<li><strong>生成数据</strong>：使用<code>vtkSphereSource</code>创建一个球体PolyData，带有标量属性（法向量作为颜色源）。</li>
+<li><strong>写入文件</strong>：将生成的PolyData写入<code>.vtp</code>文件（XML PolyData格式）。</li>
+<li><strong>读取文件</strong>：从<code>.vtp</code>文件中读取数据，得到Pipeline中第二个独立的数据集。</li>
+<li><strong>应用过滤器</strong>：对读取的数据施加<code>vtkShrinkPolyData</code>过滤器，使每个面片收缩，展示网格结构。</li>
+<li><strong>双视口渲染</strong>：左侧视口显示原始的球体表面，右侧视口显示收缩后的网格结构。</li>
+<li><strong>完整CMakeLists.txt</strong>：确保代码可编译运行。</li>
+</ol>
+<pre><code>数据管线流程图:
+
+  [vtkSphereSource]
+         |
+         +----&gt; vtkXMLPolyDataWriter --&gt; disk (.vtp)
+         |
+         +----&gt; vtkPolyDataMapper --&gt; Actor --&gt; Left Viewport (原始球体)
+
+  disk (.vtp)
+         |
+         +----&gt; vtkXMLPolyDataReader
+                     |
+                     +----&gt; vtkShrinkPolyData
+                     |            |
+                     |            +----&gt; vtkPolyDataMapper --&gt; Actor --&gt; Right Viewport (收缩网格)
+                     |
+                     +----&gt; (读取的数据可与更多过滤器连接)
+</code></pre>
+<h3 id="1072">10.7.2 完整源代码</h3>
+<pre><code class="language-cpp">// data_pipeline_demo.cxx
+// ============================================================================
+// 第十章综合示例：完整的数据I/O管线
+//
+// 管线流程：
+//   1. vtkSphereSource 生成球体PolyData
+//   2. 分支A：直接渲染（左侧视口）
+//   3. 写入 .vtp 文件（磁盘持久化）
+//   4. 从 .vtp 文件读回
+//   5. 对读回的数据施加 vtkShrinkPolyData 过滤器
+//   6. 分支B：渲染收缩网格（右侧视口）
+//
+// 演示要点：
+//   - 管道分支（一个Source驱动两条渲染路径）
+//   - XML PolyData写入与读取
+//   - 过滤器连接 (SetInputConnection / SetInputData)
+//   - 双视口对比布局
+//   - 属性数据在I/O中的保持
+//
+// 需要的VTK模块（CMake COMPONENTS）：
+//   CommonCore, CommonDataModel, CommonExecutionModel,
+//   FiltersCore, FiltersSources,
+//   IOXML, IOLegacy,
+//   InteractionStyle, RenderingCore, RenderingOpenGL2, RenderingFreeType
+// ============================================================================
+
+#include &quot;vtkActor.h&quot;
+#include &quot;vtkCamera.h&quot;
+#include &quot;vtkInteractorStyleTrackballCamera.h&quot;
+#include &quot;vtkNew.h&quot;
+#include &quot;vtkPointData.h&quot;
+#include &quot;vtkPolyData.h&quot;
+#include &quot;vtkPolyDataMapper.h&quot;
+#include &quot;vtkProperty.h&quot;
+#include &quot;vtkRenderWindow.h&quot;
+#include &quot;vtkRenderWindowInteractor.h&quot;
+#include &quot;vtkRenderer.h&quot;
+#include &quot;vtkShrinkPolyData.h&quot;
+#include &quot;vtkSmartPointer.h&quot;
+#include &quot;vtkSphereSource.h&quot;
+#include &quot;vtkTextActor.h&quot;
+#include &quot;vtkTextProperty.h&quot;
+#include &quot;vtkXMLPolyDataReader.h&quot;
+#include &quot;vtkXMLPolyDataWriter.h&quot;
+
+#include &lt;cmath&gt;
+#include &lt;iostream&gt;
+#include &lt;string&gt;
+
+// ============================================================================
+// 辅助函数：为渲染器添加标题标签
+// ============================================================================
+vtkSmartPointer&lt;vtkTextActor&gt; CreateLabel(const std::string&amp; title,
+                                          const std::string&amp; subtitle,
+                                          double r, double g, double b)
+{
+  auto label = vtkSmartPointer&lt;vtkTextActor&gt;::New();
+  std::string fullText = title + &quot;\n&quot; + subtitle;
+  label-&gt;SetInput(fullText.c_str());
+  label-&gt;SetPosition(15, 15);
+  label-&gt;GetTextProperty()-&gt;SetFontSize(13);
+  label-&gt;GetTextProperty()-&gt;SetColor(r, g, b);
+  label-&gt;GetTextProperty()-&gt;SetFontFamilyToCourier();
+  label-&gt;GetTextProperty()-&gt;SetJustificationToLeft();
+  label-&gt;GetTextProperty()-&gt;SetVerticalJustificationToBottom();
+  label-&gt;GetTextProperty()-&gt;SetLineSpacing(1.3);
+  return label;
+}
+
+// ============================================================================
+// 主程序入口
+// ============================================================================
+int main(int argc, char* argv[])
+{
+  (void)argc;
+  (void)argv;
+
+  // ========================================================================
+  // 第一步：生成数据 (Source)
+  // ========================================================================
+  std::cout &lt;&lt; &quot;[Step 1] Generating sphere source...&quot; &lt;&lt; std::endl;
+
+  vtkNew&lt;vtkSphereSource&gt; sphereSource;
+  sphereSource-&gt;SetThetaResolution(48);
+  sphereSource-&gt;SetPhiResolution(48);
+  sphereSource-&gt;SetRadius(1.0);
+  sphereSource-&gt;SetCenter(0.0, 0.0, 0.0);
+  sphereSource-&gt;Update();
+
+  vtkPolyData* originalSphere = sphereSource-&gt;GetOutput();
+  std::cout &lt;&lt; &quot;  Generated sphere: &quot;
+            &lt;&lt; originalSphere-&gt;GetNumberOfPoints() &lt;&lt; &quot; points, &quot;
+            &lt;&lt; originalSphere-&gt;GetNumberOfCells() &lt;&lt; &quot; cells&quot; &lt;&lt; std::endl;
+
+  // 检查原始数据是否携带法向量（vtkSphereSource默认生成）
+  vtkDataArray* origNormals =
+    originalSphere-&gt;GetPointData()-&gt;GetNormals();
+  std::cout &lt;&lt; &quot;  Original normals: &quot;
+            &lt;&lt; (origNormals ? &quot;Present&quot; : &quot;NOT present&quot;) &lt;&lt; std::endl;
+
+  // ========================================================================
+  // 第二步：写入文件（.vtp XML PolyData）
+  // ========================================================================
+  const char* outputFile = &quot;pipeline_demo_sphere.vtp&quot;;
+
+  std::cout &lt;&lt; &quot;\n[Step 2] Writing to file: &quot; &lt;&lt; outputFile &lt;&lt; std::endl;
+
+  vtkNew&lt;vtkXMLPolyDataWriter&gt; writer;
+  writer-&gt;SetFileName(outputFile);
+  writer-&gt;SetInputConnection(sphereSource-&gt;GetOutputPort());
+  writer-&gt;SetDataModeToBinary();
+  // 可选：转换为ASCII以便查看文件内容（调试时取消注释）
+  // writer-&gt;SetDataModeToAscii();
+  writer-&gt;Write();
+
+  std::cout &lt;&lt; &quot;  Write complete.&quot; &lt;&lt; std::endl;
+
+  // ========================================================================
+  // 第三步：读取文件
+  // ========================================================================
+  std::cout &lt;&lt; &quot;\n[Step 3] Reading from file: &quot; &lt;&lt; outputFile &lt;&lt; std::endl;
+
+  vtkNew&lt;vtkXMLPolyDataReader&gt; reader;
+  reader-&gt;SetFileName(outputFile);
+  reader-&gt;Update();
+
+  vtkPolyData* loadedSphere = reader-&gt;GetOutput();
+  std::cout &lt;&lt; &quot;  Loaded sphere: &quot;
+            &lt;&lt; loadedSphere-&gt;GetNumberOfPoints() &lt;&lt; &quot; points, &quot;
+            &lt;&lt; loadedSphere-&gt;GetNumberOfCells() &lt;&lt; &quot; cells&quot; &lt;&lt; std::endl;
+
+  vtkDataArray* loadedNormals =
+    loadedSphere-&gt;GetPointData()-&gt;GetNormals();
+  std::cout &lt;&lt; &quot;  Loaded normals: &quot;
+            &lt;&lt; (loadedNormals ? &quot;Present&quot; : &quot;NOT present&quot;)
+            &lt;&lt; &quot; (I/O preserved point data)&quot; &lt;&lt; std::endl;
+
+  // 验证数据完整性
+  double origBounds[6], loadedBounds[6];
+  originalSphere-&gt;GetBounds(origBounds);
+  loadedSphere-&gt;GetBounds(loadedBounds);
+  std::cout &lt;&lt; &quot;  Original bounds: [&quot;
+            &lt;&lt; origBounds[0] &lt;&lt; &quot;, &quot; &lt;&lt; origBounds[1] &lt;&lt; &quot;] x [&quot;
+            &lt;&lt; origBounds[2] &lt;&lt; &quot;, &quot; &lt;&lt; origBounds[3] &lt;&lt; &quot;] x [&quot;
+            &lt;&lt; origBounds[4] &lt;&lt; &quot;, &quot; &lt;&lt; origBounds[5] &lt;&lt; &quot;]\n&quot;;
+  std::cout &lt;&lt; &quot;  Loaded bounds:   [&quot;
+            &lt;&lt; loadedBounds[0] &lt;&lt; &quot;, &quot; &lt;&lt; loadedBounds[1] &lt;&lt; &quot;] x [&quot;
+            &lt;&lt; loadedBounds[2] &lt;&lt; &quot;, &quot; &lt;&lt; loadedBounds[3] &lt;&lt; &quot;] x [&quot;
+            &lt;&lt; loadedBounds[4] &lt;&lt; &quot;, &quot; &lt;&lt; loadedBounds[5] &lt;&lt; &quot;]\n&quot;;
+
+  // ========================================================================
+  // 第四步：对读取的数据施加过滤器
+  // ========================================================================
+  std::cout &lt;&lt; &quot;\n[Step 4] Applying vtkShrinkPolyData to loaded data...&quot;
+            &lt;&lt; std::endl;
+
+  vtkNew&lt;vtkShrinkPolyData&gt; shrinkFilter;
+  shrinkFilter-&gt;SetInputConnection(reader-&gt;GetOutputPort());
+  shrinkFilter-&gt;SetShrinkFactor(0.8);   // 三角形收缩至原始大小的80%
+
+  // vtkShrinkPolyData 的输入需要是三角形（不能是 Triangle Strips）
+  // vtkSphereSource 默认生成 Strips，但 XML 读写后保持原格式。
+  // 这里无需额外处理——我们的球体在写入前已经是三角形面片了。
+
+  shrinkFilter-&gt;Update();
+  vtkPolyData* shrunkSphere = shrinkFilter-&gt;GetOutput();
+  std::cout &lt;&lt; &quot;  Shrunk sphere: &quot;
+            &lt;&lt; shrunkSphere-&gt;GetNumberOfPoints() &lt;&lt; &quot; points, &quot;
+            &lt;&lt; shrunkSphere-&gt;GetNumberOfCells() &lt;&lt; &quot; cells&quot; &lt;&lt; std::endl;
+
+  // ========================================================================
+  // 第五步：构建渲染场景（双视口对比布局）
+  // ========================================================================
+
+  // 创建渲染窗口
+  vtkNew&lt;vtkRenderWindow&gt; renderWindow;
+  renderWindow-&gt;SetSize(1100, 550);
+  renderWindow-&gt;SetMultiSamples(8);
+  renderWindow-&gt;SetWindowName(&quot;Chapter 10: Data I/O Pipeline Demo&quot;);
+
+  const double bgColor[3] = {0.08, 0.10, 0.15};
+
+  // ---- 左视口：原始球体（来自Source的直接渲染） ----
+  auto renLeft = vtkSmartPointer&lt;vtkRenderer&gt;::New();
+  renLeft-&gt;SetViewport(0.0, 0.0, 0.5, 1.0);
+  renLeft-&gt;SetBackground(bgColor);
+  renLeft-&gt;GetActiveCamera()-&gt;SetPosition(0, -3, 1.5);
+  renLeft-&gt;GetActiveCamera()-&gt;SetFocalPoint(0, 0, 0);
+  renLeft-&gt;GetActiveCamera()-&gt;SetViewUp(0, 0, 1);
+
+  // 原始球体的Mapper和Actor（使用Source的输出——管道分支A）
+  vtkNew&lt;vtkPolyDataMapper&gt; mapperOriginal;
+  mapperOriginal-&gt;SetInputConnection(sphereSource-&gt;GetOutputPort());
+  mapperOriginal-&gt;ScalarVisibilityOff();
+
+  vtkNew&lt;vtkActor&gt; actorOriginal;
+  actorOriginal-&gt;SetMapper(mapperOriginal);
+  actorOriginal-&gt;GetProperty()-&gt;SetColor(0.20, 0.50, 0.90);    // 蓝色
+  actorOriginal-&gt;GetProperty()-&gt;SetSpecular(0.4);
+  actorOriginal-&gt;GetProperty()-&gt;SetSpecularPower(30);
+  actorOriginal-&gt;GetProperty()-&gt;SetAmbient(0.2);
+  actorOriginal-&gt;GetProperty()-&gt;SetDiffuse(0.7);
+
+  renLeft-&gt;AddActor(actorOriginal);
+
+  // 左侧标签
+  auto labelLeft = CreateLabel(&quot;Original Sphere&quot;,
+                               &quot;From vtkSphereSource\n&quot;
+                               &quot;(pipeline branch A)&quot;,
+                               0.40, 0.70, 1.00);
+  renLeft-&gt;AddActor2D(labelLeft);
+
+  renderWindow-&gt;AddRenderer(renLeft);
+
+  // ---- 右视口：收缩网格（来自Reader -&gt; ShrinkFilter的处理结果） ----
+  auto renRight = vtkSmartPointer&lt;vtkRenderer&gt;::New();
+  renRight-&gt;SetViewport(0.5, 0.0, 1.0, 1.0);
+  renRight-&gt;SetBackground(bgColor);
+
+  // 使两个视口共享同一相机（旋转时同步）
+  renRight-&gt;SetActiveCamera(renLeft-&gt;GetActiveCamera());
+
+  // 收缩球体的Mapper和Actor（管道分支B：Reader -&gt; Shrink -&gt; Mapper -&gt; Actor）
+  vtkNew&lt;vtkPolyDataMapper&gt; mapperShrunk;
+  mapperShrunk-&gt;SetInputConnection(shrinkFilter-&gt;GetOutputPort());
+  mapperShrunk-&gt;ScalarVisibilityOff();
+
+  vtkNew&lt;vtkActor&gt; actorShrunk;
+  actorShrunk-&gt;SetMapper(mapperShrunk);
+  actorShrunk-&gt;GetProperty()-&gt;SetColor(0.95, 0.40, 0.25);    // 橙色
+  actorShrunk-&gt;GetProperty()-&gt;SetSpecular(0.3);
+  actorShrunk-&gt;GetProperty()-&gt;SetSpecularPower(20);
+  actorShrunk-&gt;GetProperty()-&gt;SetEdgeVisibility(1);            // 显示三角形边界
+  actorShrunk-&gt;GetProperty()-&gt;SetEdgeColor(0.10, 0.10, 0.12);
+  actorShrunk-&gt;GetProperty()-&gt;SetLineWidth(0.8);
+
+  renRight-&gt;AddActor(actorShrunk);
+
+  // 右侧标签
+  auto labelRight = CreateLabel(&quot;Shrunk Sphere&quot;,
+                                &quot;Read from .vtp -&gt;\n&quot;
+                                &quot;vtkShrinkPolyData (factor=0.8)\n&quot;
+                                &quot;(pipeline branch B)&quot;,
+                                1.00, 0.55, 0.35);
+  renRight-&gt;AddActor2D(labelRight);
+
+  renderWindow-&gt;AddRenderer(renRight);
+
+  // ========================================================================
+  // 第六步：交互器与程序启动
+  // ========================================================================
+  vtkNew&lt;vtkRenderWindowInteractor&gt; interactor;
+  interactor-&gt;SetRenderWindow(renderWindow);
+
+  vtkNew&lt;vtkInteractorStyleTrackballCamera&gt; style;
+  style-&gt;SetDefaultRenderer(renLeft);
+  interactor-&gt;SetInteractorStyle(style);
+
+  // 首次渲染
+  renderWindow-&gt;Render();
+
+  // ========================================================================
+  // 第七步：输出运行信息
+  // ========================================================================
+  std::cout &lt;&lt; &quot;\n&quot;
+            &lt;&lt; &quot;============================================================\n&quot;
+            &lt;&lt; &quot;  Chapter 10: Data I/O Pipeline Demo\n&quot;
+            &lt;&lt; &quot;============================================================\n&quot;
+            &lt;&lt; &quot;\n&quot;
+            &lt;&lt; &quot;Pipeline summary:\n&quot;
+            &lt;&lt; &quot;  Source:    vtkSphereSource (48x48)\n&quot;
+            &lt;&lt; &quot;  Write:     vtkXMLPolyDataWriter -&gt; &quot; &lt;&lt; outputFile &lt;&lt; &quot;\n&quot;
+            &lt;&lt; &quot;  Read:      vtkXMLPolyDataReader\n&quot;
+            &lt;&lt; &quot;  Filter:    vtkShrinkPolyData (factor=0.8)\n&quot;
+            &lt;&lt; &quot;  Render:    Dual viewport comparison\n&quot;
+            &lt;&lt; &quot;\n&quot;
+            &lt;&lt; &quot;Viewports:\n&quot;
+            &lt;&lt; &quot;  Left:   Original sphere (direct from Source)\n&quot;
+            &lt;&lt; &quot;  Right:  Shrunk sphere (Source -&gt; Write -&gt; Read -&gt; Shrink)\n&quot;
+            &lt;&lt; &quot;\n&quot;
+            &lt;&lt; &quot;Interaction:\n&quot;
+            &lt;&lt; &quot;  - Left mouse drag:   Rotate (both viewports sync)\n&quot;
+            &lt;&lt; &quot;  - Right mouse drag:  Zoom\n&quot;
+            &lt;&lt; &quot;  - Middle mouse drag: Pan\n&quot;
+            &lt;&lt; &quot;  - Scroll wheel:      Zoom\n&quot;
+            &lt;&lt; &quot;  - Press 'r':         Reset camera\n&quot;
+            &lt;&lt; &quot;\n&quot;
+            &lt;&lt; &quot;Observe:\n&quot;
+            &lt;&lt; &quot;  - The sphere on the left is smooth and complete.\n&quot;
+            &lt;&lt; &quot;  - The sphere on the right shows each triangle shrunk\n&quot;
+            &lt;&lt; &quot;    to 80% of its original size, revealing the mesh\n&quot;
+            &lt;&lt; &quot;    structure. This proves the data survived the\n&quot;
+            &lt;&lt; &quot;    write-read round-trip intact.\n&quot;
+            &lt;&lt; &quot;============================================================\n&quot;
+            &lt;&lt; std::endl;
+
+  // 进入事件循环
+  interactor-&gt;Start();
+
+  std::cout &lt;&lt; &quot;\nProgram terminated. The file '&quot; &lt;&lt; outputFile
+            &lt;&lt; &quot;' remains on disk for inspection.&quot; &lt;&lt; std::endl;
+
+  return 0;
+}
+</code></pre>
+<h3 id="1073-cmakeliststxt">10.7.3 CMakeLists.txt</h3>
+<pre><code class="language-cmake">cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
+project(DataPipelineDemo VERSION 1.0.0 LANGUAGES CXX)
+
+# ============================================================================
+# 设置C++标准
+# ============================================================================
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+# ============================================================================
+# 查找VTK 9.5.2
+# ============================================================================
+find_package(VTK 9.5.2
+  COMPONENTS
+    CommonCore
+    CommonDataModel
+    CommonExecutionModel
+    CommonMath
+    FiltersCore
+    FiltersSources
+    IOXML
+    InteractionStyle
+    RenderingCore
+    RenderingOpenGL2
+    RenderingFreeType
+  REQUIRED
+)
+
+# ============================================================================
+# 打印VTK信息
+# ============================================================================
+message(STATUS &quot;VTK_VERSION: ${VTK_VERSION}&quot;)
+message(STATUS &quot;VTK_RENDERING_BACKEND: OpenGL2&quot;)
+
+# ============================================================================
+# 创建可执行文件
+# ============================================================================
+add_executable(DataPipelineDemo data_pipeline_demo.cxx)
+
+# ============================================================================
+# 链接VTK库
+# ============================================================================
+target_link_libraries(DataPipelineDemo
+  PRIVATE
+    ${VTK_LIBRARIES}
+)
+
+# ============================================================================
+# VTK模块自动初始化（必须！）
+# ============================================================================
+vtk_module_autoinit(
+  TARGETS DataPipelineDemo
+  MODULES ${VTK_LIBRARIES}
+)
+
+# ============================================================================
+# 编译选项
+# ============================================================================
+if(MSVC)
+  target_compile_options(DataPipelineDemo PRIVATE /W3)
+else()
+  target_compile_options(DataPipelineDemo PRIVATE -Wall -Wextra)
+endif()
+</code></pre>
+<h3 id="1074">10.7.4 所需模块说明</h3>
+<table>
+<thead>
+<tr>
+<th>模块</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CommonCore</code></td>
+<td>VTK基础类型、<code>vtkNew</code>、<code>vtkSmartPointer</code></td>
+</tr>
+<tr>
+<td><code>CommonDataModel</code></td>
+<td><code>vtkPolyData</code>、属性数据 (<code>vtkPointData</code>)</td>
+</tr>
+<tr>
+<td><code>CommonExecutionModel</code></td>
+<td>管道执行基础设施</td>
+</tr>
+<tr>
+<td><code>CommonMath</code></td>
+<td>数学常量</td>
+</tr>
+<tr>
+<td><code>FiltersCore</code></td>
+<td><code>vtkShrinkPolyData</code>过滤器</td>
+</tr>
+<tr>
+<td><code>FiltersSources</code></td>
+<td><code>vtkSphereSource</code></td>
+</tr>
+<tr>
+<td><code>IOXML</code></td>
+<td><code>vtkXMLPolyDataReader</code>、<code>vtkXMLPolyDataWriter</code></td>
+</tr>
+<tr>
+<td><code>InteractionStyle</code></td>
+<td><code>vtkInteractorStyleTrackballCamera</code></td>
+</tr>
+<tr>
+<td><code>RenderingCore</code></td>
+<td><code>vtkActor</code>、<code>vtkRenderer</code>、<code>vtkRenderWindow</code>、<code>vtkProperty</code></td>
+</tr>
+<tr>
+<td><code>RenderingOpenGL2</code></td>
+<td>OpenGL2渲染后端</td>
+</tr>
+<tr>
+<td><code>RenderingFreeType</code></td>
+<td>FreeType字体渲染（<code>vtkTextActor</code>）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="1075">10.7.5 代码详解</h3>
+<h4 id="_2">管道分支的概念</h4>
+<p>这是本示例最重要的设计概念。观察主程序中的两条数据路径：</p>
+<pre><code>路径A (左视口):
+  sphereSource -&gt; mapperOriginal -&gt; actorOriginal -&gt; renLeft
+
+路径B (右视口):
+  sphereSource -&gt; writer -&gt; disk -&gt; reader -&gt; shrinkFilter -&gt; mapperShrunk -&gt; actorShrunk -&gt; renRight
+</code></pre>
+<p><strong>SetInputConnection vs SetInputData</strong>：注意在路径A中，<code>mapperOriginal</code>通过<code>SetInputConnection(sphereSource-&gt;GetOutputPort())</code>直接连接到源。而在路径B中，由于Reader已经调用了<code>Update()</code>，数据已经被实际读取，<code>shrinkFilter</code>通过<code>SetInputConnection(reader-&gt;GetOutputPort())</code>保持管道式连接。两种连接方式在VTK中都是合法的。</p>
+<p><strong>数据保真度验证</strong>：程序输出了写入前后的点数、单元数和边界范围。<code>loadedNormals</code>的检查证实了属性数据（法向量）在I/O过程中被完整保留。这对于需要保留仿真结果物理属性的科学可视化应用至关重要。</p>
+<h4 id="_3">双视口与共享相机</h4>
+<pre><code class="language-cpp">renRight-&gt;SetActiveCamera(renLeft-&gt;GetActiveCamera());
+</code></pre>
+<p>这行使右侧渲染器共享左侧渲染器的相机对象。因此当用户旋转其中一个视口时，另一个视口会自动同步旋转——确保两个球体始终处于相同的视角下，便于对比观察。</p>
+<h3 id="1076">10.7.6 扩展方向</h3>
+<p>这个数据管线模板可以轻松扩展为更实用的工具：</p>
+<ol>
+<li><strong>批量格式转换</strong>：遍历目录中的所有<code>.stl</code>文件，读取并写入<code>.vtp</code>。</li>
+<li><strong>自动验证管道</strong>：在写入后自动读取并验证每一块数据的完整性（点数、单元类型、边界范围、属性数组名和范围）。</li>
+<li><strong>多步骤过滤链</strong>：Reader -&gt; Smooth -&gt; Clip -&gt; Contour -&gt; Writer，实现文件到文件的复杂处理管线。</li>
+<li><strong>属性驱动的处理分支</strong>：根据读入数据的属性数组决定施加什么过滤器（例如，如果读到"Temperature"数组，自动添加等高线）。</li>
+<li><strong>ParaView Python脚本导出</strong>：使用VTK Python API将上述逻辑导出为ParaView自动化脚本。</li>
+</ol>
+<hr />
+<h2 id="108">10.8 本章小结</h2>
+<p>本章系统介绍了VTK 9.5.2的数据文件I/O体系，从格式体系到具体API，从单数据集读写到复合数据集管理，从理论到完整的代码示例。</p>
+<h3 id="_4">要点速览</h3>
+<ol>
+<li>
+<p><strong>VTK拥有两套格式体系</strong>：Legacy格式（统一<code>.vtk</code>扩展名，ASCII，简单但功能有限）和XML格式（类型特定扩展名 .vtp/.vtu/.vti/.vtr/.vts/.vtm，支持二进制、压缩、并行I/O）。推荐所有新项目使用XML格式。</p>
+</li>
+<li>
+<p><strong>扩展名直接指示数据类型</strong>：中间字母记忆法——p=PolyData, u=Unstructured, i=Image, r=Rectilinear, s=Structured, m=MultiBlock。</p>
+</li>
+<li>
+<p><strong>PolyData是最通用的可交换数据类型</strong>：VTK原生支持STL（3D打印）、OBJ（图形学）、PLY（3D扫描）等多种工业标准格式，<code>vtkSTLReader/Writer</code>、<code>vtkOBJReader/Writer</code>、<code>vtkPLYReader/Writer</code>的API高度一致。</p>
+</li>
+<li>
+<p><strong>所有的Writer都支持三种数据编码模式</strong>：<code>SetDataModeToAscii()</code>（可读）、<code>SetDataModeToBinary()</code>（高效，默认）、<code>SetDataModeToAppended()</code>（随机访问）。<code>SetCompressorTypeToZLib()</code>提供透明的数据压缩。</p>
+</li>
+<li>
+<p><strong>属性数据在I/O中自动保持</strong>：点数据和单元数据（标量、向量、法向量、纹理坐标、张量等）都在写入-读取往返中完整保留，无需手动管理。</p>
+</li>
+<li>
+<p><strong>vtkDICOMImageReader</strong>是通向医学影像可视化的入口，将在体渲染章节中深入展开。</p>
+</li>
+<li>
+<p><strong>文件格式选型有明确决策路径</strong>：从数据类型出发，考虑压缩需求、可调试性、互操作性三个维度，参考10.6节的决策表即可作出正确选择。</p>
+</li>
+</ol>
+<h3 id="io">从I/O到全书</h3>
+<p>本章是连接"程序内创造数据"与"处理真实世界数据"之间的桥梁。掌握了本章的内容后：</p>
+<ul>
+<li><strong>你在前九章中学到的所有数据类型操作技能</strong>现在可以应用到从磁盘读取的真实数据上。</li>
+<li><strong>10.7节的数据管线模板</strong>可以作为你所有VTK项目的基础骨架——从文件读取，施加过滤器，渲染结果。</li>
+<li><strong>ParaView是一个VTK应用</strong>：ParaView使用的文件格式与本章介绍的完全相同。你现在用VTK C++ API读写的数据，可以直接在ParaView中打开、检查和进一步处理。</li>
+</ul>
+<h3 id="_5">与后续章节的衔接</h3>
+<p>在下一章（第十一章）中，你将学习VTK的<strong>高级过滤器与算法</strong>——<code>vtkContourFilter</code>（等值面提取）、<code>vtkClipDataSet</code>（数据裁剪）、<code>vtkStreamTracer</code>（流线可视化）、<code>vtkGlyph3D</code>（张量/向量场的图标化表示）等。这些过滤器需要输入数据，而现在你已经知道如何从文件中获取这些数据了。</p>
+<blockquote>
+<p><strong>本章关键概念口诀</strong>："XML是新格式，Legacy是旧格式；扩展名识类型，二进制压缩小；数据往返保真，管线分支灵活。"</p>
+</blockquote>
+<hr />
+<p><em>本章完成。第十章为你打开了从磁盘到内存的数据通道——从此以后，你不再仅仅使用<code>vtkSphereSource</code>和<code>vtkCubeSource</code>，而是能够处理来自CT扫描仪、CFD求解器、3D扫描仪或公共数据集的真实科学数据。</em></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,3608 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../chapter-18-charts/">
+      
+      
+        <link rel="next" href="../chapter-20-custom-interaction/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>第十九章 三维标注与交互组件 - Echo-b's Tech Notes</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#3d-annotation-and-display-components" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Echo-b&#39;s Tech Notes" class="md-header__button md-logo" aria-label="Echo-b's Tech Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Echo-b's Tech Notes
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              第十九章 三维标注与交互组件
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Echo-b&#39;s Tech Notes" class="md-nav__button md-logo" aria-label="Echo-b's Tech Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Echo-b's Tech Notes
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VTK 教程
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    VTK 教程
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    入门篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    入门篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-01-vtk-overview-and-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第一章 VTK概述与环境搭建
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-02-visualization-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二章 可视化管线
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-03-data-model-basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第三章 数据模型基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-04-geometry-and-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第四章 基本几何体与数据源
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-05-rendering-and-interactor/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第五章 渲染与交互机
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-06-volume1-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第六章 入门篇综合实战——3D几何画廊
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    实战篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    实战篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-07-polydata/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第七章 PolyData详解
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-08-unstructured-grid/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第八章 非结构化网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-09-structured-data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第九章 结构化数据
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-10-data-io/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十章 数据I/O
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-11-common-filters/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十一章 常用过滤器
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-12-color-mapping/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十二章 颜色映射与标量可视化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-13-advanced-rendering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十三章 高级渲染技术
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-14-multi-dataset/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十四章 多个数据集处理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-15-volume2-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十五章 实战篇综合实战——CFD后处理可视化工具
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    进阶篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    进阶篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-16-volume-rendering-basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十六章 体渲染基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-17-volume-rendering-advanced/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十七章 体渲染高级技术
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-18-charts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十八章 2D图表系统
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十九章 三维标注与交互组件
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十九章 三维标注与交互组件
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        本章导读
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#191" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19.1 标注系统概览
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="19.1 标注系统概览">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1911" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19.1.1 标注的本质：信息层
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1912-vs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19.1.2 二维标注 vs 三维标注
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1913" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19.1.3 标注不修改数据的核心原则
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#192-vtkscalarbaractor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19.2 标量条（vtkScalarBarActor深度使用）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="19.2 标量条（vtkScalarBarActor深度使用）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1921" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19.2.1 精细位置与尺寸控制
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1922" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19.2.2 标签与标题的精细文本控制
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1923" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19.2.3 边框、背景与其他外观设置
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1924" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19.2.4 多标量条布局管理
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1925" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19.2.5 多标量条布局的计算辅助函数
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1926" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19.2.6 自定义颜色条中的颜色段
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#193" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19.3 方向标与坐标轴
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="19.3 方向标与坐标轴">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1931-vtkorientationmarkerwidget" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19.3.1 vtkOrientationMarkerWidget概述
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1932-vtkaxesactor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19.3.2 vtkAxesActor深度配置
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1933-vtkannotatedcubeactor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19.3.3 vtkAnnotatedCubeActor：带文字标签的方向立方体
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1934" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19.3.4 同时使用坐标轴和立方体
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#194" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19.4 文字标注
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="19.4 文字标注">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1941-vtktextactor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19.4.1 vtkTextActor：屏幕空间固定文字
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1942-vtkcaptionactor2d" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19.4.2 vtkCaptionActor2D：带引线的跟随文字
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1943-vtkcornerannotation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19.4.3 vtkCornerAnnotation：角标注
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1944" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19.4.4 综合文字标注示例
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1945" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19.4.5 字体选择与中文支持
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#195" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19.5 比例尺与图例
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="19.5 比例尺与图例">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1951-vtklegendscaleactor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19.5.1 vtkLegendScaleActor：自动比例尺
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1952-vtklegendboxactor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19.5.2 vtkLegendBoxActor：图例框
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1953" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19.5.3 创建自定义比例尺
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#196" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19.6 代码示例：完整标注系统
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="19.6 代码示例：完整标注系统">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1961" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19.6.1 程序概述
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1962-c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19.6.2 完整C++代码
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1963-cmakeliststxt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19.6.3 CMakeLists.txt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1964" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19.6.4 编译与运行
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1965" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19.6.5 预期效果
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#197" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19.7 本章小结
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="19.7 本章小结">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        核心概念
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        关键类与API速查
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        标量条高级配置要点
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        方向标配置要点
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        文字标注选择指南
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        综合演示
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        继续学习建议
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-20-custom-interaction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十章 自定义交互与Widget
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-21-qt-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十一章 Qt集成
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-22-smp-parallel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十二章 SMP并行入门
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-23-volume3-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十三章 进阶篇综合实战
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        本章导读
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#191" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19.1 标注系统概览
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="19.1 标注系统概览">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1911" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19.1.1 标注的本质：信息层
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1912-vs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19.1.2 二维标注 vs 三维标注
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1913" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19.1.3 标注不修改数据的核心原则
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#192-vtkscalarbaractor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19.2 标量条（vtkScalarBarActor深度使用）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="19.2 标量条（vtkScalarBarActor深度使用）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1921" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19.2.1 精细位置与尺寸控制
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1922" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19.2.2 标签与标题的精细文本控制
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1923" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19.2.3 边框、背景与其他外观设置
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1924" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19.2.4 多标量条布局管理
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1925" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19.2.5 多标量条布局的计算辅助函数
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1926" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19.2.6 自定义颜色条中的颜色段
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#193" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19.3 方向标与坐标轴
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="19.3 方向标与坐标轴">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1931-vtkorientationmarkerwidget" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19.3.1 vtkOrientationMarkerWidget概述
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1932-vtkaxesactor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19.3.2 vtkAxesActor深度配置
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1933-vtkannotatedcubeactor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19.3.3 vtkAnnotatedCubeActor：带文字标签的方向立方体
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1934" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19.3.4 同时使用坐标轴和立方体
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#194" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19.4 文字标注
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="19.4 文字标注">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1941-vtktextactor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19.4.1 vtkTextActor：屏幕空间固定文字
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1942-vtkcaptionactor2d" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19.4.2 vtkCaptionActor2D：带引线的跟随文字
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1943-vtkcornerannotation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19.4.3 vtkCornerAnnotation：角标注
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1944" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19.4.4 综合文字标注示例
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1945" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19.4.5 字体选择与中文支持
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#195" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19.5 比例尺与图例
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="19.5 比例尺与图例">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1951-vtklegendscaleactor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19.5.1 vtkLegendScaleActor：自动比例尺
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1952-vtklegendboxactor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19.5.2 vtkLegendBoxActor：图例框
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1953" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19.5.3 创建自定义比例尺
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#196" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19.6 代码示例：完整标注系统
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="19.6 代码示例：完整标注系统">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1961" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19.6.1 程序概述
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1962-c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19.6.2 完整C++代码
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1963-cmakeliststxt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19.6.3 CMakeLists.txt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1964" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19.6.4 编译与运行
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1965" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19.6.5 预期效果
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#197" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19.7 本章小结
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="19.7 本章小结">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        核心概念
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        关键类与API速查
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        标量条高级配置要点
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        方向标配置要点
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        文字标注选择指南
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        综合演示
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        继续学习建议
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="3d-annotation-and-display-components">第十九章 三维标注与交互组件 (3D Annotation and Display Components)</h1>
+<h2 id="_1">本章导读</h2>
+<p>在前面的章节中，你已经掌握了如何使用VTK构建数据可视化管线的核心能力：从数据读取、过滤变换、颜色映射、材质渲染，到体绘制和复合可视化。这些技能让你能够将原始数据转化为富有视觉表现力的三维场景。然而，一个有效的可视化作品不仅要"好看"，还要<strong>易于理解</strong>——观察者需要知道数据的大小比例、空间方向、数值含义，以及场景中各对象的身份。</p>
+<p>这就是<strong>标注系统</strong>（Annotation System）的用武之地。标注是叠加在三维可视化之上的"信息层"，它为观察者提供理解场景所需的上下文信息，包括但不限于：</p>
+<ul>
+<li><strong>数值信息</strong>：标量条（颜色图例）告诉观察者"某种颜色对应什么数值"。</li>
+<li><strong>空间方向</strong>：方向标（坐标轴指示器）告诉观察者"数据在三维空间中的哪个朝向"。</li>
+<li><strong>文字说明</strong>：标题、角标、数据描述文字提供了场景的元信息。</li>
+<li><strong>比例尺度</strong>：比例尺告诉观察者"屏幕上的距离对应数据中的多少物理单位"。</li>
+<li><strong>图例信息</strong>：多数据集的图例帮助观察者区分不同的数据对象。</li>
+</ul>
+<p>本章将系统地讲解VTK中与标注相关的核心类和组件，涵盖以下主题：</p>
+<ol>
+<li><strong>标注系统概览</strong>（19.1节）——理解二维标注与三维标注的区别、标注Actor与场景Actor的关系。</li>
+<li><strong>标量条深度使用</strong>（19.2节）——在第12章标量条基础之上，深入学习精细外观控制、多标量条布局管理、文本属性定制。</li>
+<li><strong>方向标与坐标轴</strong>（19.3节）——使用<code>vtkOrientationMarkerWidget</code>和<code>vtkAxesActor</code>创建方向指示器，以及<code>vtkAnnotatedCubeActor</code>创建带文字标签的方向立方体。</li>
+<li><strong>文字标注</strong>（19.4节）——四种主要的文字标注方式：固定屏幕文字（<code>vtkTextActor</code>）、跟随3D点的引线文字（<code>vtkCaptionActor2D</code>）、角标注（<code>vtkCornerAnnotation</code>）和自定义的3D文字。</li>
+<li><strong>比例尺与图例</strong>（19.5节）——创建空间比例尺和数据集图例的多种方法。</li>
+<li><strong>完整代码示例</strong>（19.6节）——一个约300行的综合演示程序，整合了所有标注类型。</li>
+<li><strong>本章小结</strong>（19.7节）。</li>
+</ol>
+<p>本章需要的前置知识包括：第5章（渲染管道基础）、第12章（颜色映射与标量条基础）、第13章（高级渲染技术）。如果你对这些内容不太熟悉，建议先回顾相关章节。</p>
+<hr />
+<h2 id="191">19.1 标注系统概览</h2>
+<h3 id="1911">19.1.1 标注的本质：信息层</h3>
+<p>在VTK的架构中，标注可以被理解为一个独立的<strong>信息层</strong>（Information Layer），叠加在三维数据可视化之上。这个层次不修改底层的可视化数据，而是通过额外的视觉元素来增强观察者的理解。</p>
+<p>关键区别在于：</p>
+<ul>
+<li><strong>数据可视化</strong>：将数据集通过Mapper映射为可渲染的图元（点、线、三角形），形成对数据的视觉呈现。</li>
+<li><strong>标注</strong>：在数据可视化之上，添加文字、线条、图例、图标等辅助元素，它们不表示数据本身，而是<strong>解释数据</strong>。</li>
+</ul>
+<p>这种分离设计是科学可视化的一项基本原则。一个典型的例子是：当你展示一个有限元分析的应力分布时，彩色曲面是"数据可视化"，而旁边的标量条（标出应力值范围）和左上角的方向标（标出坐标轴方向）是"标注"。两者协同工作，但你可以独立地打开或关闭标注层而不影响数据层。</p>
+<h3 id="1912-vs">19.1.2 二维标注 vs 三维标注</h3>
+<p>VTK中的标注根据其坐标空间分为两大类：</p>
+<p><strong>二维标注（2D Annotation）</strong>——也称为"叠加标注"（Overlay Annotation）。这些标注位于<strong>屏幕空间</strong>中，使用归一化视口坐标（Normalized Viewport Coordinates），位置以渲染窗口的左下角为原点(0, 0)，右上角为(1, 1)。二维标注不随三维场景的旋转、缩放或平移而改变位置。它们通过<code>renderer-&gt;AddActor2D()</code>添加到渲染器中。</p>
+<p>二维标注的典型代表：
+- <code>vtkScalarBarActor</code>：标量条/颜色图例
+- <code>vtkTextActor</code>：屏幕空间固定文字
+- <code>vtkCornerAnnotation</code>：角标注
+- <code>vtkLegendBoxActor</code>、<code>vtkLegendScaleActor</code>：图例和比例尺</p>
+<p><strong>三维标注（3D Annotation）</strong>——这些标注位于<strong>世界空间</strong>中，使用场景的三维坐标系统。它们像普通的三维Actor一样，可以随场景旋转、缩放和平移。三维标注通过<code>renderer-&gt;AddActor()</code>（或<code>AddViewProp()</code>）添加到渲染器中。</p>
+<p>三维标注的典型代表：
+- <code>vtkCaptionActor2D</code>：带有引线的文字标注（虽然Actor本身是2D的，但它跟随一个3D锚点）
+- <code>vtkAxesActor</code>：三维坐标轴
+- <code>vtkCubeAxesActor</code>：包围盒坐标轴
+- <code>vtkAnnotatedCubeActor</code>：带文字标签的方向立方体</p>
+<p>此外，还有一种特殊的<strong>交互标注</strong>——这些标注通过<strong>Widget</strong>（交互组件）来管理，支持用户交互：
+- <code>vtkOrientationMarkerWidget</code>：管理方向指示标记
+- <code>vtkScalarBarWidget</code>：可交互的标量条
+- <code>vtkCaptionWidget</code>：可交互的引线文字</p>
+<p>表19.1总结了两种标注类型的对比：</p>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>二维标注 (2D)</th>
+<th>三维标注 (3D)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>坐标空间</td>
+<td>屏幕空间（归一化视口坐标）</td>
+<td>世界空间（三维坐标）</td>
+</tr>
+<tr>
+<td>添加方式</td>
+<td><code>renderer-&gt;AddActor2D()</code></td>
+<td><code>renderer-&gt;AddActor()</code></td>
+</tr>
+<tr>
+<td>随场景旋转变化</td>
+<td>否</td>
+<td>是</td>
+</tr>
+<tr>
+<td>随场景缩放变化</td>
+<td>否（可用像素限制尺寸）</td>
+<td>是</td>
+</tr>
+<tr>
+<td>适用场景</td>
+<td>图例、标题、固定信息、标量条</td>
+<td>方向指示器、数据标签、空间参考</td>
+</tr>
+<tr>
+<td>交互支持</td>
+<td>部分通过Widget支持</td>
+<td>Widget支持拖拽等交互</td>
+</tr>
+</tbody>
+</table>
+<h3 id="1913">19.1.3 标注不修改数据的核心原则</h3>
+<p>一个重要的设计原则需要在此强调：<strong>标注组件不应修改底层数据集或可视化管线的状态</strong>。标注Actor接收的是对已有查找表、相机或数据集的<strong>引用</strong>（而非拷贝），它们读取这些引用中的信息并将其可视化，但不应更改这些引用的内容。</p>
+<p>例如，<code>vtkScalarBarActor</code>持有对<code>vtkLookupTable</code>的引用（通过<code>SetLookupTable()</code>），它读取查找表中的颜色和范围信息来绘制颜色条，但绝不会修改查找表中的任何条目。同样，<code>vtkOrientationMarkerWidget</code>读取渲染器的当前相机状态来同步方向指示，但不会修改相机参数。</p>
+<p>这种"读取但不修改"的设计确保了标注系统的安全性和可组合性——你可以随时添加或移除标注组件，而不必担心它们对数据可视化产生副作用。</p>
+<hr />
+<h2 id="192-vtkscalarbaractor">19.2 标量条（vtkScalarBarActor深度使用）</h2>
+<p>在第12章中，你已经学习了<code>vtkScalarBarActor</code>的基本用法：创建标量条、关联查找表、设置标题和标签数量。本节将在这些基础知识之上，深入探讨标量条的高级外观控制和多标量条布局管理。</p>
+<h3 id="1921">19.2.1 精细位置与尺寸控制</h3>
+<p>在第12章中，我们使用了<code>SetPosition()</code>、<code>SetWidth()</code>和<code>SetHeight()</code>来控制标量条的位置和尺寸。这些方法使用的是<strong>归一化视口坐标</strong>。在实际的复杂可视化布局中，你还需要了解以下几个关键API来精确控制标量条的几何外观：</p>
+<pre><code class="language-cpp">#include &lt;vtkScalarBarActor.h&gt;
+
+vtkNew&lt;vtkScalarBarActor&gt; scalarBar;
+scalarBar-&gt;SetLookupTable(lut);
+
+// --- 位置设置（归一化视口坐标） ---
+// SetPosition(x, y) 设置标量条左下角的位置
+scalarBar-&gt;SetPosition(0.85, 0.1);
+
+// --- 尺寸设置（归一化视口坐标） ---
+scalarBar-&gt;SetWidth(0.1);         // 标量条的整体宽度
+scalarBar-&gt;SetHeight(0.6);        // 标量条的整体高度
+
+// --- 像素单位的尺寸限制 ---
+// 这些限制优先级高于归一化坐标的尺寸设置
+scalarBar-&gt;SetMaximumWidthInPixels(120);   // 最大宽度（像素），超过此值不再增大
+scalarBar-&gt;SetMaximumHeightInPixels(600);  // 最大高度（像素），超过此值不再增大
+
+// --- 颜色条本身的几何比例 ---
+// SetBarRatio() 控制在标量条的总宽度中，颜色条部分占据的比例
+// 默认值约为0.375（颜色条占37.5%，其余为文字区域）
+scalarBar-&gt;SetBarRatio(0.4);     // 颜色条占40%，文字区域的标注占60%
+</code></pre>
+<p><code>SetMaximumWidthInPixels()</code>和<code>SetMaximumHeightInPixels()</code>在实际应用中非常重要。由于归一化坐标依赖于窗口大小，当一个窗口被拉伸到非常大时，用归一化坐标定义的标量条可能会变得不协调地大。像素限制提供了一种"上限"约束。</p>
+<h3 id="1922">19.2.2 标签与标题的精细文本控制</h3>
+<p>标量条的外观很大程度上取决于其文本元素（标题和数值标签）的质量。VTK提供了丰富的API来分别控制标题和标签的文本属性：</p>
+<pre><code class="language-cpp">// --- 标题文本属性 ---
+vtkTextProperty* titleProp = scalarBar-&gt;GetTitleTextProperty();
+titleProp-&gt;SetFontSize(14);                            // 字体大小（点数）
+titleProp-&gt;SetFontFamilyToArial();                     // 字体族
+// 可选字体族:
+//   VTK_ARIAL, VTK_COURIER, VTK_TIMES
+titleProp-&gt;SetColor(0.0, 0.0, 0.0);                   // 标题颜色（黑色）
+titleProp-&gt;SetBold(true);                              // 粗体
+titleProp-&gt;SetItalic(false);                           // 非斜体
+titleProp-&gt;SetShadow(false);                           // 无阴影
+titleProp-&gt;SetOpacity(1.0);                            // 完全不透明
+
+// --- 标签文本属性 ---
+vtkTextProperty* labelProp = scalarBar-&gt;GetLabelTextProperty();
+labelProp-&gt;SetFontSize(10);
+labelProp-&gt;SetFontFamilyToArial();
+labelProp-&gt;SetColor(0.2, 0.2, 0.2);                   // 深灰色字体
+labelProp-&gt;SetBold(false);
+labelProp-&gt;SetItalic(false);
+
+// --- 标签格式化 ---
+scalarBar-&gt;SetLabelFormat(&quot;%.2f&quot;);                     // 保留两位小数的浮点数
+scalarBar-&gt;SetLabelFormat(&quot;%4.1f&quot;);                    // 至少4位宽度，一位小数
+scalarBar-&gt;SetLabelFormat(&quot;%.1e&quot;);                     // 科学计数法
+
+// --- 标签数量 ---
+scalarBar-&gt;SetNumberOfLabels(7);                       // 显示7个数值标签（含两端）
+
+// --- 标签相对于颜色条的位置 ---
+scalarBar-&gt;SetTextPositionToPrecedeScalarBar();        // 文字在颜色条之前（左侧，垂直条）
+scalarBar-&gt;SetTextPositionToSucceedScalarBar();        // 文字在颜色条之后（右侧，垂直条）
+</code></pre>
+<p><code>SetTextPositionToPrecedeScalarBar()</code>和<code>SetTextPositionToSucceedScalarBar()</code>这两个方法控制数值标签显示在颜色条的哪一侧。对于垂直方向的标量条，"Precede"意味着标签出现在颜色条的左边；"Succeed"意味着标签出现在右边。在水平条中，"Precede"是上方，"Succeed"是下方。</p>
+<h3 id="1923">19.2.3 边框、背景与其他外观设置</h3>
+<p>标量条的外观还可以通过以下选项进一步定制：</p>
+<pre><code class="language-cpp">// --- 边框设置 ---
+scalarBar-&gt;SetDrawBorder(true);                        // 是否绘制标量条的外边框
+scalarBar-&gt;SetBorderColor(0.0, 0.0, 0.0);              // 边框颜色
+scalarBar-&gt;SetBorderThickness(2.0);                    // 边框厚度
+
+// --- 背景设置 ---
+scalarBar-&gt;SetDrawBackground(true);                    // 是否在标量条背后绘制背景
+scalarBar-&gt;SetBackgroundColor(1.0, 1.0, 1.0);          // 背景颜色（白色）
+scalarBar-&gt;SetBackgroundOpacity(0.7);                  // 背景不透明度（0.7 = 70%不透明）
+
+// --- 颜色条的方向 ---
+scalarBar-&gt;SetOrientationToVertical();                 // 垂直方向（默认）
+scalarBar-&gt;SetOrientationToHorizontal();               // 水平方向
+
+// --- 颜色条的框线 ---
+scalarBar-&gt;SetDrawColorBar(true);                      // 是否绘制颜色条本身
+scalarBar-&gt;SetDrawTickMarks(true);                     // 是否绘制刻度标记
+scalarBar-&gt;SetTickLabelPrecision(2);                   // 刻度标签精度
+
+// --- 设置Unconstrained字体大小 ---
+// 默认情况下，字体大小可能受到标量条尺寸的限制
+scalarBar-&gt;SetUnconstrainedFontSize(true);             // 字体大小不受限制
+</code></pre>
+<h3 id="1924">19.2.4 多标量条布局管理</h3>
+<p>当你在一个渲染窗口中展示多个数据集，或者使用多个渲染器时，你可能需要为每个数据集配置独立的标量条。这就涉及到多标量条的布局管理问题。</p>
+<p><strong>场景一：单个渲染器中的多个标量条</strong></p>
+<p>在一个渲染器中，你可以通过仔细设置每个标量条的位置和尺寸，来避免它们互相重叠：</p>
+<pre><code class="language-cpp">// 标量条1：右侧，上半部分
+scalarBar1-&gt;SetOrientationToVertical();
+scalarBar1-&gt;SetPosition(0.85, 0.55);
+scalarBar1-&gt;SetWidth(0.12);
+scalarBar1-&gt;SetHeight(0.35);
+
+// 标量条2：右侧，下半部分
+scalarBar2-&gt;SetOrientationToVertical();
+scalarBar2-&gt;SetPosition(0.85, 0.12);
+scalarBar2-&gt;SetWidth(0.12);
+scalarBar2-&gt;SetHeight(0.35);
+
+// 添加到渲染器
+renderer-&gt;AddActor2D(scalarBar1);
+renderer-&gt;AddActor2D(scalarBar2);
+</code></pre>
+<p><strong>场景二：多视口布局中每个渲染器有自己的标量条</strong></p>
+<p>这种架构在12.6节的多方案对比示例中已经使用过。每个Renderer有自己独立的视口（Viewport），其内部的标量条位置相对于该Renderer的视口而言。这是最清晰的管理方式：</p>
+<pre><code class="language-cpp">// 渲染器1占左半部分
+renderer1-&gt;SetViewport(0.0, 0.0, 0.5, 1.0);
+
+// 标量条1在渲染器1中定位
+scalarBar1-&gt;SetPosition(0.85, 0.1);  // 相对于renderer1的视口
+
+// 渲染器2占右半部分
+renderer2-&gt;SetViewport(0.5, 0.0, 1.0, 1.0);
+
+// 标量条2在渲染器2中定位
+scalarBar2-&gt;SetPosition(0.85, 0.1);  // 相对于renderer2的视口
+</code></pre>
+<h3 id="1925">19.2.5 多标量条布局的计算辅助函数</h3>
+<p>当需要在一个渲染器中布置多个标量条时，手动计算每个标量条的位置可能会很繁琐。下面是一个辅助函数，它将渲染器的右侧区域均匀分配给指定数量的垂直标量条：</p>
+<pre><code class="language-cpp">// 在渲染器右侧均匀布置多个垂直标量条
+// renderer: 目标渲染器
+// scalarBars: 标量条数组
+// startX: 第一个标量条左边缘的归一化x坐标 (建议0.82)
+// barWidth: 每个标量条的宽度 (建议0.12)
+// minY: 最下方标量条的底部y坐标 (建议0.05)
+// maxY: 最上方标量条的顶部y坐标 (建议0.95)
+// gap: 标量条之间的间距 (建议0.03)
+
+void LayoutMultipleScalarBars(
+    std::vector&lt;vtkSmartPointer&lt;vtkScalarBarActor&gt;&gt;&amp; scalarBars,
+    double startX, double barWidth,
+    double minY, double maxY, double gap)
+{
+    int n = static_cast&lt;int&gt;(scalarBars.size());
+    if (n == 0) return;
+
+    // 计算每个标量条的可用高度
+    double totalGap = (n - 1) * gap;
+    double totalHeight = maxY - minY - totalGap;
+    double eachHeight = totalHeight / n;
+
+    for (int i = 0; i &lt; n; ++i)
+    {
+        // 自下而上排列
+        double y = minY + i * (eachHeight + gap);
+        scalarBars[i]-&gt;SetPosition(startX, y);
+        scalarBars[i]-&gt;SetWidth(barWidth);
+        scalarBars[i]-&gt;SetHeight(eachHeight);
+    }
+}
+</code></pre>
+<p>这个函数的使用示例：</p>
+<pre><code class="language-cpp">// 创建三个标量条，分别对应温度、压力和速度
+std::vector&lt;vtkSmartPointer&lt;vtkScalarBarActor&gt;&gt; bars;
+bars.push_back(tempScalarBar);
+bars.push_back(pressureScalarBar);
+bars.push_back(velocityScalarBar);
+
+// 在渲染器右侧均匀布置
+LayoutMultipleScalarBars(bars, 0.84, 0.12, 0.08, 0.92, 0.02);
+
+// 全部添加到渲染器
+for (auto&amp; bar : bars)
+{
+    renderer-&gt;AddActor2D(bar);
+}
+</code></pre>
+<h3 id="1926">19.2.6 自定义颜色条中的颜色段</h3>
+<p>如果你需要创建带有多段离散颜色的标量条（例如，针对分类数据的标量条），你可以通过<code>SetAnnotationTextEntry()</code>或自定义标量条的外观来实现。但对于大多数连续数据可视化场景，标准的<code>vtkScalarBarActor</code>就已经足够了。</p>
+<hr />
+<h2 id="193">19.3 方向标与坐标轴</h2>
+<p>方向标（Orientation Marker）是三维可视化最基本的标注元素之一。当用户旋转场景时，很容易失去对空间方向的感知——XYZ三个轴到底指向哪里？方向标通过始终显示坐标轴的方向来解决这个问题。</p>
+<h3 id="1931-vtkorientationmarkerwidget">19.3.1 vtkOrientationMarkerWidget概述</h3>
+<p><code>vtkOrientationMarkerWidget</code>是VTK中管理方向指示器的主要组件。它本质上是一个Widget（交互组件），负责在渲染窗口的一个角落显示一个小型的坐标轴指示器。当用户旋转场景时，这个小坐标轴也跟随旋转，始终指明世界坐标系的方向。</p>
+<p><code>vtkOrientationMarkerWidget</code>的工作机制：
+1. 它持有一个Actor（通常是<code>vtkAxesActor</code>或<code>vtkAnnotatedCubeActor</code>）作为方向指示标记。
+2. 它创建一个独立的小型Renderer，专门用于渲染这个标记。
+3. 它将这个小型Renderer叠加在主渲染窗口的指定位置（通过<code>SetViewport()</code>控制）。
+4. 它监听主Renderer的相机变化，并自动更新标记的朝向。</p>
+<pre><code class="language-cpp">#include &lt;vtkOrientationMarkerWidget.h&gt;
+#include &lt;vtkAxesActor.h&gt;
+
+// 步骤1：创建坐标轴Actor作为方向标记
+vtkNew&lt;vtkAxesActor&gt; axesActor;
+axesActor-&gt;SetTotalLength(2.0, 2.0, 2.0);   // 每个轴的长度
+axesActor-&gt;SetShaftTypeToCylinder();         // 轴干用圆柱体表示
+axesActor-&gt;SetCylinderRadius(0.05);          // 圆柱体半径
+axesActor-&gt;SetConeRadius(0.15);              // 箭头圆锥半径
+axesActor-&gt;SetConeResolution(16);            // 圆锥的边数
+axesActor-&gt;SetAxisLabels(true);              // 显示X、Y、Z标签
+axesActor-&gt;SetXAxisLabelText(&quot;X&quot;);
+axesActor-&gt;SetYAxisLabelText(&quot;Y&quot;);
+axesActor-&gt;SetZAxisLabelText(&quot;Z&quot;);
+
+// 步骤2：创建OrientationMarkerWidget
+vtkNew&lt;vtkOrientationMarkerWidget&gt; orientationWidget;
+orientationWidget-&gt;SetOrientationMarker(axesActor);
+orientationWidget-&gt;SetInteractor(renderWindowInteractor);
+
+// 步骤3：设置位置（视口坐标）
+orientationWidget-&gt;SetViewport(0.0, 0.0, 0.2, 0.2);
+// 含义：方向标占据渲染窗口左下角，从左下角(0,0)到(0.2, 0.2)
+// 即窗口宽度的20%，窗口高度的20%
+
+// 步骤4：设置行为
+orientationWidget-&gt;SetEnabled(true);          // 启用方向标
+orientationWidget-&gt;SetInteractive(true);      // 允许用户与方向标交互
+// 当SetInteractive(true)时，用户可以点击方向标来重置相机朝向
+</code></pre>
+<p><code>SetViewport()</code>的四个参数定义了方向标在渲染窗口中的矩形区域（归一化坐标）。推荐的典型位置有：
+- 左下角：<code>(0.0, 0.0, 0.2, 0.2)</code>
+- 右下角：<code>(0.8, 0.0, 1.0, 0.2)</code>
+- 左上角：<code>(0.0, 0.8, 0.2, 1.0)</code></p>
+<h3 id="1932-vtkaxesactor">19.3.2 vtkAxesActor深度配置</h3>
+<p><code>vtkAxesActor</code>是VTK中标准的坐标轴Actor，它由三个带箭头的轴组成（X=红色、Y=绿色、Z=蓝色，遵循传统的RGB-XYZ映射）。除了基本的轴长和标签设置外，它还支持以下高级配置：</p>
+<pre><code class="language-cpp">vtkNew&lt;vtkAxesActor&gt; axesActor;
+
+// --- 轴长 ---
+axesActor-&gt;SetTotalLength(1.5, 1.5, 1.5);     // X, Y, Z轴各自的总长度
+
+// --- 轴干类型 ---
+axesActor-&gt;SetShaftTypeToCylinder();           // 圆柱体轴干（默认）
+axesActor-&gt;SetShaftTypeToLine();               // 线段轴干（更简洁）
+axesActor-&gt;SetShaftTypeToUserDefined();        // 用户自定义
+
+// --- 轴干尺寸 ---
+axesActor-&gt;SetCylinderRadius(0.04);            // 圆柱体半径
+axesActor-&gt;SetLineWidth(1.5);                  // 线型轴干的线宽
+
+// --- 箭头设置 ---
+axesActor-&gt;SetConeRadius(0.12);                // 箭头圆锥的底面半径
+axesActor-&gt;SetConeResolution(20);              // 圆锥的边数（越大越光滑）
+axesActor-&gt;SetTipTypeToCone();                 // 圆锥形箭头
+// axesActor-&gt;SetTipTypeToSphere();            // 球形箭头
+
+// --- 标签设置 ---
+axesActor-&gt;SetAxisLabels(true);                // 是否显示轴标签
+axesActor-&gt;SetXAxisLabelText(&quot;水平X&quot;);          // 自定义X轴标签文字
+axesActor-&gt;SetYAxisLabelText(&quot;垂直Y&quot;);          // 自定义Y轴标签文字
+axesActor-&gt;SetZAxisLabelText(&quot;深度Z&quot;);          // 自定义Z轴标签文字
+
+// --- 轴的颜色 ---
+// 默认: X=红色, Y=绿色, Z=蓝色（RGB-XYZ对应）
+// 可以手动修改单个轴的各个部分的颜色：
+// X轴: axesActor-&gt;GetXAxisShaftProperty()-&gt;SetColor(r, g, b);
+//      axesActor-&gt;GetXAxisTipProperty()-&gt;SetColor(r, g, b);
+// Y轴: axesActor-&gt;GetYAxisShaftProperty()-&gt;SetColor(r, g, b);
+//      axesActor-&gt;GetYAxisTipProperty()-&gt;SetColor(r, g, b);
+// Z轴: axesActor-&gt;GetZAxisShaftProperty()-&gt;SetColor(r, g, b);
+//      axesActor-&gt;GetZAxisTipProperty()-&gt;SetColor(r, g, b);
+
+// 自定义轴颜色示例：将Z轴改为黄色
+axesActor-&gt;GetZAxisShaftProperty()-&gt;SetColor(1.0, 1.0, 0.0);
+axesActor-&gt;GetZAxisTipProperty()-&gt;SetColor(1.0, 1.0, 0.0);
+
+// --- 标签文本属性 ---
+// X轴标签属性
+axesActor-&gt;GetXAxisCaptionActor2D()-&gt;GetTextActor()-&gt;GetTextProperty()-&gt;SetFontSize(14);
+axesActor-&gt;GetXAxisCaptionActor2D()-&gt;GetTextActor()-&gt;GetTextProperty()-&gt;SetBold(true);
+
+// --- 整体姿态 ---
+// 设置坐标轴的朝向（通过四元数或旋转角度）
+// 默认情况下，X轴向右、Y轴向上、Z轴指向观察者
+axesActor-&gt;SetOrientation(30, 20, 0);         // 绕X旋转30°，绕Y旋转20°
+</code></pre>
+<h3 id="1933-vtkannotatedcubeactor">19.3.3 vtkAnnotatedCubeActor：带文字标签的方向立方体</h3>
+<p><code>vtkAnnotatedCubeActor</code>是一种替代性的方向指示器。与<code>vtkAxesActor</code>不同，它显示的是一个小型的标注立方体——每个面标有文字标签（通常是"R/L"、"A/P"、"S/I"等解剖学术语，或者"+X/-X"等坐标标签）。</p>
+<pre><code class="language-cpp">#include &lt;vtkAnnotatedCubeActor.h&gt;
+#include &lt;vtkNamedColors.h&gt;
+
+vtkNew&lt;vtkAnnotatedCubeActor&gt; cubeActor;
+
+// --- 设置六个面的文字标签 ---
+// SetFaceText(faces) 设置所有六个面的文字
+// 面的顺序: 1=X+, 2=X-, 3=Y+, 4=Y-, 5=Z+, 6=Z-
+// 或使用vtkAnnotatedCubeActor中定义的枚举常量
+cubeActor-&gt;SetXPlusFaceText(&quot;+X&quot;);            // X+面：右
+cubeActor-&gt;SetXMinusFaceText(&quot;-X&quot;);           // X-面：左
+cubeActor-&gt;SetYPlusFaceText(&quot;+Y&quot;);            // Y+面：上
+cubeActor-&gt;SetYMinusFaceText(&quot;-Y&quot;);           // Y-面：下
+cubeActor-&gt;SetZPlusFaceText(&quot;+Z&quot;);            // Z+面：前
+cubeActor-&gt;SetZMinusFaceText(&quot;-Z&quot;);           // Z-面：后
+
+// --- 外观设置 ---
+// 获取立方体的外观属性
+cubeActor-&gt;GetCubeProperty()-&gt;SetColor(0.8, 0.85, 0.9);  // 浅灰色立方体
+cubeActor-&gt;GetCubeProperty()-&gt;SetOpacity(0.8);            // 轻微半透明
+
+// 获取面文字的文本属性
+cubeActor-&gt;GetTextEdgesProperty()-&gt;SetColor(0.0, 0.0, 0.0);  // 文字颜色：黑色
+cubeActor-&gt;GetTextEdgesProperty()-&gt;SetLineWidth(2.0);
+
+// 获取X+面文字属性
+cubeActor-&gt;GetXPlusFaceProperty()-&gt;SetColor(1.0, 0.0, 0.0);   // 红色文字
+cubeActor-&gt;GetXPlusFaceProperty()-&gt;SetFontSize(16);
+
+// --- 使用OrientationMarkerWidget来管理 ---
+vtkNew&lt;vtkOrientationMarkerWidget&gt; cubeWidget;
+cubeWidget-&gt;SetOrientationMarker(cubeActor);
+cubeWidget-&gt;SetInteractor(renderWindowInteractor);
+cubeWidget-&gt;SetViewport(0.0, 0.0, 0.2, 0.2);
+cubeWidget-&gt;SetEnabled(true);
+cubeWidget-&gt;SetInteractive(true);
+</code></pre>
+<p><code>vtkAnnotatedCubeActor</code>在医学可视化中特别受欢迎，因为它可以用解剖学术语来标注方向：上方(Superior)、下方(Inferior)、左方(Left)、右方(Right)、前方(Anterior)、后方(Posterior)。这种表达方式比单纯的XYZ坐标更符合领域专家的使用习惯。</p>
+<h3 id="1934">19.3.4 同时使用坐标轴和立方体</h3>
+<p>你可以在同一个渲染窗口中同时使用<code>vtkAxesActor</code>（通过一个OrientationMarkerWidget）和<code>vtkAnnotatedCubeActor</code>（通过另一个OrientationMarkerWidget），将它们放置在不同角落。但通常来说，选择其中一种就足够了。推荐的做法是：</p>
+<ul>
+<li>对于工程和物理仿真场景，使用<code>vtkAxesActor</code>（更精确地表示坐标轴）。</li>
+<li>对于医学和生物可视化场景，使用<code>vtkAnnotatedCubeActor</code>（用术语替代XYZ）。</li>
+<li>对于一般科学可视化，任意一种都可以。</li>
+</ul>
+<hr />
+<h2 id="194">19.4 文字标注</h2>
+<p>文字标注是可视化场景中传递信息的根本方式。VTK提供了多种文字标注组件，适用于不同的使用场景。本节将系统地介绍四种主要的文字标注工具。</p>
+<h3 id="1941-vtktextactor">19.4.1 vtkTextActor：屏幕空间固定文字</h3>
+<p><code>vtkTextActor</code>是最基本的文字标注组件。它在屏幕空间中显示文字，位置以归一化视口坐标表示，不受相机运动的影响。它适合用作场景的标题、固定的数据说明或任何不需要随3D场景移动的文字信息。</p>
+<pre><code class="language-cpp">#include &lt;vtkTextActor.h&gt;
+#include &lt;vtkTextProperty.h&gt;
+
+// 创建屏幕空间文字
+vtkNew&lt;vtkTextActor&gt; textActor;
+
+// 设置文字内容
+textActor-&gt;SetInput(&quot;有限元应力分析结果\n最大主应力分布图&quot;);
+
+// 设置显示位置（归一化视口坐标）
+// 支持SetDisplayPosition(x, y)和SetPosition(x, y)两种方式
+textActor-&gt;SetDisplayPosition(10, 50);          // 像素坐标：距离左边缘10px，下边缘50px
+
+// 或者使用归一化坐标
+textActor-&gt;SetPosition(0.02, 0.95);             // 视口坐标：靠近左上角
+
+// --- 文本属性设置 ---
+vtkTextProperty* textProp = textActor-&gt;GetTextProperty();
+textProp-&gt;SetFontSize(18);                       // 字体大小
+textProp-&gt;SetFontFamilyToArial();                // 字体族
+textProp-&gt;SetColor(0.0, 0.0, 0.0);              // 文字颜色（黑色）
+textProp-&gt;SetBold(true);                         // 粗体
+textProp-&gt;SetItalic(false);                      // 非斜体
+textProp-&gt;SetShadow(true);                       // 开启阴影
+textProp-&gt;SetShadowOffset(2, -2);                // 阴影偏移量
+textProp-&gt;SetOpacity(1.0);                       // 完全不透明
+textProp-&gt;SetJustificationToLeft();              // 左对齐
+// 可选对齐方式:
+//   SetJustificationToLeft()   -- 左对齐
+//   SetJustificationToCentered() -- 居中对齐
+//   SetJustificationToRight()  -- 右对齐
+
+textProp-&gt;SetVerticalJustificationToTop();       // 顶部对齐
+// 可选垂直对齐方式:
+//   SetVerticalJustificationToTop()
+//   SetVerticalJustificationToCentered()
+//   SetVerticalJustificationToBottom()
+
+// --- 文字背景设置 ---
+textProp-&gt;SetBackgroundColor(1.0, 1.0, 0.9);     // 浅黄色背景
+textProp-&gt;SetBackgroundOpacity(0.6);              // 背景半透明
+textProp-&gt;SetFrame(true);                         // 在文字周围绘制边框
+textProp-&gt;SetFrameColor(0.0, 0.0, 0.0);          // 边框颜色
+textProp-&gt;SetFrameWidth(2);                       // 边框宽度
+
+// --- 添加到渲染器 ---
+renderer-&gt;AddActor2D(textActor);                  // 作为2D叠加层添加
+</code></pre>
+<p><code>vtkTextActor</code>支持多行文字——在输入的字符串中使用<code>\n</code>来换行。你可以用它来创建结构化的信息显示。</p>
+<h3 id="1942-vtkcaptionactor2d">19.4.2 vtkCaptionActor2D：带引线的跟随文字</h3>
+<p><code>vtkCaptionActor2D</code>是一种特殊的文字标注，它由两部分组成：
+1. <strong>文字部分</strong>：在屏幕上显示的文字。
+2. <strong>引线</strong>（Leader Line）：一条从文字指向场景中某个3D点的线段。</p>
+<p>当场景旋转或缩放时，引线的锚点始终指向3D世界中的固定位置，而文字部分保持在屏幕空间中。这非常适合标注数据中的特定位置（例如"最高温度点"、"入口边界"等）。</p>
+<pre><code class="language-cpp">#include &lt;vtkCaptionActor2D.h&gt;
+
+// 创建引线文字标注
+vtkNew&lt;vtkCaptionActor2D&gt; captionActor;
+
+// 设置标注文字
+captionActor-&gt;SetCaption(&quot;峰值应力\n450 MPa&quot;);
+
+// 设置引线锚点（3D世界坐标）
+captionActor-&gt;SetAttachmentPoint(peakStressX, peakStressY, peakStressZ);
+
+// --- 文字部分的外观设置 ---
+vtkTextProperty* capTextProp = captionActor-&gt;GetCaptionTextProperty();
+capTextProp-&gt;SetFontSize(12);
+capTextProp-&gt;SetFontFamilyToArial();
+capTextProp-&gt;SetColor(1.0, 0.0, 0.0);              // 红色文字
+capTextProp-&gt;SetBold(true);
+capTextProp-&gt;SetShadow(true);
+capTextProp-&gt;SetFrame(true);
+capTextProp-&gt;SetFrameColor(0.0, 0.0, 0.0);
+
+// --- 引线设置 ---
+captionActor-&gt;SetLeader(true);                       // 显示引线
+captionActor-&gt;SetLeaderGlyphSize(5.0);               // 引线端点的箭头大小
+// SetLeaderGlyphSize() 控制引线在锚点端的箭头大小，
+// 设置为0则没有箭头
+
+// --- 边框与填充 ---
+captionActor-&gt;SetPadding(4);                         // 文字矩形框的内边距
+captionActor-&gt;SetBorder(true);                       // 显示文字边框
+captionActor-&gt;SetThreeDimensionalLeader(false);      // 引线是2D还是3D
+// true: 引线作为3D线绘制（可能被其他几何体遮挡）
+// false: 引线在屏幕空间中绘制（始终可见，默认）
+
+// --- 添加到渲染器 ---
+// vtkCaptionActor2D 通过 AddActor() 添加（因为它有3D锚点）
+renderer-&gt;AddActor(captionActor);
+</code></pre>
+<h3 id="1943-vtkcornerannotation">19.4.3 vtkCornerAnnotation：角标注</h3>
+<p><code>vtkCornerAnnotation</code>专门用于在渲染窗口的四个角落显示文本信息。它的典型用途是显示数据的元信息——文件来源、时间步、数据范围、当前相机参数等。</p>
+<pre><code class="language-cpp">#include &lt;vtkCornerAnnotation.h&gt;
+
+vtkNew&lt;vtkCornerAnnotation&gt; cornerAnnotation;
+
+// 设置四个角落的文本
+// SetText(int corner, const char* text)
+// corner参数:
+//   0 = 左下角 (Lower Left)
+//   1 = 右下角 (Lower Right)
+//   2 = 左上角 (Upper Left)
+//   3 = 右上角 (Upper Right)
+
+// 左下角：显示数据来源信息
+cornerAnnotation-&gt;SetText(0, &quot;数据来源: NASA SRTM v4\n分辨率: 90m&quot;);
+
+// 右下角：显示时间步和范围
+cornerAnnotation-&gt;SetText(1, &quot;时间: t=3.5s\n高程范围: [-109, 8852] m&quot;);
+
+// 左上角：显示场景名称
+cornerAnnotation-&gt;SetText(2, &quot;VTK地形可视化演示&quot;);
+
+// 右上角：显示渲染信息
+cornerAnnotation-&gt;SetText(3, &quot;帧率: 未知\n相机制: 透视&quot;);
+
+// --- 清除某个角落的文本 ---
+cornerAnnotation-&gt;SetText(1, &quot;&quot;);                    // 清空右下角
+
+// --- 文本属性 ---
+vtkTextProperty* cornerProp = cornerAnnotation-&gt;GetTextProperty();
+cornerProp-&gt;SetFontSize(11);
+cornerProp-&gt;SetFontFamilyToCourier();                // 等宽字体适合对齐
+cornerProp-&gt;SetColor(0.9, 0.9, 0.9);                // 浅灰色文字
+cornerProp-&gt;SetShadow(true);
+cornerProp-&gt;SetShadowOffset(1, -1);
+
+// --- 设置最大字体大小（防止在大窗口中文字过大） ---
+cornerAnnotation-&gt;SetMaximumFontSize(14);
+
+// --- 设置最小字体大小（防止在小窗口中文字过小） ---
+cornerAnnotation-&gt;SetMinimumFontSize(8);
+
+// --- 线性渐变与非线性字体缩放 ---
+cornerAnnotation-&gt;SetNonlinearFontScaleFactor(0.35);
+cornerAnnotation-&gt;SetLinearFontScaleFactor(0.015);
+
+// --- 添加到渲染器 ---
+renderer-&gt;AddActor2D(cornerAnnotation);
+</code></pre>
+<p>角标注的一个关键特性是，它的字体大小可以随窗口大小的变化而自动调整。通过<code>SetMaximumFontSize()</code>和<code>SetMinimumFontSize()</code>可以限制这种自适应行为的上界和下界，确保文字在任何窗口尺寸下都保持可读。</p>
+<h3 id="1944">19.4.4 综合文字标注示例</h3>
+<p>下面是一个综合示例，展示如何在单个渲染器中组合使用多种文字标注类型：</p>
+<pre><code class="language-cpp">// --- 场景标题（vtkTextActor，固定在顶部居中） ---
+vtkNew&lt;vtkTextActor&gt; titleActor;
+titleActor-&gt;SetInput(&quot;三维标注系统演示&quot;);
+vtkTextProperty* titleProp = titleActor-&gt;GetTextProperty();
+titleProp-&gt;SetFontSize(22);
+titleProp-&gt;SetFontFamilyToArial();
+titleProp-&gt;SetColor(0.0, 0.0, 0.0);
+titleProp-&gt;SetBold(true);
+titleProp-&gt;SetJustificationToCentered();
+titleProp-&gt;SetVerticalJustificationToTop();
+titleActor-&gt;SetPosition(0.5, 0.98);                   // 顶部居中
+
+// --- 角标注（vtkCornerAnnotation，左上角和右上角） ---
+vtkNew&lt;vtkCornerAnnotation&gt; cornerAnnot;
+cornerAnnot-&gt;SetText(2, &quot;数据集: RandomHills\n标量: 高程值&quot;);   // 左上角
+cornerAnnot-&gt;SetText(3, &quot;相机状态: 用户交互模式&quot;);              // 右上角
+cornerAnnot-&gt;GetTextProperty()-&gt;SetFontSize(10);
+cornerAnnot-&gt;GetTextProperty()-&gt;SetColor(0.3, 0.3, 0.3);
+
+// --- 数据统计信息（vtkTextActor，左下角固定位置） ---
+vtkNew&lt;vtkTextActor&gt; statsActor;
+statsActor-&gt;SetInput(&quot;高程统计:\n  最小值: 0.00 m\n&quot;
+                     &quot;  最大值: 6.00 m\n  平均值: 3.00 m\n  标准差: 1.41 m&quot;);
+statsActor-&gt;GetTextProperty()-&gt;SetFontSize(10);
+statsActor-&gt;GetTextProperty()-&gt;SetFontFamilyToCourier();
+statsActor-&gt;GetTextProperty()-&gt;SetColor(0.1, 0.1, 0.1);
+statsActor-&gt;GetTextProperty()-&gt;SetBackgroundColor(0.95, 0.95, 0.95);
+statsActor-&gt;GetTextProperty()-&gt;SetBackgroundOpacity(0.7);
+statsActor-&gt;GetTextProperty()-&gt;SetFrame(true);
+statsActor-&gt;GetTextProperty()-&gt;SetFrameColor(0.5, 0.5, 0.5);
+statsActor-&gt;SetDisplayPosition(10, 80);               // 左下角，距左10px，距下80px
+
+// --- 将所有标注添加到渲染器 ---
+renderer-&gt;AddActor2D(titleActor);
+renderer-&gt;AddActor2D(cornerAnnot);
+renderer-&gt;AddActor2D(statsActor);
+</code></pre>
+<h3 id="1945">19.4.5 字体选择与中文支持</h3>
+<p>在VTK中使用中文字符串标注时，需要确保渲染后端配置了支持中文的字体。VTK依赖FreeType进行字体渲染，中文字体需要在系统字体路径中可用，或者通过<code>vtkFreeTypeTools</code>显式指定字体文件。</p>
+<pre><code class="language-cpp">#include &lt;vtkFreeTypeTools.h&gt;
+
+// 显式设置中文字体文件（Windows示例）
+textProp-&gt;SetFontFamily(VTK_FONT_FILE);
+textProp-&gt;SetFontFile(&quot;C:/Windows/Fonts/msyh.ttc&quot;);   // 微软雅黑
+// 或
+textProp-&gt;SetFontFile(&quot;C:/Windows/Fonts/simsun.ttc&quot;);  // 宋体
+// 或
+textProp-&gt;SetFontFile(&quot;C:/Windows/Fonts/simhei.ttf&quot;);  // 黑体
+
+// 在Linux/macOS上：
+// textProp-&gt;SetFontFile(&quot;/usr/share/fonts/truetype/droid/DroidSansFallbackFull.ttf&quot;);
+// 或使用Noto Sans CJK等开放字体
+</code></pre>
+<p>没有正确配置中文字体时，中文字符可能显示为方框或空白。如果你主要在英文环境中工作，建议在代码中使用ASCII字符并配合数字来表示需要的信息；如果需要中文标注，务必在部署环境中检查字体可用性。</p>
+<hr />
+<h2 id="195">19.5 比例尺与图例</h2>
+<p>比例尺和图例是两类重要的辅助标注组件，它们帮助观察者理解场景中的空间尺度和数据对象身份。</p>
+<h3 id="1951-vtklegendscaleactor">19.5.1 vtkLegendScaleActor：自动比例尺</h3>
+<p><code>vtkLegendScaleActor</code>是一个二合一的标注组件：它同时显示<strong>水平比例尺</strong>和<strong>垂直比例尺</strong>（在渲染窗口的底部和右侧），为观察者提供场景的物理尺度参考。</p>
+<pre><code class="language-cpp">#include &lt;vtkLegendScaleActor.h&gt;
+
+vtkNew&lt;vtkLegendScaleActor&gt; legendScale;
+
+// --- 基本设置 ---
+legendScale-&gt;SetLabelModeToDistance();               // 按距离显示刻度
+// 可选模式:
+//   SetLabelModeToDistance()  -- 显示物理距离（默认）
+//   SetLabelModeToCoordinates() -- 显示坐标值
+
+legendScale-&gt;SetNumberOfTicks(4);                    // 刻度标记数量
+
+// --- 刻度方向 ---
+legendScale-&gt;RightAxisVisibilityOn();                // 显示右侧（垂直）比例尺
+legendScale-&gt;TopAxisVisibilityOn();                  // 显示顶部（水平）比例尺
+legendScale-&gt;LeftAxisVisibilityOff();                // 隐藏左侧比例尺
+legendScale-&gt;BottomAxisVisibilityOff();              // 隐藏底部比例尺
+
+// --- 添加到渲染器 ---
+// vtkLegendScaleActor 通过 AddActor2D() 添加
+// 它自动将自己定位在渲染窗口的边缘
+renderer-&gt;AddActor2D(legendScale);
+</code></pre>
+<p><code>vtkLegendScaleActor</code>的一个重要特性是它的<strong>自动缩放</strong>：当场景缩放时，比例尺上的刻度标记会自动调整，避免过密或过疏。这意味着你不需要为不同的缩放级别手动调整刻度——它会自动选择合适的间距。</p>
+<p>然而，它有两个局限性需要了解：
+1. 它假定世界坐标系中的距离单位与物理单位一致（它无法知道你的数据使用的是什么单位，1个世界单位始终显示为1）。
+2. 它的外观定制选项相对有限，不支持自定义字体大小和颜色（在VTK 9.5.2中）。</p>
+<h3 id="1952-vtklegendboxactor">19.5.2 vtkLegendBoxActor：图例框</h3>
+<p>当场景中包含多个数据Actor时，图例（Legend Box）帮助观察者区分不同的数据对象。<code>vtkLegendBoxActor</code>允许你创建一个包含颜色块和对应文字的图例框。</p>
+<pre><code class="language-cpp">#include &lt;vtkLegendBoxActor.h&gt;
+
+vtkNew&lt;vtkLegendBoxActor&gt; legendBox;
+
+// --- 每个条目由一个颜色块和一个文本标签组成 ---
+// AddEntry(i, icon, color, text, colorStr)
+// icon: 图例条目的图标类型
+//    1 = 实心颜色块
+//    2 = 线型图标
+// 注意：在VTK 9.5.2中，推荐使用SetEntry()方法
+
+// --- 设置图例条目的方法 ---
+// 方法1：逐个添加条目（索引从0开始）
+int entryIdx = 0;
+
+// 添加&quot;温度&quot;条目（红色块）
+vtkNew&lt;vtkSphereSource&gt; dummySphere;   // 需要一个虚拟的Symbol用于颜色
+// 实际而言，推荐直接设置颜色矩形：
+legendBox-&gt;SetEntry(entryIdx++,
+    nullptr,               // icon (nullptr使用默认颜色矩形)
+    &quot;温度场 (Temperature)&quot;, // 文字标签
+    VTK_COLOR_RED);         // 颜色字符串
+
+// 添加&quot;压力&quot;条目（蓝色块）
+legendBox-&gt;SetEntry(entryIdx++,
+    nullptr,
+    &quot;压力场 (Pressure)&quot;,
+    VTK_COLOR_BLUE);
+
+// --- 条目数量 ---
+legendBox-&gt;SetNumberOfEntries(entryIdx);
+
+// --- 外观设置 ---
+legendBox-&gt;SetBorder(true);                          // 显示边框
+legendBox-&gt;SetBox(true);                             // 每个条目周围显示框线
+legendBox-&gt;SetPadding(6);                            // 内边距
+legendBox-&gt;SetBackgroundColor(1.0, 1.0, 1.0);       // 白色背景
+legendBox-&gt;SetEntryTextProperty(textProp);           // 文字属性
+
+// --- 添加到渲染器 ---
+renderer-&gt;AddActor2D(legendBox);                     // 作为2D叠加层
+</code></pre>
+<p>在实际使用中，<code>vtkLegendBoxActor</code>的使用比标量条要少。这是因为在大多数科学可视化场景中，每个数据集都有自己独立的颜色映射和标量条，图例的需求可以通过标量条来满足。<code>vtkLegendBoxActor</code>更适合于展示来自多个不同数据源的、使用单一颜色（而非颜色映射）表示的Actor。</p>
+<h3 id="1953">19.5.3 创建自定义比例尺</h3>
+<p>如果自动比例尺的外观音准不能满足你的需求，你可以通过手动创建线段和文字标注来实现完全自定义的比例尺。下面是一个简化的自定义比例尺示例：</p>
+<pre><code class="language-cpp">// 创建自定义比例尺的辅助代码
+// 使用 vtkAxisActor2D 或手动绘制线条
+
+// 方案：使用 vtkPolyData + vtkPolyDataMapper2D 绘制自定义比例尺条
+// 这在需要极高度自定义外观的场景下有用。
+//
+// 步骤概要：
+// 1. 创建表示比例尺线条的 vtkPolyData（使用 vtkPoints + vtkCellArray）
+// 2. 使用 vtkPolyDataMapper2D 将其映射为2D可渲染图元
+// 3. 使用 vtkActor2D 添加到渲染器
+// 4. 手动创建 vtkTextActor 用于刻度标签
+//
+// 由于代码较长（~60-80行），此处仅给出策略概要。
+// 对于大多数场景，vtkLegendScaleActor已经足够。
+</code></pre>
+<hr />
+<h2 id="196">19.6 代码示例：完整标注系统</h2>
+<p>本节提供一个完整的C++程序（约300行），展示本章涵盖的所有核心标注组件。程序创建一个具有高度变化的三维地形表面，并为其配备全套标注系统。</p>
+<h3 id="1961">19.6.1 程序概述</h3>
+<p>本演示程序创建以下场景和标注：</p>
+<p><strong>场景内容：</strong>
+1. 使用<code>vtkParametricRandomHills</code>生成地形曲面，以高程作为标量值。
+2. 使用彩虹色阶（<code>vtkColorTransferFunction</code>）进行颜色映射。
+3. 程序化生成一个平面用作"海平面"参考面。</p>
+<p><strong>标注系统（完整的六层信息叠加）：</strong>
+1. <strong>标量条</strong>（<code>vtkScalarBarActor</code>）——自定义样式的垂直颜色图例，展示高程色阶。
+2. <strong>方向标</strong>（<code>vtkOrientationMarkerWidget</code> + <code>vtkAxesActor</code>）——左下角的方向指示器。
+3. <strong>角标注</strong>（<code>vtkCornerAnnotation</code>）——右上角显示场景元信息。
+4. <strong>场景标题</strong>（<code>vtkTextActor</code>）——顶部居中的主标题。
+5. <strong>数据统计信息</strong>（<code>vtkTextActor</code>）——左下角的min/max/mean统计。
+6. <strong>引线文字标注</strong>（<code>vtkCaptionActor2D</code>）——指向地形最高点的引线标注。</p>
+<h3 id="1962-c">19.6.2 完整C++代码</h3>
+<pre><code class="language-cpp">// ============================================================================
+// Chapter 19: 3D Annotation and Display Components
+// File: AnnotationDemo.cxx
+// Description: A comprehensive demonstration of VTK annotation system:
+//              scalar bar, orientation marker, corner annotation, text actors,
+//              caption with leader line, and custom styling.
+//              Creates a terrain surface visualization with a complete
+//              annotation layer.
+// VTK Version: 9.5.2
+// ============================================================================
+
+#include &lt;vtkActor.h&gt;
+#include &lt;vtkAxesActor.h&gt;
+#include &lt;vtkCamera.h&gt;
+#include &lt;vtkCaptionActor2D.h&gt;
+#include &lt;vtkCleanPolyData.h&gt;
+#include &lt;vtkColorTransferFunction.h&gt;
+#include &lt;vtkCornerAnnotation.h&gt;
+#include &lt;vtkElevationFilter.h&gt;
+#include &lt;vtkFloatArray.h&gt;
+#include &lt;vtkLookupTable.h&gt;
+#include &lt;vtkNamedColors.h&gt;
+#include &lt;vtkNew.h&gt;
+#include &lt;vtkOrientationMarkerWidget.h&gt;
+#include &lt;vtkParametricFunctionSource.h&gt;
+#include &lt;vtkParametricRandomHills.h&gt;
+#include &lt;vtkPlaneSource.h&gt;
+#include &lt;vtkPointData.h&gt;
+#include &lt;vtkPolyDataMapper.h&gt;
+#include &lt;vtkProperty.h&gt;
+#include &lt;vtkRenderWindow.h&gt;
+#include &lt;vtkRenderWindowInteractor.h&gt;
+#include &lt;vtkRenderer.h&gt;
+#include &lt;vtkScalarBarActor.h&gt;
+#include &lt;vtkSmartPointer.h&gt;
+#include &lt;vtkSphereSource.h&gt;
+#include &lt;vtkTextActor.h&gt;
+#include &lt;vtkTextProperty.h&gt;
+
+#include &lt;cmath&gt;
+#include &lt;sstream&gt;
+#include &lt;string&gt;
+
+// ============================================================================
+// Helper: Create the terrain surface
+// ============================================================================
+vtkSmartPointer&lt;vtkPolyData&gt; CreateTerrainSurface()
+{
+    // Create a random hills parametric surface
+    vtkNew&lt;vtkParametricRandomHills&gt; hillsFunc;
+    hillsFunc-&gt;SetHillXVariance(2.5);
+    hillsFunc-&gt;SetHillYVariance(2.5);
+    hillsFunc-&gt;SetAmplitude(3.0);
+    hillsFunc-&gt;SetAllowRandomGeneration(true);
+    hillsFunc-&gt;SetRandomSeed(42);
+    hillsFunc-&gt;SetNumberOfHills(8);
+
+    // Generate surface as polydata
+    vtkNew&lt;vtkParametricFunctionSource&gt; source;
+    source-&gt;SetParametricFunction(hillsFunc);
+    source-&gt;SetUResolution(100);
+    source-&gt;SetVResolution(100);
+    source-&gt;SetWResolution(100);
+    source-&gt;SetScalarModeToZ();              // Use Z (height) as scalar value
+    source-&gt;Update();
+
+    // Clean the polydata to merge duplicate points
+    vtkNew&lt;vtkCleanPolyData&gt; cleaner;
+    cleaner-&gt;SetInputConnection(source-&gt;GetOutputPort());
+    cleaner-&gt;Update();
+
+    return cleaner-&gt;GetOutput();
+}
+
+// ============================================================================
+// Helper: Compute scalar statistics (min, max, mean) from polydata
+// ============================================================================
+void ComputeScalarStats(vtkPolyData* data,
+    double&amp; minVal, double&amp; maxVal, double&amp; meanVal)
+{
+    vtkDataArray* scalars = data-&gt;GetPointData()-&gt;GetScalars();
+    if (!scalars)
+    {
+        minVal = maxVal = meanVal = 0.0;
+        return;
+    }
+
+    double range[2];
+    scalars-&gt;GetRange(range);
+    minVal = range[0];
+    maxVal = range[1];
+
+    // Compute mean
+    double sum = 0.0;
+    vtkIdType n = scalars-&gt;GetNumberOfTuples();
+    for (vtkIdType i = 0; i &lt; n; ++i)
+    {
+        sum += scalars-&gt;GetComponent(i, 0);
+    }
+    meanVal = sum / static_cast&lt;double&gt;(n);
+}
+
+// ============================================================================
+// Helper: Find the 3D point with the maximum scalar value
+// ============================================================================
+void FindMaxScalarPoint(vtkPolyData* data,
+    double&amp; maxX, double&amp; maxY, double&amp; maxZ, double&amp; maxVal)
+{
+    vtkDataArray* scalars = data-&gt;GetPointData()-&gt;GetScalars();
+    vtkPoints* points = data-&gt;GetPoints();
+    if (!scalars || !points)
+    {
+        maxX = maxY = maxZ = maxVal = 0.0;
+        return;
+    }
+
+    maxVal = -std::numeric_limits&lt;double&gt;::max();
+    vtkIdType maxIdx = 0;
+    vtkIdType n = scalars-&gt;GetNumberOfTuples();
+    for (vtkIdType i = 0; i &lt; n; ++i)
+    {
+        double val = scalars-&gt;GetComponent(i, 0);
+        if (val &gt; maxVal)
+        {
+            maxVal = val;
+            maxIdx = i;
+        }
+    }
+
+    double pt[3];
+    points-&gt;GetPoint(maxIdx, pt);
+    maxX = pt[0];
+    maxY = pt[1];
+    maxZ = pt[2];
+}
+
+// ============================================================================
+// Main
+// ============================================================================
+int main(int argc, char* argv[])
+{
+    // ========================================================================
+    // 1. Create the terrain surface data
+    // ========================================================================
+    auto surface = CreateTerrainSurface();
+
+    // Get data range
+    double dataRange[2];
+    surface-&gt;GetScalarRange(dataRange);
+    std::cout &lt;&lt; &quot;Terrain scalar range: [&quot; &lt;&lt; dataRange[0]
+              &lt;&lt; &quot;, &quot; &lt;&lt; dataRange[1] &lt;&lt; &quot;]&quot; &lt;&lt; std::endl;
+
+    // Compute statistics
+    double minVal, maxVal, meanVal;
+    ComputeScalarStats(surface, minVal, maxVal, meanVal);
+    std::cout &lt;&lt; &quot;Stats -- Min: &quot; &lt;&lt; minVal &lt;&lt; &quot;, Max: &quot; &lt;&lt; maxVal
+              &lt;&lt; &quot;, Mean: &quot; &lt;&lt; meanVal &lt;&lt; std::endl;
+
+    // ========================================================================
+    // 2. Create the color transfer function (terrain elevation colormap)
+    // ========================================================================
+    vtkNew&lt;vtkColorTransferFunction&gt; ctf;
+    ctf-&gt;AddRGBPoint(0.0,   0.2, 0.3, 0.7);    // Deep water: dark blue
+    ctf-&gt;AddRGBPoint(0.15,  0.3, 0.5, 0.9);    // Shallow water: medium blue
+    ctf-&gt;AddRGBPoint(0.3,   0.2, 0.7, 0.3);    // Lowland: green
+    ctf-&gt;AddRGBPoint(0.5,   0.5, 0.8, 0.2);    // Midland: yellow-green
+    ctf-&gt;AddRGBPoint(0.7,   0.7, 0.7, 0.3);    // Hills: tan
+    ctf-&gt;AddRGBPoint(0.85,  0.6, 0.4, 0.2);    // Mountains: brown
+    ctf-&gt;AddRGBPoint(1.0,   1.0, 1.0, 1.0);    // Snow peak: white
+    ctf-&gt;SetColorSpaceToRGB();
+
+    // ========================================================================
+    // 3. Setup the terrain mapper and actor
+    // ========================================================================
+    vtkNew&lt;vtkPolyDataMapper&gt; terrainMapper;
+    terrainMapper-&gt;SetInputData(surface);
+    terrainMapper-&gt;SetLookupTable(ctf);
+    terrainMapper-&gt;SetScalarRange(dataRange);
+    terrainMapper-&gt;SetScalarVisibility(true);
+
+    vtkNew&lt;vtkActor&gt; terrainActor;
+    terrainActor-&gt;SetMapper(terrainMapper);
+    terrainActor-&gt;GetProperty()-&gt;SetSpecular(0.3);
+    terrainActor-&gt;GetProperty()-&gt;SetSpecularPower(20);
+    terrainActor-&gt;GetProperty()-&gt;SetAmbient(0.15);
+    terrainActor-&gt;GetProperty()-&gt;SetDiffuse(0.8);
+
+    // ========================================================================
+    // 4. Create a reference plane (sea level)
+    // ========================================================================
+    vtkNew&lt;vtkPlaneSource&gt; planeSource;
+    planeSource-&gt;SetOrigin(-5.0, -5.0, 0.0);
+    planeSource-&gt;SetPoint1(5.0, -5.0, 0.0);
+    planeSource-&gt;SetPoint2(-5.0, 5.0, 0.0);
+    planeSource-&gt;SetXResolution(1);
+    planeSource-&gt;SetYResolution(1);
+    planeSource-&gt;Update();
+
+    vtkNew&lt;vtkPolyDataMapper&gt; planeMapper;
+    planeMapper-&gt;SetInputConnection(planeSource-&gt;GetOutputPort());
+
+    vtkNew&lt;vtkActor&gt; planeActor;
+    planeActor-&gt;SetMapper(planeMapper);
+    planeActor-&gt;GetProperty()-&gt;SetColor(0.3, 0.5, 0.8);
+    planeActor-&gt;GetProperty()-&gt;SetOpacity(0.3);
+    planeActor-&gt;GetProperty()-&gt;SetAmbient(0.5);
+    planeActor-&gt;GetProperty()-&gt;SetSpecular(0.0);
+
+    // ========================================================================
+    // 5. Create the renderer
+    // ========================================================================
+    vtkNew&lt;vtkRenderer&gt; renderer;
+    renderer-&gt;AddActor(terrainActor);
+    renderer-&gt;AddActor(planeActor);
+    renderer-&gt;SetBackground(0.08, 0.08, 0.15);         // Dark navy background
+    renderer-&gt;SetBackground2(0.15, 0.15, 0.25);
+    renderer-&gt;SetGradientBackground(true);
+
+    // Enable depth peeling for transparent plane
+    renderer-&gt;SetUseDepthPeeling(true);
+    renderer-&gt;SetMaximumNumberOfPeels(6);
+    renderer-&gt;SetOcclusionRatio(0.0);
+
+    // Camera: isometric-like view
+    vtkCamera* camera = renderer-&gt;GetActiveCamera();
+    camera-&gt;SetPosition(-3.0, -8.0, 5.0);
+    camera-&gt;SetFocalPoint(0.0, 0.0, 1.8);
+    camera-&gt;SetViewUp(0.0, 0.0, 1.0);
+    camera-&gt;SetClippingRange(0.5, 50.0);
+    renderer-&gt;ResetCamera();
+
+    // ========================================================================
+    // 6. ANNOTATION LAYER
+    // ========================================================================
+
+    // --- 6a. Scalar Bar (标量条) ---
+    vtkNew&lt;vtkScalarBarActor&gt; scalarBar;
+    scalarBar-&gt;SetLookupTable(ctf);
+    scalarBar-&gt;SetTitle(&quot;高程 (m)&quot;);
+    scalarBar-&gt;SetNumberOfLabels(8);
+    scalarBar-&gt;SetLabelFormat(&quot;%.1f&quot;);
+    scalarBar-&gt;SetOrientationToVertical();
+    scalarBar-&gt;SetTextPositionToPrecedeScalarBar();
+    scalarBar-&gt;SetPosition(0.85, 0.12);
+    scalarBar-&gt;SetWidth(0.10);
+    scalarBar-&gt;SetHeight(0.65);
+    scalarBar-&gt;SetMaximumWidthInPixels(100);
+    scalarBar-&gt;SetMaximumHeightInPixels(600);
+    scalarBar-&gt;SetBarRatio(0.4);
+    scalarBar-&gt;SetDrawBorder(true);
+    scalarBar-&gt;SetBorderColor(0.8, 0.8, 0.8);
+    scalarBar-&gt;SetBackgroundColor(0.1, 0.1, 0.15);
+    scalarBar-&gt;SetBackgroundOpacity(0.5);
+    scalarBar-&gt;SetDrawBackground(true);
+
+    // Title text properties
+    scalarBar-&gt;GetTitleTextProperty()-&gt;SetFontSize(14);
+    scalarBar-&gt;GetTitleTextProperty()-&gt;SetFontFamilyToArial();
+    scalarBar-&gt;GetTitleTextProperty()-&gt;SetColor(1.0, 1.0, 1.0);
+    scalarBar-&gt;GetTitleTextProperty()-&gt;SetBold(true);
+    scalarBar-&gt;GetTitleTextProperty()-&gt;SetShadow(false);
+
+    // Label text properties
+    scalarBar-&gt;GetLabelTextProperty()-&gt;SetFontSize(11);
+    scalarBar-&gt;GetLabelTextProperty()-&gt;SetFontFamilyToArial();
+    scalarBar-&gt;GetLabelTextProperty()-&gt;SetColor(0.9, 0.9, 0.9);
+    scalarBar-&gt;GetLabelTextProperty()-&gt;SetBold(false);
+
+    renderer-&gt;AddActor2D(scalarBar);
+
+    // --- 6b. Orientation Marker (方向标) ---
+    vtkNew&lt;vtkAxesActor&gt; axesActor;
+    axesActor-&gt;SetTotalLength(1.5, 1.5, 1.5);
+    axesActor-&gt;SetShaftTypeToCylinder();
+    axesActor-&gt;SetCylinderRadius(0.04);
+    axesActor-&gt;SetConeRadius(0.12);
+    axesActor-&gt;SetConeResolution(16);
+    axesActor-&gt;SetAxisLabels(true);
+    axesActor-&gt;SetXAxisLabelText(&quot;X&quot;);
+    axesActor-&gt;SetYAxisLabelText(&quot;Y&quot;);
+    axesActor-&gt;SetZAxisLabelText(&quot;Z&quot;);
+
+    // Customize Z-axis color for better visibility against dark background
+    axesActor-&gt;GetZAxisShaftProperty()-&gt;SetColor(1.0, 1.0, 0.3);
+    axesActor-&gt;GetZAxisTipProperty()-&gt;SetColor(1.0, 1.0, 0.3);
+
+    // --- 6c. Scene Title (场景标题) ---
+    vtkNew&lt;vtkTextActor&gt; titleActor;
+    titleActor-&gt;SetInput(&quot;地形可视化 - 完整标注系统演示&quot;);
+    vtkTextProperty* titleProp = titleActor-&gt;GetTextProperty();
+    titleProp-&gt;SetFontSize(20);
+    titleProp-&gt;SetFontFamilyToArial();
+    titleProp-&gt;SetColor(1.0, 1.0, 1.0);
+    titleProp-&gt;SetBold(true);
+    titleProp-&gt;SetShadow(true);
+    titleProp-&gt;SetShadowOffset(2, -2);
+    titleProp-&gt;SetJustificationToCentered();
+    titleProp-&gt;SetVerticalJustificationToTop();
+    titleActor-&gt;SetPosition(0.5, 0.97);
+
+    renderer-&gt;AddActor2D(titleActor);
+
+    // --- 6d. Corner Annotation (角标注 - 数据信息) ---
+    vtkNew&lt;vtkCornerAnnotation&gt; cornerAnnot;
+    cornerAnnot-&gt;SetText(2, &quot;VTK 9.5.2 教程\n第十九章: 标注系统&quot;);  // 左上角
+    cornerAnnot-&gt;SetText(3, &quot;渲染模式: 表面+半透明参考面\n&quot;
+                            &quot;颜色映射: 地形高程色阶&quot;);               // 右上角
+    cornerAnnot-&gt;GetTextProperty()-&gt;SetFontSize(10);
+    cornerAnnot-&gt;GetTextProperty()-&gt;SetFontFamilyToArial();
+    cornerAnnot-&gt;GetTextProperty()-&gt;SetColor(0.8, 0.8, 0.8);
+    cornerAnnot-&gt;SetMaximumFontSize(12);
+    cornerAnnot-&gt;SetMinimumFontSize(8);
+
+    renderer-&gt;AddActor2D(cornerAnnot);
+
+    // --- 6e. Statistics Text (数据统计文字) ---
+    std::ostringstream statsStream;
+    statsStream &lt;&lt; &quot;数据统计:\n&quot;;
+    statsStream &lt;&lt; &quot;  最小值: &quot; &lt;&lt; std::fixed &lt;&lt; std::setprecision(2)
+                &lt;&lt; minVal &lt;&lt; &quot; m\n&quot;;
+    statsStream &lt;&lt; &quot;  最大值: &quot; &lt;&lt; maxVal &lt;&lt; &quot; m\n&quot;;
+    statsStream &lt;&lt; &quot;  平均值: &quot; &lt;&lt; meanVal &lt;&lt; &quot; m\n&quot;;
+    statsStream &lt;&lt; &quot;  数据点: &quot; &lt;&lt; surface-&gt;GetNumberOfPoints();
+
+    vtkNew&lt;vtkTextActor&gt; statsActor;
+    statsActor-&gt;SetInput(statsStream.str().c_str());
+    vtkTextProperty* statsProp = statsActor-&gt;GetTextProperty();
+    statsProp-&gt;SetFontSize(11);
+    statsProp-&gt;SetFontFamilyToCourier();
+    statsProp-&gt;SetColor(1.0, 1.0, 1.0);
+    statsProp-&gt;SetBackgroundColor(0.05, 0.05, 0.15);
+    statsProp-&gt;SetBackgroundOpacity(0.7);
+    statsProp-&gt;SetFrame(true);
+    statsProp-&gt;SetFrameColor(0.5, 0.5, 0.5);
+    statsProp-&gt;SetFrameWidth(1);
+    statsProp-&gt;SetJustificationToLeft();
+    statsProp-&gt;SetVerticalJustificationToBottom();
+    statsActor-&gt;SetDisplayPosition(12, 110);
+
+    renderer-&gt;AddActor2D(statsActor);
+
+    // --- 6f. Caption with Leader Line (引线文字标注，指向最高点) ---
+    double maxPtX, maxPtY, maxPtZ, maxScalar;
+    FindMaxScalarPoint(surface, maxPtX, maxPtY, maxPtZ, maxScalar);
+
+    std::ostringstream captionStream;
+    captionStream &lt;&lt; &quot;最高点\n&quot; &lt;&lt; std::fixed &lt;&lt; std::setprecision(2)
+                  &lt;&lt; maxScalar &lt;&lt; &quot; m&quot;;
+
+    vtkNew&lt;vtkCaptionActor2D&gt; captionActor;
+    captionActor-&gt;SetCaption(captionStream.str().c_str());
+    captionActor-&gt;SetAttachmentPoint(maxPtX, maxPtY, maxPtZ);
+    captionActor-&gt;SetLeader(true);
+    captionActor-&gt;SetLeaderGlyphSize(8.0);
+    captionActor-&gt;SetThreeDimensionalLeader(false);
+    captionActor-&gt;SetPadding(4);
+    captionActor-&gt;SetBorder(true);
+
+    vtkTextProperty* captionTextProp = captionActor-&gt;GetCaptionTextProperty();
+    captionTextProp-&gt;SetFontSize(12);
+    captionTextProp-&gt;SetFontFamilyToArial();
+    captionTextProp-&gt;SetColor(1.0, 1.0, 0.3);          // 亮黄色
+    captionTextProp-&gt;SetBold(true);
+    captionTextProp-&gt;SetShadow(true);
+    captionTextProp-&gt;SetShadowOffset(1, -1);
+    captionTextProp-&gt;SetBackgroundColor(0.1, 0.1, 0.1);
+    captionTextProp-&gt;SetBackgroundOpacity(0.8);
+    captionTextProp-&gt;SetFrame(true);
+    captionTextProp-&gt;SetFrameColor(1.0, 1.0, 0.3);
+    captionTextProp-&gt;SetFrameWidth(1);
+    captionTextProp-&gt;SetJustificationToCentered();
+
+    renderer-&gt;AddActor(captionActor);
+
+    // ========================================================================
+    // 7. Render Window
+    // ========================================================================
+    vtkNew&lt;vtkRenderWindow&gt; renderWindow;
+    renderWindow-&gt;SetSize(1200, 800);
+    renderWindow-&gt;SetMultiSamples(8);
+    renderWindow-&gt;SetWindowName(
+        &quot;Chapter 19: 3D Annotation and Display Components&quot;);
+    renderWindow-&gt;AddRenderer(renderer);
+
+    // ========================================================================
+    // 8. Interactor + Orientation Marker Widget
+    // ========================================================================
+    vtkNew&lt;vtkRenderWindowInteractor&gt; interactor;
+    interactor-&gt;SetRenderWindow(renderWindow);
+
+    // Orientation marker widget must be created AFTER the interactor
+    vtkNew&lt;vtkOrientationMarkerWidget&gt; orientationWidget;
+    orientationWidget-&gt;SetOrientationMarker(axesActor);
+    orientationWidget-&gt;SetInteractor(interactor);
+    orientationWidget-&gt;SetViewport(0.0, 0.0, 0.18, 0.18);   // 左下角
+    orientationWidget-&gt;SetEnabled(true);
+    orientationWidget-&gt;SetInteractive(true);
+
+    // ========================================================================
+    // 9. Render and Start
+    // ========================================================================
+    renderWindow-&gt;Render();
+    interactor-&gt;Initialize();
+    interactor-&gt;Start();
+
+    return 0;
+}
+</code></pre>
+<h3 id="1963-cmakeliststxt">19.6.3 CMakeLists.txt</h3>
+<pre><code class="language-cmake">cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
+
+# ============================================================================
+# Chapter 19: 3D Annotation and Display Components
+# File: CMakeLists.txt
+# ============================================================================
+
+project(AnnotationDemo)
+
+# --------------------------------------------------------------------------
+# Find VTK 9.5.2
+# --------------------------------------------------------------------------
+find_package(VTK 9.5 REQUIRED COMPONENTS
+    CommonCore
+    CommonColor
+    CommonComputationalGeometry
+    CommonDataModel
+    CommonExecutionModel
+    CommonMath
+    CommonSystem
+    CommonTransforms
+    FiltersCore
+    FiltersGeneral
+    FiltersSources
+    InteractionStyle
+    InteractionWidgets
+    RenderingAnnotation
+    RenderingCore
+    RenderingFreeType
+    RenderingOpenGL2
+)
+
+if(NOT VTK_FOUND)
+    message(FATAL_ERROR
+        &quot;VTK 9.5 not found. Please set -DVTK_DIR=/path/to/vtk-9.5.2/build&quot;)
+endif()
+
+message(STATUS &quot;VTK version: ${VTK_VERSION}&quot;)
+message(STATUS &quot;VTK_DIR: ${VTK_DIR}&quot;)
+
+# --------------------------------------------------------------------------
+# Executable
+# --------------------------------------------------------------------------
+add_executable(AnnotationDemo AnnotationDemo.cxx)
+
+target_link_libraries(AnnotationDemo PRIVATE
+    VTK::CommonCore
+    VTK::CommonColor
+    VTK::CommonComputationalGeometry
+    VTK::CommonDataModel
+    VTK::CommonExecutionModel
+    VTK::CommonMath
+    VTK::CommonSystem
+    VTK::CommonTransforms
+    VTK::FiltersCore
+    VTK::FiltersGeneral
+    VTK::FiltersSources
+    VTK::InteractionStyle
+    VTK::InteractionWidgets
+    VTK::RenderingAnnotation
+    VTK::RenderingCore
+    VTK::RenderingFreeType
+    VTK::RenderingOpenGL2
+)
+
+# --------------------------------------------------------------------------
+# C++ Standard
+# --------------------------------------------------------------------------
+target_compile_features(AnnotationDemo PRIVATE cxx_std_17)
+
+# --------------------------------------------------------------------------
+# Platform-specific settings
+# --------------------------------------------------------------------------
+if(WIN32)
+    target_compile_definitions(AnnotationDemo PRIVATE
+        _CRT_SECURE_NO_WARNINGS
+        NOMINMAX
+    )
+endif()
+
+if(MSVC)
+    target_compile_options(AnnotationDemo PRIVATE
+        /bigobj
+    )
+endif()
+</code></pre>
+<h3 id="1964">19.6.4 编译与运行</h3>
+<p><strong>编译步骤：</strong></p>
+<pre><code class="language-bash"># 1. 创建构建目录
+mkdir build &amp;&amp; cd build
+
+# 2. 配置CMake（请将路径替换为你本地的VTK安装路径）
+cmake .. -DVTK_DIR=/path/to/vtk-9.5.2/build
+
+# 3. 编译
+cmake --build . --config Release
+
+# 4. 运行
+./AnnotationDemo        # Linux/macOS
+AnnotationDemo.exe      # Windows
+</code></pre>
+<p><strong>交互说明：</strong></p>
+<ul>
+<li>鼠标左键拖拽：旋转场景</li>
+<li>鼠标滚轮：缩放</li>
+<li>鼠标中键拖拽：平移</li>
+<li>R键：重置相机</li>
+<li>点击左下角的方向标：将相机重置到坐标轴的默认视角</li>
+</ul>
+<h3 id="1965">19.6.5 预期效果</h3>
+<p>运行程序后，你将看到一个包含地形曲面可视化的窗口，叠加了完整的标注系统：</p>
+<ul>
+<li><strong>场景中心</strong>：随机丘陵地形曲面，使用从上到下的蓝色(低)到白色(高)的地形高程色阶。半透明的蓝色参考平面位于z=0处作为"海平面"。</li>
+<li><strong>右侧</strong>：垂直方向的标量条，白色标题"高程 (m)"位于顶部，数值标签清晰可读。</li>
+<li><strong>左下角</strong>：白色的方向坐标轴标记（X=红色、Y=绿色、Z=黄色），随场景旋转同步更新方向。点击它可以重置视角。</li>
+<li><strong>左上角</strong>：灰色小字显示"VTK 9.5.2 教程 / 第十九章: 标注系统"。</li>
+<li><strong>右上角</strong>：灰色小字显示渲染模式和颜色映射信息。</li>
+<li><strong>顶部中央</strong>：白色粗体大标题"地形可视化 - 完整标注系统演示"，带阴影效果。</li>
+<li><strong>左下角统计面板</strong>：深色背景半透明的统计信息框，显示最小值、最大值、平均值和数据点总数。</li>
+<li><strong>最高点标注</strong>：亮黄色引线从文字指向地形曲面上的最高点位置，文字显示该点的精确高程值。</li>
+</ul>
+<p>通过旋转和缩放场景，你可以观察到：标量条、标题文字、角标注和统计面板保持固定不变（它们是屏幕空间的2D标注），而引线标注的锚点始终跟随地形上的最高点，方向标随场景旋转同步更新。这正是二维标注和三维标注之间区别的直观体现。</p>
+<hr />
+<h2 id="197">19.7 本章小结</h2>
+<p>本章系统地介绍了VTK中的三维标注与交互组件系统。以下是本章的核心要点：</p>
+<h3 id="_2">核心概念</h3>
+<ol>
+<li>
+<p><strong>标注作为信息层</strong>：标注是叠加在三维数据可视化之上的辅助信息层，用于增强观察者对场景的理解，而不修改底层数据或可视化管线。</p>
+</li>
+<li>
+<p><strong>二维标注 vs 三维标注</strong>：二维标注（<code>AddActor2D()</code>）位于屏幕空间，位置固定，不随场景变换而改变；三维标注（<code>AddActor()</code>）位于世界空间，随场景一起旋转、缩放和平移。</p>
+</li>
+<li>
+<p><strong>Widget管理</strong>：部分标注组件（如方向标、可交互标量条）通过Widget机制管理，提供了交互性（鼠标点击、拖拽等）。</p>
+</li>
+</ol>
+<h3 id="api">关键类与API速查</h3>
+<table>
+<thead>
+<tr>
+<th>类</th>
+<th>主要用途</th>
+<th>添加方式</th>
+<th>坐标空间</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>vtkScalarBarActor</code></td>
+<td>颜色图例/标量条</td>
+<td><code>AddActor2D()</code></td>
+<td>屏幕空间</td>
+</tr>
+<tr>
+<td><code>vtkAxesActor</code></td>
+<td>三维坐标轴</td>
+<td>OrientationMarkerWidget</td>
+<td>世界空间</td>
+</tr>
+<tr>
+<td><code>vtkAnnotatedCubeActor</code></td>
+<td>标注方向立方体</td>
+<td>OrientationMarkerWidget</td>
+<td>世界空间</td>
+</tr>
+<tr>
+<td><code>vtkOrientationMarkerWidget</code></td>
+<td>管理方向指示标记</td>
+<td>Widget(SetEnabled)</td>
+<td>混合</td>
+</tr>
+<tr>
+<td><code>vtkTextActor</code></td>
+<td>屏幕固定文字</td>
+<td><code>AddActor2D()</code></td>
+<td>屏幕空间</td>
+</tr>
+<tr>
+<td><code>vtkCaptionActor2D</code></td>
+<td>带引线的跟随文字标注</td>
+<td><code>AddActor()</code></td>
+<td>混合(锚点3D+文字2D)</td>
+</tr>
+<tr>
+<td><code>vtkCornerAnnotation</code></td>
+<td>四角文字标注</td>
+<td><code>AddActor2D()</code></td>
+<td>屏幕空间</td>
+</tr>
+<tr>
+<td><code>vtkLegendScaleActor</code></td>
+<td>自动比例尺</td>
+<td><code>AddActor2D()</code></td>
+<td>屏幕空间</td>
+</tr>
+<tr>
+<td><code>vtkLegendBoxActor</code></td>
+<td>图例框</td>
+<td><code>AddActor2D()</code></td>
+<td>屏幕空间</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_3">标量条高级配置要点</h3>
+<ul>
+<li><code>SetTextPositionToPrecedeScalarBar()</code>和<code>SetTextPositionToSucceedScalarBar()</code>控制标签在颜色条的左侧还是右侧。</li>
+<li><code>SetMaximumWidthInPixels()</code>和<code>SetMaximumHeightInPixels()</code>防止标量条在窗口放大时过度膨胀。</li>
+<li><code>SetBarRatio()</code>控制颜色条部分在总宽度中的比例。</li>
+<li>使用<code>GetTitleTextProperty()</code>和<code>GetLabelTextProperty()</code>分别控制标题和标签的字体样式。</li>
+<li>多标量条布局需要仔细计算每个标量条的位置和尺寸，可使用辅助函数进行管理。</li>
+</ul>
+<h3 id="_4">方向标配置要点</h3>
+<ul>
+<li><code>vtkOrientationMarkerWidget</code>负责管理方向标，通过<code>SetViewport()</code>定义其在窗口中的矩形区域。</li>
+<li><code>vtkAxesActor</code>提供标准的RGB-XYZ坐标轴，支持自定义轴长、轴干类型（圆柱/线）、箭头形状和轴标签。</li>
+<li><code>vtkAnnotatedCubeActor</code>提供带文字标签的方向立方体，特别适合医学可视化中的解剖学方向标注。</li>
+<li><code>SetInteractive(true)</code>允许用户点击方向标来重置相机视角。</li>
+</ul>
+<h3 id="_5">文字标注选择指南</h3>
+<ul>
+<li><strong>场景标题/固定说明</strong>：使用<code>vtkTextActor</code>（屏幕空间固定文字）。</li>
+<li><strong>数据中特定位置的标注</strong>：使用<code>vtkCaptionActor2D</code>（带引线的跟随文字）。</li>
+<li><strong>展示元信息和状态</strong>：使用<code>vtkCornerAnnotation</code>（四角标注）。</li>
+<li><strong>需要交互的标注</strong>：使用<code>vtkCaptionWidget</code>（可拖拽的引线标注）。</li>
+</ul>
+<h3 id="_6">综合演示</h3>
+<p>19.6节提供的一个完整程序演示了六种标注组件的协同使用。通过运行这个程序，你可以直观地理解各标注组件的工作方式和视觉效果。建议在运行程序时：
+- 旋转场景观察方向标的同步更新；
+- 注意哪些标注保持固定（2D）而哪些跟随场景变化（3D/混合）；
+- 尝试点击左下角的方向标来重置相机；
+- 放大和缩小窗口观察标量条的像素限制和角标注的字体缩放行为。</p>
+<h3 id="_7">继续学习建议</h3>
+<p>标注系统是创建专业级、出版物级别可视化作品的关键组成部分。掌握了本章的内容后，你可以将标注技术与以下主题结合使用：</p>
+<ul>
+<li><strong>第十二章（颜色映射）</strong>和<strong>第十三章（高级渲染）</strong>的知识，在数据可视化之上叠加完整的标注信息。</li>
+<li><strong>Widget交互系统</strong>——进一步探索VTK中丰富的交互组件（如<code>vtkDistanceWidget</code>、<code>vtkAngleWidget</code>、<code>vtkImageTracerWidget</code>等），实现交互式的测量和标注。</li>
+<li><strong>动画与时序数据</strong>——在时变数据可视化中动态更新角标注的时间信息。</li>
+<li><strong>导出与出版</strong>——在生成高分辨率截图或出版用图片时，确保标注的字体大小和布局是经过优化的。</li>
+</ul>
+<p>一个设计良好的标注系统可以让观察者在不阅读任何外部文档的情况下，就能理解可视化的内容。这是将数据可视化从"探索工具"提升为"交流媒介"的关键一步。</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

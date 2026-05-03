@@ -1,0 +1,4040 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../chapter-10-data-io/">
+      
+      
+        <link rel="next" href="../chapter-12-color-mapping/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>第十一章 常用过滤器 - Echo-b's Tech Notes</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#common-filters" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Echo-b&#39;s Tech Notes" class="md-header__button md-logo" aria-label="Echo-b's Tech Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Echo-b's Tech Notes
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              第十一章 常用过滤器
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Echo-b&#39;s Tech Notes" class="md-nav__button md-logo" aria-label="Echo-b's Tech Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Echo-b's Tech Notes
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VTK 教程
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    VTK 教程
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    入门篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    入门篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-01-vtk-overview-and-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第一章 VTK概述与环境搭建
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-02-visualization-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二章 可视化管线
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-03-data-model-basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第三章 数据模型基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-04-geometry-and-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第四章 基本几何体与数据源
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-05-rendering-and-interactor/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第五章 渲染与交互机
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-06-volume1-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第六章 入门篇综合实战——3D几何画廊
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    实战篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    实战篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-07-polydata/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第七章 PolyData详解
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-08-unstructured-grid/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第八章 非结构化网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-09-structured-data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第九章 结构化数据
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-10-data-io/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十章 数据I/O
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十一章 常用过滤器
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十一章 常用过滤器
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        本章导读
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#111" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.1 过滤器分类概览
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="11.1 过滤器分类概览">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1111" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.1.1 过滤器的统一接口
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1112" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.1.2 四大分类
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1113" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.1.3 过滤器链的构建模式
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#112" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.2 几何变换过滤器
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="11.2 几何变换过滤器">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1121-vtkshrinkpolydata-vtkshrinkfilter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.2.1 vtkShrinkPolyData / vtkShrinkFilter —— 收缩过滤器
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1122-vtktransformpolydatafilter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.2.2 vtkTransformPolyDataFilter —— 坐标变换过滤器
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1123-vtkwarpscalar-vtkwarpvector" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.2.3 vtkWarpScalar / vtkWarpVector —— 变形过滤器
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#113" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.3 数据提取过滤器
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="11.3 数据提取过滤器">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1131-vtkclipdataset-vtkclippolydata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.3.1 vtkClipDataSet / vtkClipPolyData —— 裁剪过滤器
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1132-vtkcontourfilter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.3.2 vtkContourFilter —— 等值面/等值线提取
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1133-vtkthreshold" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.3.3 vtkThreshold —— 阈值过滤器
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1134-vtkcutter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.3.4 vtkCutter —— 切片过滤器
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1135-vtkextractedges" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.3.5 vtkExtractEdges —— 边缘提取过滤器
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#114" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.4 矢量可视化过滤器
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="11.4 矢量可视化过滤器">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1141-vtkglyph3d" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.4.1 vtkGlyph3D —— 三维符号图
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1142-vtkstreamtracer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.4.2 vtkStreamTracer —— 流线追踪器
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1143-vtkhedgehog" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.4.3 vtkHedgeHog —— 刺猬图
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#115" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.5 网格处理过滤器
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="11.5 网格处理过滤器">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1151-vtksmoothpolydatafilter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.5.1 vtkSmoothPolyDataFilter —— 拉普拉斯平滑
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1152-vtkdecimatepro" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.5.2 vtkDecimatePro —— 网格简化
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1153-vtkpolydatanormals" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.5.3 vtkPolyDataNormals —— 法向量计算
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1154-vtktrianglefilter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.5.4 vtkTriangleFilter —— 三角化过滤器
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#116" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.6 代码示例：多过滤器流水线
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="11.6 代码示例：多过滤器流水线">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1161" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.6.1 项目概述
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1162" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.6.2 管道结构全景图
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1163" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.6.3 完整代码
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1164-cmakeliststxt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.6.4 CMakeLists.txt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1165" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.6.5 编译和运行
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1166" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.6.6 代码要点分析
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#117" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.7 本章小结
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="11.7 本章小结">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1171" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.7.1 过滤器选择指南
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1172" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.7.2 核心概念回顾
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1173" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.7.3 下一步
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-12-color-mapping/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十二章 颜色映射与标量可视化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-13-advanced-rendering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十三章 高级渲染技术
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-14-multi-dataset/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十四章 多个数据集处理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-15-volume2-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十五章 实战篇综合实战——CFD后处理可视化工具
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    进阶篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    进阶篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-16-volume-rendering-basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十六章 体渲染基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-17-volume-rendering-advanced/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十七章 体渲染高级技术
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-18-charts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十八章 2D图表系统
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-19-annotation-and-widgets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十九章 三维标注与交互组件
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-20-custom-interaction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十章 自定义交互与Widget
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-21-qt-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十一章 Qt集成
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-22-smp-parallel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十二章 SMP并行入门
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-23-volume3-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十三章 进阶篇综合实战
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        本章导读
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#111" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.1 过滤器分类概览
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="11.1 过滤器分类概览">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1111" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.1.1 过滤器的统一接口
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1112" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.1.2 四大分类
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1113" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.1.3 过滤器链的构建模式
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#112" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.2 几何变换过滤器
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="11.2 几何变换过滤器">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1121-vtkshrinkpolydata-vtkshrinkfilter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.2.1 vtkShrinkPolyData / vtkShrinkFilter —— 收缩过滤器
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1122-vtktransformpolydatafilter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.2.2 vtkTransformPolyDataFilter —— 坐标变换过滤器
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1123-vtkwarpscalar-vtkwarpvector" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.2.3 vtkWarpScalar / vtkWarpVector —— 变形过滤器
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#113" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.3 数据提取过滤器
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="11.3 数据提取过滤器">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1131-vtkclipdataset-vtkclippolydata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.3.1 vtkClipDataSet / vtkClipPolyData —— 裁剪过滤器
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1132-vtkcontourfilter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.3.2 vtkContourFilter —— 等值面/等值线提取
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1133-vtkthreshold" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.3.3 vtkThreshold —— 阈值过滤器
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1134-vtkcutter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.3.4 vtkCutter —— 切片过滤器
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1135-vtkextractedges" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.3.5 vtkExtractEdges —— 边缘提取过滤器
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#114" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.4 矢量可视化过滤器
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="11.4 矢量可视化过滤器">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1141-vtkglyph3d" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.4.1 vtkGlyph3D —— 三维符号图
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1142-vtkstreamtracer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.4.2 vtkStreamTracer —— 流线追踪器
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1143-vtkhedgehog" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.4.3 vtkHedgeHog —— 刺猬图
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#115" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.5 网格处理过滤器
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="11.5 网格处理过滤器">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1151-vtksmoothpolydatafilter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.5.1 vtkSmoothPolyDataFilter —— 拉普拉斯平滑
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1152-vtkdecimatepro" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.5.2 vtkDecimatePro —— 网格简化
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1153-vtkpolydatanormals" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.5.3 vtkPolyDataNormals —— 法向量计算
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1154-vtktrianglefilter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.5.4 vtkTriangleFilter —— 三角化过滤器
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#116" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.6 代码示例：多过滤器流水线
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="11.6 代码示例：多过滤器流水线">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1161" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.6.1 项目概述
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1162" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.6.2 管道结构全景图
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1163" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.6.3 完整代码
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1164-cmakeliststxt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.6.4 CMakeLists.txt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1165" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.6.5 编译和运行
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1166" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.6.6 代码要点分析
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#117" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.7 本章小结
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="11.7 本章小结">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1171" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.7.1 过滤器选择指南
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1172" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.7.2 核心概念回顾
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1173" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.7.3 下一步
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="common-filters">第十一章 常用过滤器（Common Filters）</h1>
+<h2 id="_1">本章导读</h2>
+<p>在前十章中，你已经系统学习了VTK的基础架构和数据类型：
+- 第一卷（1-6章）建立了管道架构、数据模型、数据源、渲染和交互的坚实基础。
+- 第二卷（7-9章）深入了PolyData、UnstructuredGrid和结构化数据的内部结构。
+- 第十章带你掌握了I/O操作，实现了从外部世界获取数据的能力。</p>
+<p>现在，你将面临一个自然的问题：<strong>拿到了数据之后，如何真正处理它？</strong> 答案就是<strong>过滤器（Filters）</strong>。</p>
+<p>在VTK中，过滤器是数据处理的核心引擎。没有过滤器，你只能渲染原始数据源生成的基本几何体——一个巨大的限制。有了过滤器，你可以：</p>
+<ul>
+<li><strong>提取感兴趣的子集</strong>：从体数据中切出等值面、裁剪掉不需要的区域、按标量范围提取单元。</li>
+<li><strong>揭示数据的隐藏结构</strong>：生成矢量场的流线、用Glyph表达点数据、提取网格的骨架（中轴线）。</li>
+<li><strong>改善可视化的质量</strong>：平滑网格、计算法向量、简化复杂模型。</li>
+<li><strong>执行空间变换</strong>：旋转、平移、缩放、变形——实现更丰富的可视化叙事。</li>
+</ul>
+<p>本章将以<strong>实战为主线</strong>，逐一讲解VTK 9.5.2中最常用、最强大的过滤器。每个过滤器都会包含"是什么、怎么用、何时用、代码示例"四个环节。此外，本章还将包含一个<strong>用同一数据源驱动四条过滤器分支</strong>的综合实例——这是对VTK管道分支能力的极致展示。</p>
+<p>读完本章后，你将建立起一套心理"过滤器工具箱"——面对一个可视化任务时，你能快速判断需要哪个（或哪几个）过滤器，并知道如何将它们串联成有效的处理流水线。</p>
+<hr />
+<h2 id="111">11.1 过滤器分类概览</h2>
+<h3 id="1111">11.1.1 过滤器的统一接口</h3>
+<p>VTK中所有过滤器（Filter）都直接或间接地继承自<code>vtkAlgorithm</code>。这意味着你可以用统一的模式来操作任何过滤器：</p>
+<pre><code class="language-cpp">// 统一的连接模式
+filter-&gt;SetInputConnection(source-&gt;GetOutputPort());
+// 或
+filter-&gt;SetInputData(polyData);
+
+// 统一的执行模式
+filter-&gt;Update();
+
+// 统一的输出获取
+vtkPolyData* output = filter-&gt;GetOutput();
+// 或用于管道继续连接
+someMapper-&gt;SetInputConnection(filter-&gt;GetOutputPort());
+</code></pre>
+<p>这种统一性来源于第二章讲述的流水线机制（Pipeline Mechanism）：过滤器不会在你调用<code>SetInputConnection()</code>时立即执行，而是等到下游消费者（如Mapper）需要数据时，才沿着管道链按需执行。</p>
+<h3 id="1112">11.1.2 四大分类</h3>
+<p>根据功能目标，本章将常用过滤器分为四类：</p>
+<table>
+<thead>
+<tr>
+<th>分类</th>
+<th>功能目标</th>
+<th>典型过滤器</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>几何变换</strong></td>
+<td>改变几何体的空间位置或形状</td>
+<td><code>vtkTransformPolyDataFilter</code>, <code>vtkWarpScalar</code>, <code>vtkShrinkPolyData</code></td>
+</tr>
+<tr>
+<td><strong>数据提取</strong></td>
+<td>从数据集中摘取感兴趣的局部</td>
+<td><code>vtkClipDataSet</code>, <code>vtkContourFilter</code>, <code>vtkThreshold</code>, <code>vtkCutter</code>, <code>vtkExtractEdges</code></td>
+</tr>
+<tr>
+<td><strong>矢量可视化</strong></td>
+<td>表达矢量场的方向和强度</td>
+<td><code>vtkGlyph3D</code>, <code>vtkStreamTracer</code>, <code>vtkHedgeHog</code></td>
+</tr>
+<tr>
+<td><strong>网格处理</strong></td>
+<td>修改网格的连接关系或几何质量</td>
+<td><code>vtkSmoothPolyDataFilter</code>, <code>vtkDecimatePro</code>, <code>vtkPolyDataNormals</code>, <code>vtkTriangleFilter</code></td>
+</tr>
+</tbody>
+</table>
+<p>这四类过滤器常常需要组合使用。例如，你可能先用<code>vtkClipDataSet</code>裁剪出感兴趣区域，再用<code>vtkGlyph3D</code>在该区域内放置箭头来表达矢量场——两条过滤器首尾相连形成处理链。</p>
+<h3 id="1113">11.1.3 过滤器链的构建模式</h3>
+<p>VTK中，多个过滤器可以串联成<strong>流水线链</strong>（Pipeline Chain）：</p>
+<pre><code>Source → Filter1 → Filter2 → ... → FilterN → Mapper → Actor
+</code></pre>
+<p>同时，一个Source可以驱动<strong>多个并行的过滤器链</strong>（管道分支）：</p>
+<pre><code>                         ┌→ FilterA → MapperA → ActorA
+Source ──────────────────┤
+                         ├→ FilterB → MapperB → ActorB
+                         │
+                         ├→ FilterC → MapperC → ActorC
+                         │
+                         └→ FilterD → MapperD → ActorD
+</code></pre>
+<p>这正是本章11.6节将要演示的综合实例模式。</p>
+<hr />
+<h2 id="112">11.2 几何变换过滤器</h2>
+<p>几何变换过滤器对数据集的几何坐标进行操作——它们改变点在空间中的位置，但不改变拓扑（点之间的连接关系）。</p>
+<h3 id="1121-vtkshrinkpolydata-vtkshrinkfilter">11.2.1 vtkShrinkPolyData / vtkShrinkFilter —— 收缩过滤器</h3>
+<p><strong>功能描述：</strong> 将数据集中每个单元的顶点沿单元中心方向收缩，使相邻单元之间产生可见的缝隙。这个过滤器不改变数据，而是将数据"拆开"以展示其内部结构。</p>
+<p><strong>核心参数：</strong>
+- <code>SetShrinkFactor(double factor)</code> —— 收缩因子，取值范围[0.0, 1.0]：
+  - 1.0：保持原始尺寸（无收缩）
+  - 0.5：每个单元收缩到原始大小的50%
+  - 0.0：所有顶点收缩到单元中心（单元消失）</p>
+<p><strong>适用场景：</strong>
+- 展示网格的单元构成（在有限元后处理中非常有用）
+- 在讲课或演示中显示"这些三角形是如何拼成这个曲面的"
+- 在多视口对比中展示模型的内部结构</p>
+<p><strong>代码示例：</strong></p>
+<pre><code class="language-cpp">#include &quot;vtkSmartPointer.h&quot;
+#include &quot;vtkSphereSource.h&quot;
+#include &quot;vtkShrinkPolyData.h&quot;
+#include &quot;vtkPolyDataMapper.h&quot;
+#include &quot;vtkActor.h&quot;
+#include &quot;vtkRenderer.h&quot;
+#include &quot;vtkRenderWindow.h&quot;
+#include &quot;vtkRenderWindowInteractor.h&quot;
+#include &quot;vtkInteractorStyleTrackballCamera.h&quot;
+#include &quot;vtkNamedColors.h&quot;
+
+int main()
+{
+  // --- 创建球体数据源 ---
+  auto sphere = vtkSmartPointer&lt;vtkSphereSource&gt;::New();
+  sphere-&gt;SetThetaResolution(32);
+  sphere-&gt;SetPhiResolution(32);
+
+  // --- 收缩过滤器 ---
+  auto shrink = vtkSmartPointer&lt;vtkShrinkPolyData&gt;::New();
+  shrink-&gt;SetInputConnection(sphere-&gt;GetOutputPort());
+  shrink-&gt;SetShrinkFactor(0.7);  // 收缩30%，露出单元间缝隙
+
+  // --- Mapper 和 Actor ---
+  auto mapper = vtkSmartPointer&lt;vtkPolyDataMapper&gt;::New();
+  mapper-&gt;SetInputConnection(shrink-&gt;GetOutputPort());
+
+  auto actor = vtkSmartPointer&lt;vtkActor&gt;::New();
+  actor-&gt;SetMapper(mapper);
+  actor-&gt;GetProperty()-&gt;SetColor(0.3, 0.5, 0.8);
+  actor-&gt;GetProperty()-&gt;SetEdgeVisibility(1);  // 显示单元边线
+  actor-&gt;GetProperty()-&gt;SetEdgeColor(0.1, 0.1, 0.15);
+  actor-&gt;GetProperty()-&gt;SetLineWidth(1.0);
+
+  // --- 渲染设置 ---
+  auto colors = vtkSmartPointer&lt;vtkNamedColors&gt;::New();
+  auto renderer = vtkSmartPointer&lt;vtkRenderer&gt;::New();
+  renderer-&gt;SetBackground(colors-&gt;GetColor3d(&quot;SteelBlue&quot;).GetData());
+  renderer-&gt;AddActor(actor);
+
+  auto renWin = vtkSmartPointer&lt;vtkRenderWindow&gt;::New();
+  renWin-&gt;SetSize(800, 600);
+  renWin-&gt;AddRenderer(renderer);
+
+  auto interactor = vtkSmartPointer&lt;vtkRenderWindowInteractor&gt;::New();
+  interactor-&gt;SetRenderWindow(renWin);
+  auto style = vtkSmartPointer&lt;vtkInteractorStyleTrackballCamera&gt;::New();
+  interactor-&gt;SetInteractorStyle(style);
+
+  renWin-&gt;Render();
+  interactor-&gt;Start();
+
+  return 0;
+}
+</code></pre>
+<p><strong>注意事项：</strong>
+- 对于混合多边形类型的网格（如同时包含三角形和四边形），建议先使用<code>vtkTriangleFilter</code>将全部单元转化为三角形，以使收缩效果均匀。这就是第六章综合实例中的做法。
+- <code>vtkShrinkPolyData</code>是专门处理PolyData的版本。对于其他数据集类型，可以使用通用的<code>vtkShrinkFilter</code>。</p>
+<h3 id="1122-vtktransformpolydatafilter">11.2.2 vtkTransformPolyDataFilter —— 坐标变换过滤器</h3>
+<p><strong>功能描述：</strong> 将<code>vtkTransform</code>定义的齐次变换（平移、旋转、缩放）应用到PolyData的每一个点上。与在Actor层面做变换不同，这个过滤器<strong>真的修改了点的坐标</strong>——被变换过的数据可以继续传递给下游过滤器做进一步处理。</p>
+<p><strong>核心参数：</strong>
+- <code>SetTransform(vtkTransform* transform)</code> —— 设置变换对象</p>
+<p><code>vtkTransform</code>本身提供的核心方法：
+- <code>Translate(dx, dy, dz)</code> —— 平移
+- <code>RotateX(angle)</code>, <code>RotateY(angle)</code>, <code>RotateZ(angle)</code> —— 绕坐标轴旋转（角度制）
+- <code>Scale(sx, sy, sz)</code> —— 各向异性缩放
+- <code>Concatenate(vtkMatrix4x4* mat)</code> —— 连接任意4x4齐次变换矩阵
+- <code>PostMultiply()</code> / <code>PreMultiply()</code> —— 控制变换的乘法顺序
+- <code>Identity()</code> —— 重置为单位变换</p>
+<p><strong>适用场景：</strong>
+- 需要对同一个几何体在场景中放置多个副本（通过多次应用不同变换）
+- 在数据层面进行精确的几何配准（如将多个医学扫描对齐到同一坐标系）
+- 变换后的数据需要继续传递给下游过滤器（Actor层面的变换不改变实际坐标）</p>
+<p><strong>Actor变换与Filter变换的区别：</strong></p>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>Actor变换 (vtkActor::SetUserTransform)</th>
+<th>Filter变换 (vtkTransformPolyDataFilter)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>修改对象</td>
+<td>Actor的渲染矩阵（GPU层面）</td>
+<td>PolyData的实际点坐标（CPU层面）</td>
+</tr>
+<tr>
+<td>下游过滤器能否感知</td>
+<td>否——下游过滤器看到的是原始坐标</td>
+<td>是——下游过滤器看到的是变换后的坐标</td>
+</tr>
+<tr>
+<td>性能</td>
+<td>高（GPU执行）</td>
+<td>较低（每次Update都需变换所有点）</td>
+</tr>
+<tr>
+<td>适用</td>
+<td>静态场景中的物体摆放</td>
+<td>需要后继数据处理的变换</td>
+</tr>
+</tbody>
+</table>
+<p><strong>代码示例：</strong></p>
+<pre><code class="language-cpp">#include &quot;vtkSmartPointer.h&quot;
+#include &quot;vtkConeSource.h&quot;
+#include &quot;vtkTransform.h&quot;
+#include &quot;vtkTransformPolyDataFilter.h&quot;
+#include &quot;vtkPolyDataMapper.h&quot;
+#include &quot;vtkActor.h&quot;
+#include &quot;vtkRenderer.h&quot;
+#include &quot;vtkRenderWindow.h&quot;
+#include &quot;vtkRenderWindowInteractor.h&quot;
+#include &quot;vtkInteractorStyleTrackballCamera.h&quot;
+#include &quot;vtkNamedColors.h&quot;
+
+int main()
+{
+  auto colors = vtkSmartPointer&lt;vtkNamedColors&gt;::New();
+
+  // --- 创建圆锥数据源 ---
+  auto cone = vtkSmartPointer&lt;vtkConeSource&gt;::New();
+  cone-&gt;SetResolution(20);
+
+  // --- 构建复合变换 ---
+  auto transform = vtkSmartPointer&lt;vtkTransform&gt;::New();
+  transform-&gt;Translate(1.5, 0.0, 0.0);  // 沿X轴平移1.5
+  transform-&gt;RotateZ(45.0);             // 绕Z轴旋转45度
+  transform-&gt;Scale(1.0, 1.5, 1.0);      // 在Y方向拉伸1.5倍
+
+  // --- 将变换应用到数据 ---
+  auto transformFilter = vtkSmartPointer&lt;vtkTransformPolyDataFilter&gt;::New();
+  transformFilter-&gt;SetInputConnection(cone-&gt;GetOutputPort());
+  transformFilter-&gt;SetTransform(transform);
+
+  // --- 渲染 ---
+  auto mapper = vtkSmartPointer&lt;vtkPolyDataMapper&gt;::New();
+  mapper-&gt;SetInputConnection(transformFilter-&gt;GetOutputPort());
+
+  auto actor = vtkSmartPointer&lt;vtkActor&gt;::New();
+  actor-&gt;SetMapper(mapper);
+  actor-&gt;GetProperty()-&gt;SetColor(colors-&gt;GetColor3d(&quot;Coral&quot;).GetData());
+
+  auto renderer = vtkSmartPointer&lt;vtkRenderer&gt;::New();
+  renderer-&gt;SetBackground(colors-&gt;GetColor3d(&quot;SlateGray&quot;).GetData());
+  renderer-&gt;AddActor(actor);
+
+  auto renWin = vtkSmartPointer&lt;vtkRenderWindow&gt;::New();
+  renWin-&gt;SetSize(800, 600);
+  renWin-&gt;AddRenderer(renderer);
+
+  auto interactor = vtkSmartPointer&lt;vtkRenderWindowInteractor&gt;::New();
+  interactor-&gt;SetRenderWindow(renWin);
+  auto style = vtkSmartPointer&lt;vtkInteractorStyleTrackballCamera&gt;::New();
+  interactor-&gt;SetInteractorStyle(style);
+
+  renWin-&gt;Render();
+  interactor-&gt;Start();
+
+  return 0;
+}
+</code></pre>
+<h3 id="1123-vtkwarpscalar-vtkwarpvector">11.2.3 vtkWarpScalar / vtkWarpVector —— 变形过滤器</h3>
+<p><strong>功能描述：</strong> 这两个过滤器根据数据集中点的属性数据来<strong>改变点的几何位置</strong>，是数据可视化中最直观的表达方式之一：</p>
+<ul>
+<li><strong>vtkWarpScalar</strong>：将每个点沿其<strong>法向量方向</strong>移动一段距离，移动量由该点的标量值决定。典型的应用是"高度场"——标量值越大，点被推得越高。</li>
+<li><strong>vtkWarpVector</strong>：将每个点沿该点<strong>矢量数据的实际方向</strong>移动一段距离，移动量由矢量的模决定。典型应用是变形分析——显示结构受力后的位移场。</li>
+</ul>
+<p><strong>核心参数：</strong></p>
+<p>vtkWarpScalar：
+- <code>SetScaleFactor(double factor)</code> —— 缩放因子，将标量值乘以该因子后作为位移量。这是最重要的参数，需要根据数据范围反复调试。
+- <code>SetUseNormal(bool)</code> —— 是否使用法向量作为位移方向（默认为true）。关闭后可使用自定义方向向量。
+- <code>SetInputArrayToProcess(...)</code> —— 指定使用点数据中的哪个标量数组。</p>
+<p>vtkWarpVector：
+- <code>SetScaleFactor(double factor)</code> —— 缩放因子，乘以矢量的模得到实际位移量。
+- <code>SetInputArrayToProcess(...)</code> —— 指定使用点数据中的哪个矢量数组。</p>
+<p><strong>适用场景：</strong></p>
+<p>vtkWarpScalar：
+- 将二维标量场可视化三维曲面（如地形高度的三维表达）
+- 将压力、温度分布变形为三维"浮雕"图
+- 展示模态分析中的振型</p>
+<p>vtkWarpVector：
+- 固体力学中的位移可视化（放大变形后的结构形态）
+- 流体仿真中的流场扰动展示
+- 地质形变分析</p>
+<p><strong>代码示例（vtkWarpScalar）：</strong></p>
+<pre><code class="language-cpp">#include &quot;vtkSmartPointer.h&quot;
+#include &quot;vtkPlaneSource.h&quot;
+#include &quot;vtkMath.h&quot;
+#include &quot;vtkFloatArray.h&quot;
+#include &quot;vtkPointData.h&quot;
+#include &quot;vtkWarpScalar.h&quot;
+#include &quot;vtkPolyDataMapper.h&quot;
+#include &quot;vtkActor.h&quot;
+#include &quot;vtkRenderer.h&quot;
+#include &quot;vtkRenderWindow.h&quot;
+#include &quot;vtkRenderWindowInteractor.h&quot;
+#include &quot;vtkInteractorStyleTrackballCamera.h&quot;
+#include &quot;vtkNamedColors.h&quot;
+#include &quot;vtkSmoothPolyDataFilter.h&quot;
+
+int main()
+{
+  auto colors = vtkSmartPointer&lt;vtkNamedColors&gt;::New();
+
+  // --- 创建二维平面网格 ---
+  auto plane = vtkSmartPointer&lt;vtkPlaneSource&gt;::New();
+  plane-&gt;SetXResolution(30);
+  plane-&gt;SetYResolution(30);
+  plane-&gt;SetOrigin(-5.0, -5.0, 0.0);
+  plane-&gt;SetPoint1(5.0, -5.0, 0.0);
+  plane-&gt;SetPoint2(-5.0, 5.0, 0.0);
+
+  // --- 在网格点上生成高程标量数据（一个高斯小山） ---
+  // 注意：我们需要先Update平面，然后才能修改其点数据
+  plane-&gt;Update();
+  int numPoints = plane-&gt;GetOutput()-&gt;GetNumberOfPoints();
+
+  auto scalars = vtkSmartPointer&lt;vtkFloatArray&gt;::New();
+  scalars-&gt;SetName(&quot;Elevation&quot;);
+  scalars-&gt;SetNumberOfTuples(numPoints);
+
+  for (int i = 0; i &lt; numPoints; i++)
+  {
+    double pt[3];
+    plane-&gt;GetOutput()-&gt;GetPoint(i, pt);
+    // 生成一个中心在原点的高斯山
+    double r2 = pt[0] * pt[0] + pt[1] * pt[1];
+    double elevation = 2.0 * exp(-r2 / 2.0);
+    scalars-&gt;SetTuple1(i, elevation);
+  }
+
+  plane-&gt;GetOutput()-&gt;GetPointData()-&gt;SetScalars(scalars);
+
+  // --- 经标量变形（法向偏移） ---
+  auto warp = vtkSmartPointer&lt;vtkWarpScalar&gt;::New();
+  warp-&gt;SetInputData(plane-&gt;GetOutput());
+  warp-&gt;SetScaleFactor(1.0);   // 标量值直接作为位移量
+
+  // --- 平滑处理（使变形后的表面更光滑） ---
+  auto smooth = vtkSmartPointer&lt;vtkSmoothPolyDataFilter&gt;::New();
+  smooth-&gt;SetInputConnection(warp-&gt;GetOutputPort());
+  smooth-&gt;SetNumberOfIterations(10);
+  smooth-&gt;SetRelaxationFactor(0.1);
+
+  // --- 渲染 ---
+  auto mapper = vtkSmartPointer&lt;vtkPolyDataMapper&gt;::New();
+  mapper-&gt;SetInputConnection(smooth-&gt;GetOutputPort());
+  mapper-&gt;SetScalarRange(0.0, 2.0);
+
+  auto actor = vtkSmartPointer&lt;vtkActor&gt;::New();
+  actor-&gt;SetMapper(mapper);
+  actor-&gt;GetProperty()-&gt;SetColor(colors-&gt;GetColor3d(&quot;Gold&quot;).GetData());
+
+  auto renderer = vtkSmartPointer&lt;vtkRenderer&gt;::New();
+  renderer-&gt;SetBackground(colors-&gt;GetColor3d(&quot;MidnightBlue&quot;).GetData());
+  renderer-&gt;AddActor(actor);
+
+  auto renWin = vtkSmartPointer&lt;vtkRenderWindow&gt;::New();
+  renWin-&gt;SetSize(800, 600);
+  renWin-&gt;AddRenderer(renderer);
+
+  auto interactor = vtkSmartPointer&lt;vtkRenderWindowInteractor&gt;::New();
+  interactor-&gt;SetRenderWindow(renWin);
+  auto style = vtkSmartPointer&lt;vtkInteractorStyleTrackballCamera&gt;::New();
+  interactor-&gt;SetInteractorStyle(style);
+
+  renWin-&gt;Render();
+  interactor-&gt;Start();
+
+  return 0;
+}
+</code></pre>
+<hr />
+<h2 id="113">11.3 数据提取过滤器</h2>
+<p>数据提取过滤器能够从完整的数据集中截取你真正感兴趣的部分——裁剪、切割、等值面提取、阈值筛选，这些都是科学可视化中最常用的操作。</p>
+<h3 id="1131-vtkclipdataset-vtkclippolydata">11.3.1 vtkClipDataSet / vtkClipPolyData —— 裁剪过滤器</h3>
+<p><strong>功能描述：</strong> 用一个隐函数（Implicit Function）或裁剪平面将数据集一分为二，保留其中一半（或两半都保留）。隐函数可以是平面、球体、圆柱体、长方体等任意几何形状的函数表达。</p>
+<p><strong>核心参数：</strong>
+- <code>SetClipFunction(vtkImplicitFunction* func)</code> —— 设置裁剪所用的隐函数。最常用的是<code>vtkPlane</code>。
+- <code>SetInsideOut(bool)</code> —— 控制保留哪一侧：
+  - <code>false</code>（默认）：保留隐函数值为<strong>正</strong>的一侧
+  - <code>true</code>：保留隐函数值为<strong>负</strong>的一侧
+- <code>SetValue(double value)</code> —— 裁剪等值面的值（默认为0.0）
+- <code>SetGenerateClippedOutput(bool)</code> —— 是否同时输出被裁剪掉的部分（默认false）
+- <code>GetClippedOutputPort()</code> —— 获取被裁剪部分的输出端口（需先开启<code>SetGenerateClippedOutput(true)</code>）</p>
+<p><strong>隐函数类型：</strong></p>
+<table>
+<thead>
+<tr>
+<th>隐函数类</th>
+<th>描述</th>
+<th>创建示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>vtkPlane</code></td>
+<td>无限平面</td>
+<td><code>plane-&gt;SetOrigin(0,0,0); plane-&gt;SetNormal(1,0,0);</code></td>
+</tr>
+<tr>
+<td><code>vtkSphere</code></td>
+<td>球面</td>
+<td><code>sphere-&gt;SetCenter(0,0,0); sphere-&gt;SetRadius(5.0);</code></td>
+</tr>
+<tr>
+<td><code>vtkCylinder</code></td>
+<td>无限圆柱</td>
+<td><code>cyl-&gt;SetCenter(0,0,0); cyl-&gt;SetRadius(2.0);</code></td>
+</tr>
+<tr>
+<td><code>vtkBox</code></td>
+<td>长方体</td>
+<td><code>box-&gt;SetBounds(xmin,xmax,ymin,ymax,zmin,zmax);</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>适用场景：</strong>
+- 切除模型的一部分以展示内部结构（截面可视化）
+- 基于几何范围过滤掉不感兴趣的区域
+- 用球体"削"出一个感兴趣的子区域
+- 医学可视化中切除遮挡器官查看病灶</p>
+<p><strong>代码示例：</strong></p>
+<pre><code class="language-cpp">#include &quot;vtkSmartPointer.h&quot;
+#include &quot;vtkConeSource.h&quot;
+#include &quot;vtkPlane.h&quot;
+#include &quot;vtkClipPolyData.h&quot;
+#include &quot;vtkPolyDataMapper.h&quot;
+#include &quot;vtkActor.h&quot;
+#include &quot;vtkProperty.h&quot;
+#include &quot;vtkRenderer.h&quot;
+#include &quot;vtkRenderWindow.h&quot;
+#include &quot;vtkRenderWindowInteractor.h&quot;
+#include &quot;vtkInteractorStyleTrackballCamera.h&quot;
+#include &quot;vtkNamedColors.h&quot;
+
+int main()
+{
+  auto colors = vtkSmartPointer&lt;vtkNamedColors&gt;::New();
+
+  // --- 创建圆锥数据源 ---
+  auto cone = vtkSmartPointer&lt;vtkConeSource&gt;::New();
+  cone-&gt;SetHeight(3.0);
+  cone-&gt;SetRadius(1.0);
+  cone-&gt;SetResolution(40);
+
+  // --- 定义裁剪平面：垂直于X轴，穿过原点 ---
+  auto clipPlane = vtkSmartPointer&lt;vtkPlane&gt;::New();
+  clipPlane-&gt;SetOrigin(0.0, 0.0, 0.0);
+  clipPlane-&gt;SetNormal(1.0, 0.0, 0.0);  // 法向沿+X
+
+  // --- 裁剪过滤器 ---
+  auto clipper = vtkSmartPointer&lt;vtkClipPolyData&gt;::New();
+  clipper-&gt;SetInputConnection(cone-&gt;GetOutputPort());
+  clipper-&gt;SetClipFunction(clipPlane);
+  clipper-&gt;SetInsideOut(true);   // 保留X&lt;0的一侧（即平面的负侧）
+  clipper-&gt;SetValue(0.0);
+  clipper-&gt;SetGenerateClippedOutput(true);  // 同时保留被切掉的部分
+
+  // --- 保留部分的 Mapper 和 Actor ---
+  auto keptMapper = vtkSmartPointer&lt;vtkPolyDataMapper&gt;::New();
+  keptMapper-&gt;SetInputConnection(clipper-&gt;GetOutputPort());
+
+  auto keptActor = vtkSmartPointer&lt;vtkActor&gt;::New();
+  keptActor-&gt;SetMapper(keptMapper);
+  keptActor-&gt;GetProperty()-&gt;SetColor(colors-&gt;GetColor3d(&quot;Tomato&quot;).GetData());
+  // 让裁剪面可见：将保留部分的裁剪面向-X方向略微平移
+  keptActor-&gt;GetProperty()-&gt;SetEdgeVisibility(1);
+  keptActor-&gt;GetProperty()-&gt;SetEdgeColor(0.3, 0.3, 0.3);
+
+  // --- 被裁剪部分的 Mapper 和 Actor ---
+  auto clippedMapper = vtkSmartPointer&lt;vtkPolyDataMapper&gt;::New();
+  clippedMapper-&gt;SetInputConnection(clipper-&gt;GetClippedOutputPort());
+
+  auto clippedActor = vtkSmartPointer&lt;vtkActor&gt;::New();
+  clippedActor-&gt;SetMapper(clippedMapper);
+  clippedActor-&gt;GetProperty()-&gt;SetColor(colors-&gt;GetColor3d(&quot;Silver&quot;).GetData());
+  clippedActor-&gt;GetProperty()-&gt;SetEdgeVisibility(1);
+  clippedActor-&gt;GetProperty()-&gt;SetEdgeColor(0.2, 0.2, 0.2);
+  // 将裁剪部分沿X方向平移以清晰展示
+  clippedActor-&gt;SetPosition(2.5, 0.0, 0.0);
+
+  // --- 渲染 ---
+  auto renderer = vtkSmartPointer&lt;vtkRenderer&gt;::New();
+  renderer-&gt;SetBackground(colors-&gt;GetColor3d(&quot;SlateGray&quot;).GetData());
+  renderer-&gt;AddActor(keptActor);
+  renderer-&gt;AddActor(clippedActor);
+
+  auto renWin = vtkSmartPointer&lt;vtkRenderWindow&gt;::New();
+  renWin-&gt;SetSize(1000, 600);
+  renWin-&gt;AddRenderer(renderer);
+
+  auto interactor = vtkSmartPointer&lt;vtkRenderWindowInteractor&gt;::New();
+  interactor-&gt;SetRenderWindow(renWin);
+  auto style = vtkSmartPointer&lt;vtkInteractorStyleTrackballCamera&gt;::New();
+  interactor-&gt;SetInteractorStyle(style);
+
+  renWin-&gt;Render();
+  interactor-&gt;Start();
+
+  return 0;
+}
+</code></pre>
+<h3 id="1132-vtkcontourfilter">11.3.2 vtkContourFilter —— 等值面/等值线提取</h3>
+<p><strong>功能描述：</strong> <code>vtkContourFilter</code>是VTK中最标志性的过滤器之一，它从标量场中提取所有标量值等于指定等值面值（Isovalue）的点构成的表面（3D中）或线（2D中）。这个算法的通用名称是<strong>Marching Cubes（移动立方体）</strong>。在医学可视化中，它能从CT数据中提取骨骼表面或皮肤表面；在气象学中，它能提取某个气压值的等压面。</p>
+<p><strong>核心参数：</strong>
+- <code>SetValue(int i, double value)</code> —— 设置第i个等值面值为value
+- <code>GenerateValues(int numContours, double range[2])</code> —— 在range范围内均匀生成numContours个等值面值
+- <code>GenerateValues(int numContours, double min, double max)</code> —— 同上，但用两个标量参数
+- <code>SetNumberOfContours(int n)</code> —— 设置等值面数量
+- <code>SetComputeNormals(bool)</code> —— 是否计算法向量（默认true，对光照效果很重要）
+- <code>SetComputeScalars(bool)</code> —— 是否将原始标量传递给输出（默认true）</p>
+<p><strong>Marching Cubes 算法简述：</strong></p>
+<p>Marching Cubes算法按以下步骤工作：</p>
+<ol>
+<li><strong>遍历所有体素</strong>：对于体数据（<code>vtkImageData</code>）中的每个由相邻8个点围成的立方体单元（体素），执行以下操作。</li>
+<li><strong>判定顶点状态</strong>：对于该体素的8个顶点，如果该顶点的标量值大于等值面值，标记为"内部"（1）；否则标记为"外部"（0）。这样每个体素产生一个8位二进制编码。</li>
+<li><strong>查表</strong>：该编码的取值范围是[0, 255]，对应256种可能的拓扑情况。通过查找预定义的表，确定等值面在体素内部产生的三角形顶点位于体素的哪些棱边上。</li>
+<li><strong>插值</strong>：对于等值面穿过的每条棱边，用线性插值计算三角形顶点的精确空间位置。</li>
+<li><strong>输出</strong>：将所有体素中生成的三角形收集起来，形成最终的等值面PolyData。</li>
+</ol>
+<p><strong>适用场景：</strong>
+- 医学影像：从CT/MRI体数据中提取器官轮廓（如骨骼=500HU，皮肤=0HU）
+- 气象：提取等压面、等温面
+- 计算流体力学：提取涡结构（Q-criterion、lambda2判则的等值面）
+- 材料科学：材料界面提取</p>
+<p><strong>代码示例：</strong></p>
+<pre><code class="language-cpp">#include &quot;vtkSmartPointer.h&quot;
+#include &quot;vtkSampleFunction.h&quot;
+#include &quot;vtkContourFilter.h&quot;
+#include &quot;vtkPolyDataMapper.h&quot;
+#include &quot;vtkActor.h&quot;
+#include &quot;vtkProperty.h&quot;
+#include &quot;vtkRenderer.h&quot;
+#include &quot;vtkRenderWindow.h&quot;
+#include &quot;vtkRenderWindowInteractor.h&quot;
+#include &quot;vtkInteractorStyleTrackballCamera.h&quot;
+#include &quot;vtkNamedColors.h&quot;
+
+int main()
+{
+  auto colors = vtkSmartPointer&lt;vtkNamedColors&gt;::New();
+
+  // --- 创建一个隐函数采样生成体数据 ---
+  // 使用 vtkSampleFunction 从隐函数生成规则网格上的标量体数据
+  // 此处使用一个简单的&quot;距离场&quot;隐函数（球体隐函数）
+  auto sphereFunc = vtkSmartPointer&lt;vtkSphere&gt;::New();
+  sphereFunc-&gt;SetCenter(0.0, 0.0, 0.0);
+  sphereFunc-&gt;SetRadius(3.0);
+
+  auto sampler = vtkSmartPointer&lt;vtkSampleFunction&gt;::New();
+  sampler-&gt;SetImplicitFunction(sphereFunc);
+  sampler-&gt;SetModelBounds(-5.0, 5.0, -5.0, 5.0, -5.0, 5.0);
+  sampler-&gt;SetSampleDimensions(50, 50, 50);  // 50x50x50的采样网格
+  sampler-&gt;ComputeNormalsOff();              // 等值面过滤器会自行计算
+
+  // --- 等值面过滤器 ---
+  // 标量场 == 0.5 对应球体隐函数中的 r = sqrt(3*3 - 0.5) ≈ 2.92 的球面
+  auto contour = vtkSmartPointer&lt;vtkContourFilter&gt;::New();
+  contour-&gt;SetInputConnection(sampler-&gt;GetOutputPort());
+  contour-&gt;SetValue(0, 0.5);                // 提取标量值=0.5的等值面
+  // 也可以生成多个等值面:
+  // contour-&gt;GenerateValues(5, 0.1, 0.9); // 生成0.1到0.9之间5个均匀分布的等值面
+
+  // --- Mapper 和 Actor ---
+  auto mapper = vtkSmartPointer&lt;vtkPolyDataMapper&gt;::New();
+  mapper-&gt;SetInputConnection(contour-&gt;GetOutputPort());
+  mapper-&gt;ScalarVisibilityOff();  // 关闭标量颜色映射，使用单色
+
+  auto actor = vtkSmartPointer&lt;vtkActor&gt;::New();
+  actor-&gt;SetMapper(mapper);
+  actor-&gt;GetProperty()-&gt;SetColor(colors-&gt;GetColor3d(&quot;Peacock&quot;).GetData());
+  actor-&gt;GetProperty()-&gt;SetSpecular(0.5);
+  actor-&gt;GetProperty()-&gt;SetSpecularPower(20);
+
+  // --- 渲染 ---
+  auto renderer = vtkSmartPointer&lt;vtkRenderer&gt;::New();
+  renderer-&gt;SetBackground(colors-&gt;GetColor3d(&quot;MidnightBlue&quot;).GetData());
+  renderer-&gt;AddActor(actor);
+
+  auto renWin = vtkSmartPointer&lt;vtkRenderWindow&gt;::New();
+  renWin-&gt;SetSize(800, 600);
+  renWin-&gt;AddRenderer(renderer);
+
+  auto interactor = vtkSmartPointer&lt;vtkRenderWindowInteractor&gt;::New();
+  interactor-&gt;SetRenderWindow(renWin);
+  auto style = vtkSmartPointer&lt;vtkInteractorStyleTrackballCamera&gt;::New();
+  interactor-&gt;SetInteractorStyle(style);
+
+  renWin-&gt;Render();
+  interactor-&gt;Start();
+
+  return 0;
+}
+</code></pre>
+<p><strong>提示：</strong> <code>vtkContourFilter</code>对于<code>vtkImageData</code>和<code>vtkStructuredGrid</code>使用Marching Cubes算法；对于<code>vtkPolyData</code>则使用另一种称为"Edge Tracking"的算法。对于<code>vtkUnstructuredGrid</code>，它使用Marching Tetrahedra算法。</p>
+<h3 id="1133-vtkthreshold">11.3.3 vtkThreshold —— 阈值过滤器</h3>
+<p><strong>功能描述：</strong> 按标量值的范围提取数据集的单元。只有标量值落在指定范围内的单元（Cell）才会被保留在输出中。与<code>vtkContourFilter</code>提取的是标量场的"等值面"不同，<code>vtkThreshold</code>提取的是"满足条件的所有单元"。</p>
+<p><strong>核心参数：</strong>
+- <code>ThresholdBetween(double lower, double upper)</code> —— 保留标量值在[lower, upper]之间的所有单元
+- <code>ThresholdByLower(double lower)</code> —— 保留标量值大于等于lower的所有单元
+- <code>ThresholdByUpper(double upper)</code> —— 保留标量值小于等于upper的所有单元
+- <code>SetInputArrayToProcess(...)</code> —— 指定使用哪个标量数组做阈值判断
+- <code>SetAllScalars(bool)</code> —— 是否要求单元中所有点的标量值都满足条件（默认true；设为false则只要有一个点满足即可）</p>
+<p><strong>适用场景：</strong>
+- 提取CFD仿真中高涡量区域的所有单元
+- 提取有限元分析中应力超过屈服极限的单元
+- 筛选温度场中在某温度范围内的区域
+- 按置信度过滤医学图像中的分割结果</p>
+<p><strong>代码示例：</strong></p>
+<pre><code class="language-cpp">#include &quot;vtkSmartPointer.h&quot;
+#include &quot;vtkSphereSource.h&quot;
+#include &quot;vtkFloatArray.h&quot;
+#include &quot;vtkPointData.h&quot;
+#include &quot;vtkThreshold.h&quot;
+#include &quot;vtkDataSetMapper.h&quot;
+#include &quot;vtkActor.h&quot;
+#include &quot;vtkProperty.h&quot;
+#include &quot;vtkRenderer.h&quot;
+#include &quot;vtkRenderWindow.h&quot;
+#include &quot;vtkRenderWindowInteractor.h&quot;
+#include &quot;vtkInteractorStyleTrackballCamera.h&quot;
+#include &quot;vtkNamedColors.h&quot;
+
+int main()
+{
+  auto colors = vtkSmartPointer&lt;vtkNamedColors&gt;::New();
+
+  // --- 创建球体数据源并附加标量数据 ---
+  auto sphere = vtkSmartPointer&lt;vtkSphereSource&gt;::New();
+  sphere-&gt;SetThetaResolution(40);
+  sphere-&gt;SetPhiResolution(40);
+
+  // 为每个点生成一个基于Y坐标的标量值（-1到1对应Y轴高度）
+  sphere-&gt;Update();
+  int numPoints = sphere-&gt;GetOutput()-&gt;GetNumberOfPoints();
+
+  auto yScalars = vtkSmartPointer&lt;vtkFloatArray&gt;::New();
+  yScalars-&gt;SetName(&quot;YCoordinate&quot;);
+  yScalars-&gt;SetNumberOfTuples(numPoints);
+
+  for (int i = 0; i &lt; numPoints; i++)
+  {
+    double pt[3];
+    sphere-&gt;GetOutput()-&gt;GetPoint(i, pt);
+    yScalars-&gt;SetTuple1(i, pt[1]);  // 使用Y坐标作为标量值
+  }
+
+  sphere-&gt;GetOutput()-&gt;GetPointData()-&gt;SetScalars(yScalars);
+
+  // --- 阈值过滤器：只保留Y坐标在[0.2, 1.0]之间的单元 ---
+  auto threshold = vtkSmartPointer&lt;vtkThreshold&gt;::New();
+  threshold-&gt;SetInputData(sphere-&gt;GetOutput());
+  threshold-&gt;ThresholdBetween(0.2, 1.0);
+  threshold-&gt;SetInputArrayToProcess(
+      0, 0, 0, vtkDataObject::FIELD_ASSOCIATION_POINTS, &quot;YCoordinate&quot;);
+
+  // --- 被阈值过滤后的输出需要使用DataSetMapper（不再是PolyDataMapper） ---
+  // 因为阈值过滤器输出的是 vtkUnstructuredGrid
+  auto mapper = vtkSmartPointer&lt;vtkDataSetMapper&gt;::New();
+  mapper-&gt;SetInputConnection(threshold-&gt;GetOutputPort());
+  mapper-&gt;ScalarVisibilityOff();
+
+  auto actor = vtkSmartPointer&lt;vtkActor&gt;::New();
+  actor-&gt;SetMapper(mapper);
+  actor-&gt;GetProperty()-&gt;SetColor(colors-&gt;GetColor3d(&quot;Coral&quot;).GetData());
+  actor-&gt;GetProperty()-&gt;EdgeVisibilityOn();
+  actor-&gt;GetProperty()-&gt;SetEdgeColor(0.2, 0.2, 0.2);
+
+  // --- 渲染 ---
+  auto renderer = vtkSmartPointer&lt;vtkRenderer&gt;::New();
+  renderer-&gt;SetBackground(colors-&gt;GetColor3d(&quot;SlateGray&quot;).GetData());
+  renderer-&gt;AddActor(actor);
+
+  auto renWin = vtkSmartPointer&lt;vtkRenderWindow&gt;::New();
+  renWin-&gt;SetSize(800, 600);
+  renWin-&gt;AddRenderer(renderer);
+
+  auto interactor = vtkSmartPointer&lt;vtkRenderWindowInteractor&gt;::New();
+  interactor-&gt;SetRenderWindow(renWin);
+  auto style = vtkSmartPointer&lt;vtkInteractorStyleTrackballCamera&gt;::New();
+  interactor-&gt;SetInteractorStyle(style);
+
+  renWin-&gt;Render();
+  interactor-&gt;Start();
+
+  return 0;
+}
+</code></pre>
+<p><strong>重要提示：</strong> <code>vtkThreshold</code>的输出类型取决于输入类型：
+- 如果输入是<code>vtkPolyData</code>，输出是<code>vtkUnstructuredGrid</code>
+- 如果输入是<code>vtkImageData</code>，输出是<code>vtkUnstructuredGrid</code>
+- 如果输入是<code>vtkUnstructuredGrid</code>，输出是<code>vtkUnstructuredGrid</code></p>
+<p>输出变成了非结构化网格的原因在于：被阈值"切掉"后的数据拓扑不再是规则的。</p>
+<h3 id="1134-vtkcutter">11.3.4 vtkCutter —— 切片过滤器</h3>
+<p><strong>功能描述：</strong> 用一个隐函数平面（通常用<code>vtkPlane</code>定义）切割任意数据集，返回该平面与数据集的<strong>交线/交面</strong>生成的PolyData。对于3D体积数据，这相当于获取一个截面；对于3D曲面数据，这相当于获取等切线。</p>
+<p><strong>核心参数：</strong>
+- <code>SetCutFunction(vtkImplicitFunction* func)</code> —— 设置切割所用的隐函数（通常为<code>vtkPlane</code>）
+- <code>SetValue(double value)</code> —— 隐函数的等值面值（默认为0.0）
+- <code>SetGenerateCutScalars(bool)</code> —— 是否在输出中包含切割标量值（默认false）
+- <code>SetSortBy(string)</code> —— 输出线段的排序方式</p>
+<p><strong>与 vtkContourFilter 的区别：</strong>
+- <code>vtkContourFilter</code>从<strong>标量场内部</strong>提取等值面（标量值来自数据本身的点数据）
+- <code>vtkCutter</code>使用<strong>外部</strong>的隐函数来切割数据集（与数据本身的标量值无关）</p>
+<p><strong>适用场景：</strong>
+- 医学可视化中获取任意角度的CT切片（MPR——多平面重建）
+- CFD分析中提取截面上的流场分布
+- 地质分析中沿任意平面切开三维地震数据体
+- 结构分析中沿指定平面获取剖面</p>
+<p><strong>代码示例：</strong></p>
+<pre><code class="language-cpp">#include &quot;vtkSmartPointer.h&quot;
+#include &quot;vtkCylinderSource.h&quot;
+#include &quot;vtkPlane.h&quot;
+#include &quot;vtkCutter.h&quot;
+#include &quot;vtkPolyDataMapper.h&quot;
+#include &quot;vtkActor.h&quot;
+#include &quot;vtkProperty.h&quot;
+#include &quot;vtkRenderer.h&quot;
+#include &quot;vtkRenderWindow.h&quot;
+#include &quot;vtkRenderWindowInteractor.h&quot;
+#include &quot;vtkInteractorStyleTrackballCamera.h&quot;
+#include &quot;vtkNamedColors.h&quot;
+
+int main()
+{
+  auto colors = vtkSmartPointer&lt;vtkNamedColors&gt;::New();
+
+  // --- 创建圆柱体数据源 ---
+  auto cylinder = vtkSmartPointer&lt;vtkCylinderSource&gt;::New();
+  cylinder-&gt;SetHeight(3.0);
+  cylinder-&gt;SetRadius(1.0);
+  cylinder-&gt;SetResolution(60);
+
+  // --- 定义切割平面：水平穿过中心（法向沿Z轴） ---
+  auto cutPlane = vtkSmartPointer&lt;vtkPlane&gt;::New();
+  cutPlane-&gt;SetOrigin(0.0, 0.0, 0.5);    // Z=0.5处切割
+  cutPlane-&gt;SetNormal(0.0, 0.0, 1.0);    // 法向沿+Z
+
+  // --- 切片过滤器 ---
+  auto cutter = vtkSmartPointer&lt;vtkCutter&gt;::New();
+  cutter-&gt;SetInputConnection(cylinder-&gt;GetOutputPort());
+  cutter-&gt;SetCutFunction(cutPlane);
+  cutter-&gt;SetValue(0.0);
+
+  // --- 原始圆柱的渲染 ---
+  auto cylMapper = vtkSmartPointer&lt;vtkPolyDataMapper&gt;::New();
+  cylMapper-&gt;SetInputConnection(cylinder-&gt;GetOutputPort());
+
+  auto cylActor = vtkSmartPointer&lt;vtkActor&gt;::New();
+  cylActor-&gt;SetMapper(cylMapper);
+  cylActor-&gt;GetProperty()-&gt;SetColor(colors-&gt;GetColor3d(&quot;Silver&quot;).GetData());
+  cylActor-&gt;GetProperty()-&gt;SetOpacity(0.3);  // 半透明以显示切口
+
+  // --- 切口曲线的渲染（加粗，颜色鲜明） ---
+  auto cutMapper = vtkSmartPointer&lt;vtkPolyDataMapper&gt;::New();
+  cutMapper-&gt;SetInputConnection(cutter-&gt;GetOutputPort());
+
+  auto cutActor = vtkSmartPointer&lt;vtkActor&gt;::New();
+  cutActor-&gt;SetMapper(cutMapper);
+  cutActor-&gt;GetProperty()-&gt;SetColor(colors-&gt;GetColor3d(&quot;Red&quot;).GetData());
+  cutActor-&gt;GetProperty()-&gt;SetLineWidth(3.0);
+
+  // --- 渲染 ---
+  auto renderer = vtkSmartPointer&lt;vtkRenderer&gt;::New();
+  renderer-&gt;SetBackground(colors-&gt;GetColor3d(&quot;SlateGray&quot;).GetData());
+  renderer-&gt;AddActor(cylActor);
+  renderer-&gt;AddActor(cutActor);
+
+  auto renWin = vtkSmartPointer&lt;vtkRenderWindow&gt;::New();
+  renWin-&gt;SetSize(800, 600);
+  renWin-&gt;AddRenderer(renderer);
+
+  auto interactor = vtkSmartPointer&lt;vtkRenderWindowInteractor&gt;::New();
+  interactor-&gt;SetRenderWindow(renWin);
+  auto style = vtkSmartPointer&lt;vtkInteractorStyleTrackballCamera&gt;::New();
+  interactor-&gt;SetInteractorStyle(style);
+
+  renWin-&gt;Render();
+  interactor-&gt;Start();
+
+  return 0;
+}
+</code></pre>
+<h3 id="1135-vtkextractedges">11.3.5 vtkExtractEdges —— 边缘提取过滤器</h3>
+<p><strong>功能描述：</strong> 从任意数据集中提取所有单元的<strong>边线（Wireframe）</strong>，输出为包含线段的PolyData。类似于把实体模型的框架提取出来——你看到的是由线组成的支架结构。</p>
+<p><strong>核心参数：</strong>
+- 这个过滤器几乎不需要参数——直接将输入数据集的所有单元边界转换为线段。
+- 如果需要保留原始点数据到边上，可以使用<code>UseAllPointsOn()</code>。</p>
+<p><strong>适用场景：</strong>
+- 快速生成网格的线框渲染
+- 在出版物中生成简洁的网格结构示意图
+- 将3D单元的边线提取出来做进一步分析</p>
+<p><strong>代码示例：</strong></p>
+<pre><code class="language-cpp">// 只需要一行代码：
+auto edges = vtkSmartPointer&lt;vtkExtractEdges&gt;::New();
+edges-&gt;SetInputData(someDataSet);  // 适用于任何 vtkDataSet 子类
+
+// 然后用普通的 vtkPolyDataMapper 渲染输出
+auto mapper = vtkSmartPointer&lt;vtkPolyDataMapper&gt;::New();
+mapper-&gt;SetInputConnection(edges-&gt;GetOutputPort());
+</code></pre>
+<hr />
+<h2 id="114">11.4 矢量可视化过滤器</h2>
+<p>矢量数据（如速度场、力场、位移场、梯度场）是科学计算中最常见的数据类型之一。但矢量包含方向和大小两个信息维度，如何直观地可视化它们是一个长期的挑战。VTK提供了一套丰富的矢量可视化工具。</p>
+<h3 id="1141-vtkglyph3d">11.4.1 vtkGlyph3D —— 三维符号图</h3>
+<p><strong>功能描述：</strong> <code>vtkGlyph3D</code>在每个输入点上放置一个小的几何符号（Glyph），该符号的方向、大小、颜色都可以由该点的属性数据（矢量、标量）控制。这是理解和展示矢量场的最常用方法之一。</p>
+<p><strong>核心参数：</strong>
+- <code>SetSourceConnection(vtkAlgorithmOutput* source)</code> —— 设置用作Glyph的几何形状。通常用<code>vtkArrowSource</code>（箭头）、<code>vtkConeSource</code>（圆锥）、<code>vtkSphereSource</code>（球体）或<code>vtkCubeSource</code>（立方体）。
+- <code>SetInputConnection(vtkAlgorithmOutput* input)</code> —— 设置包含点的数据集（输入）。
+- <code>SetInputArrayToProcess(int idx, ...)</code> —— 指定由哪个数组控制Glyph的参数（矢量控制方向、标量控制大小）。
+- <code>SetScaleFactor(double factor)</code> —— 全局缩放因子。
+- <code>SetVectorModeToUseVector()</code> —— 由点数据的矢量数组控制Glyph朝向。
+- <code>SetScaleModeToScaleByVector()</code> —— 由矢量的模控制Glyph大小。
+- <code>SetScaleModeToScalar()</code> —— 由标量值控制Glyph大小。
+- <code>SetScaleModeToDataScalingOff()</code> —— 关闭数据驱动缩放，全部用同一个大小。
+- <code>ClampingOn/Off()</code> —— 是否将缩放因子钳制在指定范围内。
+- <code>SetRange(double min, double max)</code> —— 缩放的标量/矢量范围。
+- <code>OrientOn()</code> —— 是否让Glyph方向跟随矢量方向（默认true）。
+- <code>SetColorModeToColorByScalar()</code> / <code>SetColorModeToColorByVector()</code> —— 控制颜色映射的数据来源。</p>
+<p><strong>适用场景：</strong>
+- 用箭头展示流场中的速度方向
+- 用球体的大小展示标量值的空间分布
+- 用彩色锥体展示表面法向量的分布
+- 在有限元网格上用小球展示节点处的应力张量</p>
+<p><strong>代码示例：</strong></p>
+<pre><code class="language-cpp">#include &quot;vtkSmartPointer.h&quot;
+#include &quot;vtkPlaneSource.h&quot;
+#include &quot;vtkFloatArray.h&quot;
+#include &quot;vtkPointData.h&quot;
+#include &quot;vtkArrowSource.h&quot;
+#include &quot;vtkGlyph3D.h&quot;
+#include &quot;vtkPolyDataMapper.h&quot;
+#include &quot;vtkActor.h&quot;
+#include &quot;vtkProperty.h&quot;
+#include &quot;vtkRenderer.h&quot;
+#include &quot;vtkRenderWindow.h&quot;
+#include &quot;vtkRenderWindowInteractor.h&quot;
+#include &quot;vtkInteractorStyleTrackballCamera.h&quot;
+#include &quot;vtkNamedColors.h&quot;
+#include &quot;vtkMath.h&quot;
+
+int main()
+{
+  auto colors = vtkSmartPointer&lt;vtkNamedColors&gt;::New();
+
+  // --- 在XY平面上创建规则点网格 ---
+  auto plane = vtkSmartPointer&lt;vtkPlaneSource&gt;::New();
+  plane-&gt;SetXResolution(12);
+  plane-&gt;SetYResolution(12);
+  plane-&gt;SetOrigin(-5.0, -5.0, 0.0);
+  plane-&gt;SetPoint1(5.0, -5.0, 0.0);
+  plane-&gt;SetPoint2(-5.0, 5.0, 0.0);
+  // 注意：PlaneSource生成的是面片，但Glyph3D会识别其上的每个点
+  // 对于点云输入，可以使用 vtkProgrammableSource 或手动构建。
+
+  // --- 为每个点生成矢量数据（旋转场） ---
+  plane-&gt;Update();
+  int numPoints = plane-&gt;GetOutput()-&gt;GetNumberOfPoints();
+
+  auto vectors = vtkSmartPointer&lt;vtkFloatArray&gt;::New();
+  vectors-&gt;SetName(&quot;Velocity&quot;);
+  vectors-&gt;SetNumberOfComponents(3);
+  vectors-&gt;SetNumberOfTuples(numPoints);
+
+  for (int i = 0; i &lt; numPoints; i++)
+  {
+    double pt[3];
+    plane-&gt;GetOutput()-&gt;GetPoint(i, pt);
+
+    // 旋转场：v = (-y, x, 0) —— 绕Z轴的旋转
+    double vx = -pt[1];
+    double vy = pt[0];
+    double vz = 0.0;
+
+    double mag = sqrt(vx * vx + vy * vy);
+    // 归一化
+    if (mag &gt; 1e-6)
+    {
+      vx /= mag;
+      vy /= mag;
+    }
+
+    vectors-&gt;SetTuple3(i, vx, vy, vz);
+  }
+
+  plane-&gt;GetOutput()-&gt;GetPointData()-&gt;SetVectors(vectors);
+
+  // --- 创建箭头源（用作Glyph形状） ---
+  auto arrow = vtkSmartPointer&lt;vtkArrowSource&gt;::New();
+  arrow-&gt;SetTipLength(0.2);
+  arrow-&gt;SetTipRadius(0.08);
+  arrow-&gt;SetShaftRadius(0.03);
+
+  // --- Glyph3D过滤器 ---
+  auto glyph = vtkSmartPointer&lt;vtkGlyph3D&gt;::New();
+  glyph-&gt;SetInputData(plane-&gt;GetOutput());
+  glyph-&gt;SetSourceConnection(arrow-&gt;GetOutputPort());
+  glyph-&gt;SetVectorModeToUseVector();      // 使用点数据的矢量数组
+  glyph-&gt;SetInputArrayToProcess(
+      0, 0, 0, vtkDataObject::FIELD_ASSOCIATION_POINTS, &quot;Velocity&quot;);
+  glyph-&gt;SetScaleModeToScaleByVector();   // 大小由矢量模决定
+  glyph-&gt;SetScaleFactor(0.6);             // 全局缩放因子
+  glyph-&gt;OrientOn();                      // 箭头朝向跟随矢量方向
+  glyph-&gt;ClampingOn();                    // 钳制缩放
+  glyph-&gt;SetRange(0.2, 0.8);             // 缩放范围
+
+  // --- Mapper 和 Actor ---
+  auto mapper = vtkSmartPointer&lt;vtkPolyDataMapper&gt;::New();
+  mapper-&gt;SetInputConnection(glyph-&gt;GetOutputPort());
+  mapper-&gt;ScalarVisibilityOff();
+
+  auto actor = vtkSmartPointer&lt;vtkActor&gt;::New();
+  actor-&gt;SetMapper(mapper);
+  actor-&gt;GetProperty()-&gt;SetColor(colors-&gt;GetColor3d(&quot;DodgerBlue&quot;).GetData());
+
+  // --- 渲染 ---
+  auto renderer = vtkSmartPointer&lt;vtkRenderer&gt;::New();
+  renderer-&gt;SetBackground(colors-&gt;GetColor3d(&quot;MidnightBlue&quot;).GetData());
+  renderer-&gt;AddActor(actor);
+
+  auto renWin = vtkSmartPointer&lt;vtkRenderWindow&gt;::New();
+  renWin-&gt;SetSize(800, 600);
+  renWin-&gt;AddRenderer(renderer);
+
+  auto interactor = vtkSmartPointer&lt;vtkRenderWindowInteractor&gt;::New();
+  interactor-&gt;SetRenderWindow(renWin);
+  auto style = vtkSmartPointer&lt;vtkInteractorStyleTrackballCamera&gt;::New();
+  interactor-&gt;SetInteractorStyle(style);
+
+  renWin-&gt;Render();
+  interactor-&gt;Start();
+
+  return 0;
+}
+</code></pre>
+<h3 id="1142-vtkstreamtracer">11.4.2 vtkStreamTracer —— 流线追踪器</h3>
+<p><strong>功能描述：</strong> <code>vtkStreamTracer</code>从一组种子点（Seed Points）出发，沿矢量场方向向前（或向后）追踪粒子轨迹，生成代表流线（Streamline）的PolyData。这是CFD（计算流体力学）可视化中最核心的工具之一——它回答了"如果在这里释放一个无质量的粒子，它会飞到哪里？"</p>
+<p><strong>核心参数：</strong>
+- <code>SetInputConnection(vtkAlgorithmOutput* vectorField)</code> —— 设置包含矢量场的体数据或网格数据。
+- <code>SetSourceConnection(vtkAlgorithmOutput* seedPoints)</code> —— 设置种子点数据集。种子点可以是一条线（产生流线面）、一个点源（产生单条流线）、或多个离散点。
+- <code>SetIntegrator(vtkInitialValueProblemSolver* integrator)</code> —— 设置数值积分器：
+  - <code>vtkRungeKutta4</code> —— 四阶Runge-Kutta法（默认，高精度）
+  - <code>vtkRungeKutta2</code> —— 二阶RK法（较快）
+  - <code>vtkRungeKutta45</code> —— 自适应步长的Runge-Kutta-Fehlberg法
+- <code>SetIntegrationDirection(int dir)</code> —— 积分方向：
+  - <code>vtkStreamTracer::FORWARD</code>（0）—— 向前（顺流而下）
+  - <code>vtkStreamTracer::BACKWARD</code>（1）—— 向后（逆流而上）
+  - <code>vtkStreamTracer::BOTH</code>（2）—— 双向
+- <code>SetMaximumPropagation(double length)</code> —— 单条流线的最大长度（物理空间距离）。
+- <code>SetMaximumNumberOfSteps(int n)</code> —— 最大积分步数。
+- <code>SetInitialIntegrationStep(double step)</code> —— 初始积分步长。
+- <code>SetTerminalSpeed(double speed)</code> —— 终端速度，低于此速度时停止积分。
+- <code>SetComputeVorticity(bool)</code> —— 是否计算涡量（默认true）。</p>
+<p><strong>适用场景：</strong>
+- CFD后处理：沿速度场追踪流线
+- 天气预报图中的风场流线
+- 核磁共振扩散张量成像（DTI）中的纤维束追踪
+- 电场线/磁力线可视化</p>
+<p><strong>代码示例：</strong></p>
+<pre><code class="language-cpp">#include &quot;vtkSmartPointer.h&quot;
+#include &quot;vtkStructuredGrid.h&quot;
+#include &quot;vtkPoints.h&quot;
+#include &quot;vtkFloatArray.h&quot;
+#include &quot;vtkPointData.h&quot;
+#include &quot;vtkPointSource.h&quot;
+#include &quot;vtkStreamTracer.h&quot;
+#include &quot;vtkRungeKutta4.h&quot;
+#include &quot;vtkPolyDataMapper.h&quot;
+#include &quot;vtkActor.h&quot;
+#include &quot;vtkProperty.h&quot;
+#include &quot;vtkRenderer.h&quot;
+#include &quot;vtkRenderWindow.h&quot;
+#include &quot;vtkRenderWindowInteractor.h&quot;
+#include &quot;vtkInteractorStyleTrackballCamera.h&quot;
+#include &quot;vtkNamedColors.h&quot;
+#include &quot;vtkRibbonFilter.h&quot;
+
+int main()
+{
+  auto colors = vtkSmartPointer&lt;vtkNamedColors&gt;::New();
+
+  // --- 创建一个模拟矢量场（绕Z轴的旋转流 + 径向分量） ---
+  // 尺寸：11x11x11的网格，范围[-5,5]^3
+  int dims[3] = {11, 11, 11};
+  double origin[3] = {-5.0, -5.0, -5.0};
+  double spacing[3] = {1.0, 1.0, 1.0};
+
+  auto sgrid = vtkSmartPointer&lt;vtkStructuredGrid&gt;::New();
+  sgrid-&gt;SetDimensions(dims);
+
+  auto points = vtkSmartPointer&lt;vtkPoints&gt;::New();
+  points-&gt;SetNumberOfPoints(dims[0] * dims[1] * dims[2]);
+
+  auto vectors = vtkSmartPointer&lt;vtkFloatArray&gt;::New();
+  vectors-&gt;SetName(&quot;Velocity&quot;);
+  vectors-&gt;SetNumberOfComponents(3);
+  vectors-&gt;SetNumberOfTuples(dims[0] * dims[1] * dims[2]);
+
+  for (int k = 0; k &lt; dims[2]; k++)
+  {
+    for (int j = 0; j &lt; dims[1]; j++)
+    {
+      for (int i = 0; i &lt; dims[0]; i++)
+      {
+        double x = origin[0] + i * spacing[0];
+        double y = origin[1] + j * spacing[1];
+        double z = origin[2] + k * spacing[2];
+
+        int idx = i + j * dims[0] + k * dims[0] * dims[1];
+        points-&gt;SetPoint(idx, x, y, z);
+
+        // 绕Z轴的旋转流：(-y, x, 0) 加上一个小Z分量形成螺旋
+        double vx = -y;
+        double vy = x;
+        double vz = 0.5;  // 在Z方向上的恒定速度分量
+
+        vectors-&gt;SetTuple3(idx, vx, vy, vz);
+      }
+    }
+  }
+
+  sgrid-&gt;SetPoints(points);
+  sgrid-&gt;GetPointData()-&gt;SetVectors(vectors);
+
+  // --- 创建种子点（在XY平面上散布） ---
+  auto seedSource = vtkSmartPointer&lt;vtkPointSource&gt;::New();
+  seedSource-&gt;SetCenter(0.0, 1.0, -4.0);  // 种子点源的中心
+  seedSource-&gt;SetRadius(2.0);             // 种子散布半径
+  seedSource-&gt;SetNumberOfPoints(12);      // 12个种子点
+
+  // --- 流线追踪器 ---
+  auto integrator = vtkSmartPointer&lt;vtkRungeKutta4&gt;::New();
+
+  auto streamer = vtkSmartPointer&lt;vtkStreamTracer&gt;::New();
+  streamer-&gt;SetInputData(sgrid);
+  streamer-&gt;SetSourceConnection(seedSource-&gt;GetOutputPort());
+  streamer-&gt;SetIntegrator(integrator);
+  streamer-&gt;SetIntegrationDirectionToForward();
+  streamer-&gt;SetMaximumPropagation(200.0);
+  streamer-&gt;SetMaximumNumberOfSteps(2000);
+  streamer-&gt;SetInitialIntegrationStep(0.1);
+  streamer-&gt;SetTerminalSpeed(1e-12);
+
+  // --- 用RibbonFilter美化流线（把线变成飘带） ---
+  auto ribbon = vtkSmartPointer&lt;vtkRibbonFilter&gt;::New();
+  ribbon-&gt;SetInputConnection(streamer-&gt;GetOutputPort());
+  ribbon-&gt;SetWidth(0.15);
+  ribbon-&gt;SetWidthFactor(2.0);
+
+  // --- 渲染 ---
+  auto streamMapper = vtkSmartPointer&lt;vtkPolyDataMapper&gt;::New();
+  streamMapper-&gt;SetInputConnection(ribbon-&gt;GetOutputPort());
+  streamMapper-&gt;ScalarVisibilityOff();
+
+  auto streamActor = vtkSmartPointer&lt;vtkActor&gt;::New();
+  streamActor-&gt;SetMapper(streamMapper);
+  streamActor-&gt;GetProperty()-&gt;SetColor(colors-&gt;GetColor3d(&quot;Orange&quot;).GetData());
+
+  // 同时渲染种子点
+  auto seedMapper = vtkSmartPointer&lt;vtkPolyDataMapper&gt;::New();
+  seedMapper-&gt;SetInputConnection(seedSource-&gt;GetOutputPort());
+
+  auto seedActor = vtkSmartPointer&lt;vtkActor&gt;::New();
+  seedActor-&gt;SetMapper(seedMapper);
+  seedActor-&gt;GetProperty()-&gt;SetColor(colors-&gt;GetColor3d(&quot;Lime&quot;).GetData());
+  seedActor-&gt;GetProperty()-&gt;SetPointSize(5.0);
+
+  auto renderer = vtkSmartPointer&lt;vtkRenderer&gt;::New();
+  renderer-&gt;SetBackground(colors-&gt;GetColor3d(&quot;MidnightBlue&quot;).GetData());
+  renderer-&gt;AddActor(streamActor);
+  renderer-&gt;AddActor(seedActor);
+
+  auto renWin = vtkSmartPointer&lt;vtkRenderWindow&gt;::New();
+  renWin-&gt;SetSize(800, 600);
+  renWin-&gt;AddRenderer(renderer);
+
+  auto interactor = vtkSmartPointer&lt;vtkRenderWindowInteractor&gt;::New();
+  interactor-&gt;SetRenderWindow(renWin);
+  auto style = vtkSmartPointer&lt;vtkInteractorStyleTrackballCamera&gt;::New();
+  interactor-&gt;SetInteractorStyle(style);
+
+  renWin-&gt;Render();
+  interactor-&gt;Start();
+
+  return 0;
+}
+</code></pre>
+<h3 id="1143-vtkhedgehog">11.4.3 vtkHedgeHog —— 刺猬图</h3>
+<p><strong>功能描述：</strong> <code>vtkHedgeHog</code>是最简单的矢量可视化方法——在数据集的每个点上沿该点矢量方向绘制一条有长度的线段，线段的长度正比于矢量的模。因为密集的矢量线看起来像刺猬的刺，所以得名"Hedgehog Plot"（刺猬图）。</p>
+<p><strong>核心参数：</strong>
+- <code>SetScaleFactor(double factor)</code> —— 全局缩放因子，控制线段长度。
+- <code>SetVectorModeToUseVector()</code> —— 使用点数据的矢量数组。
+- <code>SetInputArrayToProcess(...)</code> —— 指定使用哪个矢量数组。</p>
+<p><strong>适用场景：</strong>
+- 快速可视化曲面上的法向量分布
+- 在稀疏网格上初步探查矢量场结构（密度过高时效果变差）
+- 可视化地面风场观测数据（每个观测站一根"风羽"）</p>
+<p><strong>代码示例：</strong></p>
+<pre><code class="language-cpp">#include &quot;vtkSmartPointer.h&quot;
+#include &quot;vtkSphereSource.h&quot;
+#include &quot;vtkFloatArray.h&quot;
+#include &quot;vtkPointData.h&quot;
+#include &quot;vtkHedgeHog.h&quot;
+#include &quot;vtkPolyDataMapper.h&quot;
+#include &quot;vtkActor.h&quot;
+#include &quot;vtkProperty.h&quot;
+#include &quot;vtkRenderer.h&quot;
+#include &quot;vtkRenderWindow.h&quot;
+#include &quot;vtkRenderWindowInteractor.h&quot;
+#include &quot;vtkInteractorStyleTrackballCamera.h&quot;
+#include &quot;vtkNamedColors.h&quot;
+
+int main()
+{
+  auto colors = vtkSmartPointer&lt;vtkNamedColors&gt;::New();
+
+  // --- 创建低分辨率球体（稀疏点以便刺猬图清晰可见） ---
+  auto sphere = vtkSmartPointer&lt;vtkSphereSource&gt;::New();
+  sphere-&gt;SetThetaResolution(16);
+  sphere-&gt;SetPhiResolution(16);
+
+  // --- 为每个点附上法向量作为矢量数据 ---
+  sphere-&gt;Update();
+  int numPoints = sphere-&gt;GetOutput()-&gt;GetNumberOfPoints();
+
+  auto normals = vtkSmartPointer&lt;vtkFloatArray&gt;::New();
+  normals-&gt;SetName(&quot;Normals&quot;);
+  normals-&gt;SetNumberOfComponents(3);
+  normals-&gt;SetNumberOfTuples(numPoints);
+
+  for (int i = 0; i &lt; numPoints; i++)
+  {
+    double pt[3];
+    sphere-&gt;GetOutput()-&gt;GetPoint(i, pt);
+    // 对于中心在原点的球体，法向量 = 位置向量的归一化
+    double r = sqrt(pt[0] * pt[0] + pt[1] * pt[1] + pt[2] * pt[2]);
+    if (r &gt; 1e-6)
+    {
+      normals-&gt;SetTuple3(i, pt[0] / r, pt[1] / r, pt[2] / r);
+    }
+    else
+    {
+      normals-&gt;SetTuple3(i, 0.0, 0.0, 1.0);
+    }
+  }
+
+  sphere-&gt;GetOutput()-&gt;GetPointData()-&gt;SetVectors(normals);
+
+  // --- 刺猬图过滤器 ---
+  auto hedgehog = vtkSmartPointer&lt;vtkHedgeHog&gt;::New();
+  hedgehog-&gt;SetInputData(sphere-&gt;GetOutput());
+  hedgehog-&gt;SetScaleFactor(0.5);  // 线段的缩放因子
+  hedgehog-&gt;SetVectorModeToUseVector();
+
+  // --- 同时渲染球体线框作为背景 ---
+  auto sphereMapper = vtkSmartPointer&lt;vtkPolyDataMapper&gt;::New();
+  sphereMapper-&gt;SetInputConnection(sphere-&gt;GetOutputPort());
+
+  auto sphereActor = vtkSmartPointer&lt;vtkActor&gt;::New();
+  sphereActor-&gt;SetMapper(sphereMapper);
+  sphereActor-&gt;GetProperty()-&gt;SetColor(colors-&gt;GetColor3d(&quot;Silver&quot;).GetData());
+  sphereActor-&gt;GetProperty()-&gt;SetRepresentationToWireframe();
+  sphereActor-&gt;GetProperty()-&gt;SetOpacity(0.2);
+
+  // --- 刺猬图的渲染 ---
+  auto hedgeMapper = vtkSmartPointer&lt;vtkPolyDataMapper&gt;::New();
+  hedgeMapper-&gt;SetInputConnection(hedgehog-&gt;GetOutputPort());
+
+  auto hedgeActor = vtkSmartPointer&lt;vtkActor&gt;::New();
+  hedgeActor-&gt;SetMapper(hedgeMapper);
+  hedgeActor-&gt;GetProperty()-&gt;SetColor(colors-&gt;GetColor3d(&quot;Red&quot;).GetData());
+  hedgeActor-&gt;GetProperty()-&gt;SetLineWidth(1.5);
+
+  // --- 渲染 ---
+  auto renderer = vtkSmartPointer&lt;vtkRenderer&gt;::New();
+  renderer-&gt;SetBackground(colors-&gt;GetColor3d(&quot;MidnightBlue&quot;).GetData());
+  renderer-&gt;AddActor(sphereActor);
+  renderer-&gt;AddActor(hedgeActor);
+
+  auto renWin = vtkSmartPointer&lt;vtkRenderWindow&gt;::New();
+  renWin-&gt;SetSize(800, 600);
+  renWin-&gt;AddRenderer(renderer);
+
+  auto interactor = vtkSmartPointer&lt;vtkRenderWindowInteractor&gt;::New();
+  interactor-&gt;SetRenderWindow(renWin);
+  auto style = vtkSmartPointer&lt;vtkInteractorStyleTrackballCamera&gt;::New();
+  interactor-&gt;SetInteractorStyle(style);
+
+  renWin-&gt;Render();
+  interactor-&gt;Start();
+
+  return 0;
+}
+</code></pre>
+<hr />
+<h2 id="115">11.5 网格处理过滤器</h2>
+<p>网格处理过滤器用于改善网格的质量、精度或性能。它们修改的是网格的拓扑结构（连接关系）和几何属性（法向量、三角形数量等）。</p>
+<h3 id="1151-vtksmoothpolydatafilter">11.5.1 vtkSmoothPolyDataFilter —— 拉普拉斯平滑</h3>
+<p><strong>功能描述：</strong> 通过Laplacian平滑算法（将每个顶点向邻居顶点的平均位置移动）来平滑网格曲面。可以有效地去除噪声、消除不规则起伏、使曲面更加光顺。平滑迭代次数越多，曲面越光滑，但也越容易丢失几何细节。</p>
+<p><strong>核心参数：</strong>
+- <code>SetNumberOfIterations(int n)</code> —— 平滑迭代次数（默认20）。越多越平滑，但也可能过度收缩。
+- <code>SetRelaxationFactor(double factor)</code> —— 松弛因子（默认0.01，范围[0.0, 2.0]）。值越大，每次迭代顶点移动距离越大。
+  - 0.0：顶点不动（无平滑）
+  - 0.01-0.1：保守平滑，保留较多细节
+  - 0.5-1.0：激进平滑，可能引起体积收缩
+- <code>SetFeatureEdgeSmoothing(bool)</code> —— 是否平滑特征边（默认false，保留锐边）。
+- <code>SetFeatureAngle(double angle)</code> —— 特征角定义，超过此角度的边视为特征边（默认45度）。
+- <code>SetBoundarySmoothing(bool)</code> —— 是否平滑边界（默认true）。
+- <code>SetConvergence(double value)</code> —— 收敛阈值（默认0.0即不检查收敛）。当顶点移动距离小于此值时提前终止迭代。</p>
+<p><strong>适用场景：</strong>
+- 去除三维扫描（激光扫描、结构光扫描）数据中的噪声
+- 改善有限元网格的质量
+- 在等值面提取后（Marching Cubes生成的网格有时有阶梯状伪影）进行平滑
+- 生成美观的可视化曲面</p>
+<p><strong>代码示例：</strong></p>
+<pre><code class="language-cpp">// 对噪声网格应用平滑
+auto smooth = vtkSmartPointer&lt;vtkSmoothPolyDataFilter&gt;::New();
+smooth-&gt;SetInputConnection(noisySource-&gt;GetOutputPort());
+smooth-&gt;SetNumberOfIterations(50);      // 50次迭代
+smooth-&gt;SetRelaxationFactor(0.05);      // 保守的松弛因子（每一步只移动5%）
+smooth-&gt;SetFeatureAngle(60.0);          // 保留超过60度的特征边
+smooth-&gt;SetBoundarySmoothing(false);    // 不平滑边界
+</code></pre>
+<p><strong>参数调优经验：</strong>
+- 对于高噪声数据：减小松弛因子（0.01-0.03），增加迭代次数（100-200）。
+- 对于轻微不平的网格：适中的松弛因子（0.1）和较少的迭代次数（10-20）。
+- 如果发现模型在平滑后"缩水"，可以尝试交替使用<code>vtkWindowedSincPolyDataFilter</code>（一种受控平滑的滤波器）。</p>
+<h3 id="1152-vtkdecimatepro">11.5.2 vtkDecimatePro —— 网格简化</h3>
+<p><strong>功能描述：</strong> 通过反复合并边（Edge Collapse）来减少三角形数量，同时尽量保持模型的几何形状。这是生成LOD（Level of Detail，细节层次）的关键技术——你可以在远距离观察时使用简化模型以加快渲染，在近距离观察时使用原始高分辨率模型。</p>
+<p><strong>核心参数：</strong>
+- <code>SetTargetReduction(double reduction)</code> —— 目标简化率，取值范围[0.0, 1.0]。0.0表示不减少任何三角形，0.9表示减少90%的三角形（只保留10%）。
+- <code>SetPreserveTopology(bool)</code> —— 是否保持原始拓扑（默认false）。设为true可以防止网格在简化过程中产生孔洞。
+- <code>SetFeatureAngle(double angle)</code> —— 特征角。超过该角度的边在简化中受到保护（不容易被折叠）。
+- <code>SetMaximumError(double error)</code> —— 与原始网格之间的最大允许误差。
+- <code>SetSplitting(bool)</code> —— 是否允许分裂（默认true）。
+- <code>SetBoundaryVertexDeletion(bool)</code> —— 是否允许删除边界顶点（默认true）。</p>
+<p><strong>适用场景：</strong>
+- 大型建筑模型的实时渲染（远处用简化模型）
+- 移动设备上的3D可视化（需要降低三角形数量）
+- Web端3D模型的带宽优化
+- CAD模型中快速预览生成</p>
+<p><strong>代码示例：</strong></p>
+<pre><code class="language-cpp">#include &quot;vtkSmartPointer.h&quot;
+#include &quot;vtkSphereSource.h&quot;
+#include &quot;vtkDecimatePro.h&quot;
+#include &quot;vtkPolyDataMapper.h&quot;
+#include &quot;vtkActor.h&quot;
+#include &quot;vtkProperty.h&quot;
+#include &quot;vtkRenderer.h&quot;
+#include &quot;vtkRenderWindow.h&quot;
+#include &quot;vtkRenderWindowInteractor.h&quot;
+#include &quot;vtkInteractorStyleTrackballCamera.h&quot;
+#include &quot;vtkNamedColors.h&quot;
+
+int main()
+{
+  auto colors = vtkSmartPointer&lt;vtkNamedColors&gt;::New();
+
+  // --- 创建高分辨率球体 ---
+  auto sphere = vtkSmartPointer&lt;vtkSphereSource&gt;::New();
+  sphere-&gt;SetThetaResolution(100);
+  sphere-&gt;SetPhiResolution(100);
+
+  // 打印原始三角形数量
+  sphere-&gt;Update();
+  std::cout &lt;&lt; &quot;原始三角形数: &quot; &lt;&lt; sphere-&gt;GetOutput()-&gt;GetNumberOfPolys()
+            &lt;&lt; std::endl;
+
+  // --- 网格简化（目标是减少90%的三角形） ---
+  auto decimator = vtkSmartPointer&lt;vtkDecimatePro&gt;::New();
+  decimator-&gt;SetInputConnection(sphere-&gt;GetOutputPort());
+  decimator-&gt;SetTargetReduction(0.9);   // 减面90%
+  decimator-&gt;SetPreserveTopology(true); // 保持拓扑不出现孔洞
+  decimator-&gt;SetFeatureAngle(30.0);     // 保护锐边
+
+  decimator-&gt;Update();
+  std::cout &lt;&lt; &quot;简化后三角形数: &quot; &lt;&lt; decimator-&gt;GetOutput()-&gt;GetNumberOfPolys()
+            &lt;&lt; std::endl;
+
+  // --- Mapper 和 Actor ---
+  auto mapper = vtkSmartPointer&lt;vtkPolyDataMapper&gt;::New();
+  mapper-&gt;SetInputConnection(decimator-&gt;GetOutputPort());
+
+  auto actor = vtkSmartPointer&lt;vtkActor&gt;::New();
+  actor-&gt;SetMapper(mapper);
+  actor-&gt;GetProperty()-&gt;SetColor(colors-&gt;GetColor3d(&quot;Tomato&quot;).GetData());
+  actor-&gt;GetProperty()-&gt;SetEdgeVisibility(1);
+  actor-&gt;GetProperty()-&gt;SetEdgeColor(0.1, 0.1, 0.1);
+  actor-&gt;GetProperty()-&gt;SetRepresentationToWireframe(); // 线框模式以看清简化结果
+
+  // --- 渲染 ---
+  auto renderer = vtkSmartPointer&lt;vtkRenderer&gt;::New();
+  renderer-&gt;SetBackground(colors-&gt;GetColor3d(&quot;SlateGray&quot;).GetData());
+  renderer-&gt;AddActor(actor);
+
+  auto renWin = vtkSmartPointer&lt;vtkRenderWindow&gt;::New();
+  renWin-&gt;SetSize(800, 600);
+  renWin-&gt;AddRenderer(renderer);
+
+  auto interactor = vtkSmartPointer&lt;vtkRenderWindowInteractor&gt;::New();
+  interactor-&gt;SetRenderWindow(renWin);
+  auto style = vtkSmartPointer&lt;vtkInteractorStyleTrackballCamera&gt;::New();
+  interactor-&gt;SetInteractorStyle(style);
+
+  renWin-&gt;Render();
+  interactor-&gt;Start();
+
+  return 0;
+}
+</code></pre>
+<p><strong>替代选择：</strong> 如果需要更高的简化质量和更好的边界保持，可以考虑<code>vtkQuadricDecimation</code>（基于二次误差度量的简化算法，通常产生更高质量的结果但速度较慢）。</p>
+<h3 id="1153-vtkpolydatanormals">11.5.3 vtkPolyDataNormals —— 法向量计算</h3>
+<p><strong>功能描述：</strong> 为PolyData计算/重算法向量。在VTK中，法向量对于光照效果至关重要——没有正确的法向量，曲面看起来会"平坦"或"破碎"。<code>vtkPolyDataNormals</code>通过分析每个顶点的相邻三角面片来计算平滑的法向量，也可以选择性地将锐边处的顶点拆分为多个副本以产生"硬边"效果。</p>
+<p><strong>核心参数：</strong>
+- <code>SetFeatureAngle(double angle)</code> —— <strong>这是最重要的参数。</strong> 定义了"特征边"（Feature Edge）的角度阈值（度数制）。两个相邻三角形法向之间的夹角如果超过此角度，它们之间的边将被视为特征边，该边上的顶点会被拆分为两个副本以保留硬边外观。
+  - 180度：所有三角形共用法向量（完全平滑）
+  - 60-90度：适中的平滑，在锐边处保持清晰
+  - 0度：每个三角形独立法向量（完全平面着色，Flat Shading）
+- <code>SplittingOn()/Off()</code> —— 是否在特征边处拆分顶点（默认true）。
+- <code>ConsistencyOn()/Off()</code> —— 是否修正法向量朝向的一致性（确保相邻三角形的法向量指向同一侧，默认true）。
+- <code>ComputePointNormalsOn/Off()</code> —— 是否计算点法向量（默认true）。
+- <code>ComputeCellNormalsOn/Off()</code> —— 是否计算单元法向量（默认false）。
+- <code>FlipNormalsOn/Off()</code> —— 是否翻转所有法向量（在处理反转面的模型时有用）。
+- <code>SetNonManifoldTraversal(bool)</code> —— 是否允许跨非流形边传播法向量（默认true）。</p>
+<p><strong>工作原理简述：</strong></p>
+<p>对于每个顶点，<code>vtkPolyDataNormals</code>找到所有包含该顶点的三角形面片。它计算这些三角形面片的<strong>面法向量</strong>（由三角形两条边叉积得到），然后将它们按面积加权平均，得到该顶点的<strong>顶点法向量</strong>。最后，它将平均结果归一化为单位长度。</p>
+<p><code>SetFeatureAngle</code>的作用在于：在计算平均时，如果两个相邻三角形的法向夹角超过特征角，则这两个三角形在计算时不会共享顶点法向量——相反，顶点会被"拆分"（Split）为两个副本，每个副本分别从各自的三角形集合接收法向量。这就是"硬边"的物理来源。</p>
+<p><strong>适用场景：</strong>
+- 从外部文件导入的模型缺少法向量时，必须运行此过滤器
+- 在Marching Cubes之后生成更平滑的等值面
+- 需要在特定角度产生硬边效果（如机械零件的棱线）
+- 检查模型的朝向一致性</p>
+<p><strong>代码示例：</strong></p>
+<pre><code class="language-cpp">// 典型用法：加载模型后立即计算法向量
+auto normals = vtkSmartPointer&lt;vtkPolyDataNormals&gt;::New();
+normals-&gt;SetInputConnection(reader-&gt;GetOutputPort());
+normals-&gt;SetFeatureAngle(30.0);   // 30度——产生清晰的机械棱线
+normals-&gt;SplittingOn();           // 在特征边处拆分顶点
+normals-&gt;ConsistencyOn();         // 确保法向量朝外
+
+// 然后传递给Mapper
+auto mapper = vtkSmartPointer&lt;vtkPolyDataMapper&gt;::New();
+mapper-&gt;SetInputConnection(normals-&gt;GetOutputPort());
+</code></pre>
+<h3 id="1154-vtktrianglefilter">11.5.4 vtkTriangleFilter —— 三角化过滤器</h3>
+<p><strong>功能描述：</strong> 将输入数据集中的所有多边形（三角形、四边形、多边形）转换为<strong>三角形</strong>。这是最简单也最常用的过滤器之一——许多下游算法（如某些Smooth、Decimate、STL导出）要求输入必须全部是三角形。</p>
+<p><strong>核心参数：</strong>
+- 这个过滤器几乎不需要配置。直接将输入连接上即可。
+- 对于PolyData输入，使用<code>vtkTriangleFilter</code>。
+- 对于UnstructuredGrid输入，使用<code>vtkDataSetTriangleFilter</code>。</p>
+<p><strong>为什么需要三角化？</strong></p>
+<ul>
+<li>三角形是唯一保证<strong>共面</strong>的多边形类型（任意三个点始终在同一平面内）。四边形可能不是平面的（四个点不一定共面），这会导致渲染和几何计算中的歧义。</li>
+<li>GPU原生支持三角形渲染——即使你提交了四边形，图形驱动程序也会在后台将其拆分为三角形。</li>
+<li>许多几何算法（如碰撞检测、光线投射、STL文件格式）只支持三角形。</li>
+</ul>
+<p><strong>代码示例：</strong></p>
+<pre><code class="language-cpp">// 最简单的一行用法：
+auto triangles = vtkSmartPointer&lt;vtkTriangleFilter&gt;::New();
+triangles-&gt;SetInputConnection(someSource-&gt;GetOutputPort());
+
+// 之后的所有管道连接使用 triangles-&gt;GetOutputPort()
+</code></pre>
+<p><strong>典型管道组合：</strong></p>
+<pre><code class="language-cpp">// 从混合多边形的数据源到平滑处理的标准管道
+Reader → TriangleFilter → SmoothPolyDataFilter → Normals → Mapper
+</code></pre>
+<hr />
+<h2 id="116">11.6 代码示例：多过滤器流水线</h2>
+<h3 id="1161">11.6.1 项目概述</h3>
+<p>本节将构建一个<strong>用同一数据源驱动四条不同过滤器分支</strong>的综合演示程序。这是对VTK管道分支能力的完整展示，也是对本章所学过滤器的集中演练。</p>
+<p>程序布局为<strong>2x2视口</strong>，四个视口分别展示：</p>
+<table>
+<thead>
+<tr>
+<th>视口位置</th>
+<th>展示内容</th>
+<th>过滤器链</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>左上 (0,0)</td>
+<td>原始球体（带边线）</td>
+<td>Source → Mapper（无过滤）</td>
+</tr>
+<tr>
+<td>右上 (0,1)</td>
+<td>收缩球体（展示结构）</td>
+<td>Source → TriangleFilter → ShrinkFilter → Mapper</td>
+</tr>
+<tr>
+<td>左下 (1,0)</td>
+<td>等值面提取（标量场）</td>
+<td>Source → ElevationFilter → ContourFilter → Mapper</td>
+</tr>
+<tr>
+<td>右下 (1,1)</td>
+<td>向量Glyph（法向量箭头）</td>
+<td>Source → MaskPoints → Glyph3D → Mapper</td>
+</tr>
+</tbody>
+</table>
+<p>使用同一个<code>vtkSphereSource</code>的<code>GetOutputPort()</code>同时连接到四条管道分支，充分展示管道复用的强大能力。</p>
+<h3 id="1162">11.6.2 管道结构全景图</h3>
+<pre><code>                          vtkSphereSource
+                               |
+                    GetOutputPort()
+                               |
+            +------------------+------------------+------------------+
+            |                  |                  |                  |
+            v                  v                  v                  v
+      无过滤器         TriangleFilter      ElevationFilter       MaskPoints
+            |                  |                  |                  |
+            v                  v                  v                  v
+      PolyDataMapper    ShrinkPolyData    ContourFilter        Glyph3D
+            |                  |                  |       (ArrowSource→Glyph3D)
+            v                  v                  v                  |
+       Actor(原始)       PolyDataMapper    PolyDataMapper     PolyDataMapper
+            |                  |                  |                  |
+            v                  v                  v                  v
+       Actor(收缩)       Actor(等值面)      Actor(箭头)
+            |                  |                  |                  |
+            +------------------+------------------+------------------+
+                               |
+                       四个Actor分别添加到四个Renderer
+                               |
+              四个Renderer分别设置不同的视口范围
+                               |
+                      RenderWindow → Interactor
+</code></pre>
+<h3 id="1163">11.6.3 完整代码</h3>
+<pre><code class="language-cpp">// ============================================================================
+// MultiFilterPipeline.cxx
+// VTK 第十一章综合示例：多过滤器流水线
+//
+// 演示核心概念：
+//   1. 管道分支：同一数据源驱动4条不同的过滤器链
+//   2. 2x2视口布局：使用SetViewport()精确布置
+//   3. 多种过滤器组合：Shrink, Contour, Glyph3D
+//   4. 文本标注：每个视口上方的说明标签
+//   5. 统一交互：四个Renderer共享一个Interactor
+// ============================================================================
+
+#include &quot;vtkActor.h&quot;
+#include &quot;vtkArrowSource.h&quot;
+#include &quot;vtkCamera.h&quot;
+#include &quot;vtkContourFilter.h&quot;
+#include &quot;vtkElevationFilter.h&quot;
+#include &quot;vtkGlyph3D.h&quot;
+#include &quot;vtkInteractorStyleTrackballCamera.h&quot;
+#include &quot;vtkMaskPoints.h&quot;
+#include &quot;vtkNamedColors.h&quot;
+#include &quot;vtkNew.h&quot;
+#include &quot;vtkPolyDataMapper.h&quot;
+#include &quot;vtkProperty.h&quot;
+#include &quot;vtkRenderWindow.h&quot;
+#include &quot;vtkRenderWindowInteractor.h&quot;
+#include &quot;vtkRenderer.h&quot;
+#include &quot;vtkShrinkPolyData.h&quot;
+#include &quot;vtkSmartPointer.h&quot;
+#include &quot;vtkSphereSource.h&quot;
+#include &quot;vtkTextActor.h&quot;
+#include &quot;vtkTextProperty.h&quot;
+#include &quot;vtkTriangleFilter.h&quot;
+
+#include &lt;array&gt;
+#include &lt;string&gt;
+
+// ============================================================================
+// 辅助函数：创建视口标签
+// ============================================================================
+// 在指定视口的顶部中央放置一个文本标签
+// 参数:
+//   renderer - 目标Renderer
+//   text     - 标签文本内容
+//   yPos     - 文本在视口内的归一化Y位置（0.0=底部, 1.0=顶部）
+// ============================================================================
+vtkSmartPointer&lt;vtkTextActor&gt; AddViewportLabel(
+    vtkRenderer* renderer, const std::string&amp; text, double yPos = 0.92)
+{
+  auto label = vtkSmartPointer&lt;vtkTextActor&gt;::New();
+  label-&gt;SetInput(text.c_str());
+  label-&gt;GetTextProperty()-&gt;SetFontSize(14);
+  label-&gt;GetTextProperty()-&gt;SetColor(1.0, 1.0, 1.0);        // 白色文字
+  label-&gt;GetTextProperty()-&gt;BoldOn();
+  label-&gt;GetTextProperty()-&gt;SetJustificationToCentered();
+  label-&gt;GetTextProperty()-&gt;SetVerticalJustificationToTop();
+
+  // 将文本Actor直接添加到Renderer（非视口归一化坐标）
+  // 使用vtkTextActor的SetPosition (以像素为单位不直观)
+  // 改用SetDisplayPosition——在display坐标中定位
+  // 但更简单的方式：使用vtkLegendScaleActor或手动设置
+  // 这里我们使用Position在world坐标中的方案：
+  // 由于每个视口有不同的相机，这里使用标尺actor定位更方便
+  // 实际方案：使用SetPosition在归一化显示坐标中（需手动转换）
+  renderer-&gt;AddActor2D(label);
+  // 在视口坐标系中设置位置（底部居中）
+  label-&gt;SetPosition(0.5 * (renderer-&gt;GetViewport()[0] +
+                             renderer-&gt;GetViewport()[2]) * 800,
+                     0.91 * 600); // 使用固定窗口尺寸
+
+  return label;
+}
+
+// ============================================================================
+// 辅助函数：创建并配置一个Actor
+// ============================================================================
+vtkSmartPointer&lt;vtkActor&gt; CreateActor(
+    vtkAlgorithmOutput* port,
+    double r, double g, double b,
+    bool showEdges = false,
+    double edgeR = 0.2, double edgeG = 0.2, double edgeB = 0.2,
+    double opacity = 1.0)
+{
+  auto mapper = vtkSmartPointer&lt;vtkPolyDataMapper&gt;::New();
+  mapper-&gt;SetInputConnection(port);
+  mapper-&gt;ScalarVisibilityOff();
+
+  auto actor = vtkSmartPointer&lt;vtkActor&gt;::New();
+  actor-&gt;SetMapper(mapper);
+  actor-&gt;GetProperty()-&gt;SetColor(r, g, b);
+  actor-&gt;GetProperty()-&gt;SetDiffuse(0.8);
+  actor-&gt;GetProperty()-&gt;SetSpecular(0.3);
+  actor-&gt;GetProperty()-&gt;SetSpecularPower(10.0);
+  actor-&gt;GetProperty()-&gt;SetOpacity(opacity);
+
+  if (showEdges)
+  {
+    actor-&gt;GetProperty()-&gt;SetEdgeVisibility(1);
+    actor-&gt;GetProperty()-&gt;SetEdgeColor(edgeR, edgeG, edgeB);
+    actor-&gt;GetProperty()-&gt;SetLineWidth(1.0);
+  }
+
+  return actor;
+}
+
+// ============================================================================
+// main
+// ============================================================================
+int main(int argc, char* argv[])
+{
+  auto colors = vtkSmartPointer&lt;vtkNamedColors&gt;::New();
+
+  // =========================================================================
+  // Step 1: 创建共享数据源
+  // =========================================================================
+  // 所有四条管道分支共享同一个球体数据源
+  auto sphereSource = vtkSmartPointer&lt;vtkSphereSource&gt;::New();
+  sphereSource-&gt;SetThetaResolution(48);
+  sphereSource-&gt;SetPhiResolution(48);
+  sphereSource-&gt;SetRadius(1.0);
+
+  // 获取输出端口（将被四条分支共享）
+  auto sphereOutput = sphereSource-&gt;GetOutputPort();
+
+  // =========================================================================
+  // Step 2: 构建四条过滤器分支
+  // =========================================================================
+
+  // ---- 分支A：原始球体（无过滤器，仅渲染） ----
+  auto actorA = CreateActor(sphereOutput, 0.3, 0.6, 0.9, true, 0.1, 0.1, 0.2);
+
+  // ---- 分支B：收缩球体（展示网格结构） ----
+  // 管道：Sphere -&gt; TriangleFilter -&gt; ShrinkPolyData -&gt; Mapper
+  auto triangleB = vtkSmartPointer&lt;vtkTriangleFilter&gt;::New();
+  triangleB-&gt;SetInputConnection(sphereOutput);
+
+  auto shrink = vtkSmartPointer&lt;vtkShrinkPolyData&gt;::New();
+  shrink-&gt;SetInputConnection(triangleB-&gt;GetOutputPort());
+  shrink-&gt;SetShrinkFactor(0.75);
+
+  auto actorB = CreateActor(shrink-&gt;GetOutputPort(),
+                            0.9, 0.4, 0.3,   // 暖橙色
+                            true,             // 显示边线
+                            0.15, 0.1, 0.1);  // 深色边线
+
+  // ---- 分支C：等值面提取（先添加标量高程数据） ----
+  // 管道：Sphere -&gt; ElevationFilter -&gt; ContourFilter -&gt; Mapper
+  auto elevation = vtkSmartPointer&lt;vtkElevationFilter&gt;::New();
+  elevation-&gt;SetInputConnection(sphereOutput);
+  elevation-&gt;SetLowPoint(0.0, -1.0, 0.0);
+  elevation-&gt;SetHighPoint(0.0, 1.0, 0.0);
+  // ElevationFilter 自动为每个点生成标量值（基于Y坐标）
+
+  auto contour = vtkSmartPointer&lt;vtkContourFilter&gt;::New();
+  contour-&gt;SetInputConnection(elevation-&gt;GetOutputPort());
+  // 生成7个等值面（在Y坐标范围内均匀分布）
+  contour-&gt;GenerateValues(7, -1.0, 1.0);
+  contour-&gt;SetComputeNormals(true);
+
+  // 等值面使用标量颜色映射
+  auto contourMapper = vtkSmartPointer&lt;vtkPolyDataMapper&gt;::New();
+  contourMapper-&gt;SetInputConnection(contour-&gt;GetOutputPort());
+  contourMapper-&gt;SetScalarRange(-1.0, 1.0);
+  // 使用蓝-白-红的颜色查找表
+  contourMapper-&gt;ScalarVisibilityOn();
+
+  auto actorC = vtkSmartPointer&lt;vtkActor&gt;::New();
+  actorC-&gt;SetMapper(contourMapper);
+  actorC-&gt;GetProperty()-&gt;SetOpacity(0.85);
+
+  // ---- 分支D：向量Glyph（球体法向量以箭头表示） ----
+  // 管道：Sphere -&gt; MaskPoints(降采样) -&gt; Glyph3D(Arrow) -&gt; Mapper
+  // MaskPoints作用：减少点数，避免箭头过于密集
+  auto maskPoints = vtkSmartPointer&lt;vtkMaskPoints&gt;::New();
+  maskPoints-&gt;SetInputConnection(sphereOutput);
+  maskPoints-&gt;SetOnRatio(8);            // 每8个点保留1个
+  maskPoints-&gt;SetMaximumNumberOfPoints(200);
+  maskPoints-&gt;RandomModeOff();          // 均匀采样
+  maskPoints-&gt;GenerateVerticesOn();
+
+  // 创建箭头Glyph源
+  auto arrowSource = vtkSmartPointer&lt;vtkArrowSource&gt;::New();
+  arrowSource-&gt;SetTipLength(0.20);
+  arrowSource-&gt;SetTipRadius(0.07);
+  arrowSource-&gt;SetShaftRadius(0.03);
+
+  // Glyph3D: 在降采样后的点上放置箭头
+  auto glyph = vtkSmartPointer&lt;vtkGlyph3D&gt;::New();
+  glyph-&gt;SetInputConnection(maskPoints-&gt;GetOutputPort());
+  glyph-&gt;SetSourceConnection(arrowSource-&gt;GetOutputPort());
+  glyph-&gt;SetVectorModeToUseNormal();    // 使用点法向量作为方向
+  glyph-&gt;SetScaleModeToDataScalingOff();// 所有箭头统一大小
+  glyph-&gt;SetScaleFactor(0.25);
+  glyph-&gt;OrientOn();                    // 箭头朝向跟随法向量
+  glyph-&gt;SetColorModeToColorByVector(); // 颜色由矢量映射
+
+  auto glyphMapper = vtkSmartPointer&lt;vtkPolyDataMapper&gt;::New();
+  glyphMapper-&gt;SetInputConnection(glyph-&gt;GetOutputPort());
+  glyphMapper-&gt;ScalarVisibilityOff();
+
+  auto actorD = vtkSmartPointer&lt;vtkActor&gt;::New();
+  actorD-&gt;SetMapper(glyphMapper);
+  actorD-&gt;GetProperty()-&gt;SetColor(0.2, 0.8, 0.3);  // 绿色箭头
+  actorD-&gt;GetProperty()-&gt;SetSpecular(0.5);
+  actorD-&gt;GetProperty()-&gt;SetSpecularPower(20);
+
+  // =========================================================================
+  // Step 3: 创建四个Renderer，配置各自的视口和标签
+  // =========================================================================
+  double bgColor[3];
+  colors-&gt;GetColor(&quot;MidnightBlue&quot;, bgColor);
+
+  // 视口划分：2行x2列
+  // 视口坐标格式：(xmin, ymin, xmax, ymax)
+  struct ViewportConfig
+  {
+    double xmin, ymin, xmax, ymax;
+    std::string title;
+    vtkSmartPointer&lt;vtkActor&gt; actor;
+    int labelPosX;  // 标签X位置（像素，基于800x600窗口）
+    int labelPosY;  // 标签Y位置（像素）
+  };
+
+  // 上半部分: y从0.52到1.0; 下半部分: y从0.0到0.48
+  // 左半部分: x从0.0到0.49; 右半部分: x从0.51到1.0
+  // 中间留2%的间隙
+  std::array&lt;ViewportConfig, 4&gt; viewports = {{
+    { 0.00, 0.52, 0.49, 1.00, &quot;A: Original Sphere&quot;,        actorA, 195, 580 },
+    { 0.51, 0.52, 1.00, 1.00, &quot;B: Shrunk (Show Structure)&quot;, actorB, 595, 580 },
+    { 0.00, 0.00, 0.49, 0.48, &quot;C: Contour (Isosurfaces)&quot;,  actorC, 195, 280 },
+    { 0.51, 0.00, 1.00, 0.48, &quot;D: Glyph (Normal Vectors)&quot;, actorD, 595, 280 },
+  }};
+
+  // 创建四个Renderer
+  std::array&lt;vtkSmartPointer&lt;vtkRenderer&gt;, 4&gt; renderers;
+
+  for (int i = 0; i &lt; 4; i++)
+  {
+    auto&amp; vp = viewports[i];
+    auto renderer = vtkSmartPointer&lt;vtkRenderer&gt;::New();
+    renderer-&gt;SetViewport(vp.xmin, vp.ymin, vp.xmax, vp.ymax);
+    renderer-&gt;SetBackground(bgColor[0], bgColor[1], bgColor[2]);
+    renderer-&gt;AddActor(vp.actor);
+
+    // 添加文本标签（使用vtkTextActor —— 在视口归一化坐标中定位）
+    auto label = vtkSmartPointer&lt;vtkTextActor&gt;::New();
+    label-&gt;SetInput(vp.title.c_str());
+    label-&gt;GetTextProperty()-&gt;SetFontSize(13);
+    label-&gt;GetTextProperty()-&gt;SetColor(1.0, 1.0, 1.0);
+    label-&gt;GetTextProperty()-&gt;BoldOn();
+    label-&gt;GetTextProperty()-&gt;SetJustificationToCentered();
+    label-&gt;GetTextProperty()-&gt;SetVerticalJustificationToBottom();
+    renderer-&gt;AddActor2D(label);
+
+    // vtkTextActor 使用 display 坐标定位（像素）
+    // 计算视口中心X坐标：视口左边缘 + 视口宽度的一半
+    int centerX = static_cast&lt;int&gt;((vp.xmin + (vp.xmax - vp.xmin) * 0.5) * 800);
+    int labelY = static_cast&lt;int&gt;(vp.ymax * 600) - 25;  // 视口顶部下方25像素
+    label-&gt;SetDisplayPosition(centerX - 100, labelY);
+
+    renderers[i] = renderer;
+  }
+
+  // =========================================================================
+  // Step 4: 创建RenderWindow，将四个Renderer全部添加
+  // =========================================================================
+  auto renWin = vtkSmartPointer&lt;vtkRenderWindow&gt;::New();
+  renWin-&gt;SetSize(800, 600);
+  renWin-&gt;SetWindowName(&quot;Multi-Filter Pipeline Demo (Chapter 11)&quot;);
+
+  for (auto&amp; renderer : renderers)
+  {
+    renWin-&gt;AddRenderer(renderer);
+  }
+
+  // =========================================================================
+  // Step 5: 设置交互器
+  // =========================================================================
+  auto interactor = vtkSmartPointer&lt;vtkRenderWindowInteractor&gt;::New();
+  interactor-&gt;SetRenderWindow(renWin);
+  auto style = vtkSmartPointer&lt;vtkInteractorStyleTrackballCamera&gt;::New();
+  interactor-&gt;SetInteractorStyle(style);
+
+  // =========================================================================
+  // Step 6: 初始化每个视口的相机并渲染
+  // =========================================================================
+  renWin-&gt;Render();
+
+  // 所有视口共享相似的视角
+  for (auto&amp; renderer : renderers)
+  {
+    renderer-&gt;GetActiveCamera()-&gt;Azimuth(30);
+    renderer-&gt;GetActiveCamera()-&gt;Elevation(20);
+    renderer-&gt;GetActiveCamera()-&gt;Dolly(1.2);
+    renderer-&gt;ResetCamera();
+  }
+
+  renWin-&gt;Render();
+  interactor-&gt;Start();
+
+  return 0;
+}
+</code></pre>
+<h3 id="1164-cmakeliststxt">11.6.4 CMakeLists.txt</h3>
+<pre><code class="language-cmake">cmake_minimum_required(VERSION 3.20)
+project(MultiFilterPipeline VERSION 1.0 LANGUAGES CXX)
+
+# --------------------------------------------------------------------------
+# VTK依赖配置
+# --------------------------------------------------------------------------
+find_package(VTK REQUIRED COMPONENTS
+  CommonCore
+  CommonDataModel
+  CommonExecutionModel
+  CommonMath
+  CommonTransforms
+  FiltersCore
+  FiltersGeneral
+  FiltersSources
+  FiltersModeling
+  FiltersFlowPaths
+  InteractionStyle
+  RenderingCore
+  RenderingOpenGL2
+  RenderingAnnotation
+  RenderingFreeType
+)
+vtk_module_scan(VTK_MODULES modules ${VTK_LIBRARIES})
+
+# --------------------------------------------------------------------------
+# 可执行文件
+# --------------------------------------------------------------------------
+add_executable(MultiFilterPipeline MultiFilterPipeline.cxx)
+
+target_link_libraries(MultiFilterPipeline PRIVATE ${modules})
+
+target_compile_features(MultiFilterPipeline PRIVATE cxx_std_17)
+
+# 从VTK获取包含目录
+target_include_directories(MultiFilterPipeline SYSTEM PRIVATE
+  ${VTK_INCLUDE_DIRS}
+)
+
+# --------------------------------------------------------------------------
+# 安装规则
+# --------------------------------------------------------------------------
+install(TARGETS MultiFilterPipeline
+  RUNTIME DESTINATION bin
+)
+</code></pre>
+<h3 id="1165">11.6.5 编译和运行</h3>
+<p>在项目根目录下执行以下命令：</p>
+<pre><code class="language-bash"># 创建构建目录
+mkdir build &amp;&amp; cd build
+
+# 配置CMake（需要指定VTK_DIR到你的VTK安装路径）
+cmake .. -DVTK_DIR=/path/to/vtk-9.5.2/build
+
+# 编译
+cmake --build . --config Release
+
+# 运行
+./MultiFilterPipeline      # Linux/macOS
+# 或
+MultiFilterPipeline.exe    # Windows
+</code></pre>
+<h3 id="1166">11.6.6 代码要点分析</h3>
+<p><strong>1. 管道分支复用数据源：</strong></p>
+<pre><code class="language-cpp">auto sphereOutput = sphereSource-&gt;GetOutputPort();  // 获取一次
+
+// 四条分支共享同一个 sphereOutput
+actorA = CreateActor(sphereOutput, ...);           // 分支A直接使用
+triangleB-&gt;SetInputConnection(sphereOutput);       // 分支B以此为起点
+elevation-&gt;SetInputConnection(sphereOutput);       // 分支C以此为起点
+maskPoints-&gt;SetInputConnection(sphereOutput);      // 分支D以此为起点
+</code></pre>
+<p>这与第六章的管道分支模式完全一致——但分支数从2条扩展到4条。</p>
+<p><strong>2. MaskPoints过滤器降采样：</strong></p>
+<p>Ball体有48x48=2304个点。如果每个点都放置一个箭头，箭头会非常密集，完全看不出矢量场的结构。<code>vtkMaskPoints</code>通过<code>SetOnRatio(8)</code>将点数降为原来的1/8，只保留约288个点，箭头变得清晰可辨。</p>
+<p><strong>3. ElevationFilter + ContourFilter组合：</strong></p>
+<p><code>vtkElevationFilter</code>以两个点定义一条参考线，计算每个数据点在该参考线上的投影位置作为标量值。这里使用<code>SetLowPoint(0,-1,0)</code>和<code>SetHighPoint(0,1,0)</code>，使得Y坐标为每个点的标量值。然后<code>vtkContourFilter</code>提取7个等值面，相当于按Y坐标将球体切成7个平行的环。</p>
+<p><strong>4. Actor2D标签定位：</strong></p>
+<p>文本标签使用<code>AddActor2D()</code>添加到Renderer，用<code>SetDisplayPosition()</code>以像素坐标定位。这样标签位置独立于3D相机变换，始终固定在视口上方。</p>
+<hr />
+<h2 id="117">11.7 本章小结</h2>
+<h3 id="1171">11.7.1 过滤器选择指南</h3>
+<p>本章介绍了VTK中最常用的14个过滤器。面对一个可视化任务，如何快速选择合适的过滤器？下表提供指南：</p>
+<table>
+<thead>
+<tr>
+<th>你想要做什么</th>
+<th>推荐过滤器</th>
+<th>关键参数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>展示网格单元结构</td>
+<td><code>vtkShrinkPolyData</code> / <code>vtkShrinkFilter</code></td>
+<td><code>SetShrinkFactor()</code></td>
+</tr>
+<tr>
+<td>平移/旋转/缩放几何体</td>
+<td><code>vtkTransformPolyDataFilter</code></td>
+<td><code>SetTransform(vtkTransform*)</code></td>
+</tr>
+<tr>
+<td>将标量场映射为曲面高度</td>
+<td><code>vtkWarpScalar</code></td>
+<td><code>SetScaleFactor()</code></td>
+</tr>
+<tr>
+<td>将矢量场映射为几何变形</td>
+<td><code>vtkWarpVector</code></td>
+<td><code>SetScaleFactor()</code></td>
+</tr>
+<tr>
+<td>用平面切掉模型的一部分</td>
+<td><code>vtkClipPolyData</code> / <code>vtkClipDataSet</code></td>
+<td><code>SetClipFunction(vtkPlane*)</code>, <code>SetInsideOut()</code></td>
+</tr>
+<tr>
+<td>从体数据中提取等值面</td>
+<td><code>vtkContourFilter</code></td>
+<td><code>SetValue()</code> / <code>GenerateValues()</code></td>
+</tr>
+<tr>
+<td>按标量范围提取单元</td>
+<td><code>vtkThreshold</code></td>
+<td><code>ThresholdBetween()</code></td>
+</tr>
+<tr>
+<td>获取模型的任意截面</td>
+<td><code>vtkCutter</code></td>
+<td><code>SetCutFunction(vtkPlane*)</code></td>
+</tr>
+<tr>
+<td>提取网格的线框</td>
+<td><code>vtkExtractEdges</code></td>
+<td>（几乎无需参数）</td>
+</tr>
+<tr>
+<td>在点上放置箭头/球体/锥体</td>
+<td><code>vtkGlyph3D</code></td>
+<td><code>SetSourceConnection()</code>, <code>SetScaleMode()</code>, <code>OrientOn()</code></td>
+</tr>
+<tr>
+<td>沿矢量场追踪流线</td>
+<td><code>vtkStreamTracer</code></td>
+<td><code>SetSourceConnection(seeds)</code>, <code>SetIntegrator()</code></td>
+</tr>
+<tr>
+<td>快速显示矢量场方向</td>
+<td><code>vtkHedgeHog</code></td>
+<td><code>SetScaleFactor()</code></td>
+</tr>
+<tr>
+<td>平滑有噪声的网格</td>
+<td><code>vtkSmoothPolyDataFilter</code></td>
+<td><code>SetNumberOfIterations()</code>, <code>SetRelaxationFactor()</code></td>
+</tr>
+<tr>
+<td>减少三角形数量</td>
+<td><code>vtkDecimatePro</code></td>
+<td><code>SetTargetReduction()</code></td>
+</tr>
+<tr>
+<td>计算/重算法向量</td>
+<td><code>vtkPolyDataNormals</code></td>
+<td><code>SetFeatureAngle()</code>, <code>SplittingOn()</code></td>
+</tr>
+<tr>
+<td>将所有多边形转为三角形</td>
+<td><code>vtkTriangleFilter</code></td>
+<td>（几乎无需参数）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="1172">11.7.2 核心概念回顾</h3>
+<ol>
+<li>
+<p><strong>过滤器的统一范式</strong>：所有过滤器都继承自<code>vtkAlgorithm</code>，使用<code>SetInputConnection()</code>和<code>GetOutputPort()</code>连接，遵循按需执行的流水线机制。</p>
+</li>
+<li>
+<p><strong>管道分支</strong>：一个数据源可以同时驱动多个下游过滤器链。数据源只需计算一次，多个分支共享结果。这是VTK区别于"立即模式"图形库的核心优势之一。</p>
+</li>
+<li>
+<p><strong>过滤器链的组合能力</strong>：复杂的可视化效果往往来自于多个过滤器的<strong>串联</strong>：</p>
+</li>
+<li><code>ElevationFilter → ContourFilter</code> 产生等值面环</li>
+<li><code>TriangleFilter → ShrinkFilter → Mapper</code> 产生干净的结构图</li>
+<li><code>MaskPoints → Glyph3D</code> 产生可控密度的矢量符号图</li>
+<li>
+<p><code>Reader → TriangleFilter → SmoothFilter → Normals → Mapper</code> 产生光滑的导入模型</p>
+</li>
+<li>
+<p><strong>输出类型可能改变</strong>：<code>vtkThreshold</code>将<code>vtkPolyData</code>输入转换为<code>vtkUnstructuredGrid</code>输出。<code>vtkClipPolyData</code>的输出仍然是<code>vtkPolyData</code>（但底层拓扑已经改变）。理解输出类型对于正确选择后续Mapper至关重要。</p>
+</li>
+<li>
+<p><strong>法向量是关键</strong>：许多可视化效果（光照、Glyph朝向）依赖正确的法向量。当模型看起来"破碎"或"太暗"时，首先检查<code>vtkPolyDataNormals</code>是否正确运行。</p>
+</li>
+</ol>
+<h3 id="1173">11.7.3 下一步</h3>
+<p>本章覆盖了VTK中最常用的过滤器。你现在已经具备了处理绝大多数科学可视化任务的能力。在后续章节中，你将学习：</p>
+<ul>
+<li><strong>第十二章：颜色映射与标量着色</strong>——如何使用查找表（Lookup Table）和颜色映射将数据值转化为视觉颜色，包括自定义颜色映射、对数映射、离散映射。</li>
+<li><strong>第十三章：高级渲染技术</strong>——透明度、阴影、体积渲染、多Pass渲染、环境光遮蔽（SSAO）。</li>
+<li><strong>第十四章：多数据集可视化</strong>——在同一个场景中管理多个不同的数据集，使用<code>vtkAssembly</code>构建层级结构。</li>
+</ul>
+<p>带着本章建立的过滤器工具箱，你将能够从"拿到数据看个大概"升级到"精准地提取和表达数据中隐藏的信息"——这正是科学可视化的核心价值所在。</p>
+<hr />
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

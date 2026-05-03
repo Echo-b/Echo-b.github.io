@@ -1,0 +1,3450 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../chapter-20-custom-interaction/">
+      
+      
+        <link rel="next" href="../chapter-22-smp-parallel/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>第二十一章 Qt集成 - Echo-b's Tech Notes</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#21-qt-qt-integration" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Echo-b&#39;s Tech Notes" class="md-header__button md-logo" aria-label="Echo-b's Tech Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Echo-b's Tech Notes
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              第二十一章 Qt集成
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Echo-b&#39;s Tech Notes" class="md-nav__button md-logo" aria-label="Echo-b's Tech Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Echo-b's Tech Notes
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VTK 教程
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    VTK 教程
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    入门篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    入门篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-01-vtk-overview-and-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第一章 VTK概述与环境搭建
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-02-visualization-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二章 可视化管线
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-03-data-model-basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第三章 数据模型基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-04-geometry-and-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第四章 基本几何体与数据源
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-05-rendering-and-interactor/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第五章 渲染与交互机
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-06-volume1-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第六章 入门篇综合实战——3D几何画廊
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    实战篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    实战篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-07-polydata/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第七章 PolyData详解
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-08-unstructured-grid/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第八章 非结构化网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-09-structured-data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第九章 结构化数据
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-10-data-io/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十章 数据I/O
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-11-common-filters/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十一章 常用过滤器
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-12-color-mapping/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十二章 颜色映射与标量可视化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-13-advanced-rendering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十三章 高级渲染技术
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-14-multi-dataset/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十四章 多个数据集处理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-15-volume2-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十五章 实战篇综合实战——CFD后处理可视化工具
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    进阶篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    进阶篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-16-volume-rendering-basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十六章 体渲染基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-17-volume-rendering-advanced/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十七章 体渲染高级技术
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-18-charts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十八章 2D图表系统
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-19-annotation-and-widgets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十九章 三维标注与交互组件
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-20-custom-interaction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十章 自定义交互与Widget
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十一章 Qt集成
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十一章 Qt集成
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#211-qtvtk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.1 Qt与VTK结合的意义
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="21.1 Qt与VTK结合的意义">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2111-qt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.1.1 为什么选择 Qt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2112" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.1.2 两种集成方式
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2113-cmake" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.1.3 所需的 CMake 模块
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#212-qvtkopenglnativewidget" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.2 QVTKOpenGLNativeWidget
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="21.2 QVTKOpenGLNativeWidget">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2121" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.2.1 基本概念
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2122-qt-vtk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.2.2 在 Qt 布局中嵌入 VTK 窗口
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2123-qt-vtk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.2.3 连接 Qt 信号到 VTK 更新
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2124-qmainwindow-vtk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.2.4 示例：QMainWindow 嵌入 VTK 窗口
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#213-qtvtk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.3 Qt与VTK的数据交互
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="21.3 Qt与VTK的数据交互">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2131-qt-widget-vtk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.3.1 Qt Widget 到 VTK 管线
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2132-vtk-qt-widget" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.3.2 VTK 到 Qt Widget
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2133" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.3.3 线程安全
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2134-vtk-observer-qt-ui" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.3.4 使用 VTK Observer 更新 Qt UI
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#214-qtvtk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.4 完整的Qt+VTK应用框架
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="21.4 完整的Qt+VTK应用框架">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2141" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.4.1 总体架构设计
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2142" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.4.2 各组件职责
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2143" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.4.3 控制面板设计
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2144" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.4.4 文件菜单与加载
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2145" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.4.5 截图保存
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#215" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.5 代码示例
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="21.5 代码示例">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2151-mainwindowh" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.5.1 主头文件 MainWindow.h
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2152-mainwindowcpp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.5.2 主实现文件 MainWindow.cpp
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2153-maincpp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.5.3 main.cpp
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2154-cmakeliststxt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.5.4 CMakeLists.txt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2155" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.5.5 构建与运行
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2156" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.5.6 代码结构说明
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#216" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.6 本章小结
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-22-smp-parallel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十二章 SMP并行入门
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-23-volume3-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十三章 进阶篇综合实战
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#211-qtvtk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.1 Qt与VTK结合的意义
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="21.1 Qt与VTK结合的意义">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2111-qt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.1.1 为什么选择 Qt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2112" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.1.2 两种集成方式
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2113-cmake" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.1.3 所需的 CMake 模块
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#212-qvtkopenglnativewidget" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.2 QVTKOpenGLNativeWidget
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="21.2 QVTKOpenGLNativeWidget">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2121" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.2.1 基本概念
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2122-qt-vtk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.2.2 在 Qt 布局中嵌入 VTK 窗口
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2123-qt-vtk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.2.3 连接 Qt 信号到 VTK 更新
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2124-qmainwindow-vtk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.2.4 示例：QMainWindow 嵌入 VTK 窗口
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#213-qtvtk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.3 Qt与VTK的数据交互
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="21.3 Qt与VTK的数据交互">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2131-qt-widget-vtk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.3.1 Qt Widget 到 VTK 管线
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2132-vtk-qt-widget" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.3.2 VTK 到 Qt Widget
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2133" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.3.3 线程安全
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2134-vtk-observer-qt-ui" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.3.4 使用 VTK Observer 更新 Qt UI
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#214-qtvtk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.4 完整的Qt+VTK应用框架
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="21.4 完整的Qt+VTK应用框架">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2141" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.4.1 总体架构设计
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2142" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.4.2 各组件职责
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2143" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.4.3 控制面板设计
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2144" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.4.4 文件菜单与加载
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2145" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.4.5 截图保存
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#215" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.5 代码示例
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="21.5 代码示例">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2151-mainwindowh" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.5.1 主头文件 MainWindow.h
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2152-mainwindowcpp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.5.2 主实现文件 MainWindow.cpp
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2153-maincpp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.5.3 main.cpp
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2154-cmakeliststxt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.5.4 CMakeLists.txt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2155" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.5.5 构建与运行
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2156" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.5.6 代码结构说明
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#216" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.6 本章小结
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="21-qt-qt-integration">第21章 Qt集成 (Qt Integration)</h1>
+<p>VTK 提供了强大的可视化渲染能力，但在构建完整的科学计算或医学影像应用程序时，仅有三维渲染是远远不够的。开发者还需要按钮、滑块、文件对话框、树形视图、表格等丰富的用户界面控件。Qt 作为跨平台 C++ GUI 框架的标杆，与 VTK 的集成可以实现功能完备的专业级科学可视化应用。本章将深入讲解 VTK 9.5.2 中 Qt 集成的两种方式，并提供完整的可运行示例代码。</p>
+<h2 id="211-qtvtk">21.1 Qt与VTK结合的意义</h2>
+<h3 id="2111-qt">21.1.1 为什么选择 Qt</h3>
+<p>Qt 是一个跨平台的 C++ 应用程序开发框架，具备以下显著优势：</p>
+<ul>
+<li><strong>跨平台支持</strong>：一套代码可以同时运行于 Windows、Linux 和 macOS 操作系统，无需修改核心逻辑。这对于需要部署在不同实验环境中的科学软件至关重要。</li>
+<li><strong>信号与槽机制（Signals &amp; Slots）</strong>：Qt 的核心通信机制允许对象之间进行松耦合的事件传递。一个滑块的值变化（<code>valueChanged</code> 信号）可以直接触发 VTK 管线中某个滤波器的参数更新，无需手动编写复杂的回调逻辑。</li>
+<li><strong>丰富的 Widget 库</strong>：Qt 提供了 <code>QTreeView</code>、<code>QTableView</code>、<code>QComboBox</code>、<code>QSlider</code>、<code>QDockWidget</code> 等大量成熟的 UI 组件，可以快速搭建专业的控制面板。</li>
+<li><strong>完善的布局管理</strong>：<code>QVBoxLayout</code>、<code>QHBoxLayout</code>、<code>QSplitter</code> 等布局管理器使得 VTK 渲染窗口与控制面板的排布变得简单而灵活。</li>
+<li><strong>集成开发工具</strong>：Qt Designer 可以可视化设计界面，Qt Creator 提供一站式 IDE 体验。</li>
+</ul>
+<h3 id="2112">21.1.2 两种集成方式</h3>
+<p>VTK 9.5.2 提供了两种将渲染窗口嵌入 Qt 窗口的方案：</p>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>QVTKOpenGLNativeWidget</th>
+<th>QVTKRenderWindowInteractor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>基类</td>
+<td>QOpenGLWidget</td>
+<td>QWidget</td>
+</tr>
+<tr>
+<td>推荐程度</td>
+<td><strong>推荐（VTK 9.x 新方案）</strong></td>
+<td>传统兼容方案</td>
+</tr>
+<tr>
+<td>OpenGL 上下文管理</td>
+<td>Qt 托管</td>
+<td>手动管理</td>
+</tr>
+<tr>
+<td>窗口叠加层支持</td>
+<td>原生支持</td>
+<td>有限支持</td>
+</tr>
+<tr>
+<td>Qt 信号/槽集成</td>
+<td>完全兼容</td>
+<td>兼容</td>
+</tr>
+<tr>
+<td>多窗口共享上下文</td>
+<td>原生支持</td>
+<td>需要额外配置</td>
+</tr>
+<tr>
+<td>未来维护方向</td>
+<td>主要开发方向</td>
+<td>逐步淘汰</td>
+</tr>
+</tbody>
+</table>
+<p><strong>QVTKOpenGLNativeWidget</strong> 是 VTK 9.x 推荐使用的现代方案。它继承自 <code>QOpenGLWidget</code>，让 Qt 来管理 OpenGL 上下文，从而更好地与 Qt 的渲染管线集成，避免了上下文冲突问题。对于新项目，应优先选择此方案。</p>
+<p><strong>QVTKRenderWindowInteractor</strong> 是传统方案，通过创建独立的窗口 ID 来管理 OpenGL 上下文。在一些旧代码或特殊的平台需求下仍可使用，但官方已不再作为首选推荐。</p>
+<h3 id="2113-cmake">21.1.3 所需的 CMake 模块</h3>
+<p>在使用 Qt 集成之前，需要确保 CMake 找到了 VTK 的 <code>GUISupportQt</code> 模块。典型的 CMake 配置如下：</p>
+<pre><code class="language-cmake">find_package(VTK COMPONENTS
+  CommonCore
+  CommonDataModel
+  FiltersSources
+  InteractionStyle
+  RenderingOpenGL2
+  GUISupportQt
+  ViewsQt
+)
+</code></pre>
+<p><code>GUISupportQt</code> 是核心模块，提供了 QVTKOpenGLNativeWidget 和相关辅助类。<code>ViewsQt</code> 提供了与 Qt 视图框架（QTreeView、QTableView 等）集成的相关类。</p>
+<h2 id="212-qvtkopenglnativewidget">21.2 QVTKOpenGLNativeWidget</h2>
+<h3 id="2121">21.2.1 基本概念</h3>
+<p><code>QVTKOpenGLNativeWidget</code> 继承自 Qt 的 <code>QOpenGLWidget</code>，因此它天然具备以下能力：</p>
+<ul>
+<li>由 Qt 框架管理 OpenGL 上下文的生命周期和当前状态切换</li>
+<li>支持 Qt 的透明窗口叠加（Overlays）</li>
+<li>支持多个 QOpenGLWidget 实例共享同一个 OpenGL 上下文</li>
+<li>与 Qt 的绘制循环（<code>paintGL()</code>）无缝集成</li>
+</ul>
+<p>其内部持有 <code>vtkGenericOpenGLRenderWindow</code> 实例，将 VTK 的渲染管线桥接到 Qt 的 OpenGL 环境中。</p>
+<h3 id="2122-qt-vtk">21.2.2 在 Qt 布局中嵌入 VTK 窗口</h3>
+<p>将 QVTKOpenGLNativeWidget 嵌入 Qt 界面的核心步骤：</p>
+<ol>
+<li>创建 <code>QVTKOpenGLNativeWidget</code> 实例（需要传入 parent widget）</li>
+<li>获取其内部的 <code>vtkGenericOpenGLRenderWindow</code></li>
+<li>创建一个 <code>vtkRenderer</code> 并添加到渲染窗口中</li>
+<li>创建 <code>vtkRenderWindowInteractor</code> 并绑定到渲染窗口</li>
+<li>将 widget 添加到 Qt 布局管理器中</li>
+<li>在 widget 上调用 <code>show()</code></li>
+</ol>
+<p>基本代码结构：</p>
+<pre><code class="language-cpp">#include &lt;QVTKOpenGLNativeWidget.h&gt;
+#include &lt;vtkGenericOpenGLRenderWindow.h&gt;
+#include &lt;vtkRenderer.h&gt;
+#include &lt;vtkRenderWindowInteractor.h&gt;
+
+// 创建 VTK Qt widget
+QVTKOpenGLNativeWidget* vtkWidget = new QVTKOpenGLNativeWidget(this);
+
+// 获取内部的 VTK 渲染窗口
+vtkGenericOpenGLRenderWindow* renderWindow = vtkWidget-&gt;renderWindow();
+// 或者使用 GetRenderWindow() 成员函数
+
+// 创建渲染器和交互器
+vtkNew&lt;vtkRenderer&gt; renderer;
+renderWindow-&gt;AddRenderer(renderer);
+
+vtkNew&lt;vtkRenderWindowInteractor&gt; interactor;
+interactor-&gt;SetRenderWindow(renderWindow);
+interactor-&gt;Initialize();
+
+// 添加到布局
+QVBoxLayout* layout = new QVBoxLayout;
+layout-&gt;addWidget(vtkWidget);
+setLayout(layout);
+</code></pre>
+<h3 id="2123-qt-vtk">21.2.3 连接 Qt 信号到 VTK 更新</h3>
+<p>信号与槽机制是实现 Qt 与 VTK 交互的桥梁。典型的使用方式为：用户在 Qt 控件上的操作触发信号，槽函数中修改 VTK 管线的参数并调用 <code>renderWindow-&gt;Render()</code> 更新显示。</p>
+<pre><code class="language-cpp">// 滑块控制等值面值
+connect(isoSlider, &amp;QSlider::valueChanged, this, [this](int value) {
+    double isoValue = value / 100.0;
+    marchingCubes-&gt;SetValue(0, isoValue);
+    renderWindow-&gt;Render();
+});
+
+// 下拉框切换颜色映射
+connect(colorCombo, QOverload&lt;int&gt;::of(&amp;QComboBox::currentIndexChanged),
+        this, [this](int index) {
+    lookupTable-&gt;SetNumberOfTableValues(4);
+    switch (index) {
+        case 0: // 彩虹色
+            lookupTable-&gt;SetTableValue(0, 0.0, 0.0, 1.0, 1.0);
+            lookupTable-&gt;SetTableValue(1, 0.0, 1.0, 0.0, 1.0);
+            lookupTable-&gt;SetTableValue(2, 1.0, 1.0, 0.0, 1.0);
+            lookupTable-&gt;SetTableValue(3, 1.0, 0.0, 0.0, 1.0);
+            break;
+        case 1: // 灰度
+            lookupTable-&gt;SetTableValue(0, 0.0, 0.0, 0.0, 1.0);
+            lookupTable-&gt;SetTableValue(1, 0.33, 0.33, 0.33, 1.0);
+            lookupTable-&gt;SetTableValue(2, 0.66, 0.66, 0.66, 1.0);
+            lookupTable-&gt;SetTableValue(3, 1.0, 1.0, 1.0, 1.0);
+            break;
+    }
+    lookupTable-&gt;Modified();
+    renderWindow-&gt;Render();
+});
+</code></pre>
+<h3 id="2124-qmainwindow-vtk">21.2.4 示例：QMainWindow 嵌入 VTK 窗口</h3>
+<p>下面展示一个最基本但完整的 QMainWindow 嵌入 VTK 渲染窗口的示例：</p>
+<pre><code class="language-cpp">#include &lt;QApplication&gt;
+#include &lt;QMainWindow&gt;
+#include &lt;QVBoxLayout&gt;
+#include &lt;QVTKOpenGLNativeWidget.h&gt;
+
+#include &lt;vtkActor.h&gt;
+#include &lt;vtkConeSource.h&gt;
+#include &lt;vtkGenericOpenGLRenderWindow.h&gt;
+#include &lt;vtkNamedColors.h&gt;
+#include &lt;vtkNew.h&gt;
+#include &lt;vtkPolyDataMapper.h&gt;
+#include &lt;vtkProperty.h&gt;
+#include &lt;vtkRenderWindow.h&gt;
+#include &lt;vtkRenderer.h&gt;
+
+class MainWindow : public QMainWindow {
+public:
+    MainWindow(QWidget* parent = nullptr) : QMainWindow(parent) {
+        // 创建中央 widget 和布局
+        QWidget* central = new QWidget(this);
+        QVBoxLayout* layout = new QVBoxLayout(central);
+
+        // 创建 VTK 渲染 Widget
+        vtkWidget = new QVTKOpenGLNativeWidget(central);
+        layout-&gt;addWidget(vtkWidget);
+        setCentralWidget(central);
+
+        // 设置渲染管线
+        SetupVTKPipeline();
+
+        resize(800, 600);
+        setWindowTitle(&quot;VTK + Qt 基础示例&quot;);
+    }
+
+private:
+    void SetupVTKPipeline() {
+        vtkNew&lt;vtkNamedColors&gt; colors;
+
+        // 创建一个圆锥体数据源
+        vtkNew&lt;vtkConeSource&gt; cone;
+        cone-&gt;SetHeight(3.0);
+        cone-&gt;SetRadius(1.0);
+        cone-&gt;SetResolution(50);
+
+        // 映射器
+        vtkNew&lt;vtkPolyDataMapper&gt; mapper;
+        mapper-&gt;SetInputConnection(cone-&gt;GetOutputPort());
+
+        // Actor
+        vtkNew&lt;vtkActor&gt; actor;
+        actor-&gt;SetMapper(mapper);
+        actor-&gt;GetProperty()-&gt;SetColor(
+            colors-&gt;GetColor3d(&quot;Tomato&quot;).GetData());
+
+        // 渲染器
+        vtkNew&lt;vtkRenderer&gt; renderer;
+        renderer-&gt;AddActor(actor);
+        renderer-&gt;SetBackground(
+            colors-&gt;GetColor3d(&quot;SteelBlue&quot;).GetData());
+
+        // 获取渲染窗口并添加渲染器
+        vtkGenericOpenGLRenderWindow* renderWindow =
+            vtkWidget-&gt;renderWindow();
+        renderWindow-&gt;AddRenderer(renderer);
+    }
+
+    QVTKOpenGLNativeWidget* vtkWidget;
+};
+
+int main(int argc, char* argv[]) {
+    QApplication app(argc, argv);
+    MainWindow window;
+    window.show();
+    return app.exec();
+}
+</code></pre>
+<h2 id="213-qtvtk">21.3 Qt与VTK的数据交互</h2>
+<h3 id="2131-qt-widget-vtk">21.3.1 Qt Widget 到 VTK 管线</h3>
+<p>这是最常用的交互方向：用户在 Qt 控件上的操作改变 VTK 管线的参数。整个流程如下：</p>
+<pre><code>用户操作 Qt Widget → Qt 信号发射 → 槽函数执行 →
+修改 VTK Filter 参数 → 调用 Render() → 视图更新
+</code></pre>
+<p>关键设计原则：</p>
+<ol>
+<li><strong>参数映射</strong>：Qt 控件的值域需要映射到 VTK 参数的合理范围。例如，<code>QSlider</code> 的整数值 0-100 可以映射到等值面的 0.0-2.0 范围。</li>
+<li><strong>即時反馈</strong>：对于滑块等连续变化控件，应在 <code>valueChanged</code> 信号中直接触发渲染更新，给用户即时的视觉反馈。</li>
+<li><strong>批量更新</strong>：对于多个相关参数的修改，可以先暂停渲染、修改完所有参数后再一次性渲染，避免中间状态闪烁。</li>
+</ol>
+<pre><code class="language-cpp">// 参数映射示例
+connect(densitySlider, &amp;QSlider::valueChanged, this, [this](int val) {
+    // QSlider 范围 0-200 → 实际参数范围 0.0-1.0
+    double density = val / 200.0;
+    thresholdFilter-&gt;SetUpperThreshold(density);
+    m_renderWindow-&gt;Render();
+});
+</code></pre>
+<h3 id="2132-vtk-qt-widget">21.3.2 VTK 到 Qt Widget</h3>
+<p>数据也可以从 VTK 流回 Qt 界面，例如将数据集统计信息显示在状态栏、属性面板或表格中：</p>
+<pre><code class="language-cpp">// 从 VTK 中提取数据并更新 Qt Label
+void UpdateStatsDisplay() {
+    vtkDataSet* data = reader-&gt;GetOutput();
+    vtkIdType numPoints = data-&gt;GetNumberOfPoints();
+    vtkIdType numCells  = data-&gt;GetNumberOfCells();
+
+    double bounds[6];
+    data-&gt;GetBounds(bounds);
+
+    QString info = QString(&quot;点数: %1, 单元数: %2, &quot;
+                           &quot;范围: [%3, %4] x [%5, %6] x [%7, %8]&quot;)
+        .arg(numPoints).arg(numCells)
+        .arg(bounds[0], 0, 'f', 2).arg(bounds[1], 0, 'f', 2)
+        .arg(bounds[2], 0, 'f', 2).arg(bounds[3], 0, 'f', 2)
+        .arg(bounds[4], 0, 'f', 2).arg(bounds[5], 0, 'f', 2);
+
+    statusLabel-&gt;setText(info);
+    statusBar()-&gt;showMessage(info);
+}
+</code></pre>
+<h3 id="2133">21.3.3 线程安全</h3>
+<p>VTK 的渲染管线<strong>不是线程安全的</strong>。默认情况下，所有 VTK 操作应在主线程（Qt 的 GUI 线程）中执行。原因如下：</p>
+<ul>
+<li>VTK 的渲染类直接操作 OpenGL 状态，而 OpenGL 上下文是线程绑定的。</li>
+<li>VTK 内部大量使用引用计数和观察者模式，跨线程访问可能导致竞态条件。</li>
+<li>Qt 的 Widget 操作也必须在 GUI 线程中进行。</li>
+</ul>
+<p><strong>标准做法</strong>：</p>
+<ul>
+<li>所有 VTK 管线的创建、修改和渲染操作都在主线程执行。</li>
+<li>如果需要后台加载大型数据集，使用 <code>QThread</code> 或 <code>QtConcurrent</code> 在后台线程中执行文件 I/O 和数据读取，然后通过信号/槽将读取的数据传回主线程，在主线程中完成管线构建。</li>
+</ul>
+<pre><code class="language-cpp">// 后台加载示例
+class DataLoader : public QObject {
+    Q_OBJECT
+public:
+    void load(const QString&amp; path) {
+        // 在后台线程中读取文件
+        vtkNew&lt;vtkXMLImageDataReader&gt; reader;
+        reader-&gt;SetFileName(path.toStdString().c_str());
+        reader-&gt;Update(); // 耗时操作，在后台线程
+        // 将结果通过信号传回主线程
+        emit dataLoaded(reader-&gt;GetOutput());
+    }
+signals:
+    void dataLoaded(vtkImageData* data);
+};
+</code></pre>
+<h3 id="2134-vtk-observer-qt-ui">21.3.4 使用 VTK Observer 更新 Qt UI</h3>
+<p>VTK 的观察者/命令模式（Observer/Command Pattern）可以用于在 VTK 事件发生时更新 Qt 界面。不过需要注意，Observer 的回调可能在任意线程中执行，更新 Qt UI 时需要确保在主线程中进行：</p>
+<pre><code class="language-cpp">#include &lt;vtkCallbackCommand.h&gt;
+
+// 创建观察者回调
+vtkNew&lt;vtkCallbackCommand&gt; progressCallback;
+progressCallback-&gt;SetCallback([](vtkObject* caller, unsigned long eventId,
+                                 void* clientData, void* callData) {
+    // VTK 进度事件
+    double progress =
+        *(reinterpret_cast&lt;double*&gt;(callData));
+    // 注意：确保更新 UI 的操作在主线程执行
+    // 可以使用 QMetaObject::invokeMethod 跨线程调度
+    QMetaObject::invokeMethod(
+        QApplication::instance(),
+        [progress]() {
+            // 更新进度条
+            if (auto* bar = QApplication::activeWindow()
+                    -&gt;findChild&lt;QProgressBar*&gt;(&quot;progressBar&quot;)) {
+                bar-&gt;setValue(static_cast&lt;int&gt;(progress * 100));
+            }
+        },
+        Qt::QueuedConnection);
+});
+
+filter-&gt;AddObserver(vtkCommand::ProgressEvent, progressCallback);
+</code></pre>
+<h2 id="214-qtvtk">21.4 完整的Qt+VTK应用框架</h2>
+<h3 id="2141">21.4.1 总体架构设计</h3>
+<p>一个专业的 Qt+VTK 应用程序通常采用以下布局：</p>
+<pre><code>+--------------------------------------------------------+
+|  Menu Bar  (文件 视图 工具 帮助)                         |
++--------------------------------------------------------+
+|  Tool Bar  (打开 保存截图 重置视图)                       |
++--------------------------------------------------------+
++---------------------------+----------------------------+
+|                           |                            |
+|     VTK 渲染视口          |   [控制面板 Dock]           |
+|   (QVTKOpenGLNativeWidget)|   等值面值: [====滑块====] |
+|                           |   颜色映射: [下拉框]       |
+|                           |   显示轮廓: [复选框]       |
+|                           |   不透明度: [====滑块====] |
+|                           |                           |
+|                           |   [数据信息]               |
+|                           |   点数: 1,048,576          |
+|                           |   单元数: 1,000,000        |
+|                           |   ...                      |
++---------------------------+----------------------------+
+|  Status Bar  (显示当前操作状态和数据信息)                |
++--------------------------------------------------------+
+</code></pre>
+<h3 id="2142">21.4.2 各组件职责</h3>
+<ul>
+<li><strong>QMainWindow</strong>：主窗口容器，管理菜单、工具栏、状态栏和中央区域</li>
+<li><strong>QVTKOpenGLNativeWidget（中央区域）</strong>：VTK 的三维渲染视口，占据主要界面空间</li>
+<li><strong>QDockWidget（右侧面板）</strong>：控制面板容器，可浮动、可关闭、可调整大小</li>
+<li><strong>QSlider / QDoubleSpinBox</strong>：调整连续参数，如等值面值、轮廓阈值</li>
+<li><strong>QComboBox</strong>：选择离散选项，如颜色映射方案、管线切换</li>
+<li><strong>QCheckBox</strong>：开关布尔选项，如是否显示轮廓线、是否启用光照</li>
+<li><strong>QTableWidget / QTreeWidget</strong>：显示数据统计和结构化信息</li>
+<li><strong>QStatusBar</strong>：显示当前操作状态、坐标信息、性能数据</li>
+<li><strong>QFileDialog</strong>：文件打开对话框，选择并加载数据文件</li>
+</ul>
+<h3 id="2143">21.4.3 控制面板设计</h3>
+<pre><code class="language-cpp">// 典型的控制面板创建代码
+QDockWidget* CreateControlPanel() {
+    QDockWidget* dock = new QDockWidget(&quot;控制面板&quot;, this);
+    QWidget* panel = new QWidget(dock);
+    QVBoxLayout* layout = new QVBoxLayout(panel);
+
+    // --- 等值面控制组 ---
+    QGroupBox* isoGroup = new QGroupBox(&quot;等值面设置&quot;);
+    QVBoxLayout* isoLayout = new QVBoxLayout(isoGroup);
+
+    QLabel* isoLabel = new QLabel(&quot;等值面值:&quot;);
+    QSlider* isoSlider = new QSlider(Qt::Horizontal);
+    isoSlider-&gt;setRange(0, 200);
+    isoSlider-&gt;setValue(100);
+    QDoubleSpinBox* isoSpin = new QDoubleSpinBox;
+    isoSpin-&gt;setRange(0.0, 2.0);
+    isoSpin-&gt;setSingleStep(0.01);
+    isoSpin-&gt;setValue(1.0);
+
+    QHBoxLayout* isoHBox = new QHBoxLayout;
+    isoHBox-&gt;addWidget(isoLabel);
+    isoHBox-&gt;addWidget(isoSpin);
+    isoLayout-&gt;addLayout(isoHBox);
+    isoLayout-&gt;addWidget(isoSlider);
+
+    // 滑块和数值框双向同步
+    connect(isoSlider, &amp;QSlider::valueChanged, isoSpin,
+            [isoSpin](int v) { isoSpin-&gt;setValue(v / 100.0); });
+    connect(isoSpin, QOverload&lt;double&gt;::of(&amp;QDoubleSpinBox::valueChanged),
+            isoSlider, [isoSlider](double v) {
+                isoSlider-&gt;setValue(static_cast&lt;int&gt;(v * 100)); });
+
+    layout-&gt;addWidget(isoGroup);
+
+    // --- 颜色映射控制组 ---
+    QGroupBox* colorGroup = new QGroupBox(&quot;颜色映射&quot;);
+    QVBoxLayout* colorLayout = new QVBoxLayout(colorGroup);
+    QComboBox* cmapCombo = new QComboBox;
+    cmapCombo-&gt;addItems({&quot;彩虹色&quot;, &quot;灰度&quot;, &quot;冷暖色&quot;, &quot;蓝-红发散&quot;});
+    colorLayout-&gt;addWidget(cmapCombo);
+    layout-&gt;addWidget(colorGroup);
+
+    // --- 显示选项 ---
+    QGroupBox* displayGroup = new QGroupBox(&quot;显示选项&quot;);
+    QVBoxLayout* displayLayout = new QVBoxLayout(displayGroup);
+    QCheckBox* outlineCheck = new QCheckBox(&quot;显示轮廓线&quot;);
+    QCheckBox* wireframeCheck = new QCheckBox(&quot;线框模式&quot;);
+    QCheckBox* axesCheck = new QCheckBox(&quot;显示坐标轴&quot;);
+    displayLayout-&gt;addWidget(outlineCheck);
+    displayLayout-&gt;addWidget(wireframeCheck);
+    displayLayout-&gt;addWidget(axesCheck);
+    layout-&gt;addWidget(displayGroup);
+
+    // --- 数据信息 ---
+    QGroupBox* infoGroup = new QGroupBox(&quot;数据信息&quot;);
+    QVBoxLayout* infoLayout = new QVBoxLayout(infoGroup);
+    QLabel* pointsLabel = new QLabel(&quot;点数: --&quot;);
+    QLabel* cellsLabel  = new QLabel(&quot;单元数: --&quot;);
+    QLabel* boundsLabel = new QLabel(&quot;范围: --&quot;);
+    infoLayout-&gt;addWidget(pointsLabel);
+    infoLayout-&gt;addWidget(cellsLabel);
+    infoLayout-&gt;addWidget(boundsLabel);
+    layout-&gt;addWidget(infoGroup);
+
+    layout-&gt;addStretch();
+    dock-&gt;setWidget(panel);
+    return dock;
+}
+</code></pre>
+<h3 id="2144">21.4.4 文件菜单与加载</h3>
+<pre><code class="language-cpp">void CreateFileMenu() {
+    QMenu* fileMenu = menuBar()-&gt;addMenu(&quot;文件(&amp;F)&quot;);
+
+    QAction* openAction = fileMenu-&gt;addAction(&quot;打开(&amp;O)...&quot;);
+    openAction-&gt;setShortcut(QKeySequence::Open);
+    connect(openAction, &amp;QAction::triggered, this, &amp;MainWindow::OnFileOpen);
+
+    QAction* saveAction = fileMenu-&gt;addAction(&quot;保存截图(&amp;S)...&quot;);
+    saveAction-&gt;setShortcut(QKeySequence(&quot;Ctrl+Shift+S&quot;));
+    connect(saveAction, &amp;QAction::triggered, this, &amp;MainWindow::OnSaveScreenshot);
+
+    fileMenu-&gt;addSeparator();
+
+    QAction* exitAction = fileMenu-&gt;addAction(&quot;退出(&amp;X)&quot;);
+    exitAction-&gt;setShortcut(QKeySequence::Quit);
+    connect(exitAction, &amp;QAction::triggered, this, &amp;QWidget::close);
+}
+
+void OnFileOpen() {
+    QString fileName = QFileDialog::getOpenFileName(
+        this, &quot;打开数据文件&quot;, QString(),
+        &quot;VTK 文件 (*.vtk *.vti *.vtu *.vts *.vtr *.vtp *.vtm);;&quot;
+        &quot;所有文件 (*)&quot;);
+
+    if (fileName.isEmpty()) return;
+
+    LoadDataFile(fileName);
+}
+</code></pre>
+<h3 id="2145">21.4.5 截图保存</h3>
+<pre><code class="language-cpp">void OnSaveScreenshot() {
+    QString fileName = QFileDialog::getSaveFileName(
+        this, &quot;保存截图&quot;, &quot;screenshot.png&quot;,
+        &quot;PNG 图像 (*.png);;JPEG 图像 (*.jpg);;BMP 图像 (*.bmp)&quot;);
+
+    if (fileName.isEmpty()) return;
+
+    // 使用 VTK 的窗口到图像滤镜保存截图
+    vtkNew&lt;vtkWindowToImageFilter&gt; w2if;
+    w2if-&gt;SetInput(m_renderWindow);
+    w2if-&gt;SetScale(1);
+    w2if-&gt;SetInputBufferTypeToRGBA();
+    w2if-&gt;ReadFrontBufferOff();
+    w2if-&gt;Update();
+
+    vtkNew&lt;vtkPNGWriter&gt; writer;
+    writer-&gt;SetFileName(fileName.toStdString().c_str());
+    writer-&gt;SetInputConnection(w2if-&gt;GetOutputPort());
+    writer-&gt;Write();
+
+    statusBar()-&gt;showMessage(
+        QString(&quot;截图已保存: %1&quot;).arg(fileName), 3000);
+}
+</code></pre>
+<h2 id="215">21.5 代码示例</h2>
+<p>以下是一个完整的 Qt+VTK 应用程序，包含文件加载、等值面提取、实时参数调整和截图保存等功能。该示例演示了如何加载 VTK 支持的体数据文件，使用 Marching Cubes 算法提取等值面，并通过控制面板实时调整参数。</p>
+<h3 id="2151-mainwindowh">21.5.1 主头文件 MainWindow.h</h3>
+<pre><code class="language-cpp">#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
+
+#include &lt;QMainWindow&gt;
+#include &lt;QSlider&gt;
+#include &lt;QDoubleSpinBox&gt;
+#include &lt;QComboBox&gt;
+#include &lt;QCheckBox&gt;
+#include &lt;QPushButton&gt;
+#include &lt;QLabel&gt;
+#include &lt;QGroupBox&gt;
+#include &lt;QProgressBar&gt;
+#include &lt;QAction&gt;
+
+class QVTKOpenGLNativeWidget;
+class vtkGenericOpenGLRenderWindow;
+class vtkRenderer;
+class vtkActor;
+class vtkMarchingCubes;
+class vtkColorTransferFunction;
+class vtkLookupTable;
+class vtkDataSet;
+class vtkOutlineFilter;
+class vtkPolyDataMapper;
+class vtkImageData;
+class vtkScalarBarActor;
+class vtkAxesActor;
+
+/**
+ * @brief 主窗口类 - 完整的 Qt+VTK 科学可视化应用框架
+ *
+ * 功能:
+ * - 基于 QMainWindow 的应用框架
+ * - 通过 QVTKOpenGLNativeWidget 嵌入 VTK 渲染窗口
+ * - 等值面值的实时滑块调整
+ * - 颜色映射切换
+ * - 文件加载 (支持 VTK 格式)
+ * - 截图保存
+ * - 状态栏显示数据统计信息
+ */
+class MainWindow : public QMainWindow {
+    Q_OBJECT
+
+public:
+    explicit MainWindow(QWidget* parent = nullptr);
+    ~MainWindow() override;
+
+private slots:
+    // === 文件操作 ===
+    void OnFileOpen();
+    void OnSaveScreenshot();
+
+    // === 参数调整 ===
+    void OnIsoValueChanged(double value);
+    void OnColorMapChanged(int index);
+    void OnShowOutlineToggled(bool checked);
+    void OnShowWireframeToggled(bool checked);
+    void OnShowAxesToggled(bool checked);
+    void OnResetView();
+
+private:
+    // === UI 构建 ===
+    void SetupUI();
+    void CreateMenuBar();
+    void CreateToolBar();
+    void CreateStatusBar();
+    QDockWidget* CreateControlPanel();
+
+    // === VTK 管线 ===
+    void SetupVTKPipeline();
+    void LoadDataFile(const QString&amp; filePath);
+    void UpdatePipeline();
+    void UpdateDataInfoDisplay();
+    void ApplyColorMap(int index);
+
+    // === 颜色映射预设 ===
+    void SetPresetRainbow();
+    void SetPresetGrayscale();
+    void SetPresetCoolWarm();
+    void SetPresetBlueRed();
+
+    // === Qt Widgets ===
+    QVTKOpenGLNativeWidget* m_vtkWidget = nullptr;
+    QSlider*                m_isoSlider = nullptr;
+    QDoubleSpinBox*         m_isoSpinBox = nullptr;
+    QComboBox*              m_colorCombo = nullptr;
+    QCheckBox*              m_outlineCheck = nullptr;
+    QCheckBox*              m_wireframeCheck = nullptr;
+    QCheckBox*              m_axesCheck = nullptr;
+    QPushButton*            m_resetBtn = nullptr;
+    QLabel*                 m_pointsLabel = nullptr;
+    QLabel*                 m_cellsLabel = nullptr;
+    QLabel*                 m_boundsLabel = nullptr;
+    QLabel*                 m_scalarRangeLabel = nullptr;
+    QProgressBar*           m_progressBar = nullptr;
+
+    // === VTK 对象 ===
+    vtkSmartPointer&lt;vtkGenericOpenGLRenderWindow&gt; m_renderWindow;
+    vtkSmartPointer&lt;vtkRenderer&gt;                  m_renderer;
+    vtkSmartPointer&lt;vtkActor&gt;                     m_mainActor;
+    vtkSmartPointer&lt;vtkActor&gt;                     m_outlineActor;
+    vtkSmartPointer&lt;vtkMarchingCubes&gt;             m_marchingCubes;
+    vtkSmartPointer&lt;vtkLookupTable&gt;               m_lookupTable;
+    vtkSmartPointer&lt;vtkColorTransferFunction&gt;     m_colorFunc;
+    vtkSmartPointer&lt;vtkPolyDataMapper&gt;            m_mainMapper;
+    vtkSmartPointer&lt;vtkPolyDataMapper&gt;            m_outlineMapper;
+    vtkSmartPointer&lt;vtkOutlineFilter&gt;             m_outlineFilter;
+    vtkSmartPointer&lt;vtkScalarBarActor&gt;            m_scalarBar;
+    vtkSmartPointer&lt;vtkAxesActor&gt;                 m_axesActor;
+    vtkSmartPointer&lt;vtkDataSet&gt;                   m_currentData;
+    vtkSmartPointer&lt;vtkImageData&gt;                 m_imageData;
+
+    // 当前数据范围
+    double m_dataRange[2] = {0.0, 1.0};
+    bool   m_hasData = false;
+};
+
+#endif // MAINWINDOW_H
+</code></pre>
+<h3 id="2152-mainwindowcpp">21.5.2 主实现文件 MainWindow.cpp</h3>
+<pre><code class="language-cpp">#include &quot;MainWindow.h&quot;
+
+// === Qt 头文件 ===
+#include &lt;QApplication&gt;
+#include &lt;QFileDialog&gt;
+#include &lt;QMenuBar&gt;
+#include &lt;QToolBar&gt;
+#include &lt;QStatusBar&gt;
+#include &lt;QDockWidget&gt;
+#include &lt;QVBoxLayout&gt;
+#include &lt;QHBoxLayout&gt;
+#include &lt;QFormLayout&gt;
+#include &lt;QMessageBox&gt;
+#include &lt;QFileInfo&gt;
+#include &lt;QScreen&gt;
+
+// === VTK Qt 集成 ===
+#include &lt;QVTKOpenGLNativeWidget.h&gt;
+
+// === VTK 核心 ===
+#include &lt;vtkActor.h&gt;
+#include &lt;vtkAxesActor.h&gt;
+#include &lt;vtkCamera.h&gt;
+#include &lt;vtkColorTransferFunction.h&gt;
+#include &lt;vtkDataSet.h&gt;
+#include &lt;vtkDataSetMapper.h&gt;
+#include &lt;vtkGenericOpenGLRenderWindow.h&gt;
+#include &lt;vtkImageData.h&gt;
+#include &lt;vtkLookupTable.h&gt;
+#include &lt;vtkMarchingCubes.h&gt;
+#include &lt;vtkNamedColors.h&gt;
+#include &lt;vtkNew.h&gt;
+#include &lt;vtkOutlineFilter.h&gt;
+#include &lt;vtkPNGWriter.h&gt;
+#include &lt;vtkPolyDataMapper.h&gt;
+#include &lt;vtkProperty.h&gt;
+#include &lt;vtkRenderWindow.h&gt;
+#include &lt;vtkRenderer.h&gt;
+#include &lt;vtkScalarBarActor.h&gt;
+#include &lt;vtkSmartPointer.h&gt;
+#include &lt;vtkSphereSource.h&gt;
+#include &lt;vtkTextProperty.h&gt;
+#include &lt;vtkWindowToImageFilter.h&gt;
+#include &lt;vtkXMLImageDataReader.h&gt;
+#include &lt;vtkXMLPolyDataReader.h&gt;
+#include &lt;vtkXMLUnstructuredGridReader.h&gt;
+#include &lt;vtkStructuredPointsReader.h&gt;
+
+// ============================================================================
+// 构造函数与析构函数
+// ============================================================================
+
+MainWindow::MainWindow(QWidget* parent)
+    : QMainWindow(parent) {
+    SetupUI();
+    SetupVTKPipeline();
+}
+
+MainWindow::~MainWindow() = default;
+
+// ============================================================================
+// UI 构建
+// ============================================================================
+
+void MainWindow::SetupUI() {
+    // 窗口基本属性
+    setWindowTitle(&quot;VTK + Qt 科学可视化应用&quot;);
+    // 获取屏幕尺寸的 70% 作为初始窗口大小
+    QScreen* screen = QGuiApplication::primaryScreen();
+    QRect screenRect = screen-&gt;availableGeometry();
+    int w = static_cast&lt;int&gt;(screenRect.width() * 0.7);
+    int h = static_cast&lt;int&gt;(screenRect.height() * 0.7);
+    resize(w, h);
+
+    // 中央 Widget - VTK 渲染视口
+    QWidget* central = new QWidget(this);
+    QVBoxLayout* centralLayout = new QVBoxLayout(central);
+    centralLayout-&gt;setContentsMargins(0, 0, 0, 0);
+
+    m_vtkWidget = new QVTKOpenGLNativeWidget(central);
+    centralLayout-&gt;addWidget(m_vtkWidget);
+    setCentralWidget(central);
+
+    // 控制面板 (右侧 Dock)
+    QDockWidget* controlDock = CreateControlPanel();
+    addDockWidget(Qt::RightDockWidgetArea, controlDock);
+
+    // 菜单、工具栏、状态栏
+    CreateMenuBar();
+    CreateToolBar();
+    CreateStatusBar();
+}
+
+void MainWindow::CreateMenuBar() {
+    // === 文件菜单 ===
+    QMenu* fileMenu = menuBar()-&gt;addMenu(&quot;文件(&amp;F)&quot;);
+
+    QAction* openAction = fileMenu-&gt;addAction(&quot;打开(&amp;O)...&quot;);
+    openAction-&gt;setShortcut(QKeySequence::Open);
+    connect(openAction, &amp;QAction::triggered, this, &amp;MainWindow::OnFileOpen);
+
+    QAction* saveAction = fileMenu-&gt;addAction(&quot;保存截图(&amp;S)...&quot;);
+    saveAction-&gt;setShortcut(QKeySequence(&quot;Ctrl+Shift+S&quot;));
+    connect(saveAction, &amp;QAction::triggered, this, &amp;MainWindow::OnSaveScreenshot);
+
+    fileMenu-&gt;addSeparator();
+
+    QAction* exitAction = fileMenu-&gt;addAction(&quot;退出(&amp;X)&quot;);
+    exitAction-&gt;setShortcut(QKeySequence::Quit);
+    connect(exitAction, &amp;QAction::triggered, this, &amp;QWidget::close);
+
+    // === 视图菜单 ===
+    QMenu* viewMenu = menuBar()-&gt;addMenu(&quot;视图(&amp;V)&quot;);
+
+    QAction* resetAction = viewMenu-&gt;addAction(&quot;重置视图(&amp;R)&quot;);
+    resetAction-&gt;setShortcut(QKeySequence(&quot;R&quot;));
+    connect(resetAction, &amp;QAction::triggered, this, &amp;MainWindow::OnResetView);
+
+    QAction* togglePanelAction = viewMenu-&gt;addAction(&quot;显示/隐藏控制面板&quot;);
+    connect(togglePanelAction, &amp;QAction::triggered, this, [this]() {
+        // 找到控制面板 dock 并切换可见性
+        for (auto* dock : findChildren&lt;QDockWidget*&gt;()) {
+            dock-&gt;setVisible(!dock-&gt;isVisible());
+        }
+    });
+
+    // === 帮助菜单 ===
+    QMenu* helpMenu = menuBar()-&gt;addMenu(&quot;帮助(&amp;H)&quot;);
+    QAction* aboutAction = helpMenu-&gt;addAction(&quot;关于(&amp;A)...&quot;);
+    connect(aboutAction, &amp;QAction::triggered, this, [this]() {
+        QMessageBox::about(this, &quot;关于 VTK+Qt 应用&quot;,
+            &quot;VTK 9.5.2 + Qt 集成示例\n\n&quot;
+            &quot;功能:\n&quot;
+            &quot;- 加载 VTK 数据文件\n&quot;
+            &quot;- 等值面可视化\n&quot;
+            &quot;- 实时参数调整\n&quot;
+            &quot;- 截图保存\n&quot;);
+    });
+}
+
+void MainWindow::CreateToolBar() {
+    QToolBar* toolbar = addToolBar(&quot;主工具栏&quot;);
+    toolbar-&gt;setMovable(false);
+
+    QAction* openAction = toolbar-&gt;addAction(&quot;打开&quot;);
+    openAction-&gt;setToolTip(&quot;打开数据文件&quot;);
+    connect(openAction, &amp;QAction::triggered, this, &amp;MainWindow::OnFileOpen);
+
+    QAction* saveAction = toolbar-&gt;addAction(&quot;截图&quot;);
+    saveAction-&gt;setToolTip(&quot;保存当前视图截图&quot;);
+    connect(saveAction, &amp;QAction::triggered, this, &amp;MainWindow::OnSaveScreenshot);
+
+    toolbar-&gt;addSeparator();
+
+    QAction* resetAction = toolbar-&gt;addAction(&quot;重置&quot;);
+    resetAction-&gt;setToolTip(&quot;重置相机视图&quot;);
+    connect(resetAction, &amp;QAction::triggered, this, &amp;MainWindow::OnResetView);
+}
+
+void MainWindow::CreateStatusBar() {
+    m_progressBar = new QProgressBar;
+    m_progressBar-&gt;setMaximumWidth(200);
+    m_progressBar-&gt;setMaximumHeight(16);
+    m_progressBar-&gt;setVisible(false);
+    statusBar()-&gt;addPermanentWidget(m_progressBar);
+    statusBar()-&gt;showMessage(&quot;就绪 - 请通过 '文件 &gt; 打开' 加载数据文件&quot;);
+}
+
+QDockWidget* MainWindow::CreateControlPanel() {
+    QDockWidget* dock = new QDockWidget(&quot;控制面板&quot;, this);
+    dock-&gt;setFeatures(QDockWidget::DockWidgetMovable |
+                      QDockWidget::DockWidgetFloatable);
+    dock-&gt;setMinimumWidth(280);
+
+    QWidget* panel = new QWidget(dock);
+    QVBoxLayout* mainLayout = new QVBoxLayout(panel);
+    mainLayout-&gt;setSpacing(12);
+
+    // --- 等值面控制 ---
+    QGroupBox* isoGroup = new QGroupBox(&quot;等值面设置&quot;);
+    QVBoxLayout* isoLayout = new QVBoxLayout(isoGroup);
+
+    QHBoxLayout* isoValueRow = new QHBoxLayout;
+    QLabel* isoLabel = new QLabel(&quot;等值:&quot;);
+    m_isoSpinBox = new QDoubleSpinBox;
+    m_isoSpinBox-&gt;setRange(0.0, 1.0);
+    m_isoSpinBox-&gt;setSingleStep(0.01);
+    m_isoSpinBox-&gt;setDecimals(3);
+    m_isoSpinBox-&gt;setValue(0.5);
+    isoValueRow-&gt;addWidget(isoLabel);
+    isoValueRow-&gt;addWidget(m_isoSpinBox);
+
+    m_isoSlider = new QSlider(Qt::Horizontal);
+    m_isoSlider-&gt;setRange(0, 1000);
+    m_isoSlider-&gt;setValue(500);
+
+    // 滑块与数值框双向绑定
+    connect(m_isoSlider, &amp;QSlider::valueChanged, this, [this](int v) {
+        m_isoSpinBox-&gt;blockSignals(true);
+        m_isoSpinBox-&gt;setValue(v / 1000.0 * m_dataRange[1]);
+        m_isoSpinBox-&gt;blockSignals(false);
+        OnIsoValueChanged(v / 1000.0 * m_dataRange[1]);
+    });
+    connect(m_isoSpinBox, QOverload&lt;double&gt;::of(&amp;QDoubleSpinBox::valueChanged),
+            this, [this](double v) {
+        m_isoSlider-&gt;blockSignals(true);
+        m_isoSlider-&gt;setValue(static_cast&lt;int&gt;(
+            v / m_dataRange[1] * 1000));
+        m_isoSlider-&gt;blockSignals(false);
+        OnIsoValueChanged(v);
+    });
+
+    isoLayout-&gt;addLayout(isoValueRow);
+    isoLayout-&gt;addWidget(m_isoSlider);
+    mainLayout-&gt;addWidget(isoGroup);
+
+    // --- 颜色映射 ---
+    QGroupBox* colorGroup = new QGroupBox(&quot;颜色映射&quot;);
+    QVBoxLayout* colorLayout = new QVBoxLayout(colorGroup);
+    m_colorCombo = new QComboBox;
+    m_colorCombo-&gt;addItems({&quot;彩虹色&quot;, &quot;灰度&quot;, &quot;冷暖色&quot;, &quot;蓝-红发散&quot;});
+    connect(m_colorCombo, QOverload&lt;int&gt;::of(&amp;QComboBox::currentIndexChanged),
+            this, &amp;MainWindow::OnColorMapChanged);
+    colorLayout-&gt;addWidget(m_colorCombo);
+    mainLayout-&gt;addWidget(colorGroup);
+
+    // --- 显示选项 ---
+    QGroupBox* displayGroup = new QGroupBox(&quot;显示选项&quot;);
+    QVBoxLayout* displayLayout = new QVBoxLayout(displayGroup);
+
+    m_outlineCheck = new QCheckBox(&quot;显示轮廓框&quot;);
+    connect(m_outlineCheck, &amp;QCheckBox::toggled,
+            this, &amp;MainWindow::OnShowOutlineToggled);
+
+    m_wireframeCheck = new QCheckBox(&quot;线框模式&quot;);
+    connect(m_wireframeCheck, &amp;QCheckBox::toggled,
+            this, &amp;MainWindow::OnShowWireframeToggled);
+
+    m_axesCheck = new QCheckBox(&quot;显示坐标轴&quot;);
+    connect(m_axesCheck, &amp;QCheckBox::toggled,
+            this, &amp;MainWindow::OnShowAxesToggled);
+
+    displayLayout-&gt;addWidget(m_outlineCheck);
+    displayLayout-&gt;addWidget(m_wireframeCheck);
+    displayLayout-&gt;addWidget(m_axesCheck);
+    mainLayout-&gt;addWidget(displayGroup);
+
+    // --- 操作按钮 ---
+    m_resetBtn = new QPushButton(&quot;重置视图&quot;);
+    connect(m_resetBtn, &amp;QPushButton::clicked, this, &amp;MainWindow::OnResetView);
+    mainLayout-&gt;addWidget(m_resetBtn);
+
+    // --- 数据信息 ---
+    QGroupBox* infoGroup = new QGroupBox(&quot;数据信息&quot;);
+    QVBoxLayout* infoLayout = new QVBoxLayout(infoGroup);
+
+    m_pointsLabel = new QLabel(&quot;点数: --&quot;);
+    m_cellsLabel  = new QLabel(&quot;单元数: --&quot;);
+    m_boundsLabel = new QLabel(&quot;范围: --&quot;);
+    m_scalarRangeLabel = new QLabel(&quot;标量范围: --&quot;);
+
+    infoLayout-&gt;addWidget(m_pointsLabel);
+    infoLayout-&gt;addWidget(m_cellsLabel);
+    infoLayout-&gt;addWidget(m_boundsLabel);
+    infoLayout-&gt;addWidget(m_scalarRangeLabel);
+    mainLayout-&gt;addWidget(infoGroup);
+
+    mainLayout-&gt;addStretch();
+    dock-&gt;setWidget(panel);
+    return dock;
+}
+
+// ============================================================================
+// VTK 管线初始化
+// ============================================================================
+
+void MainWindow::SetupVTKPipeline() {
+    // 获取 VTK Widget 的渲染窗口
+    m_renderWindow = m_vtkWidget-&gt;renderWindow();
+
+    // 创建渲染器
+    m_renderer = vtkSmartPointer&lt;vtkRenderer&gt;::New();
+    m_renderer-&gt;SetBackground(0.2, 0.2, 0.25);
+    m_renderer-&gt;SetBackground2(0.1, 0.1, 0.15);
+    m_renderer-&gt;GradientBackgroundOn();
+    m_renderWindow-&gt;AddRenderer(m_renderer);
+
+    // --- 创建一个默认的球体源作为占位符 ---
+    vtkNew&lt;vtkSphereSource&gt; sphere;
+    sphere-&gt;SetThetaResolution(50);
+    sphere-&gt;SetPhiResolution(50);
+    sphere-&gt;SetRadius(1.0);
+
+    vtkNew&lt;vtkPolyDataMapper&gt; sphereMapper;
+    sphereMapper-&gt;SetInputConnection(sphere-&gt;GetOutputPort());
+
+    m_mainActor = vtkSmartPointer&lt;vtkActor&gt;::New();
+    m_mainActor-&gt;SetMapper(sphereMapper);
+    m_mainActor-&gt;GetProperty()-&gt;SetColor(0.6, 0.6, 0.8);
+    m_mainActor-&gt;GetProperty()-&gt;SetOpacity(0.5);
+    m_renderer-&gt;AddActor(m_mainActor);
+
+    // --- 轮廓框 Actor ---
+    vtkNew&lt;vtkOutlineFilter&gt; outlineFilter;
+    outlineFilter-&gt;SetInputConnection(sphere-&gt;GetOutputPort());
+
+    m_outlineMapper = vtkSmartPointer&lt;vtkPolyDataMapper&gt;::New();
+    m_outlineMapper-&gt;SetInputConnection(outlineFilter-&gt;GetOutputPort());
+
+    m_outlineActor = vtkSmartPointer&lt;vtkActor&gt;::New();
+    m_outlineActor-&gt;SetMapper(m_outlineMapper);
+    m_outlineActor-&gt;GetProperty()-&gt;SetColor(0.8, 0.8, 0.8);
+    m_outlineActor-&gt;GetProperty()-&gt;SetLineWidth(1.0);
+    m_outlineActor-&gt;SetVisibility(false);
+    m_renderer-&gt;AddActor(m_outlineActor);
+
+    // --- 标量条 ---
+    m_scalarBar = vtkSmartPointer&lt;vtkScalarBarActor&gt;::New();
+    m_scalarBar-&gt;SetNumberOfLabels(5);
+    m_scalarBar-&gt;GetTitleTextProperty()-&gt;SetColor(0.9, 0.9, 0.9);
+    m_scalarBar-&gt;GetLabelTextProperty()-&gt;SetColor(0.9, 0.9, 0.9);
+    m_scalarBar-&gt;SetVisibility(false);
+    m_renderer-&gt;AddActor2D(m_scalarBar);
+
+    // --- 坐标轴 ---
+    m_axesActor = vtkSmartPointer&lt;vtkAxesActor&gt;::New();
+    m_axesActor-&gt;SetTotalLength(1.5, 1.5, 1.5);
+    m_axesActor-&gt;SetVisibility(false);
+    m_renderer-&gt;AddActor(m_axesActor);
+
+    // 初始化相机
+    m_renderer-&gt;ResetCamera();
+}
+
+// ============================================================================
+// 文件加载
+// ============================================================================
+
+void MainWindow::OnFileOpen() {
+    QString fileName = QFileDialog::getOpenFileName(
+        this, &quot;打开数据文件&quot;, QString(),
+        &quot;VTK 文件 (*.vtk *.vti *.vtu *.vts *.vtr *.vtp *.vtm);;&quot;
+        &quot;VTK ImageData (*.vti);;&quot;
+        &quot;VTK StructuredPoints (*.vtk);;&quot;
+        &quot;所有文件 (*)&quot;);
+
+    if (fileName.isEmpty()) return;
+
+    LoadDataFile(fileName);
+}
+
+void MainWindow::LoadDataFile(const QString&amp; filePath) {
+    statusBar()-&gt;showMessage(&quot;正在加载: &quot; + filePath + &quot; ...&quot;);
+    m_progressBar-&gt;setVisible(true);
+    m_progressBar-&gt;setValue(0);
+    QApplication::processEvents();
+
+    QFileInfo fileInfo(filePath);
+    QString suffix = fileInfo.suffix().toLower();
+
+    bool loaded = false;
+
+    // 根据扩展名选择合适的 Reader
+    try {
+        if (suffix == &quot;vti&quot;) {
+            vtkNew&lt;vtkXMLImageDataReader&gt; reader;
+            reader-&gt;SetFileName(filePath.toStdString().c_str());
+            reader-&gt;Update();
+            m_imageData = reader-&gt;GetOutput();
+            m_currentData = m_imageData;
+            loaded = true;
+        } else if (suffix == &quot;vtk&quot;) {
+            // .vtk 文件可能是 ImageData (StructuredPoints) 或其他格式
+            vtkNew&lt;vtkStructuredPointsReader&gt; reader;
+            reader-&gt;SetFileName(filePath.toStdString().c_str());
+            reader-&gt;Update();
+            m_imageData = vtkImageData::SafeDownCast(reader-&gt;GetOutput());
+            m_currentData = reader-&gt;GetOutput();
+            loaded = true;
+        } else if (suffix == &quot;vtu&quot;) {
+            vtkNew&lt;vtkXMLUnstructuredGridReader&gt; reader;
+            reader-&gt;SetFileName(filePath.toStdString().c_str());
+            reader-&gt;Update();
+            m_currentData = reader-&gt;GetOutput();
+            loaded = true;
+        } else if (suffix == &quot;vtp&quot;) {
+            vtkNew&lt;vtkXMLPolyDataReader&gt; reader;
+            reader-&gt;SetFileName(filePath.toStdString().c_str());
+            reader-&gt;Update();
+            m_currentData = reader-&gt;GetOutput();
+            loaded = true;
+        } else {
+            // 尝试通用的读取方式
+            vtkNew&lt;vtkXMLImageDataReader&gt; reader;
+            reader-&gt;SetFileName(filePath.toStdString().c_str());
+            reader-&gt;Update();
+            m_imageData = reader-&gt;GetOutput();
+            m_currentData = m_imageData;
+            loaded = true;
+        }
+    } catch (...) {
+        QMessageBox::warning(this, &quot;加载失败&quot;,
+            &quot;无法加载文件: &quot; + filePath + &quot;\n请检查文件格式是否正确。&quot;);
+        m_progressBar-&gt;setVisible(false);
+        return;
+    }
+
+    if (loaded &amp;&amp; m_currentData) {
+        m_hasData = true;
+
+        // 获取数据范围
+        if (m_imageData &amp;&amp; m_imageData-&gt;GetPointData()-&gt;GetScalars()) {
+            double range[2];
+            m_imageData-&gt;GetPointData()-&gt;GetScalars()-&gt;GetRange(range);
+            m_dataRange[0] = range[0];
+            m_dataRange[1] = range[1];
+        }
+
+        // 更新等值面控件的范围
+        m_isoSpinBox-&gt;blockSignals(true);
+        m_isoSpinBox-&gt;setRange(m_dataRange[0], m_dataRange[1]);
+        m_isoSpinBox-&gt;setValue((m_dataRange[0] + m_dataRange[1]) * 0.5);
+        m_isoSpinBox-&gt;blockSignals(false);
+
+        m_isoSlider-&gt;blockSignals(true);
+        m_isoSlider-&gt;setValue(500);
+        m_isoSlider-&gt;blockSignals(false);
+
+        // 构建管线
+        UpdatePipeline();
+        UpdateDataInfoDisplay();
+        ApplyColorMap(m_colorCombo-&gt;currentIndex());
+
+        // 启用控件
+        m_isoSlider-&gt;setEnabled(true);
+        m_isoSpinBox-&gt;setEnabled(true);
+        m_colorCombo-&gt;setEnabled(true);
+        m_outlineCheck-&gt;setEnabled(true);
+        m_wireframeCheck-&gt;setEnabled(true);
+        m_axesCheck-&gt;setEnabled(true);
+
+        m_renderer-&gt;ResetCamera();
+        m_renderWindow-&gt;Render();
+
+        QFileInfo fi(filePath);
+        statusBar()-&gt;showMessage(
+            QString(&quot;已加载: %1 (点数: %2)&quot;)
+                .arg(fi.fileName())
+                .arg(m_currentData-&gt;GetNumberOfPoints()), 5000);
+    }
+
+    m_progressBar-&gt;setVisible(false);
+}
+
+// ============================================================================
+// 管线更新
+// ============================================================================
+
+void MainWindow::UpdatePipeline() {
+    if (!m_hasData || !m_currentData) return;
+
+    // --- 构建等值面(Marching Cubes)管线 ---
+    m_marchingCubes = vtkSmartPointer&lt;vtkMarchingCubes&gt;::New();
+
+    if (m_imageData) {
+        m_marchingCubes-&gt;SetInputData(m_imageData);
+    } else {
+        m_marchingCubes-&gt;SetInputData(m_currentData);
+    }
+
+    double isoValue = m_isoSpinBox-&gt;value();
+    m_marchingCubes-&gt;SetValue(0, isoValue);
+    m_marchingCubes-&gt;ComputeNormalsOn();
+    m_marchingCubes-&gt;ComputeScalarsOn();
+    m_marchingCubes-&gt;Update();
+
+    // 映射器
+    m_mainMapper = vtkSmartPointer&lt;vtkPolyDataMapper&gt;::New();
+    m_mainMapper-&gt;SetInputConnection(m_marchingCubes-&gt;GetOutputPort());
+    m_mainMapper-&gt;ScalarVisibilityOn();
+    m_mainMapper-&gt;SetScalarRange(m_dataRange);
+
+    // 移除旧的 Actor (如果有)
+    m_renderer-&gt;RemoveActor(m_mainActor);
+
+    // 更新主 Actor
+    m_mainActor = vtkSmartPointer&lt;vtkActor&gt;::New();
+    m_mainActor-&gt;SetMapper(m_mainMapper);
+    m_mainActor-&gt;GetProperty()-&gt;SetSpecular(0.3);
+    m_mainActor-&gt;GetProperty()-&gt;SetSpecularPower(20);
+    m_renderer-&gt;AddActor(m_mainActor);
+
+    // --- 轮廓框 ---
+    m_outlineFilter = vtkSmartPointer&lt;vtkOutlineFilter&gt;::New();
+    m_outlineFilter-&gt;SetInputData(m_currentData);
+
+    m_outlineMapper = vtkSmartPointer&lt;vtkPolyDataMapper&gt;::New();
+    m_outlineMapper-&gt;SetInputConnection(m_outlineFilter-&gt;GetOutputPort());
+
+    m_renderer-&gt;RemoveActor(m_outlineActor);
+    m_outlineActor = vtkSmartPointer&lt;vtkActor&gt;::New();
+    m_outlineActor-&gt;SetMapper(m_outlineMapper);
+    m_outlineActor-&gt;GetProperty()-&gt;SetColor(0.8, 0.8, 0.8);
+    m_outlineActor-&gt;GetProperty()-&gt;SetLineWidth(1.0);
+    m_outlineActor-&gt;SetVisibility(m_outlineCheck-&gt;isChecked());
+    m_renderer-&gt;AddActor(m_outlineActor);
+
+    // --- 标量条 ---
+    m_scalarBar-&gt;SetLookupTable(m_lookupTable);
+    m_scalarBar-&gt;SetVisibility(true);
+
+    ApplyColorMap(m_colorCombo-&gt;currentIndex());
+
+    m_renderWindow-&gt;Render();
+}
+
+// ============================================================================
+// 槽函数: 参数调整
+// ============================================================================
+
+void MainWindow::OnIsoValueChanged(double value) {
+    if (!m_hasData || !m_marchingCubes) return;
+
+    m_marchingCubes-&gt;SetValue(0, value);
+    m_marchingCubes-&gt;Update();
+    m_renderWindow-&gt;Render();
+
+    statusBar()-&gt;showMessage(
+        QString(&quot;等值面值: %1&quot;).arg(value, 0, 'f', 3), 2000);
+}
+
+void MainWindow::OnColorMapChanged(int index) {
+    ApplyColorMap(index);
+    if (m_hasData) {
+        m_renderWindow-&gt;Render();
+    }
+}
+
+void MainWindow::ApplyColorMap(int index) {
+    if (!m_lookupTable) {
+        m_lookupTable = vtkSmartPointer&lt;vtkLookupTable&gt;::New();
+    }
+
+    switch (index) {
+        case 0: SetPresetRainbow();    break;
+        case 1: SetPresetGrayscale();  break;
+        case 2: SetPresetCoolWarm();   break;
+        case 3: SetPresetBlueRed();    break;
+    }
+
+    if (m_mainMapper) {
+        m_mainMapper-&gt;SetLookupTable(m_lookupTable);
+    }
+    if (m_scalarBar) {
+        m_scalarBar-&gt;SetLookupTable(m_lookupTable);
+    }
+}
+
+void MainWindow::SetPresetRainbow() {
+    m_lookupTable-&gt;SetNumberOfTableValues(256);
+    m_lookupTable-&gt;SetHueRange(0.0, 0.667);      // 红到蓝
+    m_lookupTable-&gt;SetSaturationRange(1.0, 1.0);
+    m_lookupTable-&gt;SetValueRange(1.0, 1.0);
+    m_lookupTable-&gt;SetTableRange(m_dataRange);
+    m_lookupTable-&gt;Build();
+}
+
+void MainWindow::SetPresetGrayscale() {
+    m_lookupTable-&gt;SetNumberOfTableValues(256);
+    m_lookupTable-&gt;SetHueRange(0.0, 0.0);
+    m_lookupTable-&gt;SetSaturationRange(0.0, 0.0);
+    m_lookupTable-&gt;SetValueRange(0.0, 1.0);
+    m_lookupTable-&gt;SetTableRange(m_dataRange);
+    m_lookupTable-&gt;Build();
+}
+
+void MainWindow::SetPresetCoolWarm() {
+    m_lookupTable-&gt;SetNumberOfTableValues(256);
+    m_lookupTable-&gt;SetHueRange(0.667, 0.0);       // 蓝到红（经青色）
+    m_lookupTable-&gt;SetSaturationRange(0.8, 0.8);
+    m_lookupTable-&gt;SetValueRange(0.8, 1.0);
+    m_lookupTable-&gt;SetTableRange(m_dataRange);
+    m_lookupTable-&gt;Build();
+}
+
+void MainWindow::SetPresetBlueRed() {
+    m_lookupTable-&gt;SetNumberOfTableValues(256);
+    m_lookupTable-&gt;SetHueRange(0.667, 0.0);       // 蓝到红
+    m_lookupTable-&gt;SetSaturationRange(1.0, 1.0);
+    m_lookupTable-&gt;SetValueRange(1.0, 1.0);
+    m_lookupTable-&gt;SetTableRange(m_dataRange);
+    m_lookupTable-&gt;Build();
+}
+
+void MainWindow::OnShowOutlineToggled(bool checked) {
+    if (m_outlineActor) {
+        m_outlineActor-&gt;SetVisibility(checked);
+        m_renderWindow-&gt;Render();
+    }
+}
+
+void MainWindow::OnShowWireframeToggled(bool checked) {
+    if (m_mainActor) {
+        if (checked) {
+            m_mainActor-&gt;GetProperty()-&gt;SetRepresentationToWireframe();
+        } else {
+            m_mainActor-&gt;GetProperty()-&gt;SetRepresentationToSurface();
+        }
+        m_renderWindow-&gt;Render();
+    }
+}
+
+void MainWindow::OnShowAxesToggled(bool checked) {
+    if (m_axesActor) {
+        m_axesActor-&gt;SetVisibility(checked);
+        m_renderWindow-&gt;Render();
+    }
+}
+
+void MainWindow::OnResetView() {
+    if (m_renderer) {
+        m_renderer-&gt;ResetCamera();
+        m_renderWindow-&gt;Render();
+        statusBar()-&gt;showMessage(&quot;视图已重置&quot;, 2000);
+    }
+}
+
+// ============================================================================
+// 截图保存
+// ============================================================================
+
+void MainWindow::OnSaveScreenshot() {
+    QString fileName = QFileDialog::getSaveFileName(
+        this, &quot;保存截图&quot;, &quot;screenshot.png&quot;,
+        &quot;PNG 图像 (*.png);;JPEG 图像 (*.jpg);;BMP 图像 (*.bmp)&quot;);
+
+    if (fileName.isEmpty()) return;
+
+    vtkNew&lt;vtkWindowToImageFilter&gt; w2if;
+    w2if-&gt;SetInput(m_renderWindow);
+    w2if-&gt;SetScale(1);
+    w2if-&gt;SetInputBufferTypeToRGBA();
+    w2if-&gt;ReadFrontBufferOff();
+    w2if-&gt;Update();
+
+    vtkNew&lt;vtkPNGWriter&gt; writer;
+    writer-&gt;SetFileName(fileName.toStdString().c_str());
+    writer-&gt;SetInputConnection(w2if-&gt;GetOutputPort());
+    writer-&gt;Write();
+
+    statusBar()-&gt;showMessage(
+        QString(&quot;截图已保存: %1&quot;).arg(fileName), 3000);
+}
+
+// ============================================================================
+// 数据信息更新
+// ============================================================================
+
+void MainWindow::UpdateDataInfoDisplay() {
+    if (!m_currentData) return;
+
+    vtkIdType numPoints = m_currentData-&gt;GetNumberOfPoints();
+    vtkIdType numCells  = m_currentData-&gt;GetNumberOfCells();
+    double bounds[6];
+    m_currentData-&gt;GetBounds(bounds);
+
+    m_pointsLabel-&gt;setText(
+        QString(&quot;点数: %1&quot;).arg(numPoints));
+    m_cellsLabel-&gt;setText(
+        QString(&quot;单元数: %1&quot;).arg(numCells));
+    m_boundsLabel-&gt;setText(
+        QString(&quot;范围:\n  X: [%1, %2]\n  Y: [%3, %4]\n  Z: [%5, %6]&quot;)
+            .arg(bounds[0], 0, 'f', 2).arg(bounds[1], 0, 'f', 2)
+            .arg(bounds[2], 0, 'f', 2).arg(bounds[3], 0, 'f', 2)
+            .arg(bounds[4], 0, 'f', 2).arg(bounds[5], 0, 'f', 2));
+    m_scalarRangeLabel-&gt;setText(
+        QString(&quot;标量范围: [%1, %2]&quot;)
+            .arg(m_dataRange[0], 0, 'f', 3)
+            .arg(m_dataRange[1], 0, 'f', 3));
+}
+</code></pre>
+<h3 id="2153-maincpp">21.5.3 main.cpp</h3>
+<pre><code class="language-cpp">#include &lt;QApplication&gt;
+#include &lt;QSurfaceFormat&gt;
+
+#include &quot;MainWindow.h&quot;
+
+/**
+ * @brief 程序入口
+ *
+ * 启动 Qt 应用程序并显示主窗口。
+ * 可以通过 QSurfaceFormat 设置全局的 OpenGL 参数。
+ */
+int main(int argc, char* argv[]) {
+    // 设置全局 OpenGL Surface 格式 (可选)
+    // 对于 VTK 渲染，通常建议使用默认格式
+    QSurfaceFormat format = QVTKOpenGLNativeWidget::defaultFormat(true);
+    QSurfaceFormat::setDefaultFormat(format);
+
+    // 创建 Qt 应用
+    QApplication app(argc, argv);
+    app.setApplicationName(&quot;VTK Qt 可视化&quot;);
+    app.setApplicationVersion(&quot;1.0.0&quot;);
+    app.setOrganizationName(&quot;VTK Tutorial&quot;);
+
+    // 创建并显示主窗口
+    MainWindow window;
+    window.show();
+
+    return app.exec();
+}
+</code></pre>
+<h3 id="2154-cmakeliststxt">21.5.4 CMakeLists.txt</h3>
+<p>以下 CMake 配置文件同时支持 Qt5 和 Qt6，以及 VTK 9.x。根据系统中实际安装的版本，CMake 会自动选择合适的 Qt 版本。</p>
+<pre><code class="language-cmake">cmake_minimum_required(VERSION 3.20)
+project(VTKQtApp VERSION 1.0.0 LANGUAGES CXX)
+
+# ============================================================================
+# C++ 标准
+# ============================================================================
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+# ============================================================================
+# 启用 Qt 的 AUTOMOC, AUTOUIC, AUTORCC
+# ============================================================================
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTORCC ON)
+
+# ============================================================================
+# 查找 VTK (需要 GUISupportQt 模块)
+# ============================================================================
+find_package(VTK REQUIRED COMPONENTS
+    # 核心模块
+    CommonCore
+    CommonDataModel
+    CommonExecutionModel
+
+    # 数据源与滤波器
+    FiltersSources
+    FiltersCore
+
+    # 渲染
+    RenderingCore
+    RenderingOpenGL2
+
+    # Qt 集成 (核心模块)
+    GUISupportQt
+
+    # IO
+    IOImage
+    IOLegacy
+    IOXML
+
+    # 交互
+    InteractionStyle
+)
+
+# ============================================================================
+# 查找 Qt (同时支持 Qt5 和 Qt6)
+# ============================================================================
+# 先尝试 Qt6，如果找不到则回退到 Qt5
+find_package(Qt6 COMPONENTS Widgets OpenGLWidgets QUIET)
+if(NOT Qt6_FOUND)
+    find_package(Qt5 5.12 REQUIRED COMPONENTS Widgets)
+    if(NOT Qt5_FOUND)
+        message(FATAL_ERROR &quot;需要 Qt5 (&gt;= 5.12) 或 Qt6&quot;)
+    endif()
+    set(QT_VERSION_MAJOR 5)
+else()
+    set(QT_VERSION_MAJOR 6)
+endif()
+
+message(STATUS &quot;使用 Qt 版本: ${QT_VERSION_MAJOR}&quot;)
+
+# ============================================================================
+# 源文件
+# ============================================================================
+set(SOURCES
+    main.cpp
+    MainWindow.cpp
+)
+
+set(HEADERS
+    MainWindow.h
+)
+
+# ============================================================================
+# 创建可执行目标
+# ============================================================================
+add_executable(${PROJECT_NAME}
+    ${SOURCES}
+    ${HEADERS}
+)
+
+# ============================================================================
+# 链接库
+# ============================================================================
+target_link_libraries(${PROJECT_NAME} PRIVATE
+    # VTK 库 (VTK:: 是 cmake 的命名空间)
+    VTK::CommonCore
+    VTK::CommonDataModel
+    VTK::CommonExecutionModel
+    VTK::FiltersSources
+    VTK::FiltersCore
+    VTK::RenderingCore
+    VTK::RenderingOpenGL2
+    VTK::GUISupportQt
+    VTK::IOImage
+    VTK::IOLegacy
+    VTK::IOXML
+    VTK::InteractionStyle
+)
+
+if(QT_VERSION_MAJOR EQUAL 6)
+    target_link_libraries(${PROJECT_NAME} PRIVATE
+        Qt6::Widgets
+        Qt6::OpenGLWidgets
+    )
+else()
+    target_link_libraries(${PROJECT_NAME} PRIVATE
+        Qt5::Widgets
+    )
+endif()
+
+# ============================================================================
+# 编译器选项
+# ============================================================================
+if(MSVC)
+    target_compile_options(${PROJECT_NAME} PRIVATE /W3 /utf-8)
+else()
+    target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra)
+endif()
+
+# ============================================================================
+# 包含目录
+# ============================================================================
+target_include_directories(${PROJECT_NAME} PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${VTK_INCLUDE_DIRS}
+)
+
+# ============================================================================
+# 安装规则 (可选)
+# ============================================================================
+install(TARGETS ${PROJECT_NAME}
+    RUNTIME DESTINATION bin
+)
+</code></pre>
+<h3 id="2155">21.5.5 构建与运行</h3>
+<p>构建此项目的典型步骤：</p>
+<p><strong>Linux / macOS:</strong></p>
+<pre><code class="language-bash">mkdir build &amp;&amp; cd build
+cmake .. -DCMAKE_PREFIX_PATH=/path/to/Qt
+cmake --build . --config Release
+./VTKQtApp
+</code></pre>
+<p><strong>Windows (Visual Studio):</strong></p>
+<pre><code class="language-powershell">mkdir build; cd build
+cmake .. -DCMAKE_PREFIX_PATH=&quot;C:\Qt\6.x.x\msvc2019_64&quot;
+cmake --build . --config Release
+.\Release\VTKQtApp.exe
+</code></pre>
+<p><strong>常见构建注意事项:</strong></p>
+<ol>
+<li>确保 VTK 在编译时启用了 <code>VTK_MODULE_ENABLE_VTK_GUISupportQt</code> 选项（通常默认开启）。</li>
+<li>Qt 和 VTK 必须使用相同的编译器编译（如 MSVC 2019、GCC 11+），否则会导致 ABI 不兼容。</li>
+<li>如果 VTK 和 Qt 使用不同的 OpenGL 后端，可能会出现渲染异常。推荐 VTK 使用 <code>RenderingOpenGL2</code> 模块。</li>
+<li>在 macOS 上运行时，可能需要设置环境变量 <code>QT_QPA_PLATFORM_PLUGIN_PATH</code>。</li>
+</ol>
+<h3 id="2156">21.5.6 代码结构说明</h3>
+<p>上面的示例代码展示了一个功能完整的 Qt+VTK 应用，其设计遵循以下原则:</p>
+<ol>
+<li>
+<p><strong>关注点分离</strong>: <code>MainWindow.h</code> 声明接口，<code>MainWindow.cpp</code> 实现逻辑，<code>main.cpp</code> 作为程序入口。</p>
+</li>
+<li>
+<p><strong>信号槽驱动的参数更新</strong>: 滑块 (<code>QSlider</code>) 的值变化通过信号传递给槽函数 <code>OnIsoValueChanged</code>，槽函数中直接修改 VTK 的 <code>vtkMarchingCubes</code> 滤波器参数并触发渲染。数值框 (<code>QDoubleSpinBox</code>) 与滑块双向同步，用户无论通过哪种方式输入都能即时得到反馈。</p>
+</li>
+<li>
+<p><strong>模块化的颜色映射</strong>: 四种颜色映射预设 (<code>SetPresetRainbow</code>, <code>SetPresetGrayscale</code>, <code>SetPresetCoolWarm</code>, <code>SetPresetBlueRed</code>) 被封装为独立函数，通过 <code>QComboBox</code> 的索引选择调用。<code>vtkLookupTable</code> 的 <code>HueRange</code>, <code>SaturationRange</code>, <code>ValueRange</code> 三元组决定了颜色在数据范围内的分布。</p>
+</li>
+<li>
+<p><strong>智能文件加载</strong>: <code>LoadDataFile</code> 函数通过文件扩展名自动选择合适的 VTK Reader。对于不支持的格式，程序会弹出警告对话框而非崩溃。</p>
+</li>
+<li>
+<p><strong>UI 状态管理</strong>: 在数据加载前，参数调节控件处于禁用状态 (<code>setEnabled(false)</code>)，防止用户进行无效操作。加载完成后才启用所有控件。</p>
+</li>
+</ol>
+<h2 id="216">21.6 本章小结</h2>
+<p>本章系统地讲解了 VTK 9.5.2 与 Qt 框架集成的完整方案，从概念原理到可运行的完整代码示例。</p>
+<p><strong>核心要点回顾:</strong></p>
+<ol>
+<li>
+<p><strong>两种集成方式</strong>: 推荐使用现代的 <code>QVTKOpenGLNativeWidget</code>（基于 <code>QOpenGLWidget</code>），它是 VTK 9.x 的主要发展方向。传统的 <code>QVTKRenderWindowInteractor</code> 保留用于向后兼容。</p>
+</li>
+<li>
+<p><strong>信号与槽桥接</strong>: Qt 的信号槽机制是实现 UI 控件与 VTK 管线之间双向交互的核心。用户操作触发信号，槽函数中修改 VTK 参数并调用 <code>Render()</code> 实现即时视觉反馈。</p>
+</li>
+<li>
+<p><strong>线程安全</strong>: 所有 VTK 渲染操作必须在主线程（Qt GUI 线程）执行。文件 I/O 等耗时操作可以在后台线程完成，但结果必须传回主线程后再构建管线。</p>
+</li>
+<li>
+<p><strong>完整应用架构</strong>: 以 <code>QMainWindow</code> 为框架，<code>QVTKOpenGLNativeWidget</code> 占据中央视图区，<code>QDockWidget</code> 承载控制面板，<code>QMenuBar</code> 和 <code>QToolBar</code> 提供文件操作，<code>QStatusBar</code> 显示状态信息。这种布局是科学可视化应用程序的经典模式。</p>
+</li>
+<li>
+<p><strong>CMake 构建</strong>: 使用 <code>GUISupportQt</code> 模块，同时支持 Qt5 和 Qt6，<code>CMAKE_AUTOMOC</code> 自动处理 Qt 元对象编译。</p>
+</li>
+</ol>
+<p><strong>进一步学习方向:</strong></p>
+<ul>
+<li>使用 <code>vtkEventQtSlotConnect</code> 直接从 VTK 事件连接到 Qt 槽函数，无需手动编写 Observer 回调。</li>
+<li>将 VTK 的 <code>QVTKRenderWindowInteractor</code> 与 Qt 的多文档界面 (MDI) 结合，构建多视图可视化平台。</li>
+<li>使用 Qt 的 Model/View 框架与 VTK 的数据集 (如 <code>vtkTable</code>) 整合，实现数据的表格化浏览与编辑。</li>
+<li>探索 <code>ViewsQt</code> 模块中提供的 <code>vtkQtTableView</code> 等视图适配器，实现更深度集成。</li>
+<li>将 QVTKOpenGLNativeWidget 与 Qt Quick (QML) 混合使用，构建更现代化的界面风格。</li>
+</ul>
+<p>通过本章的学习，读者应该能够独立构建一个具备文件加载、三维渲染、实时参数调整和截图保存等功能的科学可视化桌面应用程序。这一模式是众多专业 VTK 应用（如 ParaView、3D Slicer、OpenFOAM 后处理工具）的架构基础。</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

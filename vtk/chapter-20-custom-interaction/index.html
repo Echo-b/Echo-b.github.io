@@ -1,0 +1,3919 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../chapter-19-annotation-and-widgets/">
+      
+      
+        <link rel="next" href="../chapter-21-qt-integration/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>第二十章 自定义交互与Widget - Echo-b's Tech Notes</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#widget-custom-interaction-and-widgets" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Echo-b&#39;s Tech Notes" class="md-header__button md-logo" aria-label="Echo-b's Tech Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Echo-b's Tech Notes
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              第二十章 自定义交互与Widget
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Echo-b&#39;s Tech Notes" class="md-nav__button md-logo" aria-label="Echo-b's Tech Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Echo-b's Tech Notes
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VTK 教程
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    VTK 教程
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    入门篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    入门篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-01-vtk-overview-and-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第一章 VTK概述与环境搭建
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-02-visualization-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二章 可视化管线
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-03-data-model-basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第三章 数据模型基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-04-geometry-and-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第四章 基本几何体与数据源
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-05-rendering-and-interactor/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第五章 渲染与交互机
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-06-volume1-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第六章 入门篇综合实战——3D几何画廊
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    实战篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    实战篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-07-polydata/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第七章 PolyData详解
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-08-unstructured-grid/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第八章 非结构化网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-09-structured-data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第九章 结构化数据
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-10-data-io/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十章 数据I/O
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-11-common-filters/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十一章 常用过滤器
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-12-color-mapping/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十二章 颜色映射与标量可视化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-13-advanced-rendering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十三章 高级渲染技术
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-14-multi-dataset/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十四章 多个数据集处理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-15-volume2-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十五章 实战篇综合实战——CFD后处理可视化工具
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    进阶篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    进阶篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-16-volume-rendering-basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十六章 体渲染基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-17-volume-rendering-advanced/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十七章 体渲染高级技术
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-18-charts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十八章 2D图表系统
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-19-annotation-and-widgets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十九章 三维标注与交互组件
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十章 自定义交互与Widget
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十章 自定义交互与Widget
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        本章导读
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#201-widget" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.1 Widget系统概览
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="20.1 Widget系统概览">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2011-widget" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.1.1 两代Widget架构
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2012-widgetrepresentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.1.2 Widget的组成：Representation + 行为逻辑
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2013-widget" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.1.3 Widget的放置与激活
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2014-widget" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.1.4 Widget的事件处理流程
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#202-3d-widget" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.2 常用3D Widget
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="20.2 常用3D Widget">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2021-vtkboxwidget" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.2.1 vtkBoxWidget —— 六面体包围盒
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2022-vtkdistancewidget" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.2.2 vtkDistanceWidget —— 三维距离测量
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-vtkimplicitplanewidget" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.2.3 vtkImplicitPlaneWidget —— 交互式裁剪平面
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2024-vtkspherewidget" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.2.4 vtkSphereWidget —— 球形区域选择
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2025-vtksliderwidget" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.2.5 vtkSliderWidget —— 二维滑块控件
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2026-vtklinewidget" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.2.6 vtkLineWidget —— 交互式线段
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#203-observer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.3 Observer回调模式
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="20.3 Observer回调模式">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2031-vtkcommand-observer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.3.1 vtkCommand 与 Observer模式
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2032" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.3.2 静态函数回调
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2033-clientdata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.3.3 使用clientData传递上下文
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2034" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.3.4 成员函数回调
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2035-widget" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.3.5 常用的Widget事件
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2036" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.3.6 回调示例：实时显示测量距离
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#204-interactorstyle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.4 自定义交互样式（InteractorStyle）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="20.4 自定义交互样式（InteractorStyle）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2041-vtkinteractorstyletrackballcamera" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.4.1 继承自vtkInteractorStyleTrackballCamera
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2042" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.4.2 覆写鼠标事件处理方法
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2043" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.4.3 覆写键盘事件处理方法
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2044" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.4.4 模式切换的实现模式
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2045-style" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.4.5 自定义Style的使用方式
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#205" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.5 代码示例：交互式裁剪工具
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="20.5 代码示例：交互式裁剪工具">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2051" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.5.1 程序概述
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2052-c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.5.2 完整C++代码
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2053-cmakeliststxt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.5.3 CMakeLists.txt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2054" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.5.4 编译与运行
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2055" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.5.5 预期效果与交互指南
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2056" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.5.6 扩展思路
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#206" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.6 本章小结
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="20.6 本章小结">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#widget" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        一、Widget系统架构
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3d-widget" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        二、六个常用3D Widget
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#observer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        三、Observer回调模式
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#interactorstyle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        四、自定义InteractorStyle
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        五、与实践的联系
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        关键类与API速查
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-21-qt-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十一章 Qt集成
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-22-smp-parallel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十二章 SMP并行入门
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-23-volume3-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十三章 进阶篇综合实战
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        本章导读
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#201-widget" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.1 Widget系统概览
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="20.1 Widget系统概览">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2011-widget" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.1.1 两代Widget架构
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2012-widgetrepresentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.1.2 Widget的组成：Representation + 行为逻辑
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2013-widget" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.1.3 Widget的放置与激活
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2014-widget" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.1.4 Widget的事件处理流程
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#202-3d-widget" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.2 常用3D Widget
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="20.2 常用3D Widget">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2021-vtkboxwidget" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.2.1 vtkBoxWidget —— 六面体包围盒
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2022-vtkdistancewidget" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.2.2 vtkDistanceWidget —— 三维距离测量
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-vtkimplicitplanewidget" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.2.3 vtkImplicitPlaneWidget —— 交互式裁剪平面
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2024-vtkspherewidget" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.2.4 vtkSphereWidget —— 球形区域选择
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2025-vtksliderwidget" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.2.5 vtkSliderWidget —— 二维滑块控件
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2026-vtklinewidget" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.2.6 vtkLineWidget —— 交互式线段
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#203-observer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.3 Observer回调模式
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="20.3 Observer回调模式">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2031-vtkcommand-observer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.3.1 vtkCommand 与 Observer模式
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2032" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.3.2 静态函数回调
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2033-clientdata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.3.3 使用clientData传递上下文
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2034" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.3.4 成员函数回调
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2035-widget" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.3.5 常用的Widget事件
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2036" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.3.6 回调示例：实时显示测量距离
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#204-interactorstyle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.4 自定义交互样式（InteractorStyle）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="20.4 自定义交互样式（InteractorStyle）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2041-vtkinteractorstyletrackballcamera" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.4.1 继承自vtkInteractorStyleTrackballCamera
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2042" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.4.2 覆写鼠标事件处理方法
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2043" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.4.3 覆写键盘事件处理方法
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2044" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.4.4 模式切换的实现模式
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2045-style" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.4.5 自定义Style的使用方式
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#205" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.5 代码示例：交互式裁剪工具
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="20.5 代码示例：交互式裁剪工具">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2051" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.5.1 程序概述
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2052-c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.5.2 完整C++代码
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2053-cmakeliststxt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.5.3 CMakeLists.txt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2054" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.5.4 编译与运行
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2055" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.5.5 预期效果与交互指南
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2056" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.5.6 扩展思路
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#206" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.6 本章小结
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="20.6 本章小结">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#widget" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        一、Widget系统架构
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3d-widget" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        二、六个常用3D Widget
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#observer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        三、Observer回调模式
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#interactorstyle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        四、自定义InteractorStyle
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        五、与实践的联系
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        关键类与API速查
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="widget-custom-interaction-and-widgets">第二十章 自定义交互与Widget (Custom Interaction and Widgets)</h1>
+<h2 id="_1">本章导读</h2>
+<p>在前面的章节中，你通过<code>vtkRenderWindowInteractor</code>和<code>vtkInteractorStyleTrackballCamera</code>体验了VTK的默认交互能力——鼠标拖拽旋转、缩放、平移场景。这是科学可视化交互的基础层，但对于实际应用而言，你几乎总是需要更丰富的交互方式：</p>
+<ul>
+<li>在三维场景中放置一个包围盒来选择感兴趣的区域（Region of Interest）。</li>
+<li>交互式地测量三维空间中两点之间的距离。</li>
+<li>用一个可拖拽的平面来实时裁剪数据，观察内部结构。</li>
+<li>在屏幕上放置滑块来控制参数（如等值面的值、时间步）。</li>
+<li>自定义鼠标和键盘的行为——例如在点击位置打印世界坐标，或切换"测量模式"与"观察模式"。</li>
+</ul>
+<p>VTK通过两套互补的系统来满足这些需求：</p>
+<ol>
+<li><strong>Widget系统</strong>：提供了一组丰富的"三维控件"——可以在场景中拖拽、旋转、缩放的交互式实体。Widget遵循"Representation（视觉表现）+ Widget（行为逻辑）"的分离设计。</li>
+<li><strong>InteractorStyle系统</strong>：允许你继承并覆写默认的交互样式，从而自定义场景对鼠标和键盘事件的响应方式。</li>
+</ol>
+<p>本章将系统性地讲解这两套系统，从Widget框架的原理开始，逐一介绍六个最常用的3D Widget，深入Observer回调模式，最后通过一个完整的"交互式裁剪工具"程序将所有概念整合起来。</p>
+<p><strong>前置知识</strong>：本章需要第5章（渲染与交互机）的知识。如果你对Actor/Renderer/Interactor的关系或事件循环机制还不清楚，建议先回顾第5章。</p>
+<hr />
+<h2 id="201-widget">20.1 Widget系统概览</h2>
+<h3 id="2011-widget">20.1.1 两代Widget架构</h3>
+<p>VTK的Widget系统经历了两个主要的设计世代。理解它们的区别有助于你在实际开发中选择合适的工具。</p>
+<p><strong>第一代Widget（Legacy Widget）</strong>：以<code>vtk3DWidget</code>为基类。这一代Widget将视觉表现和事件处理逻辑合并在一个类中。代表性类包括：
+- <code>vtkBoxWidget</code> —— 可操纵的正交六面体
+- <code>vtkLineWidget</code> —— 交互式线段
+- <code>vtkSphereWidget</code> —— 球形区域
+- <code>vtkImplicitPlaneWidget</code> —— 交互式隐式平面
+- <code>vtkDistanceWidget</code> —— 距离测量</p>
+<p>第一代Widget的使用模式较为简单直接：创建Widget实例，调用<code>SetInteractor()</code>和<code>SetDefaultRenderer()</code>绑定到渲染环境，然后调用<code>On()</code>激活。但它们的缺点是视觉表现与行为逻辑耦合在一起，难以自定义外观。</p>
+<p><strong>第二代Widget（New Widgets）</strong>：以<code>vtkAbstractWidget</code>为基类。这一代Widget引入了关键的设计分离：</p>
+<pre><code>vtkAbstractWidget (行为逻辑)
+    |
+    +-- 持有 vtkWidgetRepresentation (视觉表现)
+              |
+              +-- 是一个 vtkProp，可添加到 vtkRenderer
+</code></pre>
+<p>代表性子类包括：
+- <code>vtkBoxWidget2</code> —— 第二代包围盒Widget
+- <code>vtkSliderWidget</code> —— 滑块Widget
+- <code>vtkHandleWidget</code> —— 通用操纵点Widget</p>
+<p>第二代Widget的核心优势在于：你可以独立地替换Representation（视觉表现）而不改变交互逻辑。例如，你可以给<code>vtkSliderWidget</code>提供不同的Representation来实现水平滑块、垂直滑块、圆形滑块等不同的外观，而行为代码完全复用。</p>
+<p>在本教程中，我们主要使用第一代Widget——因为它们更直接、API更简洁，且对于科学可视化中的绝大多数用例而言完全足够。理解它们的原理后，迁移到第二代Widget将是顺畅的。</p>
+<h3 id="2012-widgetrepresentation">20.1.2 Widget的组成：Representation + 行为逻辑</h3>
+<p>无论哪一代Widget，一个Widget在概念上由两部分组成：</p>
+<pre><code>+-- Widget（整体控件）----------------------------------+
+|                                                        |
+|  +-- Representation（视觉表现）--+   +-- 行为逻辑 -----+ |
+|  |                                |   |                 | |
+|  |  - 可拖拽的手柄（球体/箭头）   |   |  - 鼠标按下响应 | |
+|  |  - 线框/轮廓/透明面片         |   |  - 鼠标移动响应 | |
+|  |  - 文字标注                    |   |  - 鼠标释放响应 | |
+|  |  - 颜色和材质属性              |   |  - 键盘事件响应 | |
+|  +--------------------------------+   +-----------------+ |
++----------------------------------------------------------+
+</code></pre>
+<p><strong>Representation（视觉表现）</strong>：回答"这个Widget长什么样"的问题。Representation是添加到Renderer中的一组<code>vtkProp</code>对象（通常是<code>vtkActor</code>）。它包括：
+- 手柄（Handles）：小的可拾取几何体（通常是球体），用户通过拖拽它们来操纵Widget。
+- 轮廓（Outline）：包围盒或边界线，帮助用户感知Widget在三维空间中的位置和范围。
+- 辅助几何体：例如法线箭头、距离标注线、平面填充面片等。</p>
+<p><strong>行为逻辑</strong>：回答"这个Widget如何响应交互"的问题。它负责：
+- 拦截并处理来自<code>vtkRenderWindowInteractor</code>的鼠标和键盘事件。
+- 判断事件发生的位置——是否点击了某个手柄？是否在Widget轮廓内部？
+- 根据用户的拖拽动作实时更新Representation的几何位置。
+- 发出事件通知（StartInteractionEvent、InteractionEvent、EndInteractionEvent），让外部代码能够在Widget状态改变时获得回调。</p>
+<h3 id="2013-widget">20.1.3 Widget的放置与激活</h3>
+<p>所有Widget都继承自<code>vtkInteractorObserver</code>（第一代Widget通过<code>vtk3DWidget</code>间接继承）。这意味着它们共享一套统一的激活和放置机制。</p>
+<p><strong>核心API模式</strong>：</p>
+<pre><code class="language-cpp">// 1. 创建Widget实例
+vtkNew&lt;vtkBoxWidget&gt; boxWidget;
+
+// 2. 绑定到交互器和渲染器
+boxWidget-&gt;SetInteractor(interactor);
+boxWidget-&gt;SetDefaultRenderer(renderer);
+
+// 3. 设置初始位置（使用数据集的包围盒）
+double bounds[6];
+dataset-&gt;GetBounds(bounds);
+boxWidget-&gt;PlaceWidget(bounds);
+
+// 4. 激活Widget
+boxWidget-&gt;On();
+
+// 5. 当不再需要时，关闭Widget
+boxWidget-&gt;Off();
+</code></pre>
+<p><strong>关键方法说明</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SetInteractor(interactor)</code></td>
+<td>将Widget绑定到一个<code>vtkRenderWindowInteractor</code>，使其能接收该交互器的事件</td>
+</tr>
+<tr>
+<td><code>SetDefaultRenderer(renderer)</code></td>
+<td>指定Widget默认添加到哪个Renderer中</td>
+</tr>
+<tr>
+<td><code>PlaceWidget(bounds)</code></td>
+<td>设置Widget的初始位置。<code>bounds</code>是一个六元数组<code>[xmin, xmax, ymin, ymax, zmin, zmax]</code></td>
+</tr>
+<tr>
+<td><code>On()</code></td>
+<td>激活Widget——使其可见、开始响应事件</td>
+</tr>
+<tr>
+<td><code>Off()</code></td>
+<td>关闭Widget——隐藏并停止响应事件</td>
+</tr>
+<tr>
+<td><code>SetEnabled(1)</code> / <code>SetEnabled(0)</code></td>
+<td>与<code>On()</code>/<code>Off()</code>等效</td>
+</tr>
+<tr>
+<td><code>GetEnabled()</code></td>
+<td>查询Widget当前是否处于激活状态</td>
+</tr>
+</tbody>
+</table>
+<p><strong>PlaceWidget()的多种重载</strong>：</p>
+<pre><code class="language-cpp">// 使用六元数组
+double bounds[6] = {-1.0, 1.0, -1.0, 1.0, -1.0, 1.0};
+widget-&gt;PlaceWidget(bounds);
+
+// 使用六个独立的参数
+widget-&gt;PlaceWidget(-1.0, 1.0, -1.0, 1.0, -1.0, 1.0);
+
+// 不使用参数——Widget将尝试从当前绑定的数据集中获取包围盒
+widget-&gt;PlaceWidget();
+</code></pre>
+<h3 id="2014-widget">20.1.4 Widget的事件处理流程</h3>
+<p>理解Widget如何与Interactor和InteractorStyle协作处理事件，是正确使用Widget的关键。</p>
+<p><strong>事件分发顺序</strong>：</p>
+<pre><code>用户操作（鼠标移动/按键）
+    |
+    v
+vtkRenderWindowInteractor 捕获原始事件
+    |
+    v
+优先级1: 当前激活的Widget（通过vtk3DWidget/AbstractWidget注册的Observer）
+    |-- 如果Widget处理了该事件（例如点击在Widget的手柄上），事件被消费
+    |
+    v (Widget未处理)
+优先级2: 当前激活的InteractorStyle（如TrackballCamera）
+    |-- 处理标准的场景导航操作（旋转、缩放、平移）
+    |
+    v (Style也未处理)
+事件被丢弃
+</code></pre>
+<p>关键原则：<strong>Widget优先于InteractorStyle</strong>。当你在Widget上操作时（例如拖拽包围盒的一个面），TrackballCamera的旋转操作不会同时触发。只有当你点击Widget之外的区域时，标准的场景导航才生效。</p>
+<p>这使得Widget可以无缝地融入现有的交互环境——你不需要在Widget操作和场景导航之间做显式的模式切换（对于简单的Widget使用场景而言）。</p>
+<p><strong>Widget内部的事件处理链</strong>：</p>
+<p>在Widget内部，事件经过以下步骤被处理：</p>
+<ol>
+<li><strong>事件翻译（Event Translation）</strong>：原始VTK事件（如LeftButtonPressEvent）被翻译为Widget事件（如Select、Move、Scale）。<code>vtkWidgetEventTranslator</code>负责这一映射。</li>
+<li><strong>回调映射（Callback Mapping）</strong>：根据当前Widget状态和Widget事件类型，<code>vtkWidgetCallbackMapper</code>查找并调用对应的处理方法。</li>
+<li><strong>状态更新</strong>：处理方法更新Widget的内部状态（位置、朝向、大小）。</li>
+<li><strong>Representation更新</strong>：根据新状态更新视觉表现几何体。</li>
+<li><strong>事件发出</strong>：Widget在自身（通过<code>InvokeEvent</code>）发出<code>vtkCommand::InteractionEvent</code>等通知。</li>
+</ol>
+<hr />
+<h2 id="202-3d-widget">20.2 常用3D Widget</h2>
+<p>本节逐一介绍六个最常用的VTK 3D Widget。对每个Widget，我们将说明其用途、核心API、并提供一个简短的使用示例。</p>
+<h3 id="2021-vtkboxwidget">20.2.1 vtkBoxWidget —— 六面体包围盒</h3>
+<p><strong>用途</strong>：在三维场景中放置一个可交互的正交六面体包围盒。这是最通用的3D Widget之一，适用于：
+- 区域选择（Region of Interest, ROI）：框选数据集的子区域。
+- 对象变换：获取包围盒的变换矩阵，用于移动/旋转/缩放其他Actor。
+- 裁剪/切割：通过<code>GetPlanes()</code>获取六个平面，传递给裁剪过滤器。</p>
+<p><strong>交互方式</strong>：
+- 左键拖拽六个面的手柄：移动该面（改变包围盒大小）。
+- 左键拖拽中心手柄：平移整个包围盒。
+- 左键点击面（非手柄区域）并拖拽：旋转包围盒。
+- 右键在窗口中上下移动：缩放包围盒。</p>
+<p><strong>核心API</strong>：</p>
+<pre><code class="language-cpp">#include &lt;vtkBoxWidget.h&gt;
+
+vtkNew&lt;vtkBoxWidget&gt; boxWidget;
+boxWidget-&gt;SetInteractor(interactor);
+boxWidget-&gt;SetDefaultRenderer(renderer);
+boxWidget-&gt;PlaceWidget(bounds);
+
+// 获取隐式平面（用于裁剪/切割）
+vtkNew&lt;vtkPlanes&gt; planes;
+boxWidget-&gt;GetPlanes(planes);
+
+// 获取变换矩阵（用于对象变换）
+vtkNew&lt;vtkTransform&gt; transform;
+boxWidget-&gt;GetTransform(transform);
+
+// 获取几何数据（15个关键点 + 6个四边形面）
+vtkNew&lt;vtkPolyData&gt; polyData;
+boxWidget-&gt;GetPolyData(polyData);
+
+// 控制允许的操作类型
+boxWidget-&gt;TranslationEnabledOn();
+boxWidget-&gt;ScalingEnabledOn();
+boxWidget-&gt;RotationEnabledOn();
+
+// 控制法线方向
+boxWidget-&gt;SetInsideOut(0);    // 法线指向外部（默认）
+boxWidget-&gt;SetInsideOut(1);    // 法线指向内部
+
+// 外观属性
+boxWidget-&gt;GetHandleProperty()-&gt;SetColor(1, 0, 0);         // 手柄颜色：红色
+boxWidget-&gt;GetFaceProperty()-&gt;SetOpacity(0.3);              // 面半透明
+boxWidget-&gt;GetOutlineProperty()-&gt;SetColor(1, 1, 1);         // 轮廓颜色：白色
+
+boxWidget-&gt;On();
+</code></pre>
+<h3 id="2022-vtkdistancewidget">20.2.2 vtkDistanceWidget —— 三维距离测量</h3>
+<p><strong>用途</strong>：在三维空间中测量两点之间的直线距离。适用于：
+- 测量模型上的特征尺寸。
+- 交互式地检查两个空间位置之间的距离。
+- 配合Observer回调，在其他UI中实时显示距离数值。</p>
+<p><strong>交互方式</strong>：
+- 第一次左键点击：放置第一个测量点。
+- 第二次左键点击：放置第二个测量点（此时Widget进入Manipulate模式）。
+- 在Manipulate模式下，拖拽端点手柄来调整测量点的位置。</p>
+<p><strong>核心API</strong>：</p>
+<pre><code class="language-cpp">#include &lt;vtkDistanceWidget.h&gt;
+#include &lt;vtkDistanceRepresentation.h&gt;
+
+vtkNew&lt;vtkDistanceWidget&gt; distanceWidget;
+distanceWidget-&gt;SetInteractor(interactor);
+distanceWidget-&gt;SetDefaultRenderer(renderer);
+
+// 获取内部Representation以配置外观
+vtkDistanceRepresentation* rep =
+    distanceWidget-&gt;GetDistanceRepresentation();
+
+// 程序化地设置两个端点（世界坐标）
+double p1[3] = {0.0, 0.0, 0.0};
+double p2[3] = {1.0, 0.0, 0.0};
+rep-&gt;SetPoint1WorldPosition(p1);
+rep-&gt;SetPoint2WorldPosition(p2);
+
+// 设置标注格式
+rep-&gt;SetLabelFormat(&quot;%.2f mm&quot;);   // 距离标注的printf格式
+
+// 控制标尺颜色
+rep-&gt;GetLineProperty()-&gt;SetColor(1.0, 1.0, 0.0);   // 测量线：黄色
+
+// 切换到已放置模式（跳过交互式放置步骤）
+distanceWidget-&gt;SetWidgetStateToManipulate();
+
+// 获取当前距离值
+double distance = rep-&gt;GetDistance();
+
+distanceWidget-&gt;On();
+</code></pre>
+<p><strong>关于WidgetState</strong>：<code>vtkDistanceWidget</code>有三种状态：
+- <code>Start</code>（初始）：Widget等待用户通过点击来放置两个点。
+- <code>Define</code>（定义中）：第一个点已放置，等待第二个点。
+- <code>Manipulate</code>（操作中）：两个点都已放置，用户可拖拽端点调整位置。</p>
+<p>如果你通过程序设置了端点坐标，应调用<code>SetWidgetStateToManipulate()</code>跳过交互式放置阶段。</p>
+<h3 id="2023-vtkimplicitplanewidget">20.2.3 vtkImplicitPlaneWidget —— 交互式裁剪平面</h3>
+<p><strong>用途</strong>：在三维空间中放置一个可旋转、可平移的无限平面。这是科学可视化中最常用的Widget之一，典型应用包括：
+- 实时裁剪（Clipping）：用平面切割数据集，展示内部结构。
+- 切割面提取（Cutting）：提取平面与数据集的交线/交面。
+- 定义任意方向的截面视角。</p>
+<p><strong>交互方式</strong>：
+- 左键拖拽法线箭头（圆锥体）：旋转平面。
+- 左键拖拽平面本体：沿法线方向平移平面。
+- 中键拖拽平面本体：在平面内任意平移（移动原点）。
+- 右键上下移动：缩放外围的包围盒。</p>
+<p><strong>核心API</strong>：</p>
+<pre><code class="language-cpp">#include &lt;vtkImplicitPlaneWidget.h&gt;
+#include &lt;vtkPlane.h&gt;
+
+vtkNew&lt;vtkImplicitPlaneWidget&gt; planeWidget;
+planeWidget-&gt;SetInteractor(interactor);
+planeWidget-&gt;SetDefaultRenderer(renderer);
+planeWidget-&gt;PlaceWidget(bounds);
+
+// 设置初始法线方向
+planeWidget-&gt;SetNormal(1.0, 0.0, 0.0);  // 沿X轴的法线
+
+// 获取隐式平面函数（传递给裁剪/切割过滤器）
+vtkNew&lt;vtkPlane&gt; plane;
+planeWidget-&gt;GetPlane(plane);
+// plane-&gt;GetNormal() 和 plane-&gt;GetOrigin() 可用于过滤器
+
+// 强制法线与坐标轴对齐
+planeWidget-&gt;SetNormalToXAxis(1);  // 锁定到X轴
+
+// 外观控制
+planeWidget-&gt;SetDrawPlane(0);      // 隐藏平面半透明面片（避免遮挡数据）
+planeWidget-&gt;SetTubing(1);         // 启用管道化边缘
+planeWidget-&gt;GetPlaneProperty()-&gt;SetOpacity(0.3);
+
+// 交互能力控制
+planeWidget-&gt;SetOutlineTranslation(1);  // 允许通过轮廓平移
+planeWidget-&gt;SetScaleEnabled(1);        // 允许缩放包围盒
+planeWidget-&gt;SetOriginTranslation(1);   // 允许平移原点
+
+planeWidget-&gt;On();
+</code></pre>
+<p><strong>典型配合</strong>：<code>vtkImplicitPlaneWidget</code>通常与以下过滤器配合使用：
+- <code>vtkClipPolyData</code> / <code>vtkClipDataSet</code>：使用Widget提供的<code>vtkPlane</code>进行裁剪。
+- <code>vtkCutter</code>：使用Widget提供的<code>vtkPlane</code>提取截面。</p>
+<p>在20.5节的完整示例中，你将看到这两者的实时配合。</p>
+<h3 id="2024-vtkspherewidget">20.2.4 vtkSphereWidget —— 球形区域选择</h3>
+<p><strong>用途</strong>：在三维空间中放置一个可调整半径的球体。适用于：
+- 球形区域选择（选取球内的数据点或单元）。
+- 定义球形裁剪区域。
+- 创建球形的感兴趣区域。</p>
+<p><strong>交互方式</strong>：
+- 左键拖拽球体表面：调整球体半径。
+- 左键拖拽球体中心手柄：平移整个球体。</p>
+<p><strong>核心API</strong>：</p>
+<pre><code class="language-cpp">#include &lt;vtkSphereWidget.h&gt;
+
+vtkNew&lt;vtkSphereWidget&gt; sphereWidget;
+sphereWidget-&gt;SetInteractor(interactor);
+sphereWidget-&gt;SetDefaultRenderer(renderer);
+sphereWidget-&gt;PlaceWidget(bounds);
+
+// 获取球体的中心和半径
+double center[3];
+sphereWidget-&gt;GetCenter(center);
+double radius = sphereWidget-&gt;GetRadius();
+
+// 程序化地设置球体参数
+sphereWidget-&gt;SetCenter(0.0, 0.0, 0.0);
+sphereWidget-&gt;SetRadius(2.5);
+
+// 获取球体的隐式函数（用于裁剪/选择）
+vtkNew&lt;vtkSphere&gt; sphere;
+sphereWidget-&gt;GetSphere(sphere);
+
+// 外观控制
+sphereWidget-&gt;GetSphereProperty()-&gt;SetColor(0.2, 0.6, 1.0);
+sphereWidget-&gt;GetSphereProperty()-&gt;SetOpacity(0.3);
+sphereWidget-&gt;GetHandleProperty()-&gt;SetColor(1.0, 0.5, 0.0);
+
+sphereWidget-&gt;On();
+</code></pre>
+<h3 id="2025-vtksliderwidget">20.2.5 vtkSliderWidget —— 二维滑块控件</h3>
+<p><strong>用途</strong>：在渲染窗口中放置一个二维滑块，用于控制标量参数。与前面介绍的3D Widget不同，<code>vtkSliderWidget</code>是一个2D Widget——它在屏幕空间（而非世界空间）中操作。适用于：
+- 控制等值面的值（在最小值到最大值之间滑动）。
+- 调整时间步（在时间序列中跳转）。
+- 调节任何连续变化的参数（透明度、缩放因子、阈值等）。</p>
+<p><strong>交互方式</strong>：
+- 左键拖拽滑块球：连续调整数值。
+- 左键点击滑轨的某个位置：滑块跳到该位置。
+- 左键点击端点帽：滑块跳到最小或最大值。</p>
+<p><strong>核心API</strong>：</p>
+<pre><code class="language-cpp">#include &lt;vtkSliderWidget.h&gt;
+#include &lt;vtkSliderRepresentation2D.h&gt;
+
+vtkNew&lt;vtkSliderRepresentation2D&gt; sliderRep;
+sliderRep-&gt;SetMinimumValue(0.0);
+sliderRep-&gt;SetMaximumValue(1.0);
+sliderRep-&gt;SetValue(0.5);                    // 当前值
+
+// 控制滑块在窗口中的位置（归一化坐标：[0,1]）
+sliderRep-&gt;GetPoint1Coordinate()
+    -&gt;SetCoordinateSystemToNormalizedDisplay();
+sliderRep-&gt;GetPoint1Coordinate()-&gt;SetValue(0.1, 0.1);  // 起点
+sliderRep-&gt;GetPoint2Coordinate()
+    -&gt;SetCoordinateSystemToNormalizedDisplay();
+sliderRep-&gt;GetPoint2Coordinate()-&gt;SetValue(0.5, 0.1);  // 终点
+
+// 控制滑块管道的宽度
+sliderRep-&gt;SetTubeWidth(0.01);
+sliderRep-&gt;SetSliderWidth(0.03);
+
+// 标签格式
+sliderRep-&gt;SetLabelFormat(&quot;%.2f&quot;);
+
+vtkNew&lt;vtkSliderWidget&gt; sliderWidget;
+sliderWidget-&gt;SetInteractor(interactor);
+sliderWidget-&gt;SetRepresentation(sliderRep);
+sliderWidget-&gt;SetDefaultRenderer(renderer);
+sliderWidget-&gt;On();
+</code></pre>
+<p><strong>获取滑块值</strong>：通常不在SliderWidget上直接获取值，而是通过回调机制（20.3节）在滑块值改变时自动读取并更新目标对象。</p>
+<h3 id="2026-vtklinewidget">20.2.6 vtkLineWidget —— 交互式线段</h3>
+<p><strong>用途</strong>：在三维空间中放置一条可交互的线段。适用于：
+- 定义探针线（Probe Line）——沿线段采样数据值。
+- 定义裁剪轴或对称轴。
+- 交互式地指定两个三维位置。</p>
+<p><strong>交互方式</strong>：
+- 左键拖拽端点手柄：移动线段的起点或终点。
+- 左键拖拽线段中间部分：平移整条线段。</p>
+<p><strong>核心API</strong>：</p>
+<pre><code class="language-cpp">#include &lt;vtkLineWidget.h&gt;
+
+vtkNew&lt;vtkLineWidget&gt; lineWidget;
+lineWidget-&gt;SetInteractor(interactor);
+lineWidget-&gt;SetDefaultRenderer(renderer);
+lineWidget-&gt;PlaceWidget(bounds);
+
+// 设置线段的两个端点
+lineWidget-&gt;SetPoint1(-1.0, 0.0, 0.0);
+lineWidget-&gt;SetPoint2(1.0, 0.0, 0.0);
+
+// 获取线段的端点坐标
+double p1[3], p2[3];
+lineWidget-&gt;GetPoint1(p1);
+lineWidget-&gt;GetPoint2(p2);
+
+// 获取线段数据（vtkPolyData 包含一条线）
+vtkNew&lt;vtkPolyData&gt; lineData;
+lineWidget-&gt;GetPolyData(lineData);
+
+// 控制是否允许端点之外的对齐
+lineWidget-&gt;SetAlign(1);  // 对齐到最近的点（如果绑定了数据集）
+
+// 外观控制
+lineWidget-&gt;GetLineProperty()-&gt;SetColor(1.0, 1.0, 0.0);
+lineWidget-&gt;GetLineProperty()-&gt;SetLineWidth(3.0);
+lineWidget-&gt;GetHandleProperty()-&gt;SetColor(1.0, 0.0, 0.0);
+
+lineWidget-&gt;On();
+</code></pre>
+<hr />
+<h2 id="203-observer">20.3 Observer回调模式</h2>
+<p>Widget本身提供交互能力，但真正的"响应"——即当用户拖拽Widget时执行什么操作——是通过<strong>Observer（观察者）回调模式</strong>来实现的。</p>
+<h3 id="2031-vtkcommand-observer">20.3.1 vtkCommand 与 Observer模式</h3>
+<p>VTK实现了经典的设计模式——<strong>Observer模式</strong>（也称为发布-订阅模式）。在这个模式中：
+- <strong>Subject（主题/被观察者）</strong>：是任何继承自<code>vtkObject</code>的VTK对象。它维护一个Observer列表，并在特定"事件"发生时通知所有Observer。
+- <strong>Observer（观察者/回调）</strong>：是一个回调函数（或函数对象），当Subject发出事件通知时被调用。
+- <strong>Event（事件）</strong>：是一个无符号长整数，标识发生了什么。VTK在<code>vtkCommand.h</code>中定义了数百个标准事件ID。</p>
+<p>在Widget的上下文中：
+- <strong>Subject</strong>就是Widget自身（如<code>vtkBoxWidget</code>、<code>vtkDistanceWidget</code>等）。
+- <strong>Events</strong>包括<code>vtkCommand::InteractionEvent</code>（Widget被拖拽时）、<code>vtkCommand::StartInteractionEvent</code>（开始拖拽）、<code>vtkCommand::EndInteractionEvent</code>（结束拖拽）等。
+- <strong>Observer</strong>是你编写的回调函数，在Widget状态改变时执行你想要的逻辑。</p>
+<p><strong>AddObserver的基本签名</strong>：</p>
+<pre><code class="language-cpp">// 添加一个Observer，返回一个tag（用于后续移除）
+unsigned long tag = object-&gt;AddObserver(eventId, callback, clientData);
+
+// 参数说明：
+//   eventId   - 事件ID，例如 vtkCommand::InteractionEvent
+//   callback  - 回调函数指针（可以是静态函数或成员函数）
+//   clientData - 用户自定义数据，将被传递给回调函数（可选）
+
+// 移除一个Observer
+object-&gt;RemoveObserver(tag);
+</code></pre>
+<h3 id="2032">20.3.2 静态函数回调</h3>
+<p>最简单的回调形式是使用<strong>静态函数</strong>（或全局函数）：</p>
+<pre><code class="language-cpp">// 静态回调函数
+void MyCallback(vtkObject* caller, unsigned long eventId,
+                void* clientData, void* callData)
+{
+    // caller: 发出事件的对象（即调用 AddObserver 的那个Widget）
+    vtkDistanceWidget* widget =
+        static_cast&lt;vtkDistanceWidget*&gt;(caller);
+
+    // 获取距离值
+    vtkDistanceRepresentation* rep =
+        widget-&gt;GetDistanceRepresentation();
+    double distance = rep-&gt;GetDistance();
+
+    std::cout &lt;&lt; &quot;Distance: &quot; &lt;&lt; distance &lt;&lt; std::endl;
+}
+
+// 在main()中注册回调
+distanceWidget-&gt;AddObserver(vtkCommand::InteractionEvent, MyCallback);
+</code></pre>
+<p><strong>静态回调的局限性</strong>：
+- 无法直接访问非静态成员（因为没有<code>this</code>指针）。
+- 通常需要通过<code>clientData</code>参数传递上下文对象。</p>
+<h3 id="2033-clientdata">20.3.3 使用clientData传递上下文</h3>
+<p>通过<code>clientData</code>可以向回调函数传递任意指针（通常是一个应用上下文结构体），从而让回调函数能够访问更多的应用状态：</p>
+<pre><code class="language-cpp">struct AppContext
+{
+    vtkSmartPointer&lt;vtkClipPolyData&gt; clipFilter;
+    vtkSmartPointer&lt;vtkPlane&gt;        clipPlane;
+    vtkSmartPointer&lt;vtkTextActor&gt;    hudText;
+};
+
+void ClipPlaneCallback(vtkObject* caller, unsigned long eventId,
+                       void* clientData, void* callData)
+{
+    // 从clientData恢复应用上下文
+    AppContext* ctx = static_cast&lt;AppContext*&gt;(clientData);
+
+    // 从Widget获取当前平面参数
+    vtkImplicitPlaneWidget* planeWidget =
+        static_cast&lt;vtkImplicitPlaneWidget*&gt;(caller);
+    planeWidget-&gt;GetPlane(ctx-&gt;clipPlane);
+
+    // 更新HUD显示
+    double* normal = ctx-&gt;clipPlane-&gt;GetNormal();
+    double* origin = ctx-&gt;clipPlane-&gt;GetOrigin();
+    std::ostringstream oss;
+    oss &lt;&lt; &quot;Normal: (&quot; &lt;&lt; normal[0] &lt;&lt; &quot;, &quot;
+        &lt;&lt; normal[1] &lt;&lt; &quot;, &quot; &lt;&lt; normal[2] &lt;&lt; &quot;)\n&quot;
+        &lt;&lt; &quot;Origin: (&quot; &lt;&lt; origin[0] &lt;&lt; &quot;, &quot;
+        &lt;&lt; origin[1] &lt;&lt; &quot;, &quot; &lt;&lt; origin[2] &lt;&lt; &quot;)&quot;;
+    ctx-&gt;hudText-&gt;SetInput(oss.str().c_str());
+
+    // 触发渲染更新
+    ctx-&gt;clipFilter-&gt;Modified();
+    caller-&gt;GetInteractor()-&gt;Render();
+}
+
+// 注册时传递上下文指针
+AppContext ctx;
+ctx.clipFilter = clipFilter;
+ctx.clipPlane = clipPlane;
+ctx.hudText = hudText;
+
+planeWidget-&gt;AddObserver(vtkCommand::InteractionEvent,
+                         ClipPlaneCallback, &amp;ctx);
+</code></pre>
+<h3 id="2034">20.3.4 成员函数回调</h3>
+<p>在实际项目中，你通常希望回调是某个类的成员函数。VTK支持通过<code>vtkCallbackCommand</code>或直接使用<code>AddObserver</code>的成员函数重载来实现这一点。</p>
+<p><strong>方法一：使用vtkCallbackCommand</strong></p>
+<pre><code class="language-cpp">class MyObserver
+{
+public:
+    static MyObserver* New() { return new MyObserver; }
+
+    void SetContext(AppContext* ctx) { m_Context = ctx; }
+
+    // 这个静态函数作为桥接
+    static void CallbackFunction(vtkObject* caller,
+                                 unsigned long eventId,
+                                 void* clientData, void* callData)
+    {
+        MyObserver* self = static_cast&lt;MyObserver*&gt;(clientData);
+        self-&gt;OnWidgetInteraction(caller, eventId, callData);
+    }
+
+    // 真正的处理逻辑
+    void OnWidgetInteraction(vtkObject* caller,
+                             unsigned long eventId,
+                             void* callData)
+    {
+        // 在这里处理Widget交互
+        vtkDistanceWidget* widget =
+            static_cast&lt;vtkDistanceWidget*&gt;(caller);
+        // ... 更新m_Context中的状态 ...
+    }
+
+private:
+    AppContext* m_Context = nullptr;
+};
+
+// 使用：
+vtkNew&lt;MyObserver&gt; observer;
+observer-&gt;SetContext(&amp;ctx);
+distanceWidget-&gt;AddObserver(vtkCommand::InteractionEvent,
+    MyObserver::CallbackFunction, observer);
+</code></pre>
+<p><strong>方法二：使用AddObserver的Lambda风格</strong>（需要std::function支持）</p>
+<p>现代C++中，你可以使用lambda表达式配合<code>clientData</code>来实现简洁的回调：</p>
+<pre><code class="language-cpp">AppContext* ctx = new AppContext;  // 注意生命周期管理
+
+distanceWidget-&gt;AddObserver(vtkCommand::InteractionEvent,
+    [](vtkObject* caller, unsigned long eventId,
+       void* clientData, void* callData)
+    {
+        auto* ctx = static_cast&lt;AppContext*&gt;(clientData);
+        auto* widget = static_cast&lt;vtkDistanceWidget*&gt;(caller);
+        double d = widget-&gt;GetDistanceRepresentation()-&gt;GetDistance();
+        std::cout &lt;&lt; &quot;Distance: &quot; &lt;&lt; d &lt;&lt; std::endl;
+    },
+    ctx);
+</code></pre>
+<p><strong>注意</strong>：Lambda只有当没有捕获变量时才能退化为函数指针。如果需要捕获变量，使用<code>clientData</code>来传递上下文是最兼容的方式。</p>
+<h3 id="2035-widget">20.3.5 常用的Widget事件</h3>
+<p>以下是Widget交互中最常使用的VTK事件ID：</p>
+<table>
+<thead>
+<tr>
+<th>事件ID</th>
+<th>含义</th>
+<th>典型触发时机</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>vtkCommand::StartInteractionEvent</code></td>
+<td>开始交互</td>
+<td>用户在Widget上按下鼠标按钮</td>
+</tr>
+<tr>
+<td><code>vtkCommand::InteractionEvent</code></td>
+<td>交互进行中</td>
+<td>用户在Widget上拖拽鼠标（持续触发）</td>
+</tr>
+<tr>
+<td><code>vtkCommand::EndInteractionEvent</code></td>
+<td>交互结束</td>
+<td>用户在Widget上释放鼠标按钮</td>
+</tr>
+<tr>
+<td><code>vtkCommand::PlacePointEvent</code></td>
+<td>点已放置</td>
+<td>交互式放置Widget的一个端点时</td>
+</tr>
+<tr>
+<td><code>vtkCommand::ModifiedEvent</code></td>
+<td>对象被修改</td>
+<td>Widget的某个参数被程序修改时</td>
+</tr>
+</tbody>
+</table>
+<p><strong>回调策略建议</strong>：</p>
+<ul>
+<li><strong>StartInteractionEvent</strong>：适合做一些准备工作，如保存当前状态、显示辅助信息、暂停某些计算。</li>
+<li><strong>InteractionEvent</strong>：适合实时更新——例如实时裁剪、实时更新测量数值。这个事件在拖拽时非常高频地触发，因此回调中的逻辑应该尽量轻量。</li>
+<li><strong>EndInteractionEvent</strong>：适合做收尾工作，如保存最终结果、触发重计算、记录日志。</li>
+</ul>
+<h3 id="2036">20.3.6 回调示例：实时显示测量距离</h3>
+<p>下面是一个完整的Observer回调示例，展示如何在拖拽<code>vtkDistanceWidget</code>端点时实时更新屏幕上显示的距离值：</p>
+<pre><code class="language-cpp">// 全局或成员变量
+vtkSmartPointer&lt;vtkTextActor&gt; g_HudText;
+
+void DistanceInteractionCallback(vtkObject* caller,
+                                 unsigned long eventId,
+                                 void* clientData, void* callData)
+{
+    vtkDistanceWidget* widget =
+        static_cast&lt;vtkDistanceWidget*&gt;(caller);
+
+    vtkDistanceRepresentation* rep =
+        widget-&gt;GetDistanceRepresentation();
+
+    double distance = rep-&gt;GetDistance();
+
+    // 获取两个端点的世界坐标
+    double p1[3], p2[3];
+    rep-&gt;GetPoint1WorldPosition(p1);
+    rep-&gt;GetPoint2WorldPosition(p2);
+
+    // 更新HUD文字
+    std::ostringstream oss;
+    oss &lt;&lt; &quot;Distance: &quot; &lt;&lt; std::fixed
+        &lt;&lt; std::setprecision(3) &lt;&lt; distance &lt;&lt; &quot;\n&quot;
+        &lt;&lt; &quot;P1: (&quot; &lt;&lt; p1[0] &lt;&lt; &quot;, &quot; &lt;&lt; p1[1] &lt;&lt; &quot;, &quot; &lt;&lt; p1[2] &lt;&lt; &quot;)\n&quot;
+        &lt;&lt; &quot;P2: (&quot; &lt;&lt; p2[0] &lt;&lt; &quot;, &quot; &lt;&lt; p2[1] &lt;&lt; &quot;, &quot; &lt;&lt; p2[2] &lt;&lt; &quot;)&quot;;
+
+    g_HudText-&gt;SetInput(oss.str().c_str());
+
+    // 刷新渲染
+    widget-&gt;GetInteractor()-&gt;Render();
+}
+
+// 在初始化代码中注册Observer
+distanceWidget-&gt;AddObserver(vtkCommand::InteractionEvent,
+                           DistanceInteractionCallback);
+distanceWidget-&gt;AddObserver(vtkCommand::EndInteractionEvent,
+                           DistanceInteractionCallback);  // 最终值也更新
+</code></pre>
+<hr />
+<h2 id="204-interactorstyle">20.4 自定义交互样式（InteractorStyle）</h2>
+<p>除了使用Widget之外，VTK的另一个重要的交互定制途径是<strong>自定义InteractorStyle</strong>。通过继承<code>vtkInteractorStyleTrackballCamera</code>（或其它内置Style），你可以覆写特定的事件处理方法来响应鼠标和键盘操作。</p>
+<h3 id="2041-vtkinteractorstyletrackballcamera">20.4.1 继承自vtkInteractorStyleTrackballCamera</h3>
+<p><code>vtkInteractorStyleTrackballCamera</code>是VTK最常用的交互样式，提供：
+- 左键拖拽：旋转场景（轨迹球旋转）。
+- 右键拖拽（或滚轮）：缩放场景。
+- 中键拖拽：平移场景。
+- 键盘快捷键：<code>r</code>重置相机，<code>w</code>线框模式，<code>s</code>表面模式等。</p>
+<p>继承它的基本框架如下：</p>
+<pre><code class="language-cpp">#include &lt;vtkInteractorStyleTrackballCamera.h&gt;
+#include &lt;vtkObjectFactory.h&gt;
+
+class MyCustomStyle : public vtkInteractorStyleTrackballCamera
+{
+public:
+    static MyCustomStyle* New();
+    vtkTypeMacro(MyCustomStyle, vtkInteractorStyleTrackballCamera);
+
+    // 覆写鼠标事件处理方法
+    void OnLeftButtonDown() override;
+    void OnRightButtonDown() override;
+    void OnMiddleButtonDown() override;
+    void OnMouseMove() override;
+    void OnKeyPress() override;
+    void OnKeyRelease() override;
+
+protected:
+    MyCustomStyle() = default;
+    ~MyCustomStyle() override = default;
+
+private:
+    MyCustomStyle(const MyCustomStyle&amp;) = delete;
+    void operator=(const MyCustomStyle&amp;) = delete;
+};
+
+// VTK要求使用vtkStandardNewMacro来定义New()实现
+vtkStandardNewMacro(MyCustomStyle);
+</code></pre>
+<h3 id="2042">20.4.2 覆写鼠标事件处理方法</h3>
+<p>你可以在鼠标事件处理方法中添加自定义逻辑。<strong>关键规则</strong>：如果你处理了事件，不要调用父类的对应方法；如果你不处理（或处理后仍需要默认行为），则调用父类方法。</p>
+<pre><code class="language-cpp">void MyCustomStyle::OnLeftButtonDown()
+{
+    // 获取当前点击位置的显示坐标（像素坐标）
+    int* clickPos = this-&gt;GetInteractor()-&gt;GetEventPosition();
+    std::cout &lt;&lt; &quot;Click at display coords: (&quot;
+              &lt;&lt; clickPos[0] &lt;&lt; &quot;, &quot; &lt;&lt; clickPos[1] &lt;&lt; &quot;)&quot; &lt;&lt; std::endl;
+
+    // 获取世界坐标（通过Picker拾取）
+    this-&gt;GetInteractor()-&gt;GetPicker()-&gt;Pick(
+        clickPos[0], clickPos[1],
+        0,  // 总是使用第一个Renderer
+        this-&gt;GetDefaultRenderer());
+
+    double* worldPos =
+        this-&gt;GetInteractor()-&gt;GetPicker()-&gt;GetPickPosition();
+    std::cout &lt;&lt; &quot;World position: (&quot;
+              &lt;&lt; worldPos[0] &lt;&lt; &quot;, &quot;
+              &lt;&lt; worldPos[1] &lt;&lt; &quot;, &quot;
+              &lt;&lt; worldPos[2] &lt;&lt; &quot;)&quot; &lt;&lt; std::endl;
+
+    // 如果你想保留默认的旋转行为，调用父类方法
+    // 如果不想（想完全接管左键），则注释掉这一行
+    vtkInteractorStyleTrackballCamera::OnLeftButtonDown();
+}
+</code></pre>
+<h3 id="2043">20.4.3 覆写键盘事件处理方法</h3>
+<pre><code class="language-cpp">void MyCustomStyle::OnKeyPress()
+{
+    // 获取按下的键
+    std::string key = this-&gt;GetInteractor()-&gt;GetKeySym();
+
+    if (key == &quot;m&quot;)
+    {
+        std::cout &lt;&lt; &quot;Switched to Measure mode.&quot; &lt;&lt; std::endl;
+        // 切换到测量模式的逻辑...
+    }
+    else if (key == &quot;v&quot;)
+    {
+        std::cout &lt;&lt; &quot;Switched to View mode.&quot; &lt;&lt; std::endl;
+        // 切换到观察模式的逻辑...
+    }
+    else if (key == &quot;c&quot;)
+    {
+        // 打印当前相机参数
+        vtkCamera* cam = this-&gt;GetDefaultRenderer()-&gt;GetActiveCamera();
+        double* pos = cam-&gt;GetPosition();
+        double* fp  = cam-&gt;GetFocalPoint();
+        double* vu  = cam-&gt;GetViewUp();
+        std::cout &lt;&lt; &quot;Camera -- Position: (&quot; &lt;&lt; pos[0] &lt;&lt; &quot;, &quot;
+                  &lt;&lt; pos[1] &lt;&lt; &quot;, &quot; &lt;&lt; pos[2] &lt;&lt; &quot;)\n&quot;
+                  &lt;&lt; &quot;          FocalPoint: (&quot; &lt;&lt; fp[0]  &lt;&lt; &quot;, &quot;
+                  &lt;&lt; fp[1]  &lt;&lt; &quot;, &quot; &lt;&lt; fp[2]  &lt;&lt; &quot;)\n&quot;
+                  &lt;&lt; &quot;          ViewUp:     (&quot; &lt;&lt; vu[0]  &lt;&lt; &quot;, &quot;
+                  &lt;&lt; vu[1]  &lt;&lt; &quot;, &quot; &lt;&lt; vu[2]  &lt;&lt; &quot;)&quot; &lt;&lt; std::endl;
+    }
+    else
+    {
+        // 对于未处理的键，转发给父类（保留默认快捷键）
+        vtkInteractorStyleTrackballCamera::OnKeyPress();
+    }
+}
+</code></pre>
+<h3 id="2044">20.4.4 模式切换的实现模式</h3>
+<p>自定义InteractorStyle的一个常见用途是实现<strong>模式切换</strong>——在不同的交互模式之间切换，每个模式下相同的鼠标操作具有不同的含义。</p>
+<p>以下是一种典型的模式切换实现：</p>
+<pre><code class="language-cpp">class ModeSwitchingStyle : public vtkInteractorStyleTrackballCamera
+{
+public:
+    static ModeSwitchingStyle* New();
+    vtkTypeMacro(ModeSwitchingStyle, vtkInteractorStyleTrackballCamera);
+
+    enum InteractionMode
+    {
+        VIEW_MODE = 0,      // 标准视角操控模式
+        MEASURE_MODE = 1,   // 测量模式
+        PICK_MODE = 2       // 拾取模式
+    };
+
+    void SetMode(InteractionMode mode) { m_Mode = mode; }
+    InteractionMode GetMode() const { return m_Mode; }
+
+    void OnLeftButtonDown() override
+    {
+        switch (m_Mode)
+        {
+        case VIEW_MODE:
+            // 标准轨迹球旋转
+            vtkInteractorStyleTrackballCamera::OnLeftButtonDown();
+            break;
+
+        case MEASURE_MODE:
+        {
+            // 在测量模式下，左键点击用于放置测量点
+            int* clickPos = this-&gt;GetInteractor()-&gt;GetEventPosition();
+            this-&gt;GetInteractor()-&gt;GetPicker()-&gt;Pick(
+                clickPos[0], clickPos[1], 0,
+                this-&gt;GetDefaultRenderer());
+            double* worldPos =
+                this-&gt;GetInteractor()-&gt;GetPicker()-&gt;GetPickPosition();
+            std::cout &lt;&lt; &quot;Measure point: (&quot;
+                      &lt;&lt; worldPos[0] &lt;&lt; &quot;, &quot;
+                      &lt;&lt; worldPos[1] &lt;&lt; &quot;, &quot;
+                      &lt;&lt; worldPos[2] &lt;&lt; &quot;)&quot; &lt;&lt; std::endl;
+            break;
+        }
+
+        case PICK_MODE:
+        {
+            // 在拾取模式下，左键点击用于选择物体
+            int* clickPos = this-&gt;GetInteractor()-&gt;GetEventPosition();
+            // ... 拾取逻辑 ...
+            std::cout &lt;&lt; &quot;Pick mode: object selected.&quot; &lt;&lt; std::endl;
+            break;
+        }
+        }
+    }
+
+    void OnKeyPress() override
+    {
+        std::string key = this-&gt;GetInteractor()-&gt;GetKeySym();
+        if (key == &quot;v&quot;)
+        {
+            SetMode(VIEW_MODE);
+            std::cout &lt;&lt; &quot;Mode: VIEW&quot; &lt;&lt; std::endl;
+        }
+        else if (key == &quot;m&quot;)
+        {
+            SetMode(MEASURE_MODE);
+            std::cout &lt;&lt; &quot;Mode: MEASURE&quot; &lt;&lt; std::endl;
+        }
+        else if (key == &quot;p&quot;)
+        {
+            SetMode(PICK_MODE);
+            std::cout &lt;&lt; &quot;Mode: PICK&quot; &lt;&lt; std::endl;
+        }
+        else
+        {
+            vtkInteractorStyleTrackballCamera::OnKeyPress();
+        }
+    }
+
+protected:
+    ModeSwitchingStyle() : m_Mode(VIEW_MODE) {}
+    ~ModeSwitchingStyle() override = default;
+
+private:
+    InteractionMode m_Mode;
+    ModeSwitchingStyle(const ModeSwitchingStyle&amp;) = delete;
+    void operator=(const ModeSwitchingStyle&amp;) = delete;
+};
+
+vtkStandardNewMacro(ModeSwitchingStyle);
+</code></pre>
+<h3 id="2045-style">20.4.5 自定义Style的使用方式</h3>
+<p>自定义Style创建后，通过<code>vtkRenderWindowInteractor</code>的<code>SetInteractorStyle()</code>方法与交互器绑定：</p>
+<pre><code class="language-cpp">vtkNew&lt;vtkRenderWindowInteractor&gt; interactor;
+
+// 创建并使用自定义Style
+vtkNew&lt;MyCustomStyle&gt; customStyle;
+interactor-&gt;SetInteractorStyle(customStyle);
+
+// 或者替换默认的TrackballCamera为ModeSwitchingStyle
+vtkNew&lt;ModeSwitchingStyle&gt; modeStyle;
+interactor-&gt;SetInteractorStyle(modeStyle);
+
+// 启动事件循环（照常）
+interactor-&gt;Initialize();
+interactor-&gt;Start();
+</code></pre>
+<hr />
+<h2 id="205">20.5 代码示例：交互式裁剪工具</h2>
+<p>本节提供一个完整的C++程序<code>InteractiveClipper.cxx</code>，将本章的核心概念整合到一个实用的科学可视化工具中。</p>
+<h3 id="2051">20.5.1 程序概述</h3>
+<p><strong>功能描述</strong>：本程序创建一个三维数据集（结构化网格上的球形标量场），提供以下交互式工具：</p>
+<ol>
+<li><strong>交互式裁剪平面（vtkImplicitPlaneWidget）</strong>：用户可以拖拽一个半透明的平面来实时裁剪数据，观察内部结构。平面移动时，裁剪结果立即更新。</li>
+<li><strong>距离测量工具（vtkDistanceWidget）</strong>：用户可以放置两个测量点来测量裁剪面上的特征尺寸。测量值实时显示在屏幕上。</li>
+<li><strong>自定义交互样式（ClipperInteractorStyle）</strong>：支持三种模式——视角操控模式（V）、裁剪模式（C）、测量模式（M）。通过键盘切换。</li>
+<li><strong>实时信息显示（HUD）</strong>：在屏幕左上角显示当前模式、裁剪平面参数和测量距离。</li>
+</ol>
+<p><strong>数据流程</strong>：</p>
+<pre><code>vtkSampleFunction (隐式球体)
+    |
+    v
+vtkImageData (标量场)
+    |
+    v
+vtkClipDataSet (使用Widget提供的vtkPlane进行实时裁剪)
+    |
+    v
+vtkDataSetMapper --&gt; vtkActor (裁剪后的可见部分)
+</code></pre>
+<h3 id="2052-c">20.5.2 完整C++代码</h3>
+<pre><code class="language-cpp">// ============================================================================
+// Chapter 20: Custom Interaction and Widgets
+// File: InteractiveClipper.cxx
+// Description: Comprehensive demonstration of VTK interactive widgets.
+//              Features an interactive clipping plane, distance measurement,
+//              mode-switching interactor style, and real-time HUD display.
+// VTK Version: 9.5.2
+// ============================================================================
+
+#include &lt;vtkActor.h&gt;
+#include &lt;vtkCallbackCommand.h&gt;
+#include &lt;vtkCamera.h&gt;
+#include &lt;vtkClipDataSet.h&gt;
+#include &lt;vtkCommand.h&gt;
+#include &lt;vtkDataSetMapper.h&gt;
+#include &lt;vtkDataSetSurfaceFilter.h&gt;
+#include &lt;vtkDistanceRepresentation.h&gt;
+#include &lt;vtkDistanceWidget.h&gt;
+#include &lt;vtkImplicitPlaneWidget.h&gt;
+#include &lt;vtkInteractorStyleTrackballCamera.h&gt;
+#include &lt;vtkMinimalStandardRandomSequence.h&gt;
+#include &lt;vtkNamedColors.h&gt;
+#include &lt;vtkNew.h&gt;
+#include &lt;vtkObjectFactory.h&gt;
+#include &lt;vtkPlane.h&gt;
+#include &lt;vtkPlanes.h&gt;
+#include &lt;vtkPointData.h&gt;
+#include &lt;vtkProperty.h&gt;
+#include &lt;vtkRenderWindow.h&gt;
+#include &lt;vtkRenderWindowInteractor.h&gt;
+#include &lt;vtkRenderer.h&gt;
+#include &lt;vtkSampleFunction.h&gt;
+#include &lt;vtkSmartPointer.h&gt;
+#include &lt;vtkSphere.h&gt;
+#include &lt;vtkTextActor.h&gt;
+#include &lt;vtkTextProperty.h&gt;
+#include &lt;vtkUnstructuredGrid.h&gt;
+
+#include &lt;iomanip&gt;
+#include &lt;iostream&gt;
+#include &lt;sstream&gt;
+#include &lt;string&gt;
+
+// ============================================================================
+// Forward declarations
+// ============================================================================
+struct AppContext;
+void ClipPlaneInteractionCallback(vtkObject* caller, unsigned long eventId,
+                                  void* clientData, void* callData);
+void DistanceInteractionCallback(vtkObject* caller, unsigned long eventId,
+                                 void* clientData, void* callData);
+void UpdateHUD(AppContext* ctx);
+
+// ============================================================================
+// Application context: shared data between main(), callbacks, and style
+// ============================================================================
+struct AppContext
+{
+    vtkSmartPointer&lt;vtkClipDataSet&gt;          clipFilter;
+    vtkSmartPointer&lt;vtkDataSetSurfaceFilter&gt; surfaceFilter;
+    vtkSmartPointer&lt;vtkPlane&gt;                clipPlane;
+    vtkSmartPointer&lt;vtkImplicitPlaneWidget&gt;  planeWidget;
+    vtkSmartPointer&lt;vtkDistanceWidget&gt;       distanceWidget;
+    vtkSmartPointer&lt;vtkRenderer&gt;             renderer;
+    vtkSmartPointer&lt;vtkRenderWindow&gt;         renderWindow;
+    vtkSmartPointer&lt;vtkRenderWindowInteractor&gt; interactor;
+    vtkSmartPointer&lt;vtkTextActor&gt;            hudText;
+    vtkSmartPointer&lt;vtkDataSetMapper&gt;        mapper;
+    std::string                              currentMode;
+    double                                   lastDistance;
+};
+
+// ============================================================================
+// Custom Interactor Style: supports View / Clip / Measure modes
+// ============================================================================
+class ClipperInteractorStyle : public vtkInteractorStyleTrackballCamera
+{
+public:
+    static ClipperInteractorStyle* New();
+    vtkTypeMacro(ClipperInteractorStyle, vtkInteractorStyleTrackballCamera);
+
+    enum Mode
+    {
+        VIEW_MODE = 0,
+        CLIP_MODE = 1,
+        MEASURE_MODE = 2
+    };
+
+    void SetContext(AppContext* ctx) { m_Context = ctx; }
+    void SetMode(int mode);
+
+    void OnKeyPress() override;
+
+protected:
+    ClipperInteractorStyle();
+    ~ClipperInteractorStyle() override = default;
+
+private:
+    AppContext* m_Context = nullptr;
+    int         m_Mode = VIEW_MODE;
+
+    ClipperInteractorStyle(const ClipperInteractorStyle&amp;) = delete;
+    void operator=(const ClipperInteractorStyle&amp;) = delete;
+};
+
+vtkStandardNewMacro(ClipperInteractorStyle);
+
+ClipperInteractorStyle::ClipperInteractorStyle()
+    : m_Mode(VIEW_MODE)
+{
+}
+
+void ClipperInteractorStyle::SetMode(int mode)
+{
+    if (m_Context == nullptr) return;
+
+    m_Mode = mode;
+
+    switch (mode)
+    {
+    case VIEW_MODE:
+        m_Context-&gt;currentMode = &quot;VIEW&quot;;
+        m_Context-&gt;planeWidget-&gt;Off();
+        m_Context-&gt;distanceWidget-&gt;Off();
+        std::cout &lt;&lt; &quot;[Mode] VIEW -- Standard trackball navigation.&quot; &lt;&lt; std::endl;
+        break;
+
+    case CLIP_MODE:
+        m_Context-&gt;currentMode = &quot;CLIP&quot;;
+        m_Context-&gt;planeWidget-&gt;On();
+        m_Context-&gt;distanceWidget-&gt;Off();
+        std::cout &lt;&lt; &quot;[Mode] CLIP -- Drag the plane to clip data.&quot; &lt;&lt; std::endl;
+        break;
+
+    case MEASURE_MODE:
+        m_Context-&gt;currentMode = &quot;MEASURE&quot;;
+        m_Context-&gt;distanceWidget-&gt;On();
+        m_Context-&gt;planeWidget-&gt;Off();
+        std::cout &lt;&lt; &quot;[Mode] MEASURE -- Click two points to measure distance.&quot; &lt;&lt; std::endl;
+        break;
+    }
+
+    UpdateHUD(m_Context);
+    m_Context-&gt;renderWindow-&gt;Render();
+}
+
+void ClipperInteractorStyle::OnKeyPress()
+{
+    std::string key = this-&gt;GetInteractor()-&gt;GetKeySym();
+
+    if (key == &quot;v&quot; || key == &quot;V&quot;)
+    {
+        SetMode(VIEW_MODE);
+    }
+    else if (key == &quot;c&quot; || key == &quot;C&quot;)
+    {
+        SetMode(CLIP_MODE);
+    }
+    else if (key == &quot;m&quot; || key == &quot;M&quot;)
+    {
+        SetMode(MEASURE_MODE);
+    }
+    else if (key == &quot;r&quot; || key == &quot;R&quot;)
+    {
+        // Reset: restore default clipping plane
+        if (m_Context &amp;&amp; m_Context-&gt;planeWidget)
+        {
+            m_Context-&gt;planeWidget-&gt;SetNormal(1.0, 0.0, 0.0);
+            m_Context-&gt;planeWidget-&gt;SetOrigin(0.0, 0.0, 0.0);
+
+            double bounds[6];
+            m_Context-&gt;clipFilter-&gt;GetInput()-&gt;GetBounds(bounds);
+            m_Context-&gt;planeWidget-&gt;PlaceWidget(bounds);
+
+            m_Context-&gt;clipPlane-&gt;SetNormal(1.0, 0.0, 0.0);
+            m_Context-&gt;clipPlane-&gt;SetOrigin(0.0, 0.0, 0.0);
+            m_Context-&gt;clipFilter-&gt;Modified();
+
+            std::cout &lt;&lt; &quot;[Reset] Clipping plane reset to X-normal at origin.&quot; &lt;&lt; std::endl;
+        }
+        m_Context-&gt;renderWindow-&gt;Render();
+    }
+    else if (key == &quot;h&quot; || key == &quot;H&quot;)
+    {
+        // Toggle clipping plane visibility (useful when examining clipped result)
+        int drawPlane =
+            m_Context-&gt;planeWidget-&gt;GetDrawPlane() ? 0 : 1;
+        m_Context-&gt;planeWidget-&gt;SetDrawPlane(drawPlane);
+        std::cout &lt;&lt; &quot;[Toggle] Plane visibility: &quot;
+                  &lt;&lt; (drawPlane ? &quot;ON&quot; : &quot;OFF&quot;) &lt;&lt; std::endl;
+        m_Context-&gt;renderWindow-&gt;Render();
+    }
+    else
+    {
+        // Forward unhandled keys to parent (preserves default shortcuts like 'w', 's')
+        vtkInteractorStyleTrackballCamera::OnKeyPress();
+    }
+}
+
+// ============================================================================
+// Callback: Clipping plane interaction -- update clip filter in real-time
+// ============================================================================
+void ClipPlaneInteractionCallback(vtkObject* caller, unsigned long eventId,
+                                  void* clientData, void* callData)
+{
+    AppContext* ctx = static_cast&lt;AppContext*&gt;(clientData);
+
+    // Extract current plane parameters from the widget
+    ctx-&gt;planeWidget-&gt;GetPlane(ctx-&gt;clipPlane);
+
+    // Notify the pipeline that the clip filter's implicit function changed.
+    // The clip filter stores a pointer to the plane, so Modified() triggers
+    // a re-evaluation on the next Update().
+    ctx-&gt;clipFilter-&gt;Modified();
+
+    // Update the HUD with current plane parameters
+    UpdateHUD(ctx);
+
+    // Re-render
+    ctx-&gt;renderWindow-&gt;Render();
+}
+
+// ============================================================================
+// Callback: Distance widget interaction -- update distance display
+// ============================================================================
+void DistanceInteractionCallback(vtkObject* caller, unsigned long eventId,
+                                 void* clientData, void* callData)
+{
+    AppContext* ctx = static_cast&lt;AppContext*&gt;(clientData);
+
+    vtkDistanceRepresentation* rep =
+        ctx-&gt;distanceWidget-&gt;GetDistanceRepresentation();
+
+    ctx-&gt;lastDistance = rep-&gt;GetDistance();
+
+    // Update HUD
+    UpdateHUD(ctx);
+
+    // Re-render
+    ctx-&gt;renderWindow-&gt;Render();
+}
+
+// ============================================================================
+// Helper: Update the HUD text overlay
+// ============================================================================
+void UpdateHUD(AppContext* ctx)
+{
+    std::ostringstream oss;
+    oss &lt;&lt; &quot;=== Interactive Clipper ===\n&quot;;
+    oss &lt;&lt; &quot;Mode: &quot; &lt;&lt; ctx-&gt;currentMode &lt;&lt; &quot;\n&quot;;
+    oss &lt;&lt; &quot;--------------------------------\n&quot;;
+
+    // Show current plane parameters
+    if (ctx-&gt;clipPlane)
+    {
+        double* normal = ctx-&gt;clipPlane-&gt;GetNormal();
+        double* origin = ctx-&gt;clipPlane-&gt;GetOrigin();
+        oss &lt;&lt; &quot;Plane Normal: (&quot;
+            &lt;&lt; std::fixed &lt;&lt; std::setprecision(3)
+            &lt;&lt; normal[0] &lt;&lt; &quot;, &quot; &lt;&lt; normal[1] &lt;&lt; &quot;, &quot; &lt;&lt; normal[2] &lt;&lt; &quot;)\n&quot;;
+        oss &lt;&lt; &quot;Plane Origin: (&quot;
+            &lt;&lt; origin[0] &lt;&lt; &quot;, &quot; &lt;&lt; origin[1] &lt;&lt; &quot;, &quot; &lt;&lt; origin[2] &lt;&lt; &quot;)\n&quot;;
+    }
+
+    // Show distance measurement if in measure mode
+    if (ctx-&gt;currentMode == &quot;MEASURE&quot; &amp;&amp; ctx-&gt;lastDistance &gt;= 0.0)
+    {
+        oss &lt;&lt; &quot;--------------------------------\n&quot;;
+        oss &lt;&lt; &quot;Distance: &quot;
+            &lt;&lt; std::fixed &lt;&lt; std::setprecision(4)
+            &lt;&lt; ctx-&gt;lastDistance &lt;&lt; &quot;\n&quot;;
+    }
+
+    oss &lt;&lt; &quot;--------------------------------\n&quot;;
+    oss &lt;&lt; &quot;Keys: V=View | C=Clip | M=Measure | R=Reset | H=Toggle Plane&quot;;
+
+    ctx-&gt;hudText-&gt;SetInput(oss.str().c_str());
+}
+
+// ============================================================================
+// Helper: Create a 3D scalar field dataset
+// ============================================================================
+vtkSmartPointer&lt;vtkImageData&gt; CreateScalarField()
+{
+    // Create an implicit sphere function
+    vtkNew&lt;vtkSphere&gt; sphere;
+    sphere-&gt;SetCenter(0.0, 0.0, 0.0);
+    sphere-&gt;SetRadius(3.0);
+
+    // Sample the sphere function onto a 3D grid
+    vtkNew&lt;vtkSampleFunction&gt; sample;
+    sample-&gt;SetImplicitFunction(sphere);
+    sample-&gt;SetModelBounds(-5.0, 5.0, -5.0, 5.0, -5.0, 5.0);
+    sample-&gt;SetSampleDimensions(80, 80, 80);
+    sample-&gt;SetOutputScalarTypeToFloat();
+    sample-&gt;CappingOff();  // Do not cap the outer values
+    sample-&gt;Update();
+
+    // Return a copy of the sampled data
+    vtkSmartPointer&lt;vtkImageData&gt; data = vtkSmartPointer&lt;vtkImageData&gt;::New();
+    data-&gt;DeepCopy(sample-&gt;GetOutput());
+
+    std::cout &lt;&lt; &quot;[Data] Created scalar field: &quot;
+              &lt;&lt; data-&gt;GetDimensions()[0] &lt;&lt; &quot; x &quot;
+              &lt;&lt; data-&gt;GetDimensions()[1] &lt;&lt; &quot; x &quot;
+              &lt;&lt; data-&gt;GetDimensions()[2]
+              &lt;&lt; &quot; (&quot;
+              &lt;&lt; data-&gt;GetNumberOfPoints()
+              &lt;&lt; &quot; points)&quot; &lt;&lt; std::endl;
+
+    return data;
+}
+
+// ============================================================================
+// main()
+// ============================================================================
+int main(int argc, char* argv[])
+{
+    // ------------------------------------------------------------------------
+    // 1. Create the 3D scalar field dataset
+    // ------------------------------------------------------------------------
+    auto dataset = CreateScalarField();
+
+    // Get the dataset bounds (used for widget placement)
+    double bounds[6];
+    dataset-&gt;GetBounds(bounds);
+
+    // ------------------------------------------------------------------------
+    // 2. Create the clipping plane (vtkPlane) -- the implicit function
+    // ------------------------------------------------------------------------
+    vtkNew&lt;vtkPlane&gt; clipPlane;
+    clipPlane-&gt;SetNormal(1.0, 0.0, 0.0);
+    clipPlane-&gt;SetOrigin(0.0, 0.0, 0.0);
+
+    // ------------------------------------------------------------------------
+    // 3. Create the pipeline: Clip -&gt; Surface -&gt; Mapper -&gt; Actor
+    // ------------------------------------------------------------------------
+    vtkNew&lt;vtkClipDataSet&gt; clipFilter;
+    clipFilter-&gt;SetInputData(dataset);
+    clipFilter-&gt;SetClipFunction(clipPlane);
+    clipFilter-&gt;SetInsideOut(0);  // Keep the side the normal points away from
+    clipFilter-&gt;GenerateClippedOutputOn(); // Keep both sides available
+
+    // Convert clipped unstructured grid to surface for rendering
+    vtkNew&lt;vtkDataSetSurfaceFilter&gt; surfaceFilter;
+    surfaceFilter-&gt;SetInputConnection(clipFilter-&gt;GetOutputPort());
+
+    vtkNew&lt;vtkDataSetMapper&gt; mapper;
+    mapper-&gt;SetInputConnection(surfaceFilter-&gt;GetOutputPort());
+    mapper-&gt;ScalarVisibilityOn();
+    mapper-&gt;SetScalarRange(dataset-&gt;GetPointData()-&gt;GetScalars()-&gt;GetRange());
+
+    vtkNew&lt;vtkActor&gt; clippedActor;
+    clippedActor-&gt;SetMapper(mapper);
+    clippedActor-&gt;GetProperty()-&gt;SetColor(0.4, 0.7, 1.0);
+    clippedActor-&gt;GetProperty()-&gt;SetAmbient(0.3);
+    clippedActor-&gt;GetProperty()-&gt;SetDiffuse(0.7);
+    clippedActor-&gt;GetProperty()-&gt;SetSpecular(0.3);
+    clippedActor-&gt;GetProperty()-&gt;SetSpecularPower(20);
+
+    // ------------------------------------------------------------------------
+    // 4. Create the renderer, render window, and interactor
+    // ------------------------------------------------------------------------
+    vtkNew&lt;vtkRenderer&gt; renderer;
+    renderer-&gt;SetBackground(0.15, 0.15, 0.2);
+    renderer-&gt;AddActor(clippedActor);
+
+    vtkNew&lt;vtkRenderWindow&gt; renderWindow;
+    renderWindow-&gt;AddRenderer(renderer);
+    renderWindow-&gt;SetSize(1200, 800);
+    renderWindow-&gt;SetWindowName(&quot;Chapter 20: Interactive Clipper&quot;);
+
+    vtkNew&lt;vtkRenderWindowInteractor&gt; interactor;
+    interactor-&gt;SetRenderWindow(renderWindow);
+
+    // ------------------------------------------------------------------------
+    // 5. Create the implicit plane widget for interactive clipping
+    // ------------------------------------------------------------------------
+    vtkNew&lt;vtkImplicitPlaneWidget&gt; planeWidget;
+    planeWidget-&gt;SetInteractor(interactor);
+    planeWidget-&gt;SetDefaultRenderer(renderer);
+    planeWidget-&gt;PlaceWidget(bounds);
+    planeWidget-&gt;SetNormal(1.0, 0.0, 0.0);
+    planeWidget-&gt;SetOrigin(0.0, 0.0, 0.0);
+
+    // Configure widget appearance
+    planeWidget-&gt;SetDrawPlane(1);          // Show the semi-transparent plane
+    planeWidget-&gt;SetTubing(1);             // Tube the intersection edges
+    planeWidget-&gt;GetPlaneProperty()-&gt;SetOpacity(0.2);
+    planeWidget-&gt;GetPlaneProperty()-&gt;SetColor(0.0, 1.0, 1.0);
+    planeWidget-&gt;GetNormalProperty()-&gt;SetColor(1.0, 0.8, 0.0);
+    planeWidget-&gt;GetSelectedNormalProperty()-&gt;SetColor(1.0, 0.2, 0.2);
+    planeWidget-&gt;GetEdgesProperty()-&gt;SetColor(0.0, 1.0, 0.0);
+    planeWidget-&gt;GetEdgesProperty()-&gt;SetLineWidth(2.0);
+
+    // Add observer callback for real-time clipping
+    planeWidget-&gt;AddObserver(vtkCommand::InteractionEvent,
+                             ClipPlaneInteractionCallback);
+
+    // ------------------------------------------------------------------------
+    // 6. Create the distance widget for measurement
+    // ------------------------------------------------------------------------
+    vtkNew&lt;vtkDistanceWidget&gt; distanceWidget;
+    distanceWidget-&gt;SetInteractor(interactor);
+    distanceWidget-&gt;SetDefaultRenderer(renderer);
+
+    // Configure the distance representation
+    vtkDistanceRepresentation* distRep =
+        distanceWidget-&gt;GetDistanceRepresentation();
+    distRep-&gt;SetLabelFormat(&quot;Distance: %.3f&quot;);
+    distRep-&gt;GetLineProperty()-&gt;SetColor(1.0, 1.0, 0.0);
+    distRep-&gt;GetLineProperty()-&gt;SetLineWidth(2.0);
+
+    // Set initial measurement positions
+    double p1[3] = {-2.0, 0.0, 0.0};
+    double p2[3] = {2.0, 0.0, 0.0};
+    distRep-&gt;SetPoint1WorldPosition(p1);
+    distRep-&gt;SetPoint2WorldPosition(p2);
+    distanceWidget-&gt;SetWidgetStateToManipulate();
+
+    // Add observer callback for real-time distance display
+    distanceWidget-&gt;AddObserver(vtkCommand::InteractionEvent,
+                                DistanceInteractionCallback);
+    distanceWidget-&gt;AddObserver(vtkCommand::EndInteractionEvent,
+                                DistanceInteractionCallback);
+
+    // ------------------------------------------------------------------------
+    // 7. Create the HUD text display
+    // ------------------------------------------------------------------------
+    vtkNew&lt;vtkTextActor&gt; hudText;
+    hudText-&gt;GetTextProperty()-&gt;SetFontFamilyToCourier();
+    hudText-&gt;GetTextProperty()-&gt;SetFontSize(14);
+    hudText-&gt;GetTextProperty()-&gt;SetColor(0.9, 0.9, 0.9);
+    hudText-&gt;GetTextProperty()-&gt;SetBackgroundColor(0.1, 0.1, 0.15);
+    hudText-&gt;GetTextProperty()-&gt;SetBackgroundOpacity(0.8);
+    hudText-&gt;SetDisplayPosition(20, 20);
+    renderer-&gt;AddActor2D(hudText);
+
+    // ------------------------------------------------------------------------
+    // 8. Build application context
+    // ------------------------------------------------------------------------
+    AppContext ctx;
+    ctx.clipFilter      = clipFilter;
+    ctx.surfaceFilter   = surfaceFilter;
+    ctx.clipPlane       = clipPlane;
+    ctx.planeWidget     = planeWidget;
+    ctx.distanceWidget  = distanceWidget;
+    ctx.renderer        = renderer;
+    ctx.renderWindow    = renderWindow;
+    ctx.interactor      = interactor;
+    ctx.hudText         = hudText;
+    ctx.mapper          = mapper;
+    ctx.currentMode     = &quot;CLIP&quot;;
+    ctx.lastDistance    = distRep-&gt;GetDistance();
+
+    // Update callback client data pointers (override the earlier registrations)
+    planeWidget-&gt;AddObserver(vtkCommand::InteractionEvent,
+                             ClipPlaneInteractionCallback, &amp;ctx);
+    planeWidget-&gt;AddObserver(vtkCommand::EndInteractionEvent,
+                             ClipPlaneInteractionCallback, &amp;ctx);
+    distanceWidget-&gt;AddObserver(vtkCommand::InteractionEvent,
+                                DistanceInteractionCallback, &amp;ctx);
+    distanceWidget-&gt;AddObserver(vtkCommand::EndInteractionEvent,
+                                DistanceInteractionCallback, &amp;ctx);
+
+    // ------------------------------------------------------------------------
+    // 9. Set up the custom interactor style
+    // ------------------------------------------------------------------------
+    vtkNew&lt;ClipperInteractorStyle&gt; customStyle;
+    customStyle-&gt;SetContext(&amp;ctx);
+    interactor-&gt;SetInteractorStyle(customStyle);
+
+    // Initialize in CLIP mode (show the clipping plane)
+    customStyle-&gt;SetMode(ClipperInteractorStyle::CLIP_MODE);
+
+    // Also register the widget callbacks on StartInteractionEvent for
+    // proper initial state capture
+    planeWidget-&gt;AddObserver(vtkCommand::StartInteractionEvent,
+                             ClipPlaneInteractionCallback, &amp;ctx);
+
+    // ------------------------------------------------------------------------
+    // 10. Set up the camera
+    // ------------------------------------------------------------------------
+    vtkCamera* camera = renderer-&gt;GetActiveCamera();
+    camera-&gt;SetPosition(8.0, 6.0, 10.0);
+    camera-&gt;SetFocalPoint(0.0, 0.0, 0.0);
+    camera-&gt;SetViewUp(0.0, 0.0, 1.0);
+    camera-&gt;Azimuth(30);
+    camera-&gt;Elevation(20);
+
+    renderer-&gt;ResetCameraClippingRange();
+
+    // Initial HUD update
+    UpdateHUD(&amp;ctx);
+
+    // ------------------------------------------------------------------------
+    // 11. Print usage instructions and start the event loop
+    // ------------------------------------------------------------------------
+    std::cout &lt;&lt; &quot;\n================================================&quot; &lt;&lt; std::endl;
+    std::cout &lt;&lt; &quot;  Interactive Clipper -- Widgets Demo&quot; &lt;&lt; std::endl;
+    std::cout &lt;&lt; &quot;================================================&quot; &lt;&lt; std::endl;
+    std::cout &lt;&lt; &quot;  V         - View mode (standard navigation)&quot; &lt;&lt; std::endl;
+    std::cout &lt;&lt; &quot;  C         - Clip mode (drag the cyan plane)&quot; &lt;&lt; std::endl;
+    std::cout &lt;&lt; &quot;  M         - Measure mode (click to place points)&quot; &lt;&lt; std::endl;
+    std::cout &lt;&lt; &quot;  R         - Reset clipping plane&quot; &lt;&lt; std::endl;
+    std::cout &lt;&lt; &quot;  H         - Toggle plane visibility&quot; &lt;&lt; std::endl;
+    std::cout &lt;&lt; &quot;  W / S     - Wireframe/Surface display&quot; &lt;&lt; std::endl;
+    std::cout &lt;&lt; &quot;  Left drag - Trackball rotate (View mode)&quot; &lt;&lt; std::endl;
+    std::cout &lt;&lt; &quot;  Right drag - Zoom (View mode)&quot; &lt;&lt; std::endl;
+    std::cout &lt;&lt; &quot;  Middle drag - Pan (View mode)&quot; &lt;&lt; std::endl;
+    std::cout &lt;&lt; &quot;================================================\n&quot; &lt;&lt; std::endl;
+
+    renderWindow-&gt;Render();
+    interactor-&gt;Initialize();
+    interactor-&gt;Start();
+
+    return 0;
+}
+</code></pre>
+<h3 id="2053-cmakeliststxt">20.5.3 CMakeLists.txt</h3>
+<pre><code class="language-cmake">cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
+
+# ============================================================================
+# Chapter 20: Custom Interaction and Widgets
+# File: CMakeLists.txt
+# ============================================================================
+
+project(InteractiveClipper)
+
+# --------------------------------------------------------------------------
+# Find VTK 9.5.2
+# Required components for this chapter:
+#   - CommonCore/DataModel/ExecutionModel: VTK foundation
+#   - FiltersSources: vtkSampleFunction
+#   - FiltersCore/General: vtkClipDataSet, vtkDataSetSurfaceFilter
+#   - InteractionWidgets: vtkImplicitPlaneWidget, vtkDistanceWidget
+#   - InteractionStyle: vtkInteractorStyleTrackballCamera
+#   - RenderingCore/OpenGL2: Rendering backend
+#   - RenderingAnnotation: vtkTextActor
+#   - RenderingFreeType: Text rendering
+# --------------------------------------------------------------------------
+find_package(VTK 9.5 REQUIRED COMPONENTS
+    CommonCore
+    CommonDataModel
+    CommonExecutionModel
+    CommonMath
+    FiltersCore
+    FiltersGeneral
+    FiltersSources
+    InteractionStyle
+    InteractionWidgets
+    RenderingAnnotation
+    RenderingCore
+    RenderingFreeType
+    RenderingOpenGL2
+)
+
+if(NOT VTK_FOUND)
+    message(FATAL_ERROR &quot;VTK 9.5 not found. &quot;
+        &quot;Set -DVTK_DIR=/path/to/vtk-9.5.2/build&quot;)
+endif()
+
+message(STATUS &quot;VTK_VERSION: ${VTK_VERSION}&quot;)
+message(STATUS &quot;VTK_DIR: ${VTK_DIR}&quot;)
+
+# --------------------------------------------------------------------------
+# Executable
+# --------------------------------------------------------------------------
+add_executable(InteractiveClipper InteractiveClipper.cxx)
+
+target_link_libraries(InteractiveClipper PRIVATE
+    VTK::CommonCore
+    VTK::CommonDataModel
+    VTK::CommonExecutionModel
+    VTK::CommonMath
+    VTK::FiltersCore
+    VTK::FiltersGeneral
+    VTK::FiltersSources
+    VTK::InteractionStyle
+    VTK::InteractionWidgets
+    VTK::RenderingAnnotation
+    VTK::RenderingCore
+    VTK::RenderingFreeType
+    VTK::RenderingOpenGL2
+)
+
+# --------------------------------------------------------------------------
+# C++ standard
+# --------------------------------------------------------------------------
+target_compile_features(InteractiveClipper PRIVATE cxx_std_17)
+
+# --------------------------------------------------------------------------
+# Platform-specific settings
+# --------------------------------------------------------------------------
+if(WIN32)
+    target_compile_definitions(InteractiveClipper PRIVATE
+        _CRT_SECURE_NO_WARNINGS
+        NOMINMAX
+    )
+endif()
+</code></pre>
+<h3 id="2054">20.5.4 编译与运行</h3>
+<p><strong>编译步骤</strong>：</p>
+<pre><code class="language-bash"># 1. 创建构建目录
+mkdir build &amp;&amp; cd build
+
+# 2. 配置CMake（将路径替换为你的VTK安装路径）
+cmake .. -DVTK_DIR=/path/to/vtk-9.5.2/build
+
+# 3. 编译
+cmake --build . --config Release
+
+# 4. 运行
+./InteractiveClipper        # Linux/macOS
+.\Release\InteractiveClipper.exe   # Windows
+</code></pre>
+<p><strong>Windows (Visual Studio)</strong>：</p>
+<pre><code class="language-powershell">mkdir build; cd build
+cmake .. -G &quot;Visual Studio 17 2022&quot;
+cmake --build . --config Release
+.\Release\InteractiveClipper.exe
+</code></pre>
+<h3 id="2055">20.5.5 预期效果与交互指南</h3>
+<p>运行程序后，你将看到一个蓝色的三维球形标量场数据，中央有一个青色的裁剪平面：</p>
+<p><strong>视觉呈现</strong>：
+- 一个三维体积数据（球体标量场），颜色随标量值变化（蓝色低值到红色高值）。
+- 一个半透明的青色平面穿过数据体——这是裁剪平面的视觉表示，带有金色的法线箭头和绿色的边缘线。
+- 裁剪平面一侧的数据可见，另一侧被裁掉——展示了数据体的内部结构。
+- 屏幕左上角的HUD面板显示当前模式、平面参数和测量距离。</p>
+<p><strong>交互指南</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>效果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>按 <code>V</code></td>
+<td>切换到<strong>视角模式</strong>。裁剪平面和测量工具都隐藏。鼠标拖拽用于标准轨迹球导航。</td>
+</tr>
+<tr>
+<td>按 <code>C</code></td>
+<td>切换到<strong>裁剪模式</strong>。裁剪平面出现。拖拽法线箭头旋转平面，拖拽平面本体沿法线平移。裁剪结果实时更新。</td>
+</tr>
+<tr>
+<td>按 <code>M</code></td>
+<td>切换到<strong>测量模式</strong>。距离测量Widget出现。点击可重新放置两个测量点，拖拽端点调整位置。距离值实时显示在HUD中。</td>
+</tr>
+<tr>
+<td>按 <code>R</code></td>
+<td>重置裁剪平面到默认位置（X轴法线，原点处）。</td>
+</tr>
+<tr>
+<td>按 <code>H</code></td>
+<td>切换裁剪平面的可见性——在检查裁剪结果时隐藏平面本身。</td>
+</tr>
+<tr>
+<td>左键拖拽（视角模式）</td>
+<td>轨迹球旋转场景。</td>
+</tr>
+<tr>
+<td>右键拖拽（视角模式）</td>
+<td>缩放场景。</td>
+</tr>
+<tr>
+<td>中键拖拽（视角模式）</td>
+<td>平移场景。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>关键观察点</strong>：</p>
+<ol>
+<li><strong>实时裁剪的响应性</strong>：在裁剪模式下拖拽平面时，裁剪结果应即时更新——这验证了Observer回调在<code>InteractionEvent</code>上的实时性。</li>
+<li><strong>模式切换的互斥性</strong>：在不同模式之间切换时，相应Widget会被激活或隐藏——这验证了<code>On()</code>/<code>Off()</code>的正确操作。</li>
+<li><strong>Widget与导航的优先级</strong>：在裁剪或测量模式下操作Widget时，场景不会同时旋转——验证了Widget优先于InteractorStyle的事件分发。</li>
+<li><strong>HUD的实时更新</strong>：观察左上角的文字在操作Widget时实时更新——验证了回调中对HUD的更新逻辑。</li>
+</ol>
+<h3 id="2056">20.5.6 扩展思路</h3>
+<p>这个示例程序可以作为更复杂应用的基础。以下是一些扩展方向：</p>
+<ol>
+<li><strong>添加第二个裁剪平面</strong>：使用两个<code>vtkImplicitPlaneWidget</code>和<code>vtkClipClosedSurface</code>实现双面裁剪，创建"切片"效果。</li>
+<li><strong>添加标量栏（Scalar Bar）</strong>：使用<code>vtkScalarBarActor</code>在屏幕上显示颜色映射的图例。</li>
+<li><strong>保存裁剪结果</strong>：添加一个键盘快捷键，使用<code>vtkDataSetWriter</code>将当前裁剪结果保存为<code>.vtk</code>文件。</li>
+<li><strong>探针线采样</strong>：结合<code>vtkLineWidget</code>和<code>vtkProbeFilter</code>，沿用户定义的线段采样标量值并绘制X-Y折线图。</li>
+<li><strong>多数据集叠加</strong>：同时显示原始数据的线框和裁剪结果，帮助理解空间关系。</li>
+<li><strong>使用第二代Widget</strong>：将<code>vtkImplicitPlaneWidget</code>替换为<code>vtkImplicitPlaneWidget2</code>，体验第二代Widget的Representation分离设计。</li>
+</ol>
+<hr />
+<h2 id="206">20.6 本章小结</h2>
+<p>本章系统性地讲解了VTK中的两大交互定制机制——Widget系统和InteractorStyle系统。以下是本章的核心要点回顾：</p>
+<h3 id="widget">一、Widget系统架构</h3>
+<p>Widget是VTK中实现"三维控件"的核心机制。你学习了第一代Widget（基于<code>vtk3DWidget</code>）和第二代Widget（基于<code>vtkAbstractWidget</code>）的区别：</p>
+<ul>
+<li>第一代Widget将视觉表现和交互逻辑合并在一个类中，API简单直接。所有Widget都通过<code>SetInteractor()</code>绑定交互器，通过<code>PlaceWidget()</code>设置初始位置，通过<code>On()</code>/<code>Off()</code>激活/关闭。</li>
+<li>第二代Widget分离了Representation（视觉表现）和Widget（行为逻辑），提供了更大的定制灵活性。</li>
+<li>Widget在事件分发链中优先于InteractorStyle——当用户在Widget上操作时，场景导航不会同时触发。</li>
+</ul>
+<h3 id="3d-widget">二、六个常用3D Widget</h3>
+<table>
+<thead>
+<tr>
+<th>Widget</th>
+<th>核心用途</th>
+<th>关键输出方法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>vtkBoxWidget</code></td>
+<td>六面体区域选择、变换</td>
+<td><code>GetPlanes()</code>, <code>GetTransform()</code>, <code>GetPolyData()</code></td>
+</tr>
+<tr>
+<td><code>vtkDistanceWidget</code></td>
+<td>三维距离测量</td>
+<td><code>GetDistanceRepresentation()-&gt;GetDistance()</code></td>
+</tr>
+<tr>
+<td><code>vtkImplicitPlaneWidget</code></td>
+<td>交互式裁剪/切割平面</td>
+<td><code>GetPlane()</code>, <code>GetPolyData()</code></td>
+</tr>
+<tr>
+<td><code>vtkSphereWidget</code></td>
+<td>球形区域选择</td>
+<td><code>GetSphere()</code>, <code>GetCenter()</code>, <code>GetRadius()</code></td>
+</tr>
+<tr>
+<td><code>vtkSliderWidget</code></td>
+<td>二维滑块参数控制</td>
+<td><code>GetSliderRepresentation()-&gt;GetValue()</code></td>
+</tr>
+<tr>
+<td><code>vtkLineWidget</code></td>
+<td>交互式线段</td>
+<td><code>GetPoint1()</code>, <code>GetPoint2()</code>, <code>GetPolyData()</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="observer">三、Observer回调模式</h3>
+<p>Observer模式是Widget与应用程序逻辑之间的桥梁：</p>
+<ul>
+<li>使用<code>AddObserver(eventId, callback, clientData)</code>注册回调函数。</li>
+<li><code>clientData</code>是向回调传递应用上下文的关键机制——通常传递一个应用状态结构体的指针。</li>
+<li>最常用的三个事件是<code>StartInteractionEvent</code>（交互开始）、<code>InteractionEvent</code>（交互进行中）和<code>EndInteractionEvent</code>（交互结束）。</li>
+<li><code>InteractionEvent</code>在拖拽过程中高频触发，回调应保持轻量。繁重的计算工作应放在<code>EndInteractionEvent</code>中。</li>
+</ul>
+<h3 id="interactorstyle">四、自定义InteractorStyle</h3>
+<p>继承<code>vtkInteractorStyleTrackballCamera</code>允许你自定义场景对鼠标和键盘的响应：</p>
+<ul>
+<li>覆写<code>OnLeftButtonDown()</code>、<code>OnRightButtonDown()</code>、<code>OnMouseMove()</code>、<code>OnKeyPress()</code>等方法。</li>
+<li>未处理的事件应转发给父类方法以保留默认行为。</li>
+<li>模式切换（View/Clip/Measure等）是自定义Style最常见的应用模式——在不同模式下相同的鼠标操作执行不同的功能。</li>
+</ul>
+<h3 id="_2">五、与实践的联系</h3>
+<p>你现在掌握的技能可以用于构建以下实际应用：</p>
+<ul>
+<li><strong>交互式数据探索工具</strong>：结合多个Widget（裁剪平面+距离测量+区域选择），构建类似ParaView的交互式数据探索界面。</li>
+<li><strong>CAD模型检查工具</strong>：使用距离测量和角度测量Widget在三维模型上进行尺寸标注和公差检查。</li>
+<li><strong>医学图像可视化</strong>：使用裁剪平面Widget交互式地浏览CT/MRI数据的内部结构，配合滑块调整窗宽窗位。</li>
+<li><strong>仿真结果后处理</strong>：使用探针线和裁剪平面交互式地检查仿真结果的局部细节。</li>
+<li><strong>自定义领域专用工具</strong>：基于InteractorStyle实现特定领域的交互逻辑——例如地质建模中的层位拾取、结构分析中的截面定位。</li>
+</ul>
+<h3 id="api">关键类与API速查</h3>
+<table>
+<thead>
+<tr>
+<th>类</th>
+<th>主要用途</th>
+<th>关键方法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>vtk3DWidget</code></td>
+<td>第一代Widget基类</td>
+<td><code>SetInteractor()</code>, <code>On()</code>, <code>Off()</code>, <code>PlaceWidget()</code></td>
+</tr>
+<tr>
+<td><code>vtkAbstractWidget</code></td>
+<td>第二代Widget基类</td>
+<td><code>SetInteractor()</code>, <code>SetEnabled()</code>, <code>SetRepresentation()</code></td>
+</tr>
+<tr>
+<td><code>vtkBoxWidget</code></td>
+<td>六面体区域选择</td>
+<td><code>GetPlanes()</code>, <code>GetTransform()</code>, <code>GetPolyData()</code></td>
+</tr>
+<tr>
+<td><code>vtkDistanceWidget</code></td>
+<td>距离测量</td>
+<td><code>GetDistanceRepresentation()</code>, <code>SetWidgetStateToManipulate()</code></td>
+</tr>
+<tr>
+<td><code>vtkImplicitPlaneWidget</code></td>
+<td>交互式裁剪平面</td>
+<td><code>GetPlane()</code>, <code>SetNormal()</code>, <code>SetOrigin()</code>, <code>GetPolyData()</code></td>
+</tr>
+<tr>
+<td><code>vtkSphereWidget</code></td>
+<td>球形区域选择</td>
+<td><code>GetSphere()</code>, <code>GetCenter()</code>, <code>GetRadius()</code></td>
+</tr>
+<tr>
+<td><code>vtkSliderWidget</code></td>
+<td>二维滑块</td>
+<td><code>SetRepresentation()</code>, <code>GetSliderRepresentation()</code></td>
+</tr>
+<tr>
+<td><code>vtkLineWidget</code></td>
+<td>交互式线段</td>
+<td><code>SetPoint1()</code>, <code>SetPoint2()</code>, <code>GetPolyData()</code></td>
+</tr>
+<tr>
+<td><code>vtkCommand</code></td>
+<td>事件定义</td>
+<td><code>InteractionEvent</code>, <code>StartInteractionEvent</code>, <code>EndInteractionEvent</code></td>
+</tr>
+<tr>
+<td><code>vtkInteractorStyleTrackballCamera</code></td>
+<td>标准交互样式</td>
+<td><code>OnLeftButtonDown()</code>, <code>OnMouseMove()</code>, <code>OnKeyPress()</code></td>
+</tr>
+<tr>
+<td><code>vtkPlane</code></td>
+<td>隐式平面函数</td>
+<td><code>SetNormal()</code>, <code>SetOrigin()</code>, <code>GetNormal()</code>, <code>GetOrigin()</code></td>
+</tr>
+<tr>
+<td><code>vtkClipDataSet</code></td>
+<td>使用隐式函数裁剪</td>
+<td><code>SetClipFunction()</code>, <code>SetInputData()</code>, <code>SetInsideOut()</code></td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

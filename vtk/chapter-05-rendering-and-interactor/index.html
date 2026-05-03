@@ -1,0 +1,4097 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../chapter-04-geometry-and-sources/">
+      
+      
+        <link rel="next" href="../chapter-06-volume1-capstone/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>第五章 渲染与交互机 - Echo-b's Tech Notes</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#rendering-and-interactor" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Echo-b&#39;s Tech Notes" class="md-header__button md-logo" aria-label="Echo-b's Tech Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Echo-b's Tech Notes
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              第五章 渲染与交互机
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Echo-b&#39;s Tech Notes" class="md-nav__button md-logo" aria-label="Echo-b's Tech Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Echo-b's Tech Notes
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VTK 教程
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    VTK 教程
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    入门篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    入门篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-01-vtk-overview-and-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第一章 VTK概述与环境搭建
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-02-visualization-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二章 可视化管线
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-03-data-model-basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第三章 数据模型基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-04-geometry-and-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第四章 基本几何体与数据源
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第五章 渲染与交互机
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第五章 渲染与交互机
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        本章导读
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#51" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 渲染管线回顾
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5.1 渲染管线回顾">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#511-vs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1.1 渲染管线 vs 可视化管线
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#512-actor-renderer-renderwindow-interactor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1.2 Actor -&gt; Renderer -&gt; RenderWindow -&gt; Interactor 角色回顾
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#513-vtk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1.3 VTK如何抽象图形后端
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#52-vtkrenderer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 vtkRenderer——场景管理者
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5.2 vtkRenderer——场景管理者">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#521-vtkrenderer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2.1 vtkRenderer的职责
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#522-addactor-removeactor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2.2 AddActor() / RemoveActor()——管理可视元素
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#523-setbackground-setbackground2-gradientbackgroundon" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2.3 SetBackground() / SetBackground2() / GradientBackgroundOn()——背景样式
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#524-setviewport" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2.4 SetViewport()——定义子区域（多视图布局的基础）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#525-setlayer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2.5 SetLayer()——渲染器分层
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#526-setdraw" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2.6 SetDraw()——启用/禁用渲染器
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#53-vtkrenderwindow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 vtkRenderWindow——渲染窗口
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5.3 vtkRenderWindow——渲染窗口">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#531-vtkrenderwindow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3.1 vtkRenderWindow的职责
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#532-addrenderer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3.2 AddRenderer()——渲染器注册
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#533-setsize-setposition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3.3 SetSize() / SetPosition()——窗口几何
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#534-setwindowname" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3.4 SetWindowName()——窗口标题
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#535-setmultisamples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3.5 SetMultiSamples()——多重采样抗锯齿
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#536-render" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3.6 Render()——触发管道级联
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#537-stereo-rendering" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3.7 立体渲染（Stereo Rendering）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#538-off-screen-rendering" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3.8 离屏渲染（Off-Screen Rendering）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#54" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.4 多视口布局
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5.4 多视口布局">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#541-setviewport" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.4.1 用SetViewport()构建栅格布局
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#542" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.4.2 常见布局模式
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#543" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.4.3 处理窗口缩放事件
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#55-vtkcamera" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.5 vtkCamera——相机控制
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5.5 vtkCamera——相机控制">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#551-vs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.5.1 平行投影 vs 透视投影
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#552" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.5.2 相机位置参数
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#553-setclippingrange" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.5.3 SetClippingRange()——近远裁剪平面
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#554" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.5.4 相机运动方法
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#555-resetcamera" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.5.5 ResetCamera()——自动适配可见物体
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#556-vtkcamera-vs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.5.6 vtkCamera vs 交互机的相机
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#56-vtkrenderwindowinteractor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.6 vtkRenderWindowInteractor——交互机
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5.6 vtkRenderWindowInteractor——交互机">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#561" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.6.1 交互机的角色
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#562-setrenderwindow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.6.2 SetRenderWindow()——绑定窗口
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#563-start" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.6.3 Start()——进入事件循环
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#564" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.6.4 默认鼠标事件
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#565" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.6.5 默认键盘事件
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#566-vtkinteractorstyle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.6.6 vtkInteractorStyle——交互样式的概念
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#567" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.6.7 自定义交互样式
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#57" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.7 代码示例：交互式多视口场景展示
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5.7 代码示例：交互式多视口场景展示">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#571-c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.7.1 完整C++代码
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#572-cmakeliststxt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.7.2 CMakeLists.txt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#573" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.7.3 代码逐段解析
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5.7.3 代码逐段解析">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        头文件和依赖
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        自定义交互样式
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#createcoloredactor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        辅助函数CreateColoredActor()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2x2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2x2视口布局
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        预设视角的设计
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        每个视口使用独立相机
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#574" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.7.4 编译和运行
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#575" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.7.5 实验建议
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#58" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.8 本章小结
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5.8 本章小结">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        要点速览
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        从本章到全书
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        进入下一章之前
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-06-volume1-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第六章 入门篇综合实战——3D几何画廊
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    实战篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    实战篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-07-polydata/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第七章 PolyData详解
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-08-unstructured-grid/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第八章 非结构化网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-09-structured-data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第九章 结构化数据
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-10-data-io/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十章 数据I/O
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-11-common-filters/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十一章 常用过滤器
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-12-color-mapping/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十二章 颜色映射与标量可视化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-13-advanced-rendering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十三章 高级渲染技术
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-14-multi-dataset/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十四章 多个数据集处理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-15-volume2-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十五章 实战篇综合实战——CFD后处理可视化工具
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    进阶篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    进阶篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-16-volume-rendering-basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十六章 体渲染基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-17-volume-rendering-advanced/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十七章 体渲染高级技术
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-18-charts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十八章 2D图表系统
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-19-annotation-and-widgets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十九章 三维标注与交互组件
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-20-custom-interaction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十章 自定义交互与Widget
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-21-qt-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十一章 Qt集成
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-22-smp-parallel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十二章 SMP并行入门
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-23-volume3-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十三章 进阶篇综合实战
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        本章导读
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#51" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 渲染管线回顾
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5.1 渲染管线回顾">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#511-vs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1.1 渲染管线 vs 可视化管线
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#512-actor-renderer-renderwindow-interactor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1.2 Actor -&gt; Renderer -&gt; RenderWindow -&gt; Interactor 角色回顾
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#513-vtk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1.3 VTK如何抽象图形后端
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#52-vtkrenderer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 vtkRenderer——场景管理者
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5.2 vtkRenderer——场景管理者">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#521-vtkrenderer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2.1 vtkRenderer的职责
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#522-addactor-removeactor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2.2 AddActor() / RemoveActor()——管理可视元素
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#523-setbackground-setbackground2-gradientbackgroundon" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2.3 SetBackground() / SetBackground2() / GradientBackgroundOn()——背景样式
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#524-setviewport" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2.4 SetViewport()——定义子区域（多视图布局的基础）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#525-setlayer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2.5 SetLayer()——渲染器分层
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#526-setdraw" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2.6 SetDraw()——启用/禁用渲染器
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#53-vtkrenderwindow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 vtkRenderWindow——渲染窗口
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5.3 vtkRenderWindow——渲染窗口">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#531-vtkrenderwindow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3.1 vtkRenderWindow的职责
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#532-addrenderer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3.2 AddRenderer()——渲染器注册
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#533-setsize-setposition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3.3 SetSize() / SetPosition()——窗口几何
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#534-setwindowname" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3.4 SetWindowName()——窗口标题
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#535-setmultisamples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3.5 SetMultiSamples()——多重采样抗锯齿
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#536-render" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3.6 Render()——触发管道级联
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#537-stereo-rendering" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3.7 立体渲染（Stereo Rendering）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#538-off-screen-rendering" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3.8 离屏渲染（Off-Screen Rendering）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#54" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.4 多视口布局
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5.4 多视口布局">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#541-setviewport" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.4.1 用SetViewport()构建栅格布局
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#542" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.4.2 常见布局模式
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#543" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.4.3 处理窗口缩放事件
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#55-vtkcamera" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.5 vtkCamera——相机控制
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5.5 vtkCamera——相机控制">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#551-vs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.5.1 平行投影 vs 透视投影
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#552" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.5.2 相机位置参数
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#553-setclippingrange" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.5.3 SetClippingRange()——近远裁剪平面
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#554" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.5.4 相机运动方法
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#555-resetcamera" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.5.5 ResetCamera()——自动适配可见物体
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#556-vtkcamera-vs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.5.6 vtkCamera vs 交互机的相机
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#56-vtkrenderwindowinteractor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.6 vtkRenderWindowInteractor——交互机
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5.6 vtkRenderWindowInteractor——交互机">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#561" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.6.1 交互机的角色
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#562-setrenderwindow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.6.2 SetRenderWindow()——绑定窗口
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#563-start" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.6.3 Start()——进入事件循环
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#564" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.6.4 默认鼠标事件
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#565" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.6.5 默认键盘事件
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#566-vtkinteractorstyle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.6.6 vtkInteractorStyle——交互样式的概念
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#567" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.6.7 自定义交互样式
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#57" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.7 代码示例：交互式多视口场景展示
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5.7 代码示例：交互式多视口场景展示">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#571-c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.7.1 完整C++代码
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#572-cmakeliststxt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.7.2 CMakeLists.txt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#573" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.7.3 代码逐段解析
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5.7.3 代码逐段解析">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        头文件和依赖
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        自定义交互样式
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#createcoloredactor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        辅助函数CreateColoredActor()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2x2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2x2视口布局
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        预设视角的设计
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        每个视口使用独立相机
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#574" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.7.4 编译和运行
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#575" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.7.5 实验建议
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#58" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.8 本章小结
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5.8 本章小结">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        要点速览
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        从本章到全书
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        进入下一章之前
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="rendering-and-interactor">第五章 渲染与交互机（Rendering and Interactor）</h1>
+<h2 id="_1">本章导读</h2>
+<p>第二章我们深入学习了可视化管道（Visualization Pipeline）——从Source到Mapper这一整条数据加工链路。你理解了数据如何沿管道流动、MTime如何驱动缓存失效、<code>SetInputConnection()</code>与<code>SetInputData()</code>的根本区别。但管道最右侧的部分——Mapper之后发生了什么——我们只是简略提及。</p>
+<p>本章将聚焦于管道的"右半侧"：<strong>渲染管道（Rendering Pipeline）</strong>。这是VTK将你的数据真正呈现为屏幕上可交互像素的最后一段旅程。具体包括：</p>
+<ol>
+<li><strong>渲染管线的四个核心层级</strong>——Actor、Renderer、RenderWindow、RenderWindowInteractor各自承担什么职责，以及它们之间的协作关系。</li>
+<li><strong>vtkRenderer</strong>——场景管理者，它不只是一个"画布"，更是Actor、Camera、Light的管理中心。</li>
+<li><strong>vtkRenderWindow</strong>——渲染窗口，操作系统窗口的VTK抽象，以及多渲染器布局的物理载体。</li>
+<li><strong>多视口（Multi-Viewport）布局</strong>——如何使用<code>SetViewport()</code>在同一个窗口中创建多个视图，如"前视图+顶视图+侧视图+透视图"的四视图科学可视化布局。</li>
+<li><strong>vtkCamera</strong>——相机控制，透视投影与平行投影、相机参数的含义、各种旋转/平移/缩放语义。</li>
+<li><strong>vtkRenderWindowInteractor</strong>——交互机，事件循环的启动、默认键盘/鼠标绑定、交互样式的概念与切换。</li>
+<li><strong>一个完整的代码示例</strong>——在一个窗口中展示多视口布局，不同视口显示不同数据源和相机角度，并通过键盘回调切换预设视角。</li>
+</ol>
+<p>如果你在之前的章节中一直在问"为什么我的数据画出来后总是白色？""如何在同一个窗口里显示四个视图？""旋转场景的轨迹球行为能不能改？"——那么这一章就是为你准备的答案。</p>
+<hr />
+<h2 id="51">5.1 渲染管线回顾</h2>
+<h3 id="511-vs">5.1.1 渲染管线 vs 可视化管线</h3>
+<p>在第二章2.1.3节，我们画出了VTK两条管道的分界线。这里我们再做一个精炼的回顾，因为深入理解第5章必须锚定这两者的区别。</p>
+<pre><code>+------------------- 可视化管道（第二章重点）-------------------+
+|                                                              |
+| Source --&gt; Filter --&gt; Filter --&gt; ... --&gt; Mapper              |
+|                                         |                    |
++-----------------------------------------+--------------------+
+                                          |
+                  actor-&gt;SetMapper(mapper) |
+                                          v
++------------------- 渲染管道（本章重点）-----------------------+
+|                                                              |
+| Actor --&gt; Renderer --&gt; RenderWindow --&gt; Interactor           |
+|                                                              |
++--------------------------------------------------------------+
+</code></pre>
+<p><strong>可视化管道</strong>处理的问题是："我有数据，我想把它变成图形"。它的输入是数据集（vtkDataSet），输出是图形基元（顶点缓冲、索引缓冲、着色器等）。核心抽象是<code>vtkAlgorithm</code>及其子类。</p>
+<p><strong>渲染管道</strong>处理的问题是："我有图形，我想把它展示给用户并允许交互"。它的输入是Actor/Mapper产出的图形基元，输出是屏幕上的像素和用户输入事件的分发。核心抽象是<code>vtkProp</code>（及其子类<code>vtkActor</code>、<code>vtkVolume</code>等）、<code>vtkRenderer</code>、<code>vtkRenderWindow</code>、<code>vtkRenderWindowInteractor</code>。</p>
+<p>一条经验法则：<strong>如果你在修改数据参数（<code>SetResolution()</code>、<code>SetRadius()</code>、<code>SetShrinkFactor()</code>），你操作的是可视化管道；如果你在修改颜色、背景、相机角度、窗口大小，你操作的是渲染管道。</strong></p>
+<h3 id="512-actor-renderer-renderwindow-interactor">5.1.2 Actor -&gt; Renderer -&gt; RenderWindow -&gt; Interactor 角色回顾</h3>
+<p>这是你从第一章第一个Cone示例中就已经见过的四层结构。既然我们要在本章中对它们逐一深入，先做一个快速的角色定位：</p>
+<pre><code>vtkActor          -- &quot;演员&quot;：场景中的可视化实体。
+                    持有一个Mapper（决定几何形状）和一组Property（决定外观）。
+                    还负责自身的空间变换（位置、朝向、缩放）。
+
+vtkRenderer       -- &quot;舞台&quot;：管理一组Actor、一组Light、一台Camera。
+                    负责Actor的添加/移除、背景设置、以及将这组Actor渲染到目标区域。
+
+vtkRenderWindow    -- &quot;剧院&quot;：屏幕上的一个窗口。
+                    可以容纳多个Renderer（每个占据窗口的一块矩形区域）。
+                    封装操作系统窗口的创建、管理、像素显示。
+
+vtkRenderWindowInteractor -- &quot;观众与演出之间的交互&quot;：
+                    捕获键盘鼠标事件，分发给当前的InteractorStyle处理。
+                    启动事件循环，驱动持续的交互刷新。
+</code></pre>
+<h3 id="513-vtk">5.1.3 VTK如何抽象图形后端</h3>
+<p>VTK的渲染系统构建在<strong>后端抽象层</strong>之上。在VTK 9.5.2中，默认且推荐的渲染后端是<strong>OpenGL2</strong>（对应的CMake模块为<code>RenderingOpenGL2</code>）。此外，VTK还支持以下后端：</p>
+<table>
+<thead>
+<tr>
+<th>后端</th>
+<th>CMake模块</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>OpenGL2</td>
+<td><code>RenderingOpenGL2</code></td>
+<td>桌面OpenGL 3.2+，默认且最成熟的后端</td>
+</tr>
+<tr>
+<td>OpenGL ES</td>
+<td><code>RenderingOpenGLES2</code></td>
+<td>移动/嵌入式OpenGL ES 3.0</td>
+</tr>
+<tr>
+<td>WebGPU</td>
+<td><code>RenderingWebGPU</code></td>
+<td>通过WebGPU标准的现代渲染（实验性）</td>
+</tr>
+<tr>
+<td>ANARI</td>
+<td><code>RenderingANARI</code></td>
+<td>通过ANARI接口支持ray tracing渲染器</td>
+</tr>
+</tbody>
+</table>
+<p>对于C++开发者和本教程而言，你只需要使用OpenGL2后端。VTK通过<strong>对象工厂（Object Factory）</strong> 机制自动选择正确的具体实现类。例如：</p>
+<ul>
+<li>你代码中写的是<code>vtkPolyDataMapper</code>，运行时使用的实际上是<code>vtkOpenGLPolyDataMapper</code>。</li>
+<li>你代码中写的是<code>vtkRenderer</code>，运行时使用的实际上是<code>vtkOpenGLRenderer</code>。</li>
+</ul>
+<p>这种抽象使得你的应用程序代码与底层渲染API完全解耦——同一个程序可以不加修改地在不同后端上运行（只要在CMake配置时选择了对应的后端模块即可）。你在CMakeLists.txt中声明<code>RenderingOpenGL2</code>，加上<code>vtk_module_autoinit</code>宏，VTK的工厂系统就会在程序启动时自动注册OpenGL2后端的所有具体实现类。</p>
+<p><strong>不需要你关心的事情（VTK已经帮你做了）：</strong></p>
+<ul>
+<li>顶点缓冲对象（VBO）的创建与填充</li>
+<li>着色器程序（Shader Program）的编译与链接</li>
+<li>帧缓冲对象（FBO）的管理</li>
+<li>纹理单元（Texture Unit）的分配</li>
+<li>OpenGL状态机的管理（绑定、解绑、状态推入/弹出）</li>
+<li>窗口系统集成（WGL/GLX/CGL/EGL）</li>
+</ul>
+<p><strong>需要你关心的事情（本章的重点）：</strong></p>
+<ul>
+<li>将Actor添加到正确的Renderer</li>
+<li>设置背景色、渐变效果</li>
+<li>使用<code>SetViewport()</code>划分多视图布局</li>
+<li>调整相机位置、焦点、投影类型</li>
+<li>选择交互样式、启动事件循环</li>
+</ul>
+<hr />
+<h2 id="52-vtkrenderer">5.2 vtkRenderer——场景管理者</h2>
+<h3 id="521-vtkrenderer">5.2.1 vtkRenderer的职责</h3>
+<p><code>vtkRenderer</code>是VTK渲染系统中的中央指挥。你可以把它想象成"灯光师+摄像师+舞台总监"的综合体。它的核心职责包括：</p>
+<ol>
+<li><strong>Actor管理</strong>：维护场景中的可视实体列表，管理它们的添加、移除和可见性。</li>
+<li><strong>光照管理</strong>：持有光源（<code>vtkLight</code>）列表，控制场景照明环境。</li>
+<li><strong>相机管理</strong>：持有一台<code>vtkCamera</code>对象，定义观察者的位置、朝向和投影方式。</li>
+<li><strong>背景设置</strong>：设置背景颜色、渐变颜色、或背景纹理。</li>
+<li><strong>渲染执行</strong>：当收到渲染请求时，遍历Actor列表，调用每个Actor的渲染方法，最终将结果绘制到RenderWindow。</li>
+</ol>
+<p>每个<code>vtkRenderer</code>内部维护着一个Prop列表（<code>vtkPropCollection</code>）。<code>vtkProp</code>是所有可渲染对象的基类，<code>vtkActor</code>、<code>vtkVolume</code>、<code>vtkActor2D</code>都是它的派生类。本章我们主要讨论<code>vtkActor</code>；体渲染（<code>vtkVolume</code>）将在第十三章专门讲解。</p>
+<h3 id="522-addactor-removeactor">5.2.2 AddActor() / RemoveActor()——管理可视元素</h3>
+<p><code>AddActor()</code>和<code>RemoveActor()</code>是渲染器中最常用的两个方法：</p>
+<pre><code class="language-cpp">// 将一个Actor添加到渲染器的场景中
+void AddActor(vtkProp* prop);
+
+// 将一个Actor从渲染器中移除
+void RemoveActor(vtkProp* prop);
+
+// 获取渲染器中当前的Actor数量
+int VisibleActorCount();
+
+// 获取渲染器中第i个Actor
+vtkProp* GetActors() 返回的集合中的元素；
+
+// 移除所有Actor
+void RemoveAllViewProps();
+</code></pre>
+<p>添加的顺序很重要：<strong>渲染器按照Actor的添加顺序进行渲染</strong>（除非你启用了透明度排序，此时半透明Actor会根据深度重新排序）。通常你应该先添加不透明对象，再添加半透明对象。</p>
+<p>一个常见的模式是：你需要临时隐藏某个Actor时，除了<code>RemoveActor()</code>之外，你也可以直接操作Actor的可见性开关：</p>
+<pre><code class="language-cpp">actor-&gt;SetVisibility(0);   // 隐藏（但Actor仍留在渲染器中）
+actor-&gt;SetVisibility(1);   // 显示
+</code></pre>
+<p>使用<code>SetVisibility()</code>比反复<code>RemoveActor()</code>/<code>AddActor()</code>更高效——它避免了从Prop列表中删除和重新插入对象的开销。</p>
+<h3 id="523-setbackground-setbackground2-gradientbackgroundon">5.2.3 SetBackground() / SetBackground2() / GradientBackgroundOn()——背景样式</h3>
+<p>VTK支持三种背景模式：纯色背景、色块渐变背景、和纹理背景。</p>
+<p><strong>纯色背景（默认）：</strong></p>
+<pre><code class="language-cpp">renderer-&gt;SetBackground(0.2, 0.3, 0.4);   // RGB（分量范围0.0~1.0）
+renderer-&gt;SetBackground(0, 0, 0);          // 纯黑背景
+renderer-&gt;SetBackground(1.0, 1.0, 1.0);    // 纯白背景
+</code></pre>
+<p><strong>渐变背景：</strong></p>
+<p>通过设置两种颜色并启用渐变模式，可以实现从上到下的平滑过渡：</p>
+<pre><code class="language-cpp">renderer-&gt;SetBackground(0.1, 0.2, 0.3);    // 顶部颜色：深蓝灰色
+renderer-&gt;SetBackground2(0.7, 0.8, 0.9);   // 底部颜色：浅灰蓝色
+renderer-&gt;GradientBackgroundOn();           // 启用渐变
+</code></pre>
+<p>渐变方向为从上到下（沿Y轴）。如果需要在代码中切换回纯色背景：</p>
+<pre><code class="language-cpp">renderer-&gt;GradientBackgroundOff();
+</code></pre>
+<p><strong>纹理背景：</strong></p>
+<p>通过设置背景纹理来实现图片背景或天空盒效果：</p>
+<pre><code class="language-cpp">// 读取图片作为纹理
+vtkNew&lt;vtkJPEGReader&gt; reader;
+reader-&gt;SetFileName(&quot;background.jpg&quot;);
+
+// 创建纹理对象
+vtkNew&lt;vtkTexture&gt; texture;
+texture-&gt;SetInputConnection(reader-&gt;GetOutputPort());
+
+// 设置为渲染器的背景纹理
+renderer-&gt;SetBackgroundTexture(texture);
+renderer-&gt;TexturedBackgroundOn();
+</code></pre>
+<p>这是显示地球影像、医学DICOM背景或公司Logo背景的常用方式。</p>
+<h3 id="524-setviewport">5.2.4 SetViewport()——定义子区域（多视图布局的基础）</h3>
+<p><code>SetViewport()</code>定义了渲染器在RenderWindow中的矩形子区域。这是实现多视图布局的核心方法。</p>
+<pre><code class="language-cpp">void SetViewport(double xmin, double ymin, double xmax, double ymax);
+</code></pre>
+<p>四个参数都是归一化坐标（normalized viewport coordinates），取值范围为 <strong>[0.0, 1.0]</strong>：</p>
+<ul>
+<li><code>(0, 0)</code> 表示窗口的左下角。</li>
+<li><code>(1, 1)</code> 表示窗口的右上角。</li>
+<li><code>(0.5, 0.5)</code> 表示窗口的正中心。</li>
+</ul>
+<p><strong>重要约定：</strong> VTK的viewport坐标原点在<strong>左下角</strong>，这与许多GUI框架（原点在左上角）不同。在设计多视口布局时务必注意这一点。</p>
+<p>几个常用布局示例：</p>
+<pre><code class="language-cpp">// 单个全窗口（默认行为）
+renderer-&gt;SetViewport(0.0, 0.0, 1.0, 1.0);
+
+// 左右并排两个视图
+rendererLeft-&gt;SetViewport(0.0, 0.0, 0.5, 1.0);   // 左半部
+rendererRight-&gt;SetViewport(0.5, 0.0, 1.0, 1.0);   // 右半部
+
+// 上下并排两个视图
+rendererTop-&gt;SetViewport(0.0, 0.5, 1.0, 1.0);     // 上半部
+rendererBottom-&gt;SetViewport(0.0, 0.0, 1.0, 0.5);   // 下半部
+
+// 四象限视图（2x2网格）
+rendererTL-&gt;SetViewport(0.0, 0.5, 0.5, 1.0);   // 左上
+rendererTR-&gt;SetViewport(0.5, 0.5, 1.0, 1.0);   // 右上
+rendererBL-&gt;SetViewport(0.0, 0.0, 0.5, 0.5);   // 左下
+rendererBR-&gt;SetViewport(0.5, 0.0, 1.0, 0.5);   // 右下
+
+// 主视图+三辅助视图（类似3D建模软件的布局）
+rendererMain-&gt;SetViewport(0.0, 0.3, 0.7, 1.0);    // 主视图（大面积透视）
+rendererTop-&gt;SetViewport(0.0, 0.0, 0.3, 0.3);     // 顶视图
+rendererFront-&gt;SetViewport(0.3, 0.0, 0.6, 0.3);   // 前视图
+rendererSide-&gt;SetViewport(0.6, 0.0, 0.9, 0.3);    // 侧视图
+</code></pre>
+<p><strong>SetViewport()的视觉效果：</strong></p>
+<pre><code>Window (e.g., 800x400 pixels)
++----------------------------------------+
+| (0,0)                        (1,1)     |
+|                                        |
+|  [Renderer A]   |   [Renderer B]      |
+|  viewport(0,0,  |   viewport(0.5,0,   |
+|           0.5,1)|            1.0,1)   |
+|                                        |
++----------------------------------------+
+</code></pre>
+<p>需要注意的是，viewport坐标与窗口的物理像素大小无关——无论窗口是300x200还是1920x1080，viewport坐标始终在[0,1]范围内。VTK内部根据当前的窗口物理尺寸将viewport坐标映射到实际的像素区域。这意味着视图布局会随着窗口缩放自动适配。</p>
+<h3 id="525-setlayer">5.2.5 SetLayer()——渲染器分层</h3>
+<p>当一个RenderWindow中多个渲染器的viewport重合时，渲染顺序决定了哪个渲染器的内容显示在最上层。<code>SetLayer()</code>可以精确控制这个顺序：</p>
+<pre><code class="language-cpp">renderer-&gt;SetLayer(int layer);
+</code></pre>
+<ul>
+<li>默认layer为0。</li>
+<li>Layer值越大的渲染器越靠上层（后渲染，覆盖在下层之上）。</li>
+<li>常用于覆盖层效果：例如在主三维视图上叠加一个二维信息面板或比例尺。</li>
+</ul>
+<pre><code class="language-cpp">// 背景三维视图（下层，先渲染）
+renderer3D-&gt;SetViewport(0.0, 0.0, 1.0, 1.0);
+renderer3D-&gt;SetLayer(0);
+
+// 前景信息面板（上层，后渲染，需要透明背景）
+rendererOverlay-&gt;SetViewport(0.7, 0.7, 1.0, 1.0);
+rendererOverlay-&gt;SetLayer(1);
+</code></pre>
+<p>当使用覆盖层时，上层渲染器的背景应该设置为透明（或让上层渲染器不设置背景色，使其内容"浮"在下层之上）。</p>
+<h3 id="526-setdraw">5.2.6 SetDraw()——启用/禁用渲染器</h3>
+<pre><code class="language-cpp">renderer-&gt;SetDraw(0);   // 禁用此渲染器（不参与渲染）
+renderer-&gt;SetDraw(1);   // 启用此渲染器（默认行为）
+</code></pre>
+<p>当<code>SetDraw(0)</code>被调用时，该渲染器在<code>RenderWindow::Render()</code>时完全被跳过——它的所有Actor都不会被渲染。这对于以下场景有用：</p>
+<ul>
+<li>临时隐藏某个视图而不需要移除它的Actor。</li>
+<li>在程序运行时动态切换显示哪些视图。</li>
+<li>性能优化：不需要的视图可以暂时关闭其渲染。</li>
+</ul>
+<hr />
+<h2 id="53-vtkrenderwindow">5.3 vtkRenderWindow——渲染窗口</h2>
+<h3 id="531-vtkrenderwindow">5.3.1 vtkRenderWindow的职责</h3>
+<p><code>vtkRenderWindow</code>是VTK对操作系统窗口的抽象。它负责：</p>
+<ol>
+<li><strong>窗口创建与管理</strong>：创建原生平台窗口（Windows上使用Win32 API、Linux上使用X11或Wayland、macOS上使用Cocoa）。</li>
+<li><strong>渲染器容纳</strong>：一个RenderWindow可以包含多个Renderer。</li>
+<li><strong>像素呈现</strong>：将各Renderer的渲染结果合成并交换到屏幕（双缓冲机制）。</li>
+<li><strong>事件路由</strong>：将窗口系统的鼠标/键盘事件转发给Interactor。</li>
+<li><strong>窗口属性</strong>：管理窗口大小、位置、标题、全屏等属性。</li>
+</ol>
+<h3 id="532-addrenderer">5.3.2 AddRenderer()——渲染器注册</h3>
+<pre><code class="language-cpp">void AddRenderer(vtkRenderer* renderer);
+</code></pre>
+<p>将一个渲染器注册到窗口中。一个RenderWindow可以容纳任意数量的Renderer，每个Renderer通过<code>SetViewport()</code>定义其在窗口中的矩形区域。</p>
+<pre><code class="language-cpp">vtkNew&lt;vtkRenderWindow&gt; renderWindow;
+
+// 创建三个渲染器
+vtkNew&lt;vtkRenderer&gt; rendererA, rendererB, rendererC;
+
+// 分别设置各自的viewport
+rendererA-&gt;SetViewport(0.0, 0.0, 0.33, 1.0);
+rendererB-&gt;SetViewport(0.33, 0.0, 0.67, 1.0);
+rendererC-&gt;SetViewport(0.67, 0.0, 1.0, 1.0);
+
+// 将三个渲染器都注册到同一个窗口中
+renderWindow-&gt;AddRenderer(rendererA);
+renderWindow-&gt;AddRenderer(rendererB);
+renderWindow-&gt;AddRenderer(rendererC);
+</code></pre>
+<p>每次<code>Render()</code>调用时，RenderWindow会按添加顺序依次调用每个渲染器的渲染方法。</p>
+<h3 id="533-setsize-setposition">5.3.3 SetSize() / SetPosition()——窗口几何</h3>
+<pre><code class="language-cpp">// 设置窗口的客户区大小（像素）
+renderWindow-&gt;SetSize(800, 600);
+
+// 设置窗口在屏幕上的位置（像素，相对于屏幕左上角）
+renderWindow-&gt;SetPosition(100, 100);
+
+// 获取当前窗口大小
+int* size = renderWindow-&gt;GetSize();       // size[0]=宽, size[1]=高
+int w = renderWindow-&gt;GetSize()[0];
+int h = renderWindow-&gt;GetSize()[1];
+
+// 获取当前屏幕尺寸
+int* screenSize = renderWindow-&gt;GetScreenSize();
+
+// 设置全屏模式
+renderWindow-&gt;SetFullScreen(1);
+renderWindow-&gt;SetFullScreen(0);            // 退出全屏
+
+// 设置窗口在屏幕上的显示模式
+renderWindow-&gt;FullScreenOn();
+renderWindow-&gt;FullScreenOff();
+</code></pre>
+<p><strong>重要细节：</strong> <code>SetSize()</code>设置的是<strong>客户区</strong>大小（可渲染区域的大小），不包括窗口标题栏、边框和菜单栏。实际窗口占用的屏幕空间会大于此值。</p>
+<h3 id="534-setwindowname">5.3.4 SetWindowName()——窗口标题</h3>
+<pre><code class="language-cpp">renderWindow-&gt;SetWindowName(&quot;My VTK Application - Cone with Shrink Filter&quot;);
+</code></pre>
+<p>设置窗口的标题栏文字。通常建议包含应用程序名称和当前数据集的描述信息，方便用户识别窗口内容。</p>
+<h3 id="535-setmultisamples">5.3.5 SetMultiSamples()——多重采样抗锯齿</h3>
+<pre><code class="language-cpp">// 启用4x多重采样抗锯齿（MSAA）
+renderWindow-&gt;SetMultiSamples(4);
+
+// 关闭多重采样（降低GPU消耗）
+renderWindow-&gt;SetMultiSamples(0);
+</code></pre>
+<p>多重采样（Multi-Sample Anti-Aliasing）是一种硬件支持的抗锯齿技术，通过在像素内采样多个点来平滑边缘锯齿。VTK中MSAA的启用与否对一个程序的视觉效果有显著影响：</p>
+<ul>
+<li><strong>SetMultiSamples(0)</strong>：无抗锯齿，边缘可能有明显锯齿，GPU消耗最低。适合开发调试阶段或对性能要求极高的场景。</li>
+<li><strong>SetMultiSamples(4)</strong>：4x MSAA，边缘明显光滑，是性能与质量兼顾的推荐设置。</li>
+<li><strong>SetMultiSamples(8)</strong>：8x MSAA，最高质量，但GPU消耗更高。</li>
+</ul>
+<p><strong>注意事项：</strong></p>
+<ol>
+<li>MSAA必须在<strong>创建vtkRenderWindow之后、首次调用Render()之前</strong>设置。如果在首次Render()之后动态修改MSAA设置，行为可能因平台和GPU驱动而异。</li>
+<li>MSAA在离屏渲染（Off-Screen Rendering）模式下可能不可用，取决于图形驱动支持。</li>
+<li>某些渲染技术（如将渲染结果读取回CPU的<code>vtkWindowToImageFilter</code>）在与MSAA配合时可能需要特殊处理。</li>
+</ol>
+<h3 id="536-render">5.3.6 Render()——触发管道级联</h3>
+<pre><code class="language-cpp">renderWindow-&gt;Render();
+</code></pre>
+<p><code>Render()</code>是渲染管道的触发器。它的执行流程在第二章2.5节中已详细解释，这里做简要回顾：</p>
+<pre><code>renderWindow-&gt;Render()
+  --&gt; 对每个renderer: renderer-&gt;Render()
+    --&gt; 遍历renderer中的每个actor: actor-&gt;Render()
+      --&gt; mapper-&gt;Update()               // 触发可视化管道按需执行
+      --&gt; mapper-&gt;Render(renderer, actor) // 执行图形绘制
+    --&gt; 执行相机投影变换
+    --&gt; 执行光照计算
+  --&gt; 合成所有renderer的输出
+  --&gt; 交换帧缓冲到屏幕（双缓冲）
+</code></pre>
+<h3 id="537-stereo-rendering">5.3.7 立体渲染（Stereo Rendering）</h3>
+<p>VTK支持生成立体图像对（stereo pair），用于VR头显、3D电视或红蓝立体眼镜。</p>
+<pre><code class="language-cpp">// 启用立体渲染
+renderWindow-&gt;SetStereoRender(1);
+
+// 设置立体渲染类型
+renderWindow-&gt;SetStereoTypeToRedBlue();     // 红蓝立体（最常用）
+renderWindow-&gt;SetStereoTypeToAnaglyph();    // 也是红蓝立体的一种
+renderWindow-&gt;SetStereoTypeToInterlaced();   // 隔行扫描
+renderWindow-&gt;SetStereoTypeToLeft();         // 仅左眼
+renderWindow-&gt;SetStereoTypeToRight();        // 仅右眼
+renderWindow-&gt;SetStereoTypeToCrystalEyes();  // Crystal Eyes主动快门式
+renderWindow-&gt;SetStereoTypeToDresden();      // Dresden立体显示
+</code></pre>
+<p>当立体渲染启用时，VTK在每个渲染周期内分别生成左眼和右眼的视图（通过水平偏移相机位置模拟双眼视差），然后将两幅图像合成到输出帧中。</p>
+<pre><code class="language-cpp">// 调整双眼间距（默认值约0.05）
+renderWindow-&gt;SetStereoTypeToRedBlue();
+renderWindow-&gt;StereoRenderOn();
+// renderWindow-&gt;GetStereoCapableWindow() 查询是否可用
+</code></pre>
+<p>立体渲染在本教程中不做重点展开，因为它需要特定显示硬件的支持。如果你从事VR/AR或科学数据沉浸式可视化开发，可以查阅VTK官方文档中关于立体渲染的详细说明。</p>
+<h3 id="538-off-screen-rendering">5.3.8 离屏渲染（Off-Screen Rendering）</h3>
+<p>离屏渲染允许VTK在不显示任何窗口的情况下完成渲染——渲染结果被写入到内存中的帧缓冲（FBO），可以随后读取回CPU或保存为图像文件。</p>
+<pre><code class="language-cpp">// 在创建renderWindow后、首次Render()前设置
+renderWindow-&gt;SetOffScreenRendering(1);
+
+// 之后正常使用：添加Renderer、Actor，调用Render()
+renderWindow-&gt;Render();  // 渲染到内存中的帧缓冲，不会弹出窗口
+</code></pre>
+<p>离屏渲染的典型应用场景：</p>
+<ul>
+<li><strong>服务器端/无头模式</strong>：在没有图形界面的服务器（headless server）上生成可视化图像。</li>
+<li><strong>批量图像生成</strong>：自动生成大量可视化截图，如参数扫描结果的可视化。</li>
+<li><strong>图像导出</strong>：将渲染结果通过<code>vtkWindowToImageFilter</code>导出为图像文件（PNG、JPEG等）。</li>
+<li><strong>单元测试中的可视化验证</strong>（Regression Testing）：自动对比渲染图像与参考图像。</li>
+</ul>
+<pre><code class="language-cpp">// 离屏渲染 + 导出PNG的示例骨架
+vtkNew&lt;vtkRenderWindow&gt; renderWindow;
+renderWindow-&gt;SetOffScreenRendering(1);
+// ... 添加renderer, actor, 配置相机 ...
+
+renderWindow-&gt;Render();
+
+// 将渲染结果读取为vtkImageData
+vtkNew&lt;vtkWindowToImageFilter&gt; windowToImage;
+windowToImage-&gt;SetInput(renderWindow);
+
+// 写入PNG文件
+vtkNew&lt;vtkPNGWriter&gt; writer;
+writer-&gt;SetInputConnection(windowToImage-&gt;GetOutputPort());
+writer-&gt;SetFileName(&quot;output.png&quot;);
+writer-&gt;Write();
+</code></pre>
+<hr />
+<h2 id="54">5.4 多视口布局</h2>
+<h3 id="541-setviewport">5.4.1 用SetViewport()构建栅格布局</h3>
+<p>科学可视化中最常见的需求之一是在同一个窗口中同时显示数据的多个视图——例如透视图、顶视图、前视图和侧视图。这完全通过<code>SetViewport()</code>实现。</p>
+<p>核心思路是：<strong>创建多个vtkRenderer，每个设置不同的viewport矩形区域，全部添加到同一个vtkRenderWindow中。</strong></p>
+<pre><code>        (0,1)                (1,1)
+          +-------------------+
+          |    |    |    |    |
+          | R0 | R1 | R2 | R3 |   四个等宽竖直条
+          |    |    |    |    |
+          +-------------------+
+        (0,0)                (1,0)
+
+        (0,1)                (1,1)
+          +---------+---------+
+          |         |         |
+          |   R0    |   R1    |   2x2 网格
+          |         |         |
+          +---------+---------+
+          |         |         |
+          |   R2    |   R3    |
+          |         |         |
+          +---------+---------+
+        (0,0)                (1,0)
+</code></pre>
+<p>viewport设置模板：</p>
+<pre><code class="language-cpp">// 2x2 等分网格
+// 左上 (0.0, 0.5, 0.5, 1.0)
+// 右上 (0.5, 0.5, 1.0, 1.0)
+// 左下 (0.0, 0.0, 0.5, 0.5)
+// 右下 (0.5, 0.0, 1.0, 0.5)
+</code></pre>
+<h3 id="542">5.4.2 常见布局模式</h3>
+<p><strong>模式一：左右并排（Side-by-Side Comparison）</strong></p>
+<p>用于对比两种不同参数的可视化结果，或同时展示数据模型与其线框表示。</p>
+<pre><code class="language-cpp">rendererLeft-&gt;SetViewport(0.0, 0.0, 0.5, 1.0);
+rendererRight-&gt;SetViewport(0.5, 0.0, 1.0, 1.0);
+</code></pre>
+<p><strong>模式二：2x2四视图（Four-View Layout）</strong></p>
+<p>科学仿真中最经典的布局：透视图 + 三正交视图。</p>
+<pre><code class="language-cpp">// 透视图（左上）
+rendererPersp-&gt;SetViewport(0.0, 0.5, 0.5, 1.0);
+// 前视图（右上）
+rendererFront-&gt;SetViewport(0.5, 0.5, 1.0, 1.0);
+// 侧视图（左下）
+rendererSide-&gt;SetViewport(0.0, 0.0, 0.5, 0.5);
+// 顶视图（右下）
+rendererTop-&gt;SetViewport(0.5, 0.0, 1.0, 0.5);
+</code></pre>
+<p><strong>模式三：主视图 + 缩略图叠加（Picture-in-Picture）</strong></p>
+<pre><code class="language-cpp">// 主视图（全窗口）
+rendererMain-&gt;SetViewport(0.0, 0.0, 1.0, 1.0);
+rendererMain-&gt;SetLayer(0);
+
+// 小缩略图（右下角）
+rendererThumb-&gt;SetViewport(0.7, 0.7, 1.0, 1.0);
+rendererThumb-&gt;SetLayer(1);
+</code></pre>
+<p><strong>模式四：2x3或更多</strong></p>
+<p>viewport坐标可任意划分，不仅限于等分。例如下面的布局产生一个大的主视图配合右侧两个小图：</p>
+<pre><code class="language-cpp">rendererMain-&gt;SetViewport(0.0, 0.0, 0.65, 1.0);    // 左侧大图
+rendererTopRight-&gt;SetViewport(0.65, 0.5, 1.0, 1.0); // 右上小图
+rendererBotRight-&gt;SetViewport(0.65, 0.0, 1.0, 0.5); // 右下小图
+</code></pre>
+<h3 id="543">5.4.3 处理窗口缩放事件</h3>
+<p>当窗口被用户拖拽改变大小时，VTK会自动将各viewport重新映射到新的像素区域——viewport是归一化坐标，因此<strong>无需手动处理缩放逻辑</strong>。每个Renderer会自适应新的区域大小。</p>
+<p>但是，有一种情况需要注意：<strong>你需要在多视口创建后调用一次<code>Render()</code>使所有viewport生效</strong>。在交互运行期间，每次窗口大小改变后，VTK的Interactor会自动触发重新渲染，viewport映射随之更新。</p>
+<pre><code class="language-cpp">// 窗口创建时设置初始大小
+renderWindow-&gt;SetSize(800, 600);
+
+// 添加所有renderer并设置viewport后
+// 首次Render()会根据当前窗口尺寸计算各viewport的实际像素范围
+renderWindow-&gt;Render();
+
+// 之后窗口大小变化时，viewport自动适配——无需额外代码
+</code></pre>
+<hr />
+<h2 id="55-vtkcamera">5.5 vtkCamera——相机控制</h2>
+<h3 id="551-vs">5.5.1 平行投影 vs 透视投影</h3>
+<p>VTK支持两种投影类型：</p>
+<p><strong>透视投影（Perspective Projection）——默认：</strong></p>
+<p>模拟人眼或真实相机的视觉效果：离相机近的物体更大，远的物体更小，平行线在远处汇聚到灭点。这是观察三维模型时最自然的选择。</p>
+<pre><code class="language-cpp">vtkCamera* camera = renderer-&gt;GetActiveCamera();
+camera-&gt;ParallelProjectionOff();  // 使用透视投影（默认）
+
+// 调整透视视角宽度（单位为度）
+camera-&gt;SetViewAngle(30.0);       // 默认值，值越大视锥越广
+</code></pre>
+<p><strong>平行投影（Parallel Projection / Orthographic）：</strong></p>
+<p>所有投影线相互平行，物体无论远近看起来大小相同。在科学可视化中，正交投影用于需要保持几何尺寸比例不变的三视图（前视图、侧视图、顶视图）。</p>
+<pre><code class="language-cpp">camera-&gt;ParallelProjectionOn();
+
+// 设置平行投影的缩放比例（控制可见区域大小）
+camera-&gt;SetParallelScale(5.0); // 值越大&quot;看到&quot;的范围越广
+</code></pre>
+<p><code>SetParallelScale()</code>的含义是：在平行投影模式下，渲染器垂直方向的一半能容纳多少世界坐标单位。例如，<code>SetParallelScale(5.0)</code>意味着垂直方向上可以看到10个单位范围（-5到+5），水平方向的范围根据窗口宽高比自动缩放。</p>
+<h3 id="552">5.5.2 相机位置参数</h3>
+<p>VTK相机使用三个核心参数来定义观察姿态：</p>
+<pre><code class="language-cpp">vtkCamera* camera = renderer-&gt;GetActiveCamera();
+
+// 设置相机在世界坐标系中的位置
+camera-&gt;SetPosition(x, y, z);       // 相机所在位置（&quot;眼睛&quot;的位置）
+
+// 设置焦点（相机正在看的目标点）
+camera-&gt;SetFocalPoint(x, y, z);     // 视线汇聚到的点
+
+// 设置&quot;上&quot;方向（定义画面中&quot;向上&quot;的方向）
+camera-&gt;SetViewUp(vx, vy, vz);      // 通常是 (0, 1, 0)，即Y轴向上
+</code></pre>
+<p>这三个参数共同定义了观察者的坐标系：</p>
+<pre><code>                Camera Position (眼睛所在位置)
+                     \
+                      \
+                       \  视线方向(View Direction)
+                        \
+                         \
+                     Focal Point (焦点，视线汇聚处)
+
+  View Up (通常指向屏幕上方 -- 决定画面中的&quot;上&quot;是哪个方向)
+</code></pre>
+<p><strong>默认值（以vtkConeSource为例的典型场景）：</strong></p>
+<ul>
+<li>Position: <code>(0, 0, 1)</code> —— 相机在Z轴正方向</li>
+<li>Focal Point: <code>(0, 0, 0)</code> —— 看原点</li>
+<li>View Up: <code>(0, 1, 0)</code> —— Y轴为"上"</li>
+</ul>
+<p><strong>一些预置视角示例：</strong></p>
+<pre><code class="language-cpp">// 前视图（从Z轴正方向看，Y向上）
+camera-&gt;SetPosition(0, 0, 10);
+camera-&gt;SetFocalPoint(0, 0, 0);
+camera-&gt;SetViewUp(0, 1, 0);
+
+// 顶视图（从Y轴正方向俯视，Z向上）
+camera-&gt;SetPosition(0, 10, 0);
+camera-&gt;SetFocalPoint(0, 0, 0);
+camera-&gt;SetViewUp(0, 0, 1);     // 注意：ViewUp变为Z轴
+
+// 侧视图（从X轴正方向看，Y向上）
+camera-&gt;SetPosition(10, 0, 0);
+camera-&gt;SetFocalPoint(0, 0, 0);
+camera-&gt;SetViewUp(0, 1, 0);
+
+// 等轴测视角（三个轴等间距）
+camera-&gt;SetPosition(5, 5, 5);
+camera-&gt;SetFocalPoint(0, 0, 0);
+camera-&gt;SetViewUp(0, 1, 0);
+</code></pre>
+<h3 id="553-setclippingrange">5.5.3 SetClippingRange()——近远裁剪平面</h3>
+<pre><code class="language-cpp">camera-&gt;SetClippingRange(double dNear, double dFar);
+</code></pre>
+<p>近裁剪面（Near Clipping Plane）和远裁剪面（Far Clipping Plane）定义了<strong>与相机的距离区间</strong>，只有在这个区间内的物体才会被渲染。离相机距离小于<code>dNear</code>或大于<code>dFar</code>的几何体将被裁剪（不渲染）。</p>
+<ul>
+<li><strong>dNear</strong>：近裁剪面与相机的距离。任何比这更靠近相机的几何体都不会被渲染。dNear必须大于0（相机位置本身不可见）。</li>
+<li><strong>dFar</strong>：远裁剪面与相机的距离。任何比这更远的几何体都不会被渲染。</li>
+</ul>
+<pre><code class="language-cpp">// 合理的默认裁剪范围
+camera-&gt;SetClippingRange(0.01, 1000.0);  // 很近到非常远
+
+// 对于大型场景（如地形、建筑、CFD域）
+camera-&gt;SetClippingRange(1.0, 10000.0);
+
+// 对于微尺度场景（如显微数据）
+camera-&gt;SetClippingRange(0.0001, 10.0);
+</code></pre>
+<p>如果<code>dNear</code>和<code>dFar</code>之间的比值过大（例如<code>dFar / dNear &gt; 10^5</code>），在透视投影中可能出现<strong>深度缓冲精度问题（Z-Fighting）</strong>——远处的两个面无法正确区分深度，导致闪烁。解决方案是尽可能收窄裁剪范围，使其刚好覆盖场景的深度范围。</p>
+<h3 id="554">5.5.4 相机运动方法</h3>
+<p>VTK的<code>vtkCamera</code>提供了一套面向交互的相机运动方法。这些方法的名字来自摄影和航空术语，理解它们的语义对于操控相机至关重要。</p>
+<pre><code class="language-cpp">// 缩放：沿视线方向向前/向后移动相机（改变Position）
+camera-&gt;Zoom(double factor);       // factor &gt; 1 放大, factor &lt; 1 缩小
+
+// 绕视线轴旋转（Roll -- 滚转）
+camera-&gt;Roll(double angle);        // 角度，单位：度。正值顺时针
+
+// 方位角（Azimuth -- 绕ViewUp轴水平旋转）
+camera-&gt;Azimuth(double angle);     // 正值：从上方看，逆时针旋转
+
+// 俯仰角（Elevation -- 绕与视线和ViewUp垂直的轴旋转）
+camera-&gt;Elevation(double angle);   // 正值：相机仰头（向上看）
+
+// 偏航（Yaw -- 绕ViewUp轴旋转视点，类似Azimuth）
+camera-&gt;Yaw(double angle);         // 与Azimuth相同语义
+
+// 俯仰（Pitch -- 相机抬头/低头，类似Elevation）
+camera-&gt;Pitch(double angle);       // 与Elevation相同语义
+
+// 推拉（Dolly -- 沿视线方向移动相机）
+camera-&gt;Dolly(double distance);    // 正值：向焦点靠近；负值：远离焦点
+</code></pre>
+<p>这里需要辨析几个容易混淆的方法：</p>
+<ul>
+<li><strong>Zoom vs Dolly</strong>：<code>Zoom()</code>通过修改视角角度（View Angle）来改变放大率——就像相机的变焦镜头；<code>Dolly()</code>通过实际移动相机位置来改变放大率——就像你拿着相机往前走。</li>
+<li><strong>Azimuth vs Yaw</strong>：两者在VTK中语义相同，都是绕ViewUp轴旋转。</li>
+<li><strong>Elevation vs Pitch</strong>：两者在VTK中语义相同，都是抬头/低头。</li>
+<li><strong>Roll</strong>：绕视线轴旋转——画面顺时针/逆时针旋转。此操作不改变Position和FocalPoint，只改变ViewUp的方向。</li>
+</ul>
+<p><strong>Azimuth/Elevation的几何直观：</strong></p>
+<p>想象你跟焦点之间有一根看不见的线。Azimuth是绕着ViewUp轴旋转这根线（从上方看逆时针转）；Elevation是保持视线长度不变，相机在包含视线和ViewUp的平面内上下摆动。</p>
+<h3 id="555-resetcamera">5.5.5 ResetCamera()——自动适配可见物体</h3>
+<pre><code class="language-cpp">// 自动调整相机使场景中所有可见Actor都在视野内且居中
+renderer-&gt;ResetCamera();
+
+// 针对某个特定数据集的边界重置相机
+renderer-&gt;ResetCamera(dataSet-&gt;GetBounds());
+
+// 重置裁剪范围为场景边界的合适倍数
+renderer-&gt;ResetCameraClippingRange();
+</code></pre>
+<p><code>ResetCamera()</code>是一个极其便利的方法：它根据当前渲染器中所有可见Actor的组合包围盒（Bounds），自动计算并设置：
+- 最佳相机位置和焦点
+- 合适的平行缩放比例或透视视角角度
+- 合适的近/远裁剪平面</p>
+<p>这是大多数VTK程序的"起点"——在添加完所有Actor之后，调用一次<code>ResetCamera()</code>让相机自动定位到一个合适的观察位置，然后再根据需要进行微调。</p>
+<p><strong>一个常见的使用模式：</strong></p>
+<pre><code class="language-cpp">// 添加所有Actor...
+renderer-&gt;AddActor(actor1);
+renderer-&gt;AddActor(actor2);
+renderer-&gt;AddActor(actor3);
+
+// 让相机自动适配到所有物体的包围盒
+renderer-&gt;ResetCamera();
+
+// 小小的后缩，留出一点呼吸空间
+vtkCamera* camera = renderer-&gt;GetActiveCamera();
+camera-&gt;Dolly(1.2);  // 向后推拉一点
+
+renderWindow-&gt;Render();
+</code></pre>
+<h3 id="556-vtkcamera-vs">5.5.6 vtkCamera vs 交互机的相机</h3>
+<p>一个重要的注意事项：<strong>每个<code>vtkRenderer</code>拥有一台属于它自己的<code>vtkCamera</code>实例。</strong> 交互机的交互样式（InteractorStyle）通过<code>style-&gt;SetDefaultRenderer(renderer)</code>知道的渲染器，然后通过该渲染器的<code>GetActiveCamera()</code>获取相机对象进行操作。</p>
+<pre><code class="language-cpp">// 获取渲染器的相机
+vtkCamera* camera = renderer-&gt;GetActiveCamera();
+
+// 交互样式操作相机
+vtkNew&lt;vtkInteractorStyleTrackballCamera&gt; style;
+style-&gt;SetDefaultRenderer(renderer);
+// 内部：当用户拖拽鼠标时，style通过
+//   renderer-&gt;GetActiveCamera() 获取相机
+//   调用 Azimuth(), Elevation(), Dolly() 等方法进行调整
+</code></pre>
+<p>这意味着：<strong>如果你更换了渲染器的相机（通过<code>renderer-&gt;SetActiveCamera(anotherCamera)</code>），交互样式也将自动使用新相机。</strong> 这对于多视口场景很有用——每个视口的渲染器拥有一台独立的相机，从而可以从不同角度观察同一个或不同的数据。</p>
+<hr />
+<h2 id="56-vtkrenderwindowinteractor">5.6 vtkRenderWindowInteractor——交互机</h2>
+<h3 id="561">5.6.1 交互机的角色</h3>
+<p><code>vtkRenderWindowInteractor</code>是VTK的事件处理中枢。如果<code>vtkRenderer</code>是"舞台"、<code>vtkRenderWindow</code>是"剧院"，那么Interactor就是"观众——它既是观众与演出之间的交互通道，也是为演出提供持续动力的幕后引擎。</p>
+<p>Interactor的核心职责：</p>
+<ol>
+<li><strong>事件循环管理</strong>：<code>Start()</code>方法进入阻塞的事件循环，持续等待并处理用户输入。</li>
+<li><strong>事件路由</strong>：将来自窗口系统的鼠标/键盘/窗口事件转发给当前的InteractorStyle。</li>
+<li><strong>交互样式管理</strong>：持有一个<code>vtkInteractorStyle</code>对象，定义"鼠标左键拖拽是什么意思？"、"按R键应该做什么？"等交互语义。</li>
+<li><strong>渲染触发</strong>：在交互操作完成后自动调用<code>RenderWindow-&gt;Render()</code>刷新画面。</li>
+<li><strong>定时器管理</strong>：支持定时器回调，用于实现动画或周期性更新。</li>
+</ol>
+<h3 id="562-setrenderwindow">5.6.2 SetRenderWindow()——绑定窗口</h3>
+<pre><code class="language-cpp">interactor-&gt;SetRenderWindow(renderWindow);
+</code></pre>
+<p>这行代码建立了交互器与渲染窗口的双向关联：
+- Interactor从RenderWindow获取窗口事件（键盘、鼠标、窗口大小变化等）。
+- Interactor在交互操作完成后调用<code>renderWindow-&gt;Render()</code>重新绘制画面。</p>
+<h3 id="563-start">5.6.3 Start()——进入事件循环</h3>
+<pre><code class="language-cpp">renderWindowInteractor-&gt;Start();
+</code></pre>
+<p><code>Start()</code>进入<strong>阻塞事件循环</strong>。程序会在这行代码处"停下来"，直到用户关闭窗口或程序调用<code>TerminateApp()</code>。事件循环的内部工作流程如下：</p>
+<pre><code>while (渲染窗口仍然打开)
+{
+    等待窗口系统事件（鼠标移动、按键、窗口尺寸变化等）
+
+    将事件转发给当前的 InteractorStyle
+
+    InteractorStyle 根据事件类型执行相应操作：
+        - 鼠标拖拽 → 调整相机参数（Azimuth, Elevation, Dolly 等）
+        - 键盘按键 → 执行按键对应的操作（r=Reset, w=Wireframe 等）
+        - 窗口大小变化 → 重新映射viewport → 触发渲染
+
+    调用 RenderWindow-&gt;Render() 刷新画面
+}
+</code></pre>
+<p>这个事件循环是交互式VTK程序的"心脏"。<code>Start()</code>之前的所有代码都是搭建舞台和布景，<code>Start()</code>之后一切都进入自动运行。</p>
+<p><strong>为什么不在<code>Start()</code>之前调用<code>Render()</code>？</strong> 因为如果没有首帧渲染（在<code>Start()</code>之前调用<code>Render()</code>），事件循环开始后用户将看到一片空白（或垃圾像素），直到第一次交互事件触发渲染。因此，<strong>标准做法是：<code>renderWindow-&gt;Render()</code>然后在<code>renderWindowInteractor-&gt;Start()</code>之前调用一次<code>renderWindow-&gt;Render()</code>。</strong> 这两次调用看似多余，实则保证了首帧的及时显示。</p>
+<h3 id="564">5.6.4 默认鼠标事件</h3>
+<p><code>vtkInteractorStyleTrackballCamera</code>（大多数VTK示例的默认交互样式）定义了以下鼠标绑定：</p>
+<table>
+<thead>
+<tr>
+<th>鼠标操作</th>
+<th>相机效果</th>
+<th>对应相机方法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>左键拖拽</strong></td>
+<td>绕焦点旋转</td>
+<td><code>Azimuth()</code> + <code>Elevation()</code></td>
+</tr>
+<tr>
+<td><strong>中键拖拽</strong></td>
+<td>平移（Pan）</td>
+<td>修改FocalPoint与Position（保持视线方向不变）</td>
+</tr>
+<tr>
+<td><strong>右键拖拽</strong></td>
+<td>缩放（Zoom/Dolly）</td>
+<td><code>Dolly()</code></td>
+</tr>
+<tr>
+<td><strong>滚轮上滚</strong></td>
+<td>放大（Zoom In）</td>
+<td>与右键向上拖拽相同</td>
+</tr>
+<tr>
+<td><strong>滚轮下滚</strong></td>
+<td>缩小（Zoom Out）</td>
+<td>与右键向下拖拽相同</td>
+</tr>
+<tr>
+<td><strong>Shift + 左键拖拽</strong></td>
+<td>平移</td>
+<td>与中键拖拽相同</td>
+</tr>
+</tbody>
+</table>
+<h3 id="565">5.6.5 默认键盘事件</h3>
+<p>相同的默认交互样式还提供了以下键盘绑定（大小写不敏感）：</p>
+<table>
+<thead>
+<tr>
+<th>按键</th>
+<th>功能</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>r</strong></td>
+<td>Reset</td>
+<td>重置相机到自动计算的默认视角（<code>ResetCamera()</code>）</td>
+</tr>
+<tr>
+<td><strong>w</strong></td>
+<td>Wireframe</td>
+<td>将所有Actor的表示模式设为线框（Wireframe）</td>
+</tr>
+<tr>
+<td><strong>s</strong></td>
+<td>Surface</td>
+<td>将所有Actor的表示模式设为表面（Surface，默认）</td>
+</tr>
+<tr>
+<td><strong>p</strong></td>
+<td>Pick</td>
+<td>触发拾取操作（Pick），在终端输出被点击的Actor信息</td>
+</tr>
+<tr>
+<td><strong>f</strong></td>
+<td>Fly-to</td>
+<td>飞行动画：相机平滑过渡到新的观察位置</td>
+</tr>
+<tr>
+<td><strong>j</strong></td>
+<td>Joystick</td>
+<td>切换到操纵杆式（Joystick）交互样式</td>
+</tr>
+<tr>
+<td><strong>t</strong></td>
+<td>Trackball</td>
+<td>切换到轨迹球式（Trackball）交互样式</td>
+</tr>
+<tr>
+<td><strong>e</strong></td>
+<td>Exit</td>
+<td>退出程序（关闭窗口）</td>
+</tr>
+<tr>
+<td><strong>q</strong></td>
+<td>退出</td>
+<td>同 e</td>
+</tr>
+<tr>
+<td><strong>3</strong></td>
+<td>Stereo</td>
+<td>切换立体渲染模式（红蓝立体）</td>
+</tr>
+<tr>
+<td><strong>u</strong></td>
+<td>User</td>
+<td>调用用户自定义回调（UserCallback）</td>
+</tr>
+</tbody>
+</table>
+<p>这些默认按键绑定让你在开发阶段可以不写任何键盘处理代码就进行基本的交互操作。特别是在调试模型时，按<code>w</code>切换到线框模式查看网格质量、按<code>s</code>切回表面模式查看最终效果、按<code>r</code>重置视角——这些便利性是VTK默认提供的，不需要写一行额外的代码。</p>
+<h3 id="566-vtkinteractorstyle">5.6.6 vtkInteractorStyle——交互样式的概念</h3>
+<p><code>vtkInteractorStyle</code>是交互行为的定义类。它决定了"用户拖拽鼠标时发生什么"——这个"什么"可以完全不同，取决于你使用哪种Style。</p>
+<p><strong>VTK 9.5.2内置的主要交互样式：</strong></p>
+<table>
+<thead>
+<tr>
+<th>样式类</th>
+<th>适用场景</th>
+<th>核心行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>vtkInteractorStyleTrackballCamera</code></td>
+<td>三维场景观察（默认）</td>
+<td>鼠标操控相机绕固定焦点旋转。适合观察静态模型</td>
+</tr>
+<tr>
+<td><code>vtkInteractorStyleJoystickCamera</code></td>
+<td>三维漫游/游戏式操控</td>
+<td>鼠标操控相机沿视线方向平滑移动。适合第一人称漫游</td>
+</tr>
+<tr>
+<td><code>vtkInteractorStyleTrackballActor</code></td>
+<td>单个物体操控</td>
+<td>鼠标操控的是选中的Actor自身旋转，而非相机</td>
+</tr>
+<tr>
+<td><code>vtkInteractorStyleImage</code></td>
+<td>二维图像浏览</td>
+<td>适合医学图像（CT/MRI切片）的平移、缩放、窗宽窗位调整</td>
+</tr>
+<tr>
+<td><code>vtkInteractorStyleFlight</code></td>
+<td>飞行动画</td>
+<td>提供平滑的相机飞行动画过渡</td>
+</tr>
+<tr>
+<td><code>vtkInteractorStyleMultiTouchCamera</code></td>
+<td>多点触控设备</td>
+<td>支持触摸屏上的捏合缩放、双指旋转等手势</td>
+</tr>
+<tr>
+<td><code>vtkInteractorStyleUnicam</code></td>
+<td>单手操控</td>
+<td>简化版的TrackballCamera，优化单手操作体验</td>
+</tr>
+</tbody>
+</table>
+<p><strong>设置交互样式：</strong></p>
+<pre><code class="language-cpp">// 创建交互样式对象
+vtkNew&lt;vtkInteractorStyleTrackballCamera&gt; style;
+
+// 绑定到交互机
+renderWindowInteractor-&gt;SetInteractorStyle(style);
+
+// 指定默认渲染器（交互操作作用于这个渲染器的相机）
+style-&gt;SetDefaultRenderer(renderer);
+</code></pre>
+<p><strong>TrackballCamera vs JoystickCamera——如何选择？</strong></p>
+<ul>
+<li><strong>TrackballCamera</strong>：相机绕固定的焦点旋转。适合"观察者围绕物体转"的场景——如查看一个机械零件、一个医学模型、一个分子结构。</li>
+<li><strong>JoystickCamera</strong>：相机以自身位置为基准平移和旋转（类似第一人称游戏）。适合"观察者在场景中走动"的场景——如建筑漫游、地质勘探场景中的穿行浏览。</li>
+</ul>
+<p><strong>TrackballActor——操控物体而非相机：</strong></p>
+<pre><code class="language-cpp">vtkNew&lt;vtkInteractorStyleTrackballActor&gt; actorStyle;
+renderWindowInteractor-&gt;SetInteractorStyle(actorStyle);
+</code></pre>
+<p>在这种模式下，鼠标拖拽操作的是<strong>被选中的Actor</strong>——你实际上在旋转、平移、缩放场景中的物体本身，而不是改变观察者的位置。这对于需要精确操作单个模型的场景（如CAD装配验证）非常有用。</p>
+<h3 id="567">5.6.7 自定义交互样式</h3>
+<p>对于需要自定义交互行为的应用，你只需继承<code>vtkInteractorStyle</code>或其子类，重写感兴趣的事件处理方法：</p>
+<pre><code class="language-cpp">class MyCustomStyle : public vtkInteractorStyleTrackballCamera
+{
+public:
+  static MyCustomStyle* New();
+  vtkTypeMacro(MyCustomStyle, vtkInteractorStyleTrackballCamera);
+
+  // 重写左键按下事件
+  void OnLeftButtonDown() override
+  {
+    // 自定义处理...
+    std::cout &lt;&lt; &quot;Left button pressed at &quot;
+              &lt;&lt; this-&gt;Interactor-&gt;GetEventPosition()[0] &lt;&lt; &quot;, &quot;
+              &lt;&lt; this-&gt;Interactor-&gt;GetEventPosition()[1] &lt;&lt; std::endl;
+
+    // 也可以调用父类实现保留默认行为
+    vtkInteractorStyleTrackballCamera::OnLeftButtonDown();
+  }
+
+  // 重写键盘事件
+  void OnKeyPress() override
+  {
+    // 获取按键符号
+    std::string key = this-&gt;Interactor-&gt;GetKeySym();
+
+    if (key == &quot;space&quot;)
+    {
+      std::cout &lt;&lt; &quot;Space key pressed -- custom action!&quot; &lt;&lt; std::endl;
+      // 你的自定义操作...
+      return;
+    }
+
+    // 其他按键交给父类处理（保留默认行为）
+    vtkInteractorStyleTrackballCamera::OnKeyPress();
+  }
+};
+</code></pre>
+<p>自定义Style中可重写的事件处理方法包括：</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>触发时机</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>OnLeftButtonDown()</code> / <code>OnLeftButtonUp()</code></td>
+<td>鼠标左键按下/释放</td>
+</tr>
+<tr>
+<td><code>OnMiddleButtonDown()</code> / <code>OnMiddleButtonUp()</code></td>
+<td>鼠标中键按下/释放</td>
+</tr>
+<tr>
+<td><code>OnRightButtonDown()</code> / <code>OnRightButtonUp()</code></td>
+<td>鼠标右键按下/释放</td>
+</tr>
+<tr>
+<td><code>OnMouseMove()</code></td>
+<td>鼠标移动</td>
+</tr>
+<tr>
+<td><code>OnMouseWheelForward()</code> / <code>OnMouseWheelBackward()</code></td>
+<td>鼠标滚轮前滚/后滚</td>
+</tr>
+<tr>
+<td><code>OnKeyPress()</code> / <code>OnKeyRelease()</code></td>
+<td>键盘按键按下/释放</td>
+</tr>
+<tr>
+<td><code>OnChar()</code></td>
+<td>字符事件（可打印字符）</td>
+</tr>
+<tr>
+<td><code>OnConfigure()</code></td>
+<td>窗口大小变化</td>
+</tr>
+<tr>
+<td><code>OnEnter()</code> / <code>OnLeave()</code></td>
+<td>鼠标进入/离开窗口</td>
+</tr>
+<tr>
+<td><code>OnTimer()</code></td>
+<td>定时器事件</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="57">5.7 代码示例：交互式多视口场景展示</h2>
+<p>本节提供一个完整的C++示例程序，综合演示本章涵盖的所有核心概念：</p>
+<ul>
+<li>多渲染器、多视口布局（2x2网格）</li>
+<li>每个视口显示不同的数据源和相机角度</li>
+<li>键盘回调：按1/2/3切换不同预设视角</li>
+<li>完整的CMakeLists.txt</li>
+</ul>
+<h3 id="571-c">5.7.1 完整C++代码</h3>
+<p>将以下代码保存为<code>MultiViewportDemo.cxx</code>：</p>
+<pre><code class="language-cpp">// ============================================================================
+// MultiViewportDemo.cxx
+// VTK第五章示例：多视口布局、相机控制与交互样式综合演示
+// ============================================================================
+
+#include &quot;vtkActor.h&quot;
+#include &quot;vtkCamera.h&quot;
+#include &quot;vtkConeSource.h&quot;
+#include &quot;vtkCubeSource.h&quot;
+#include &quot;vtkCylinderSource.h&quot;
+#include &quot;vtkInteractorStyleTrackballCamera.h&quot;
+#include &quot;vtkNew.h&quot;
+#include &quot;vtkPolyData.h&quot;
+#include &quot;vtkPolyDataMapper.h&quot;
+#include &quot;vtkProperty.h&quot;
+#include &quot;vtkRenderWindow.h&quot;
+#include &quot;vtkRenderWindowInteractor.h&quot;
+#include &quot;vtkRenderer.h&quot;
+#include &quot;vtkSphereSource.h&quot;
+
+#include &lt;iostream&gt;
+#include &lt;string&gt;
+
+// ============================================================================
+// 自定义交互样式：在TrackballCamera基础上增加键盘回调
+// ============================================================================
+class MultiViewportStyle : public vtkInteractorStyleTrackballCamera
+{
+public:
+  static MultiViewportStyle* New();
+  vtkTypeMacro(MultiViewportStyle, vtkInteractorStyleTrackballCamera);
+
+  // 设置四个渲染器，供键盘回调使用
+  void SetRenderers(vtkRenderer* tl, vtkRenderer* tr,
+                    vtkRenderer* bl, vtkRenderer* br)
+  {
+    this-&gt;RendererTL = tl;
+    this-&gt;RendererTR = tr;
+    this-&gt;RendererBL = bl;
+    this-&gt;RendererBR = br;
+  }
+
+protected:
+  MultiViewportStyle()
+    : RendererTL(nullptr), RendererTR(nullptr),
+      RendererBL(nullptr), RendererBR(nullptr)
+  {
+  }
+
+  // 将相机重置到预设位置
+  void ResetToPresetView(int presetIndex)
+  {
+    if (!this-&gt;RendererTL || !this-&gt;RendererTR ||
+        !this-&gt;RendererBL || !this-&gt;RendererBR)
+    {
+      return;
+    }
+
+    vtkCamera* camTL = this-&gt;RendererTL-&gt;GetActiveCamera();
+    vtkCamera* camTR = this-&gt;RendererTR-&gt;GetActiveCamera();
+    vtkCamera* camBL = this-&gt;RendererBL-&gt;GetActiveCamera();
+    vtkCamera* camBR = this-&gt;RendererBR-&gt;GetActiveCamera();
+
+    // =====================================================
+    // 预设视角定义
+    // =====================================================
+
+    if (presetIndex == 1)  // 等轴测视角（经典科学可视化视角）
+    {
+      std::cout &lt;&lt; &quot;&gt;&gt;&gt; 切换到等轴测视角&quot; &lt;&lt; std::endl;
+
+      camTL-&gt;SetPosition(5, 5, 5);
+      camTL-&gt;SetFocalPoint(0, 0, 0);
+      camTL-&gt;SetViewUp(0, 1, 0);
+
+      camTR-&gt;SetPosition(5, 5, 5);
+      camTR-&gt;SetFocalPoint(0, 0, 0);
+      camTR-&gt;SetViewUp(0, 1, 0);
+
+      camBL-&gt;SetPosition(5, 5, 5);
+      camBL-&gt;SetFocalPoint(0, 0, 0);
+      camBL-&gt;SetViewUp(0, 1, 0);
+
+      camBR-&gt;SetPosition(5, 5, 5);
+      camBR-&gt;SetFocalPoint(0, 0, 0);
+      camBR-&gt;SetViewUp(0, 1, 0);
+
+      // 所有渲染器设为透视投影
+      for (auto* cam : {camTL, camTR, camBL, camBR})
+      {
+        cam-&gt;ParallelProjectionOff();
+        cam-&gt;SetViewAngle(30.0);
+      }
+    }
+    else if (presetIndex == 2)  // 正交三视图 + 透视图
+    {
+      std::cout &lt;&lt; &quot;&gt;&gt;&gt; 切换到三视图+透视图&quot; &lt;&lt; std::endl;
+
+      // 左上：透视（保持之前的透视设置）
+      camTL-&gt;SetPosition(5, 5, 5);
+      camTL-&gt;SetFocalPoint(0, 0, 0);
+      camTL-&gt;SetViewUp(0, 1, 0);
+      camTL-&gt;ParallelProjectionOff();
+
+      // 右上：前视图（从+Z方向看，正交）
+      camTR-&gt;SetPosition(0, 0, 5);
+      camTR-&gt;SetFocalPoint(0, 0, 0);
+      camTR-&gt;SetViewUp(0, 1, 0);
+      camTR-&gt;ParallelProjectionOn();
+      camTR-&gt;SetParallelScale(2.0);
+
+      // 左下：侧视图（从+X方向看，正交）
+      camBL-&gt;SetPosition(5, 0, 0);
+      camBL-&gt;SetFocalPoint(0, 0, 0);
+      camBL-&gt;SetViewUp(0, 1, 0);
+      camBL-&gt;ParallelProjectionOn();
+      camBL-&gt;SetParallelScale(2.0);
+
+      // 右下：顶视图（从+Y方向看，正交）
+      camBR-&gt;SetPosition(0, 5, 0);
+      camBR-&gt;SetFocalPoint(0, 0, 0);
+      camBR-&gt;SetViewUp(0, 0, 1);
+      camBR-&gt;ParallelProjectionOn();
+      camBR-&gt;SetParallelScale(2.0);
+    }
+    else if (presetIndex == 3)  // 不同距离的透视视角
+    {
+      std::cout &lt;&lt; &quot;&gt;&gt;&gt; 切换到不同距离的透视视角&quot; &lt;&lt; std::endl;
+
+      // 左上：近距离（近景）
+      camTL-&gt;SetPosition(2, 2, 2);
+      camTL-&gt;SetFocalPoint(0, 0, 0);
+      camTL-&gt;SetViewUp(0, 1, 0);
+      camTL-&gt;ParallelProjectionOff();
+
+      // 右上：中等距离
+      camTR-&gt;SetPosition(5, 3, 4);
+      camTR-&gt;SetFocalPoint(0, 0, 0);
+      camTR-&gt;SetViewUp(0, 1, 0);
+      camTR-&gt;ParallelProjectionOff();
+
+      // 左下：远距离（远景）
+      camBL-&gt;SetPosition(10, 8, 10);
+      camBL-&gt;SetFocalPoint(0, 0, 0);
+      camBL-&gt;SetViewUp(0, 1, 0);
+      camBL-&gt;ParallelProjectionOff();
+
+      // 右下：俯视
+      camBR-&gt;SetPosition(0, 8, 0.01);
+      camBR-&gt;SetFocalPoint(0, 0, 0);
+      camBR-&gt;SetViewUp(0, 0, 1);
+      camBR-&gt;ParallelProjectionOff();
+    }
+
+    // 每个渲染器重置裁剪范围并刷新
+    this-&gt;RendererTL-&gt;ResetCameraClippingRange();
+    this-&gt;RendererTR-&gt;ResetCameraClippingRange();
+    this-&gt;RendererBL-&gt;ResetCameraClippingRange();
+    this-&gt;RendererBR-&gt;ResetCameraClippingRange();
+
+    this-&gt;Interactor-&gt;GetRenderWindow()-&gt;Render();
+  }
+
+  void OnKeyPress() override
+  {
+    std::string key = this-&gt;Interactor-&gt;GetKeySym();
+
+    if (key == &quot;1&quot;)
+    {
+      ResetToPresetView(1);
+    }
+    else if (key == &quot;2&quot;)
+    {
+      ResetToPresetView(2);
+    }
+    else if (key == &quot;3&quot;)
+    {
+      ResetToPresetView(3);
+    }
+    else if (key == &quot;h&quot; || key == &quot;H&quot;)
+    {
+      // 打印帮助信息
+      std::cout &lt;&lt; std::endl;
+      std::cout &lt;&lt; &quot;========== 快捷键 ==========&quot; &lt;&lt; std::endl;
+      std::cout &lt;&lt; &quot; 1 : 等轴测视角（所有视口相同）&quot; &lt;&lt; std::endl;
+      std::cout &lt;&lt; &quot; 2 : 三视图+透视图&quot; &lt;&lt; std::endl;
+      std::cout &lt;&lt; &quot; 3 : 不同距离的透视视角&quot; &lt;&lt; std::endl;
+      std::cout &lt;&lt; &quot; r : 重置相机到自动计算视角&quot; &lt;&lt; std::endl;
+      std::cout &lt;&lt; &quot; w : 线框模式 / s : 表面模式&quot; &lt;&lt; std::endl;
+      std::cout &lt;&lt; &quot; q / e : 退出程序&quot; &lt;&lt; std::endl;
+      std::cout &lt;&lt; &quot;============================&quot; &lt;&lt; std::endl;
+      std::cout &lt;&lt; std::endl;
+    }
+    else
+    {
+      // 其他按键交给父类处理（保留默认行为如 r/w/s/q 等）
+      vtkInteractorStyleTrackballCamera::OnKeyPress();
+    }
+  }
+
+private:
+  vtkRenderer* RendererTL;
+  vtkRenderer* RendererTR;
+  vtkRenderer* RendererBL;
+  vtkRenderer* RendererBR;
+};
+
+vtkStandardNewMacro(MultiViewportStyle);
+
+// ============================================================================
+// 辅助函数：创建一个带有颜色和边界线的Actor
+// ============================================================================
+vtkSmartPointer&lt;vtkActor&gt; CreateColoredActor(
+    vtkAlgorithmOutput* sourcePort,
+    double r, double g, double b,
+    bool showEdges = true)
+{
+  vtkNew&lt;vtkPolyDataMapper&gt; mapper;
+  mapper-&gt;SetInputConnection(sourcePort);
+
+  vtkNew&lt;vtkActor&gt; actor;
+  actor-&gt;SetMapper(mapper);
+  actor-&gt;GetProperty()-&gt;SetColor(r, g, b);
+  if (showEdges)
+  {
+    actor-&gt;GetProperty()-&gt;SetEdgeVisibility(1);
+    actor-&gt;GetProperty()-&gt;SetEdgeColor(0.1, 0.1, 0.1);
+  }
+  actor-&gt;GetProperty()-&gt;SetSpecular(0.4);
+  actor-&gt;GetProperty()-&gt;SetSpecularPower(20.0);
+
+  return actor;
+}
+
+// ============================================================================
+// main
+// ============================================================================
+int main(int argc, char* argv[])
+{
+  // ====================================================================
+  // 第一步：创建四个Source -- 每个视口显示不同的几何体
+  // ====================================================================
+
+  // 左上：球体
+  vtkNew&lt;vtkSphereSource&gt; sphere;
+  sphere-&gt;SetThetaResolution(48);
+  sphere-&gt;SetPhiResolution(48);
+  sphere-&gt;SetRadius(1.5);
+
+  // 右上：立方体
+  vtkNew&lt;vtkCubeSource&gt; cube;
+  cube-&gt;SetXLength(2.0);
+  cube-&gt;SetYLength(2.0);
+  cube-&gt;SetZLength(2.0);
+
+  // 左下：圆锥体
+  vtkNew&lt;vtkConeSource&gt; cone;
+  cone-&gt;SetResolution(48);
+  cone-&gt;SetHeight(3.0);
+  cone-&gt;SetRadius(1.5);
+
+  // 右下：圆柱体
+  vtkNew&lt;vtkCylinderSource&gt; cylinder;
+  cylinder-&gt;SetResolution(48);
+  cylinder-&gt;SetHeight(3.0);
+  cylinder-&gt;SetRadius(1.5);
+
+  // ====================================================================
+  // 第二步：创建四个Actor -- 不同颜色，不同数据源
+  // ====================================================================
+
+  vtkSmartPointer&lt;vtkActor&gt; actorTL =
+    CreateColoredActor(sphere-&gt;GetOutputPort(),    0.8, 0.4, 0.4);  // 红色系
+  vtkSmartPointer&lt;vtkActor&gt; actorTR =
+    CreateColoredActor(cube-&gt;GetOutputPort(),      0.4, 0.8, 0.4);  // 绿色系
+  vtkSmartPointer&lt;vtkActor&gt; actorBL =
+    CreateColoredActor(cone-&gt;GetOutputPort(),      0.4, 0.4, 0.8);  // 蓝色系
+  vtkSmartPointer&lt;vtkActor&gt; actorBR =
+    CreateColoredActor(cylinder-&gt;GetOutputPort(),  0.8, 0.7, 0.3);  // 黄色系
+
+  // 为每个Actor设置不同的朝向（增加视觉多样性）
+  actorTR-&gt;SetOrientation(30, 0, 0);
+  actorBL-&gt;SetOrientation(0, 45, 0);
+  actorBR-&gt;SetOrientation(-20, 30, 0);
+
+  // ====================================================================
+  // 第三步：创建四个Renderer，配置2x2视口布局
+  // ====================================================================
+
+  // 左上 -- 透视图 (viewport: 左半部上)
+  vtkNew&lt;vtkRenderer&gt; rendererTL;
+  rendererTL-&gt;SetViewport(0.0, 0.5, 0.5, 1.0);
+  rendererTL-&gt;SetBackground(0.15, 0.15, 0.18);
+  rendererTL-&gt;AddActor(actorTL);
+
+  // 右上 -- 前视图 (viewport: 右半部上)
+  vtkNew&lt;vtkRenderer&gt; rendererTR;
+  rendererTR-&gt;SetViewport(0.5, 0.5, 1.0, 1.0);
+  rendererTR-&gt;SetBackground(0.18, 0.15, 0.15);
+  rendererTR-&gt;AddActor(actorTR);
+
+  // 左下 -- 侧视图 (viewport: 左半部下)
+  vtkNew&lt;vtkRenderer&gt; rendererBL;
+  rendererBL-&gt;SetViewport(0.0, 0.0, 0.5, 0.5);
+  rendererBL-&gt;SetBackground(0.15, 0.18, 0.15);
+  rendererBL-&gt;AddActor(actorBL);
+
+  // 右下 -- 顶视图 (viewport: 右半部下)
+  vtkNew&lt;vtkRenderer&gt; rendererBR;
+  rendererBR-&gt;SetViewport(0.5, 0.0, 1.0, 0.5);
+  rendererBR-&gt;SetBackground(0.18, 0.15, 0.15);
+  rendererBR-&gt;AddActor(actorBR);
+
+  // ====================================================================
+  // 第四步：设置初始相机角度
+  // ====================================================================
+
+  // 左上：默认透视（等轴测视角）
+  vtkCamera* camTL = rendererTL-&gt;GetActiveCamera();
+  camTL-&gt;SetPosition(5, 5, 5);
+  camTL-&gt;SetFocalPoint(0, 0, 0);
+  camTL-&gt;SetViewUp(0, 1, 0);
+
+  // 右上：前视图方向
+  vtkCamera* camTR = rendererTR-&gt;GetActiveCamera();
+  camTR-&gt;SetPosition(0, 0, 5);
+  camTR-&gt;SetFocalPoint(0, 0, 0);
+  camTR-&gt;SetViewUp(0, 1, 0);
+
+  // 左下：侧视图方向
+  vtkCamera* camBL = rendererBL-&gt;GetActiveCamera();
+  camBL-&gt;SetPosition(5, 0, 0);
+  camBL-&gt;SetFocalPoint(0, 0, 0);
+  camBL-&gt;SetViewUp(0, 1, 0);
+
+  // 右下：顶视图方向（正交投影）
+  vtkCamera* camBR = rendererBR-&gt;GetActiveCamera();
+  camBR-&gt;SetPosition(0, 5, 0);
+  camBR-&gt;SetFocalPoint(0, 0, 0);
+  camBR-&gt;SetViewUp(0, 0, 1);
+  camBR-&gt;ParallelProjectionOn();
+  camBR-&gt;SetParallelScale(2.0);
+
+  // 为所有渲染器重置裁剪范围
+  rendererTL-&gt;ResetCameraClippingRange();
+  rendererTR-&gt;ResetCameraClippingRange();
+  rendererBL-&gt;ResetCameraClippingRange();
+  rendererBR-&gt;ResetCameraClippingRange();
+
+  // ====================================================================
+  // 第五步：创建RenderWindow，添加所有Renderer
+  // ====================================================================
+
+  vtkNew&lt;vtkRenderWindow&gt; renderWindow;
+  renderWindow-&gt;SetSize(900, 700);
+  renderWindow-&gt;SetWindowName(&quot;VTK Chapter 5 -- Multi Viewport Demo&quot;);
+  renderWindow-&gt;SetMultiSamples(4);  // 启用4x MSAA
+
+  renderWindow-&gt;AddRenderer(rendererTL);
+  renderWindow-&gt;AddRenderer(rendererTR);
+  renderWindow-&gt;AddRenderer(rendererBL);
+  renderWindow-&gt;AddRenderer(rendererBR);
+
+  // ====================================================================
+  // 第六步：创建Interactor和自定义交互样式
+  // ====================================================================
+
+  vtkNew&lt;vtkRenderWindowInteractor&gt; interactor;
+  interactor-&gt;SetRenderWindow(renderWindow);
+
+  vtkNew&lt;MultiViewportStyle&gt; style;
+  style-&gt;SetDefaultRenderer(rendererTL);  // 默认交互作用于左上渲染器
+  style-&gt;SetRenderers(rendererTL, rendererTR, rendererBL, rendererBR);
+  interactor-&gt;SetInteractorStyle(style);
+
+  // ====================================================================
+  // 第七步：首次渲染并启动事件循环
+  // ====================================================================
+
+  renderWindow-&gt;Render();
+
+  std::cout &lt;&lt; &quot;========================================&quot; &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;  VTK多视口布局演示&quot; &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;  左上: 球体（透视）   右上: 立方体（前视图）&quot; &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;  左下: 锥体（侧视图） 右下: 圆柱体（顶视图）&quot; &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;========================================&quot; &lt;&lt; std::endl;
+  std::cout &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;快捷键:&quot; &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;  1 : 等轴测视角&quot; &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;  2 : 三视图+透视图&quot; &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;  3 : 不同距离透视&quot; &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;  h : 打印帮助信息&quot; &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;  r : 重置相机    w : 线框模式    s : 表面模式&quot; &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;  q / e : 退出&quot; &lt;&lt; std::endl;
+  std::cout &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;交互操作:&quot; &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;  鼠标左键拖拽: 旋转     鼠标右键拖拽: 缩放&quot; &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;  鼠标中键拖拽: 平移     鼠标滚轮: 缩放&quot; &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;  注意: 交互操作作用于当前活跃的渲染器&quot; &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;========================================&quot; &lt;&lt; std::endl;
+
+  interactor-&gt;Start();
+
+  return 0;
+}
+</code></pre>
+<h3 id="572-cmakeliststxt">5.7.2 CMakeLists.txt</h3>
+<pre><code class="language-cmake">cmake_minimum_required(VERSION 3.8 FATAL_ERROR)
+project(MultiViewportDemo VERSION 1.0.0 LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+find_package(VTK 9.5.2
+  COMPONENTS
+    CommonCore
+    CommonColor
+    CommonDataModel
+    FiltersSources
+    InteractionStyle
+    RenderingCore
+    RenderingOpenGL2
+  REQUIRED
+)
+
+message(STATUS &quot;VTK version: ${VTK_VERSION}&quot;)
+
+add_executable(MultiViewportDemo MultiViewportDemo.cxx)
+
+target_link_libraries(MultiViewportDemo
+  PRIVATE
+    ${VTK_LIBRARIES}
+)
+
+vtk_module_autoinit(
+  TARGETS MultiViewportDemo
+  MODULES ${VTK_LIBRARIES}
+)
+</code></pre>
+<h3 id="573">5.7.3 代码逐段解析</h3>
+<h4 id="_2">头文件和依赖</h4>
+<pre><code class="language-cpp">#include &quot;vtkActor.h&quot;
+#include &quot;vtkCamera.h&quot;
+#include &quot;vtkConeSource.h&quot;
+#include &quot;vtkCubeSource.h&quot;
+#include &quot;vtkCylinderSource.h&quot;
+#include &quot;vtkInteractorStyleTrackballCamera.h&quot;
+#include &quot;vtkNew.h&quot;
+#include &quot;vtkPolyData.h&quot;
+#include &quot;vtkPolyDataMapper.h&quot;
+#include &quot;vtkProperty.h&quot;
+#include &quot;vtkRenderWindow.h&quot;
+#include &quot;vtkRenderWindowInteractor.h&quot;
+#include &quot;vtkRenderer.h&quot;
+#include &quot;vtkSphereSource.h&quot;
+</code></pre>
+<p>本示例使用了四种不同的Source（Sphere、Cube、Cone、Cylinder）来区分四个视口。每种Source都来自<code>FiltersSources</code>模块。<code>vtkCamera</code>头文件被显式包含，因为我们在代码中直接操作相机参数。</p>
+<h4 id="_3">自定义交互样式</h4>
+<p><code>MultiViewportStyle</code>继承自<code>vtkInteractorStyleTrackballCamera</code>，重写了<code>OnKeyPress()</code>方法：</p>
+<ul>
+<li>按键<code>1</code>、<code>2</code>、<code>3</code>分别切换到三种预设视角配置。</li>
+<li>按键<code>h</code>在终端打印帮助信息。</li>
+<li>其他按键（如<code>r</code>、<code>w</code>、<code>s</code>、<code>q</code>等）通过调用父类的<code>OnKeyPress()</code>保留默认行为。</li>
+</ul>
+<p>自定义样式保存了四个渲染器的指针，以便在键盘回调中访问所有四个渲染器的相机。<code>SetRenderers()</code>是公共的初始化方法，在main函数中调用。</p>
+<h4 id="createcoloredactor">辅助函数CreateColoredActor()</h4>
+<p>这个函数封装了"创建Mapper + Actor + 设置颜色"的样板代码。它接收一个输出端口（<code>vtkAlgorithmOutput*</code>）——注意这适用于任何Source或Filter的输出，保持管道连接——然后创建对应的Actor并配置颜色和材质属性。</p>
+<h4 id="2x2">2x2视口布局</h4>
+<pre><code class="language-cpp">rendererTL-&gt;SetViewport(0.0, 0.5, 0.5, 1.0);  // 左上
+rendererTR-&gt;SetViewport(0.5, 0.5, 1.0, 1.0);  // 右上
+rendererBL-&gt;SetViewport(0.0, 0.0, 0.5, 0.5);  // 左下
+rendererBR-&gt;SetViewport(0.5, 0.0, 1.0, 0.5);  // 右下
+</code></pre>
+<p>这是标准的2x2等分网格。注意viewport坐标的Y轴方向——<code>0.5</code>到<code>1.0</code>是上半部（高Y值），<code>0.0</code>到<code>0.5</code>是下半部（低Y值）。</p>
+<h4 id="_4">预设视角的设计</h4>
+<p>三种预设视角分别演示了本章的不同知识点：</p>
+<ul>
+<li><strong>预设1（等轴测）</strong>：所有四个视口使用相同的相机设置——这是一个简单的统一视角。</li>
+<li><strong>预设2（三视图+透视图）</strong>：左上为透视投影，其余三个为正交投影，模拟工程中常用的三视图布局。注意顶视图中ViewUp设为<code>(0, 0, 1)</code>（Z轴向上），这是因为从正Y方向俯视时，屏幕上的"上"对应世界空间的Z轴。</li>
+<li><strong>预设3（不同距离）</strong>：四个视口使用不同相机距离的透视投影——从特写到远眺，展示<code>SetPosition()</code>对画面尺度的直接影响。</li>
+</ul>
+<h4 id="_5">每个视口使用独立相机</h4>
+<p>这是本示例的一个关键设计：<strong>每个Renderer拥有独立的Camera实例</strong>。当你在任何一个视口中拖拽鼠标旋转场景时，只有该视口的相机发生变化——其他三个视口的相机保持不变。这使得你可以在不同视口中独立调整各自的角度。</p>
+<p>交互机通过自定义样式绑定到四个渲染器，键盘回调一次性设置所有四个相机。</p>
+<h3 id="574">5.7.4 编译和运行</h3>
+<p>将上述两个文件（<code>MultiViewportDemo.cxx</code>和<code>CMakeLists.txt</code>）放在同一目录中，然后：</p>
+<pre><code class="language-bash">mkdir build
+cd build
+cmake ..
+cmake --build . --config Release
+./Release/MultiViewportDemo.exe   # Windows
+./MultiViewportDemo               # Linux/macOS
+</code></pre>
+<p>运行后，你将看到一个900x700像素的窗口，其中包含2x2四视口布局：</p>
+<ul>
+<li>左上：红色球体，等轴测透视视角</li>
+<li>右上：绿色立方体，前视图方向</li>
+<li>左下：蓝色锥体，侧视图方向</li>
+<li>右下：黄色圆柱体，俯视正交投影</li>
+</ul>
+<p>按<code>2</code>切换到三视图+透视图模式，按<code>3</code>观察不同距离的效果，按<code>1</code>回到统一的等轴测视角。</p>
+<h3 id="575">5.7.5 实验建议</h3>
+<ol>
+<li><strong>修改viewport尺寸</strong>：尝试将2x2网格改为3x2或1x3布局，观察viewport坐标与视觉效果的对应关系。</li>
+<li><strong>增加第五个Source</strong>：添加一个<code>vtkArrowSource</code>或<code>vtkDiskSource</code>，为其创建一个新的Renderer和viewport区域。</li>
+<li><strong>增加预设4</strong>：在自定义Style中增加一个"鸟瞰"预设——所有相机从非常高的Y位置俯视。</li>
+<li><strong>尝试离屏渲染</strong>：在<code>renderWindow-&gt;SetOffScreenRendering(1)</code>模式下运行（注释掉<code>interactor-&gt;Start()</code>），通过<code>vtkWindowToImageFilter</code>保存四个预设视角的截图。</li>
+<li><strong>动态切换单个渲染器</strong>：修改Style使得按方向键时只旋转当前活跃的Renderer（左上），其他三个不变——验证每个Renderer的相机独立性。</li>
+</ol>
+<hr />
+<h2 id="58">5.8 本章小结</h2>
+<p>本章系统讲解了VTK渲染管线的四个核心层级以及它们之间的协作关系。让我们回顾一下关键要点：</p>
+<h3 id="_6">要点速览</h3>
+<ol>
+<li>
+<p><strong>渲染管线由四个核心对象组成</strong>：<code>vtkActor</code>（可视化实体）、<code>vtkRenderer</code>（场景管理者/舞台）、<code>vtkRenderWindow</code>（渲染窗口/剧院）、<code>vtkRenderWindowInteractor</code>（交互机/观众通道）。可视化管道（Source-&gt;Filter-&gt;Mapper）负责数据到图形的转换，渲染管道（Actor-&gt;Renderer-&gt;RenderWindow）负责图形到屏幕的呈现。</p>
+</li>
+<li>
+<p><strong>vtkRenderer是场景的中央管理者</strong>。它管理Actor列表（<code>AddActor()</code>/<code>RemoveActor()</code>）、背景样式（纯色/渐变/纹理）、以及通过<code>SetViewport()</code>定义在窗口中的矩形显示区域。<code>SetDraw()</code>和<code>SetLayer()</code>提供了启用/禁用和深度排序控制。</p>
+</li>
+<li>
+<p><strong>vtkRenderWindow封装了操作系统窗口</strong>。通过<code>SetSize()</code>、<code>SetPosition()</code>、<code>SetWindowName()</code>管理窗口属性；<code>SetMultiSamples()</code>控制抗锯齿质量；<code>Render()</code>触发整条管道的级联执行。离屏渲染（<code>SetOffScreenRendering()</code>）允许在没有图形界面的环境中生成渲染结果。</p>
+</li>
+<li>
+<p><strong>多视口布局通过SetViewport()实现</strong>。viewport坐标在[0,1]范围内，原点在左下角。通过创建多个Renderer、设置各自的viewport、全部添加到同一个RenderWindow中，可以构建任意复杂的多视图布局——从简单的左右并排到2x2四视图再到自定义的不等分栅格。</p>
+</li>
+<li>
+<p><strong>vtkCamera控制观察视角</strong>。三个核心参数——<code>SetPosition()</code>（相机位置）、<code>SetFocalPoint()</code>（视线焦点）、<code>SetViewUp()</code>（上方方向）——定义了世界空间中的观察坐标系。支持透视投影（<code>ParallelProjectionOff()</code>）和平行投影（<code>ParallelProjectionOn()</code>）。<code>Azimuth()</code>、<code>Elevation()</code>、<code>Dolly()</code>、<code>Roll()</code>等方法提供了面向交互的相机操控语义。</p>
+</li>
+<li>
+<p><strong>vtkRenderWindowInteractor驱动交互循环</strong>。<code>Start()</code>进入阻塞事件循环；默认交互样式<code>vtkInteractorStyleTrackballCamera</code>提供了丰富的鼠标键盘绑定（左键旋转、右键缩放、中键平移、r=重置、w=线框、s=表面等）。通过继承<code>vtkInteractorStyle</code>可以自定义交互行为，实现完全个性化的操作逻辑。</p>
+</li>
+</ol>
+<h3 id="_7">从本章到全书</h3>
+<p>渲染管线是VTK程序与用户交互的最终接口。你在本章学到的知识将在全书后续章节中持续发挥作用：</p>
+<ul>
+<li><strong>第六章（颜色、材质与光照）</strong>将深入<code>vtkProperty</code>——如何通过材质属性（漫反射、镜面反射、环境光、透明度）和光源配置来精细化外观。</li>
+<li><strong>第八章（标量可视化与颜色映射）</strong>将展示如何将数据标量场映射为Actor表面的颜色——这依赖Mapper的查找表（LookupTable）功能。</li>
+<li><strong>第十三章（体渲染）</strong>将介绍<code>vtkVolume</code>——它的渲染方式与<code>vtkActor</code>完全不同，但同样依赖于Renderer、RenderWindow和Camera体系。</li>
+<li><strong>第十六章（交互与控件）</strong>将深入Widget体系——在场景中添加可拖拽的三维控件（如裁切平面、测量标尺、种子点），它们与Interactor深度集成。</li>
+</ul>
+<h3 id="_8">进入下一章之前</h3>
+<p>建议你完成以下练习：</p>
+<ol>
+<li>运行5.7节的完整示例程序，通过鼠标操作在每个视口中独立旋转场景，验证"每个Renderer有独立Camera"的行为。</li>
+<li>修改5.7节的代码，增加一个覆盖层Renderer（<code>SetLayer(1)</code>），在上面用<code>vtkTextActor</code>显示当前活跃视口的名称。</li>
+<li>尝试创建你自己的自定义InteractorStyle——例如重写<code>OnMouseWheelForward()</code>使得滚轮改变Sphere的Resolution而不是缩放场景。</li>
+</ol>
+<p>下一章（第六章：颜色、材质与光照）将教你如何让场景看起来真正"漂亮"——从单调的纯色模型转变为具有金属光泽、透明效果和丰富光照的高质量渲染。</p>
+<hr />
+<blockquote>
+<p><strong>本章关键记忆口诀</strong>："Renderer管舞台，Window管窗口，Camera管视角，Interactor管交互。SetViewport划地盘，四骑士各司其职。"</p>
+<ul>
+<li>Actor：<code>SetMapper()</code> + <code>GetProperty()</code> —— 几何+外观</li>
+<li>Renderer：<code>AddActor()</code> + <code>SetViewport()</code> + <code>SetBackground()</code> —— 场景管理+视口+背景</li>
+<li>RenderWindow：<code>AddRenderer()</code> + <code>SetSize()</code> + <code>Render()</code> —— 窗口+尺寸+触发</li>
+<li>Camera：<code>SetPosition()</code> + <code>SetFocalPoint()</code> + <code>SetViewUp()</code> —— 相机三要素</li>
+<li>Interactor：<code>SetRenderWindow()</code> + <code>SetInteractorStyle()</code> + <code>Start()</code> —— 绑定+样式+事件循环</li>
+</ul>
+</blockquote>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

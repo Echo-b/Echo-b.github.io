@@ -1,0 +1,3854 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../chapter-03-data-model-basics/">
+      
+      
+        <link rel="next" href="../chapter-05-rendering-and-interactor/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>第四章 基本几何体与数据源 - Echo-b's Tech Notes</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Echo-b&#39;s Tech Notes" class="md-header__button md-logo" aria-label="Echo-b's Tech Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Echo-b's Tech Notes
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              第四章 基本几何体与数据源
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Echo-b&#39;s Tech Notes" class="md-nav__button md-logo" aria-label="Echo-b's Tech Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Echo-b's Tech Notes
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VTK 教程
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    VTK 教程
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    入门篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    入门篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-01-vtk-overview-and-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第一章 VTK概述与环境搭建
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-02-visualization-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二章 可视化管线
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-03-data-model-basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第三章 数据模型基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第四章 基本几何体与数据源
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第四章 基本几何体与数据源
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        本章导读
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#41" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 数据源概述
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.1 数据源概述">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#411-source" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1.1 Source在管道中的角色
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#412-vs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1.2 内置数据源 vs 手动构建数据
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#413-sourceupdate-vs-render" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1.3 Source::Update() vs 让Render()触发
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#414-vtk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1.4 本章涉及的VTK类速览
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#42" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 常用几何体数据源
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.2 常用几何体数据源">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#421-vtkconesource" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2.1 vtkConeSource —— 圆锥体
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#422-vtkspheresource" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2.2 vtkSphereSource —— 球体
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#423-vtkcylindersource" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2.3 vtkCylinderSource —— 圆柱体
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#424-vtkcubesource" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2.4 vtkCubeSource —— 长方体
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#425-vtkdisksource" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2.5 vtkDiskSource —— 圆盘
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#426-vtkarrowsource" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2.6 vtkArrowSource —— 箭头
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#427-vtkregularpolygonsource" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2.7 vtkRegularPolygonSource —— 正多边形
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#428-vtkplanesource" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2.8 vtkPlaneSource —— 矩形平面
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#429-vtklinesource" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2.9 vtkLineSource —— 线段
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4210-vtktextsource" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2.10 vtkTextSource —— 三维文字
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#43" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 程序化数据源
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.3 程序化数据源">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#431-vtkprogrammablesource" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3.1 vtkProgrammableSource 简介
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#432-setexecutemethod" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3.2 SetExecuteMethod 机制
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#433-z-sinx-cosy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3.3 数学曲面示例：z = sin(x) * cos(y)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#44" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4 手动构建点与单元
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.4 手动构建点与单元">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#441" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4.1 构建的基本流程
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#442-vtkpoints" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4.2 创建 vtkPoints
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#443-vtkcellarray" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4.3 创建 vtkCellArray
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#444-vtkpolydata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4.4 组装 vtkPolyData
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#445" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4.5 完整示例：手动构建一个四面体
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#446" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4.6 更简洁的单元构建方式
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#45" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.5 代码示例：多数据源对比展示
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.5 代码示例：多数据源对比展示">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#451" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.5.1 完整代码
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#452-cmakeliststxt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.5.2 CMakeLists.txt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#453" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.5.3 代码详解
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.5.3 代码详解">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#viewport" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Viewport布局
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#createactorforsource" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CreateActorForSource 辅助函数
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#addlabel-actor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AddLabel 辅助函数与二维Actor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        管道结构
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#454" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.5.4 实验拓展建议
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#46" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.6 本章小结
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.6 本章小结">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        要点速览
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        使用场景速查
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        一条核心洞察
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        进入下一章之前
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-05-rendering-and-interactor/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第五章 渲染与交互机
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-06-volume1-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第六章 入门篇综合实战——3D几何画廊
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    实战篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    实战篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-07-polydata/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第七章 PolyData详解
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-08-unstructured-grid/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第八章 非结构化网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-09-structured-data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第九章 结构化数据
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-10-data-io/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十章 数据I/O
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-11-common-filters/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十一章 常用过滤器
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-12-color-mapping/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十二章 颜色映射与标量可视化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-13-advanced-rendering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十三章 高级渲染技术
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-14-multi-dataset/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十四章 多个数据集处理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-15-volume2-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十五章 实战篇综合实战——CFD后处理可视化工具
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    进阶篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    进阶篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-16-volume-rendering-basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十六章 体渲染基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-17-volume-rendering-advanced/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十七章 体渲染高级技术
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-18-charts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十八章 2D图表系统
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-19-annotation-and-widgets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十九章 三维标注与交互组件
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-20-custom-interaction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十章 自定义交互与Widget
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-21-qt-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十一章 Qt集成
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-22-smp-parallel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十二章 SMP并行入门
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-23-volume3-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十三章 进阶篇综合实战
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        本章导读
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#41" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 数据源概述
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.1 数据源概述">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#411-source" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1.1 Source在管道中的角色
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#412-vs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1.2 内置数据源 vs 手动构建数据
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#413-sourceupdate-vs-render" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1.3 Source::Update() vs 让Render()触发
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#414-vtk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1.4 本章涉及的VTK类速览
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#42" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 常用几何体数据源
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.2 常用几何体数据源">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#421-vtkconesource" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2.1 vtkConeSource —— 圆锥体
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#422-vtkspheresource" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2.2 vtkSphereSource —— 球体
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#423-vtkcylindersource" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2.3 vtkCylinderSource —— 圆柱体
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#424-vtkcubesource" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2.4 vtkCubeSource —— 长方体
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#425-vtkdisksource" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2.5 vtkDiskSource —— 圆盘
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#426-vtkarrowsource" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2.6 vtkArrowSource —— 箭头
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#427-vtkregularpolygonsource" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2.7 vtkRegularPolygonSource —— 正多边形
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#428-vtkplanesource" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2.8 vtkPlaneSource —— 矩形平面
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#429-vtklinesource" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2.9 vtkLineSource —— 线段
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4210-vtktextsource" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2.10 vtkTextSource —— 三维文字
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#43" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 程序化数据源
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.3 程序化数据源">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#431-vtkprogrammablesource" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3.1 vtkProgrammableSource 简介
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#432-setexecutemethod" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3.2 SetExecuteMethod 机制
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#433-z-sinx-cosy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3.3 数学曲面示例：z = sin(x) * cos(y)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#44" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4 手动构建点与单元
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.4 手动构建点与单元">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#441" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4.1 构建的基本流程
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#442-vtkpoints" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4.2 创建 vtkPoints
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#443-vtkcellarray" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4.3 创建 vtkCellArray
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#444-vtkpolydata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4.4 组装 vtkPolyData
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#445" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4.5 完整示例：手动构建一个四面体
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#446" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4.6 更简洁的单元构建方式
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#45" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.5 代码示例：多数据源对比展示
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.5 代码示例：多数据源对比展示">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#451" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.5.1 完整代码
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#452-cmakeliststxt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.5.2 CMakeLists.txt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#453" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.5.3 代码详解
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.5.3 代码详解">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#viewport" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Viewport布局
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#createactorforsource" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CreateActorForSource 辅助函数
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#addlabel-actor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AddLabel 辅助函数与二维Actor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        管道结构
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#454" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.5.4 实验拓展建议
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#46" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.6 本章小结
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.6 本章小结">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        要点速览
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        使用场景速查
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        一条核心洞察
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        进入下一章之前
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="_1">第四章 基本几何体与数据源</h1>
+<h2 id="_2">本章导读</h2>
+<p>前两章我们学习了VTK的管道架构和数据模型。你知道了Source是管道的起点、Filter是数据的加工车间、Mapper是数据世界与图形世界的翻译官。你也理解了<code>SetInputConnection()</code>如何建立算法之间的"活的连接"，以及MTime如何驱动按需执行。</p>
+<p>但到目前为止，你只接触过一个Source：<code>vtkConeSource</code>。VTK提供了数十种内置的几何体数据源，覆盖了从简单的点、线、面到复杂的箭头、文字等各种基础形状。这些"积木块"是你在构建可视化场景时的基本构件。</p>
+<p>本章的核心目标有三个：</p>
+<ol>
+<li><strong>掌握VTK内置几何体数据源的完整版图</strong>——了解每种Source的用途、关键参数和适用场景，能够在需要时迅速选择正确的类。</li>
+<li><strong>理解程序化数据生成的两种路径</strong>——使用<code>vtkProgrammableSource</code>通过回调函数生成数学曲面，以及手动构建<code>vtkPoints</code>和<code>vtkCellArray</code>来创造任意形状。</li>
+<li><strong>通过完整的代码示例巩固管道的实际运用</strong>——在2x2的多视图布局中同时展示四种不同的几何体，综合运用前三章的知识。</li>
+</ol>
+<p>本章内容偏重"查阅型"——4.2节对每种Source的介绍可以当作速查手册，在你日后编写VTK程序时回头翻阅。</p>
+<hr />
+<h2 id="41">4.1 数据源概述</h2>
+<h3 id="411-source">4.1.1 Source在管道中的角色</h3>
+<p>在VTK的管道架构中，<strong>Source（数据源）是管道的入口点——它是数据的生产者，不消费任何输入数据</strong>。这个定义在类继承体系中表现为：Source对象没有输入端口（Input Port），只有输出端口（Output Port）。</p>
+<pre><code>                        管道
+   +--------------------------------------------------+
+   |                                                    |
+   |  Source --&gt; Filter --&gt; Mapper --&gt; Actor --&gt; ...    |
+   |    ^                                               |
+   |    |                                               |
+   |  0个输入端口   1个或多个输入端口                      |
+   |  1个输出端口   1个或多个输出端口                      |
+   |                                                    |
+   +--------------------------------------------------+
+</code></pre>
+<p>从<code>vtkAlgorithm</code>的角度来看，Source是一个特殊化的算法：它的<code>GetNumberOfInputPorts()</code>返回0，而普通的Filter至少返回1。这个看似简单的差异决定了Source在管道中的独特地位——它是计算链的终点，是<code>Update()</code>向上游追溯时最后到达的节点。</p>
+<p>回顾第二章的核心概念：当你调用<code>Update()</code>时，Executive沿着<code>SetInputConnection()</code>的连接链向上游一级一级追溯，直到找到一个没有输入端口的算法——那就是Source。然后，从这个Source开始，数据向下游流动，经过每一级Filter和Mapper的处理，最终到达屏幕。</p>
+<p><strong>Source本身并不特殊——它只是一个没有Input的Filter。</strong> 这一洞察将Source与Filter统一在同一个概念框架下：Filter接收数据、变换后输出；Source不接收数据、生成后输出。在VTK的类继承体系中，许多Source和Filter共享同一个中间基类，它们之间的差异仅仅在于输入端口的有无。</p>
+<h3 id="412-vs">4.1.2 内置数据源 vs 手动构建数据</h3>
+<p>VTK提供两种方式将数据带入管道：</p>
+<p><strong>方式一：使用内置数据源（Built-in Sources）</strong></p>
+<p>这是快速原型开发和教学演示中最常用的方式。VTK在<code>FiltersSources</code>模块中内置了数十种几何体数据源，每一种都能通过简洁的参数接口生成对应的几何形状：</p>
+<pre><code class="language-cpp">// 一行代码创建一个球体数据源，参数全部有默认值
+vtkNew&lt;vtkSphereSource&gt; sphere;
+// sphere此时已经&quot;知道&quot;如何生成一个球体，但数据尚未计算
+// 它记住了参数：Radius=0.5, ThetaResolution=8, PhiResolution=8, ...
+</code></pre>
+<p>内置数据源的优势在于：
+- <strong>简洁</strong>：一行构造，几行参数设置，无需理解底层几何算法。
+- <strong>可靠</strong>：经过了VTK社区数十年的测试和维护。
+- <strong>参数化</strong>：通过<code>SetXXX()</code>方法随时调整形状，MTime自动跟踪变化。
+- <strong>管道兼容</strong>：天然支持<code>SetInputConnection()</code>，可以直接接入管道。</p>
+<p><strong>方式二：手动构建数据（Manual Data Construction）</strong></p>
+<p>当你需要的形状超出了内置数据源的能力范围——例如自定义的CAD模型轮廓、科学测量得到的离散采样点、或由外部算法生成的特定拓扑结构——你需要手动构建<code>vtkPoints</code>和<code>vtkCellArray</code>，然后将它们组装成<code>vtkPolyData</code>：</p>
+<pre><code class="language-cpp">vtkNew&lt;vtkPoints&gt; points;
+points-&gt;InsertNextPoint(0.0, 0.0, 0.0);
+points-&gt;InsertNextPoint(1.0, 0.0, 0.0);
+// ... 继续添加点 ...
+
+vtkNew&lt;vtkCellArray&gt; cells;
+// ... 手动定义单元拓扑 ...
+
+vtkNew&lt;vtkPolyData&gt; polyData;
+polyData-&gt;SetPoints(points);
+polyData-&gt;SetPolys(cells);
+</code></pre>
+<p>手动构建数据的能力是VTK灵活性的核心——它意味着你<strong>不局限于任何预定义形状</strong>，可以创建任何你能用点和面描述的三维结构。4.4节将详细展示这一过程。</p>
+<h3 id="413-sourceupdate-vs-render">4.1.3 Source::Update() vs 让Render()触发</h3>
+<p>在本章及后续章节中，你会频繁看到代码中调用<code>source-&gt;Update()</code>。让我们明确它和<code>Render()</code>的区别：</p>
+<pre><code class="language-cpp">vtkNew&lt;vtkConeSource&gt; cone;
+
+// 方式A：手动Update —— 在渲染之前强制执行
+cone-&gt;Update();
+vtkPolyData* data = cone-&gt;GetOutput();  // 此时可以安全地访问数据
+int npts = data-&gt;GetNumberOfPoints();   // 例如：检查生成的点数
+
+// 方式B：让Render()触发 —— 标准管道用法
+vtkNew&lt;vtkPolyDataMapper&gt; mapper;
+mapper-&gt;SetInputConnection(cone-&gt;GetOutputPort());
+// ... 加到Actor、Renderer中 ...
+renderWindow-&gt;Render();  // Render()自动向上游触发cone-&gt;Update()
+</code></pre>
+<p><strong>什么时候需要手动调用<code>Update()</code>？</strong> 答案很简单：当你需要在渲染之前检查或使用数据时。典型场景包括：</p>
+<ol>
+<li><strong>调试与验证</strong>：在渲染前确认数据是否正确生成（检查点数、单元数、数据范围等）。</li>
+<li><strong>数据导出</strong>：在将数据写入文件（如STL、VTK）之前，需要确保数据已经生成。</li>
+<li><strong>脱离渲染的数据处理</strong>：某些应用只使用VTK的数据生成和处理能力，而不进行可视化——此时没有<code>Render()</code>来触发<code>Update()</code>，你需要手动调用。</li>
+<li><strong>教学演示</strong>：在教程代码中显式调用<code>Update()</code>来展示管道的执行时机——正如第二章示例中所做的那样。</li>
+</ol>
+<p><strong>原则是：如果你建立了完整的管道并最终调用了<code>Render()</code>，那么中间的手动<code>Update()</code>就是多余的。</strong> 在实际的应用代码中，手动<code>Update()</code>远少于教程代码中的出现频率——教程中使用它来"窥探"管道的中间状态，帮助你理解数据的流动。</p>
+<h3 id="414-vtk">4.1.4 本章涉及的VTK类速览</h3>
+<p>下表列出了本章将详细介绍的所有Source类及其所属模块（均位于<code>FiltersSources</code>模块组下）：</p>
+<table>
+<thead>
+<tr>
+<th>类名</th>
+<th>生成的几何体</th>
+<th>输出数据类型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>vtkConeSource</code></td>
+<td>圆锥体（可调边数，可变为棱锥）</td>
+<td>vtkPolyData</td>
+</tr>
+<tr>
+<td><code>vtkSphereSource</code></td>
+<td>球体（经纬线细分）</td>
+<td>vtkPolyData</td>
+</tr>
+<tr>
+<td><code>vtkCylinderSource</code></td>
+<td>圆柱体（可开关顶/底面）</td>
+<td>vtkPolyData</td>
+</tr>
+<tr>
+<td><code>vtkCubeSource</code></td>
+<td>长方体</td>
+<td>vtkPolyData</td>
+</tr>
+<tr>
+<td><code>vtkDiskSource</code></td>
+<td>圆盘（可设内外半径）</td>
+<td>vtkPolyData</td>
+</tr>
+<tr>
+<td><code>vtkArrowSource</code></td>
+<td>箭头（可调尖端和杆部比例）</td>
+<td>vtkPolyData</td>
+</tr>
+<tr>
+<td><code>vtkRegularPolygonSource</code></td>
+<td>正多边形（可设边数）</td>
+<td>vtkPolyData</td>
+</tr>
+<tr>
+<td><code>vtkPlaneSource</code></td>
+<td>矩形平面（可细分网格）</td>
+<td>vtkPolyData</td>
+</tr>
+<tr>
+<td><code>vtkLineSource</code></td>
+<td>线段（可细分中间点）</td>
+<td>vtkPolyData</td>
+</tr>
+<tr>
+<td><code>vtkTextSource</code></td>
+<td>三维文字</td>
+<td>vtkPolyData</td>
+</tr>
+<tr>
+<td><code>vtkProgrammableSource</code></td>
+<td>用户自定义（回调函数生成）</td>
+<td>vtkPolyData</td>
+</tr>
+</tbody>
+</table>
+<p>这些Source的输出类型均为<code>vtkPolyData</code>——这是VTK中最灵活、最常用的数据格式。你可以用<code>vtkPolyDataMapper</code>直接映射它们，然后用<code>vtkActor</code>在场景中渲染。</p>
+<hr />
+<h2 id="42">4.2 常用几何体数据源</h2>
+<p>本节以速查手册的形式介绍十种最常用的内置几何体数据源。对每种Source，我们说明其用途、列出关键参数、并给出一个简短的使用示例。所有示例假定你已经有了第一章中建立的渲染基础设施（Renderer、RenderWindow、RenderWindowInteractor），因此只展示Source的创建和参数设置部分。</p>
+<h3 id="421-vtkconesource">4.2.1 vtkConeSource —— 圆锥体</h3>
+<p><strong>用途：</strong> 生成一个底面为正多边形的锥体（当边数足够大时近似为圆锥）。这是第一章Cone示例中的核心Source。</p>
+<p><strong>关键参数：</strong></p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>默认值</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SetHeight(double)</code></td>
+<td>1.0</td>
+<td>锥体高度（Y轴方向）</td>
+</tr>
+<tr>
+<td><code>SetRadius(double)</code></td>
+<td>0.5</td>
+<td>底面半径</td>
+</tr>
+<tr>
+<td><code>SetResolution(int)</code></td>
+<td>6</td>
+<td>底面多边形的边数（6=六棱锥，32+接近真圆锥）</td>
+</tr>
+<tr>
+<td><code>SetCenter(double, double, double)</code></td>
+<td>(0, 0, 0)</td>
+<td>锥体几何中心位置</td>
+</tr>
+<tr>
+<td><code>SetDirection(double, double, double)</code></td>
+<td>(1, 0, 0)</td>
+<td>锥体轴向（默认X轴方向）</td>
+</tr>
+<tr>
+<td><code>SetCapping(bool)</code></td>
+<td>true</td>
+<td>是否生成底面（false则只有锥面，无底面）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>代码示例：</strong></p>
+<pre><code class="language-cpp">#include &quot;vtkConeSource.h&quot;
+#include &quot;vtkNew.h&quot;
+
+// 生成一个高1.5、底面半径0.6、32边的近似圆锥
+vtkNew&lt;vtkConeSource&gt; cone;
+cone-&gt;SetHeight(1.5);
+cone-&gt;SetRadius(0.6);
+cone-&gt;SetResolution(32);
+cone-&gt;SetCenter(0.0, 0.0, 0.0);
+cone-&gt;SetDirection(0.0, 1.0, 0.0);  // 锥体尖端指向Y轴正方向
+// 输出: vtkPolyData (顶点、三角面片、法向量)
+</code></pre>
+<p><strong>实用提示：</strong> 将<code>SetResolution(4)</code>与<code>SetCapping(false)</code>结合，可以得到一个四棱锥（金字塔形）的侧面。将<code>SetCapping(false)</code>与<code>SetRadius(0)</code>结合则生成一个没有底面的真圆锥。<code>SetDirection()</code>在需要将锥体指向特定方向（如表示向量方向）时非常有用。</p>
+<hr />
+<h3 id="422-vtkspheresource">4.2.2 vtkSphereSource —— 球体</h3>
+<p><strong>用途：</strong> 生成一个用经纬线（Latitude-Longitude）方式细分的球体表面。这是最常用的几何体之一，常用于表示点数据的位置标记（配合Glyph使用，见后续章节）、碰撞检测的包围球、或组合成分子模型。</p>
+<p><strong>关键参数：</strong></p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>默认值</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SetRadius(double)</code></td>
+<td>0.5</td>
+<td>球体半径</td>
+</tr>
+<tr>
+<td><code>SetThetaResolution(int)</code></td>
+<td>8</td>
+<td>经线方向（绕Y轴）的细分段数</td>
+</tr>
+<tr>
+<td><code>SetPhiResolution(int)</code></td>
+<td>8</td>
+<td>纬线方向（从北极到南极）的细分段数</td>
+</tr>
+<tr>
+<td><code>SetStartTheta(double)</code></td>
+<td>0.0</td>
+<td>经度起始角（度）</td>
+</tr>
+<tr>
+<td><code>SetEndTheta(double)</code></td>
+<td>360.0</td>
+<td>经度终止角（度）</td>
+</tr>
+<tr>
+<td><code>SetStartPhi(double)</code></td>
+<td>0.0</td>
+<td>纬度起始角（度，0=北极）</td>
+</tr>
+<tr>
+<td><code>SetEndPhi(double)</code></td>
+<td>180.0</td>
+<td>纬度终止角（度，180=南极）</td>
+</tr>
+<tr>
+<td><code>SetCenter(double, double, double)</code></td>
+<td>(0, 0, 0)</td>
+<td>球心位置</td>
+</tr>
+<tr>
+<td><code>SetLatLongTessellation(bool)</code></td>
+<td>false</td>
+<td>是否使用经纬线细分（true=四边形，false=三角形）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>代码示例：</strong></p>
+<pre><code class="language-cpp">#include &quot;vtkSphereSource.h&quot;
+#include &quot;vtkNew.h&quot;
+
+// 生成一个半径1.0、经线50段、纬线50段的光滑球体
+vtkNew&lt;vtkSphereSource&gt; sphere;
+sphere-&gt;SetRadius(1.0);
+sphere-&gt;SetThetaResolution(50);
+sphere-&gt;SetPhiResolution(50);
+sphere-&gt;SetCenter(0.0, 0.0, 0.0);
+// 输出: vtkPolyData
+</code></pre>
+<pre><code class="language-cpp">// 生成一个半球（通过限制纬度范围）
+vtkNew&lt;vtkSphereSource&gt; hemisphere;
+hemisphere-&gt;SetRadius(1.0);
+hemisphere-&gt;SetThetaResolution(50);
+hemisphere-&gt;SetPhiResolution(25);
+hemisphere-&gt;SetStartPhi(0.0);    // 从北极开始
+hemisphere-&gt;SetEndPhi(90.0);     // 到赤道结束——生成北半球
+</code></pre>
+<p><strong>实用提示：</strong> <code>ThetaResolution</code>和<code>PhiResolution</code>是控制球体光滑度的核心参数——值越大球体越光滑，但面片数量以乘积形式增长（面片数 = ThetaResolution x PhiResolution x 2）。对于仅用作位置标记的小球，分辨率设为8-12即可；对于大尺寸的主要展示对象，建议设为32-64。通过调节<code>StartTheta</code>/<code>EndTheta</code>和<code>StartPhi</code>/<code>EndPhi</code>可以创建球体的一部分（如半球、四分之一球、球面切片），在需要展示"切开"效果时非常有用。</p>
+<hr />
+<h3 id="423-vtkcylindersource">4.2.3 vtkCylinderSource —— 圆柱体</h3>
+<p><strong>用途：</strong> 生成一个圆柱体，可独立控制是否生成顶面和底面（Capping）。常用于表示柱状结构、管道、或数据可视化中的柱状图元素。</p>
+<p><strong>关键参数：</strong></p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>默认值</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SetHeight(double)</code></td>
+<td>1.0</td>
+<td>柱体高度（Y轴方向）</td>
+</tr>
+<tr>
+<td><code>SetRadius(double)</code></td>
+<td>0.5</td>
+<td>柱体半径</td>
+</tr>
+<tr>
+<td><code>SetResolution(int)</code></td>
+<td>6</td>
+<td>圆周方向的细分段数</td>
+</tr>
+<tr>
+<td><code>SetCenter(double, double, double)</code></td>
+<td>(0, 0, 0)</td>
+<td>柱体几何中心</td>
+</tr>
+<tr>
+<td><code>SetCapping(bool)</code></td>
+<td>true</td>
+<td>是否生成顶面和底面</td>
+</tr>
+</tbody>
+</table>
+<p><strong>代码示例：</strong></p>
+<pre><code class="language-cpp">#include &quot;vtkCylinderSource.h&quot;
+#include &quot;vtkNew.h&quot;
+
+// 生成一个高2.0、半径0.4、64边（光滑曲面）的圆柱体
+vtkNew&lt;vtkCylinderSource&gt; cylinder;
+cylinder-&gt;SetHeight(2.0);
+cylinder-&gt;SetRadius(0.4);
+cylinder-&gt;SetResolution(64);
+cylinder-&gt;SetCenter(0.0, 0.0, 0.0);
+cylinder-&gt;CappingOn();   // 生成顶面和底面（默认即为开启）
+// 输出: vtkPolyData
+</code></pre>
+<pre><code class="language-cpp">// 生成一个没有顶底面的管道（空心圆柱侧面）
+vtkNew&lt;vtkCylinderSource&gt; tube;
+tube-&gt;SetHeight(3.0);
+tube-&gt;SetRadius(0.5);
+tube-&gt;SetResolution(32);
+tube-&gt;CappingOff();  // 只有侧面——一个真正的&quot;管道&quot;
+</code></pre>
+<p><strong>实用提示：</strong> <code>SetResolution(4)</code>生成一个四棱柱（截面为正方形），<code>SetResolution(3)</code>生成三棱柱。<code>CappingOff()</code>在需要展示物体内部或创建开放式管道时非常关键——例如在CAD可视化中展示一个贯穿的孔洞。注意圆柱体的轴向是固定的（沿Y轴），如需其他方向，可以通过<code>vtkActor::SetOrientation()</code>在渲染时旋转。</p>
+<hr />
+<h3 id="424-vtkcubesource">4.2.4 vtkCubeSource —— 长方体</h3>
+<p><strong>用途：</strong> 生成一个轴对齐的长方体（所有面与坐标轴平行）。这是最基础的几何体，广泛用于表示包围盒（Bounding Box）、占位符、或体素化的三维像素。</p>
+<p><strong>关键参数：</strong></p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>默认值</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SetXLength(double)</code></td>
+<td>1.0</td>
+<td>X方向长度</td>
+</tr>
+<tr>
+<td><code>SetYLength(double)</code></td>
+<td>1.0</td>
+<td>Y方向长度</td>
+</tr>
+<tr>
+<td><code>SetZLength(double)</code></td>
+<td>1.0</td>
+<td>Z方向长度</td>
+</tr>
+<tr>
+<td><code>SetCenter(double, double, double)</code></td>
+<td>(0, 0, 0)</td>
+<td>长方体几何中心</td>
+</tr>
+</tbody>
+</table>
+<p><strong>代码示例：</strong></p>
+<pre><code class="language-cpp">#include &quot;vtkCubeSource.h&quot;
+#include &quot;vtkNew.h&quot;
+
+// 生成一个2x1x0.5的长方体（类似一块板砖）
+vtkNew&lt;vtkCubeSource&gt; cube;
+cube-&gt;SetXLength(2.0);
+cube-&gt;SetYLength(1.0);
+cube-&gt;SetZLength(0.5);
+cube-&gt;SetCenter(0.0, 0.0, 0.0);
+// 输出: vtkPolyData (8个顶点, 12个三角面片)
+</code></pre>
+<p><strong>实用提示：</strong> <code>vtkCubeSource</code>生成的始终是轴对齐的长方体。如果你需要一个可以任意旋转的立方体，在渲染时通过<code>actor-&gt;SetOrientation()</code>来实现，而不是通过Source参数。三个方向的长度独立设置意味着你可以方便地创建各种比例的长方体——这对于数据可视化中的三维柱状图尤其有用。</p>
+<hr />
+<h3 id="425-vtkdisksource">4.2.5 vtkDiskSource —— 圆盘</h3>
+<p><strong>用途：</strong> 生成一个位于XY平面的圆盘（或圆环）。可以设置内半径和外半径，从而生成从实心圆盘到圆环之间的任意形状。常用于表示二维平面中的圆形区域、垫圈形状、或饼图的扇形片。</p>
+<p><strong>关键参数：</strong></p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>默认值</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SetInnerRadius(double)</code></td>
+<td>0.0</td>
+<td>内半径（0=实心圆盘，&gt;0=圆环）</td>
+</tr>
+<tr>
+<td><code>SetOuterRadius(double)</code></td>
+<td>0.5</td>
+<td>外半径</td>
+</tr>
+<tr>
+<td><code>SetCircumferentialResolution(int)</code></td>
+<td>6</td>
+<td>圆周方向的细分段数</td>
+</tr>
+<tr>
+<td><code>SetRadialResolution(int)</code></td>
+<td>1</td>
+<td>径向的细分段数</td>
+</tr>
+</tbody>
+</table>
+<p><strong>代码示例：</strong></p>
+<pre><code class="language-cpp">#include &quot;vtkDiskSource.h&quot;
+#include &quot;vtkNew.h&quot;
+
+// 生成一个外半径1.0的实心圆盘（内半径为0）
+vtkNew&lt;vtkDiskSource&gt; disk;
+disk-&gt;SetOuterRadius(1.0);
+disk-&gt;SetInnerRadius(0.0);
+disk-&gt;SetCircumferentialResolution(64);  // 64边近似圆形
+// 输出: vtkPolyData
+
+// 生成一个圆环（垫圈形状）
+vtkNew&lt;vtkDiskSource&gt; ring;
+ring-&gt;SetOuterRadius(1.0);
+ring-&gt;SetInnerRadius(0.6);     // 内半径 &gt; 0 =&gt; 圆环
+ring-&gt;SetCircumferentialResolution(64);
+ring-&gt;SetRadialResolution(2);  // 径向2段（内圈和外圈之间有一段过渡）
+</code></pre>
+<p><strong>实用提示：</strong> <code>vtkDiskSource</code>生成的圆盘始终位于XY平面（法向为Z轴）。如果需要在其他平面上显示，通过<code>vtkActor::SetOrientation()</code>旋转。<code>CircumferentialResolution</code>控制圆的精细程度——数值越大越接近真圆。<code>RadialResolution</code>在内半径和外半径之间插入更多的顶点环，通常设为1即可，除非你计划对圆盘进行变形处理。</p>
+<hr />
+<h3 id="426-vtkarrowsource">4.2.6 vtkArrowSource —— 箭头</h3>
+<p><strong>用途：</strong> 生成一个三维箭头，由圆柱形的杆部（Shaft）和圆锥形的尖端（Tip）组成。这是矢量场可视化中最常用的符号——通过Glyph机制在数据集的每个点上放置一个箭头来表示该点的矢量方向和大小（详见第八章）。</p>
+<p><strong>关键参数：</strong></p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>默认值</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SetTipLength(double)</code></td>
+<td>0.35</td>
+<td>尖端长度（占箭头总长的比例）</td>
+</tr>
+<tr>
+<td><code>SetTipRadius(double)</code></td>
+<td>0.1</td>
+<td>尖端底部半径</td>
+</tr>
+<tr>
+<td><code>SetShaftRadius(double)</code></td>
+<td>0.03</td>
+<td>杆部半径</td>
+</tr>
+<tr>
+<td><code>SetTipResolution(int)</code></td>
+<td>6</td>
+<td>尖端的圆周细分（同Cone的Resolution）</td>
+</tr>
+<tr>
+<td><code>SetShaftResolution(int)</code></td>
+<td>6</td>
+<td>杆部的圆周细分（同Cylinder的Resolution）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>代码示例：</strong></p>
+<pre><code class="language-cpp">#include &quot;vtkArrowSource.h&quot;
+#include &quot;vtkNew.h&quot;
+
+// 生成一个标准箭头
+vtkNew&lt;vtkArrowSource&gt; arrow;
+arrow-&gt;SetTipLength(0.35);     // 尖端占35%的总长
+arrow-&gt;SetTipRadius(0.1);      // 尖端底部半径
+arrow-&gt;SetShaftRadius(0.03);   // 杆部半径
+arrow-&gt;SetTipResolution(32);   // 尖端光滑
+arrow-&gt;SetShaftResolution(32); // 杆部光滑
+// 输出: vtkPolyData (默认方向为X轴正方向)
+</code></pre>
+<pre><code class="language-cpp">// 生成一个粗壮的短箭头（用于突出显示）
+vtkNew&lt;vtkArrowSource&gt; boldArrow;
+boldArrow-&gt;SetTipLength(0.5);    // 尖端占一半
+boldArrow-&gt;SetTipRadius(0.2);    // 大尖端
+boldArrow-&gt;SetShaftRadius(0.08); // 粗杆
+</code></pre>
+<p><strong>实用提示：</strong> <code>vtkArrowSource</code>生成的箭头默认指向X轴正方向。在矢量场可视化中，<code>vtkGlyph3D</code>（详见第八章）会自动根据每个点的矢量数据调整箭头的方向和大小，你不需要手动旋转箭头。直接使用时，通过<code>actor-&gt;SetOrientation()</code>来改变箭头指向。</p>
+<hr />
+<h3 id="427-vtkregularpolygonsource">4.2.7 vtkRegularPolygonSource —— 正多边形</h3>
+<p><strong>用途：</strong> 生成一个位于XY平面的正多边形（正三角形、正方形、正五边形……）。当边数足够大时趋近于圆。这是最简单的平面几何体Source，常用于生成截面形状、符号标记、或自定义拉伸体的底面。</p>
+<p><strong>关键参数：</strong></p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>默认值</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SetNumberOfSides(int)</code></td>
+<td>6</td>
+<td>多边形的边数</td>
+</tr>
+<tr>
+<td><code>SetRadius(double)</code></td>
+<td>0.5</td>
+<td>外接圆半径</td>
+</tr>
+<tr>
+<td><code>SetCenter(double, double, double)</code></td>
+<td>(0, 0, 0)</td>
+<td>多边形中心位置</td>
+</tr>
+<tr>
+<td><code>SetGeneratePolygon(bool)</code></td>
+<td>true</td>
+<td>是否生成填充面（false则只生成轮廓线）</td>
+</tr>
+<tr>
+<td><code>SetNormal(double, double, double)</code></td>
+<td>(0, 0, 1)</td>
+<td>法向量方向（多边形所在平面的朝向）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>代码示例：</strong></p>
+<pre><code class="language-cpp">#include &quot;vtkRegularPolygonSource.h&quot;
+#include &quot;vtkNew.h&quot;
+
+// 生成一个正五边形
+vtkNew&lt;vtkRegularPolygonSource&gt; pentagon;
+pentagon-&gt;SetNumberOfSides(5);
+pentagon-&gt;SetRadius(1.0);
+pentagon-&gt;SetCenter(0.0, 0.0, 0.0);
+pentagon-&gt;SetGeneratePolygon(true);   // 生成填充面
+// 输出: vtkPolyData
+
+// 生成一个仅轮廓的正六边形（用来表示边框）
+vtkNew&lt;vtkRegularPolygonSource&gt; outline;
+outline-&gt;SetNumberOfSides(6);
+outline-&gt;SetRadius(1.0);
+outline-&gt;SetGeneratePolygon(false);    // 仅生成轮廓线，不填充
+</code></pre>
+<p><strong>实用提示：</strong> <code>SetGeneratePolygon(false)</code>生成的多边形仅包含边界线段，适合用作轮廓标记或线框装饰。将<code>SetNumberOfSides(4)</code>与<code>SetRadius(sqrt(2)/2)</code>结合可以生成一个正方形——不过对于正方形，<code>vtkPlaneSource</code>更为直接。正多边形的法向量可以通过<code>SetNormal()</code>调整，这使得你可以在任意平面上生成正多边形。</p>
+<hr />
+<h3 id="428-vtkplanesource">4.2.8 vtkPlaneSource —— 矩形平面</h3>
+<p><strong>用途：</strong> 生成一个矩形平面（由两个三角形组成），可以进一步细分为四边形网格。这是最灵活的面状几何体Source，广泛用于创建地面平面、截面切片、纹理映射底板、以及作为变形（Warp）操作的输入。</p>
+<p><strong>关键参数：</strong></p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>默认值</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SetOrigin(double, double, double)</code></td>
+<td>(-0.5, -0.5, 0.0)</td>
+<td>平面左下角的原点坐标</td>
+</tr>
+<tr>
+<td><code>SetPoint1(double, double, double)</code></td>
+<td>(0.5, -0.5, 0.0)</td>
+<td>定义平面第一条边的终点（从Origin出发）</td>
+</tr>
+<tr>
+<td><code>SetPoint2(double, double, double)</code></td>
+<td>(-0.5, 0.5, 0.0)</td>
+<td>定义平面第二条边的终点（从Origin出发）</td>
+</tr>
+<tr>
+<td><code>SetXResolution(int)</code></td>
+<td>1</td>
+<td>X方向（Point1方向）的细分段数</td>
+</tr>
+<tr>
+<td><code>SetYResolution(int)</code></td>
+<td>1</td>
+<td>Y方向（Point2方向）的细分段数</td>
+</tr>
+<tr>
+<td><code>SetCenter(double, double, double)</code></td>
+<td>(0, 0, 0)</td>
+<td>（间接）平面的几何中心</td>
+</tr>
+</tbody>
+</table>
+<p><strong>代码示例：</strong></p>
+<pre><code class="language-cpp">#include &quot;vtkPlaneSource.h&quot;
+#include &quot;vtkNew.h&quot;
+
+// 生成一个10x10的细分平面（100个四边形），用于变形演示
+vtkNew&lt;vtkPlaneSource&gt; plane;
+plane-&gt;SetOrigin(-5.0, -5.0, 0.0);   // 左下角
+plane-&gt;SetPoint1(5.0, -5.0, 0.0);    // 右下角（X方向，总长10）
+plane-&gt;SetPoint2(-5.0, 5.0, 0.0);    // 左上角（Y方向，总长10）
+plane-&gt;SetXResolution(10);            // X方向10段 =&gt; 11x11个顶点
+plane-&gt;SetYResolution(10);            // Y方向10段 =&gt; 共121个顶点, 200个三角形
+// 输出: vtkPolyData
+</code></pre>
+<pre><code class="language-cpp">// 生成一个简单的正方形平面（默认参数）
+vtkNew&lt;vtkPlaneSource&gt; square;
+// 默认: Origin=(-0.5,-0.5,0), Point1=(0.5,-0.5,0), Point2=(-0.5,0.5,0)
+// 生成一个1x1的正方形，位于XY平面，中心在原点
+// 输出: 4个顶点, 2个三角形
+</code></pre>
+<p><strong>实用提示：</strong> <code>vtkPlaneSource</code>的真正威力在于<code>SetXResolution()</code>和<code>SetYResolution()</code>——它们将平面细分为规则的四边形网格。这个网格随后可以作为<code>vtkWarpScalar</code>（根据标量值将顶点沿法向偏移）的输入，将平面变形为三维曲面——这正是标量场可视化的经典技术。平面可以位于空间的任意位置和朝向：通过设置<code>Origin</code>、<code>Point1</code>和<code>Point2</code>，你可以定义任意大小和朝向的矩形平面。</p>
+<hr />
+<h3 id="429-vtklinesource">4.2.9 vtkLineSource —— 线段</h3>
+<p><strong>用途：</strong> 生成一条由两个端点定义的线段，可以通过<code>SetResolution()</code>在端点之间插入更多的等间距采样点。常用于绘制坐标轴、连接线、或轨迹路径。</p>
+<p><strong>关键参数：</strong></p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>默认值</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SetPoint1(double, double, double)</code></td>
+<td>(-0.5, 0.0, 0.0)</td>
+<td>线段起点</td>
+</tr>
+<tr>
+<td><code>SetPoint2(double, double, double)</code></td>
+<td>(0.5, 0.0, 0.0)</td>
+<td>线段终点</td>
+</tr>
+<tr>
+<td><code>SetResolution(int)</code></td>
+<td>1</td>
+<td>两点之间的细分段数（1=只有起点和终点）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>代码示例：</strong></p>
+<pre><code class="language-cpp">#include &quot;vtkLineSource.h&quot;
+#include &quot;vtkNew.h&quot;
+
+// 生成一条从(0,0,0)到(1,1,1)的对角线段
+vtkNew&lt;vtkLineSource&gt; line;
+line-&gt;SetPoint1(0.0, 0.0, 0.0);
+line-&gt;SetPoint2(1.0, 1.0, 1.0);
+line-&gt;SetResolution(1);  // 只有起点和终点，中间没有采样点
+// 输出: vtkPolyData (一条polyline)
+
+// 生成一条有中间采样点的曲线路径（此处为直线，但点被细分了）
+vtkNew&lt;vtkLineSource&gt; sampledLine;
+sampledLine-&gt;SetPoint1(0.0, 0.0, 0.0);
+sampledLine-&gt;SetPoint2(1.0, 0.0, 0.0);
+sampledLine-&gt;SetResolution(10);  // 在两点之间插入9个中间点 =&gt; 共11个点
+// 细分后的线段可用于后续的变形或采样操作
+</code></pre>
+<p><strong>实用提示：</strong> 在VTK中，线段的渲染需要特别设置——默认情况下<code>vtkPolyDataMapper</code>会将线段渲染为细线。如果要让线段更加可见，可以通过<code>actor-&gt;GetProperty()-&gt;SetLineWidth(3.0)</code>来设置线宽，以及<code>actor-&gt;GetProperty()-&gt;SetColor(r, g, b)</code>来设置颜色。<code>SetResolution()</code>在直线段上插入中间点的目的通常不是为了渲染（因为直线只需要两个端点），而是为了后续处理——例如，将这条线段作为<code>vtkProbeFilter</code>的采样路径，在沿线的多个位置采样标量场数据。</p>
+<hr />
+<h3 id="4210-vtktextsource">4.2.10 vtkTextSource —— 三维文字</h3>
+<p><strong>用途：</strong> 生成指定字符串的三维多边形几何体。文字以折线形式表示，可以在三维场景中作为标签、标题或注释显示。</p>
+<p><strong>关键参数：</strong></p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>默认值</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SetText(const char*)</code></td>
+<td>""</td>
+<td>要生成的文字内容</td>
+</tr>
+<tr>
+<td><code>SetForegroundColor(double, double, double)</code></td>
+<td>(1, 1, 1)</td>
+<td>文字颜色（RGB，0-1范围）</td>
+</tr>
+<tr>
+<td><code>SetBackgroundColor(double, double, double)</code></td>
+<td>(0, 0, 0)</td>
+<td>背景颜色</td>
+</tr>
+<tr>
+<td><code>SetBackupPropEnabled(bool)</code></td>
+<td>false</td>
+<td>是否显示背景</td>
+</tr>
+</tbody>
+</table>
+<p><strong>代码示例：</strong></p>
+<pre><code class="language-cpp">#include &quot;vtkTextSource.h&quot;
+#include &quot;vtkNew.h&quot;
+#include &quot;vtkPolyDataMapper.h&quot;
+
+// 生成三维文字 &quot;VTK 9.5.2&quot;
+vtkNew&lt;vtkTextSource&gt; textSource;
+textSource-&gt;SetText(&quot;VTK 9.5.2&quot;);
+textSource-&gt;SetForegroundColor(1.0, 0.8, 0.2); // 金黄色文字
+textSource-&gt;SetBackgroundColor(0.1, 0.1, 0.3); // 深蓝背景
+textSource-&gt;BackingOn();  // 显示背景色块
+
+// 注意：vtkTextSource输出的是vtkPolyData，但其中包含的是折线（多段线）
+// 因此需要使用合适的mapper
+vtkNew&lt;vtkPolyDataMapper&gt; textMapper;
+textMapper-&gt;SetInputConnection(textSource-&gt;GetOutputPort());
+</code></pre>
+<p><strong>实用提示：</strong> <code>vtkTextSource</code>生成的是基于矢量字体的三维折线轮廓。文字的质量取决于VTK编译时是否启用了对FreeType等字体渲染库的支持。如果你需要高质量的屏幕文字（始终面向相机），应该优先考虑<code>vtkTextActor</code>（用于二维覆盖文字）或<code>vtkVectorText</code>（生成三维文字但质量更好）。<code>vtkTextSource</code>的优势在于简单——不需要额外的字体文件，直接生成可用的三维文字几何。</p>
+<hr />
+<h2 id="43">4.3 程序化数据源</h2>
+<h3 id="431-vtkprogrammablesource">4.3.1 vtkProgrammableSource 简介</h3>
+<p>内置数据源覆盖了常见几何形状，但如果你的需求超出了预定义形状的范围——例如生成一个数学曲面、导入自定义算法产生的点云、或从外部传感器读取实时数据——你需要一个能执行自定义代码的数据源。<strong><code>vtkProgrammableSource</code>正是为此而设计的。</strong></p>
+<p><code>vtkProgrammableSource</code>允许你注册一个C++回调函数（或静态方法），该函数将在Source被要求生成数据时被调用。在这个回调函数中，你可以直接操作<code>vtkPolyData</code>的输出——创建点、定义单元、附加属性数据——就像你完全控制了一整个Source的内部实现一样。</p>
+<h3 id="432-setexecutemethod">4.3.2 SetExecuteMethod 机制</h3>
+<p><code>vtkProgrammableSource</code>的核心方法是<code>SetExecuteMethod()</code>，它接受两个参数：一个回调函数的函数指针，以及一个可选的<code>void*</code>用户数据指针：</p>
+<pre><code class="language-cpp">// 回调函数签名
+void MyExecuteFunc(void* arg);
+</code></pre>
+<p>这个回调函数在<code>vtkProgrammableSource</code>的<code>RequestData()</code>阶段被调用——也就是在管道执行到该Source时。在回调函数内部，你需要：</p>
+<ol>
+<li>通过<code>vtkProgrammableSource::GetPolyDataOutput()</code>获取输出对象的指针。</li>
+<li>构建<code>vtkPoints</code>并填充顶点坐标。</li>
+<li>构建<code>vtkCellArray</code>并定义单元拓扑（通常是三角形或多边形）。</li>
+<li>将点和单元设置到输出PolyData上。</li>
+</ol>
+<h3 id="433-z-sinx-cosy">4.3.3 数学曲面示例：z = sin(x) * cos(y)</h3>
+<p>下面的示例使用<code>vtkProgrammableSource</code>生成一个数学曲面——z = sin(x) * cos(y)，这是一个经典的鞍状曲面（波形曲面）。</p>
+<pre><code class="language-cpp">#include &quot;vtkActor.h&quot;
+#include &quot;vtkCamera.h&quot;
+#include &quot;vtkCellArray.h&quot;
+#include &quot;vtkInteractorStyleTrackballCamera.h&quot;
+#include &quot;vtkNew.h&quot;
+#include &quot;vtkPoints.h&quot;
+#include &quot;vtkPolyData.h&quot;
+#include &quot;vtkPolyDataMapper.h&quot;
+#include &quot;vtkProgrammableSource.h&quot;
+#include &quot;vtkProperty.h&quot;
+#include &quot;vtkRenderWindow.h&quot;
+#include &quot;vtkRenderWindowInteractor.h&quot;
+#include &quot;vtkRenderer.h&quot;
+
+#include &lt;cmath&gt;
+
+// ============================================================================
+// 回调函数：生成数学曲面 z = sin(x) * cos(y)
+// ============================================================================
+void GenerateMathSurface(void* arg)
+{
+  // 获取回调参数——指向vtkProgrammableSource的指针
+  vtkProgrammableSource* source = static_cast&lt;vtkProgrammableSource*&gt;(arg);
+
+  // 获取输出PolyData
+  vtkPolyData* output = source-&gt;GetPolyDataOutput();
+
+  // --- 参数定义 ---
+  const int gridSize = 50;            // 网格分辨率（50x50个顶点）
+  const double xMin = -3.0, xMax = 3.0;
+  const double yMin = -3.0, yMax = 3.0;
+  const double dx = (xMax - xMin) / (gridSize - 1);
+  const double dy = (yMax - yMin) / (gridSize - 1);
+
+  // --- 第一步：生成顶点 ---
+  vtkNew&lt;vtkPoints&gt; points;
+  points-&gt;SetNumberOfPoints(gridSize * gridSize);
+
+  for (int j = 0; j &lt; gridSize; ++j)
+  {
+    double y = yMin + j * dy;
+    for (int i = 0; i &lt; gridSize; ++i)
+    {
+      double x = xMin + i * dx;
+      double z = std::sin(x) * std::cos(y);  // 数学曲面公式
+      points-&gt;SetPoint(j * gridSize + i, x, y, z);
+    }
+  }
+
+  // --- 第二步：生成三角形单元 ---
+  vtkNew&lt;vtkCellArray&gt; triangles;
+
+  for (int j = 0; j &lt; gridSize - 1; ++j)
+  {
+    for (int i = 0; i &lt; gridSize - 1; ++i)
+    {
+      // 每个四边形分为两个三角形
+      // 顶点索引：  (i,j) -- (i+1,j)
+      //              |   \     |
+      //            (i,j+1) -- (i+1,j+1)
+      vtkIdType a = j * gridSize + i;
+      vtkIdType b = j * gridSize + (i + 1);
+      vtkIdType c = (j + 1) * gridSize + i;
+      vtkIdType d = (j + 1) * gridSize + (i + 1);
+
+      // 第一个三角形: a -&gt; b -&gt; c
+      vtkNew&lt;vtkTriangle&gt; tri1;
+      tri1-&gt;GetPointIds()-&gt;SetId(0, a);
+      tri1-&gt;GetPointIds()-&gt;SetId(1, b);
+      tri1-&gt;GetPointIds()-&gt;SetId(2, c);
+      triangles-&gt;InsertNextCell(tri1);
+
+      // 第二个三角形: b -&gt; d -&gt; c
+      vtkNew&lt;vtkTriangle&gt; tri2;
+      tri2-&gt;GetPointIds()-&gt;SetId(0, b);
+      tri2-&gt;GetPointIds()-&gt;SetId(1, d);
+      tri2-&gt;GetPointIds()-&gt;SetId(2, c);
+      triangles-&gt;InsertNextCell(tri2);
+    }
+  }
+
+  // --- 第三步：组装到输出PolyData ---
+  output-&gt;SetPoints(points);
+  output-&gt;SetPolys(triangles);
+}
+
+int main(int argc, char* argv[])
+{
+  // --- 渲染基础设施 ---
+  vtkNew&lt;vtkRenderer&gt; renderer;
+  vtkNew&lt;vtkRenderWindow&gt; renderWindow;
+  renderWindow-&gt;AddRenderer(renderer);
+  renderWindow-&gt;SetSize(600, 600);
+  renderWindow-&gt;SetWindowName(&quot;Math Surface: z = sin(x) * cos(y)&quot;);
+
+  vtkNew&lt;vtkRenderWindowInteractor&gt; interactor;
+  interactor-&gt;SetRenderWindow(renderWindow);
+
+  vtkNew&lt;vtkInteractorStyleTrackballCamera&gt; style;
+  style-&gt;SetDefaultRenderer(renderer);
+  interactor-&gt;SetInteractorStyle(style);
+
+  // --- 创建程序化数据源 ---
+  vtkNew&lt;vtkProgrammableSource&gt; progSource;
+  progSource-&gt;SetExecuteMethod(GenerateMathSurface, progSource);
+
+  // --- 构建管道 ---
+  vtkNew&lt;vtkPolyDataMapper&gt; mapper;
+  mapper-&gt;SetInputConnection(progSource-&gt;GetOutputPort());
+
+  vtkNew&lt;vtkActor&gt; actor;
+  actor-&gt;SetMapper(mapper);
+  actor-&gt;GetProperty()-&gt;SetColor(0.3, 0.6, 0.9);  // 浅蓝色
+  actor-&gt;GetProperty()-&gt;SetEdgeVisibility(1);       // 显示网格边线
+  actor-&gt;GetProperty()-&gt;SetEdgeColor(0.0, 0.0, 0.2);
+
+  renderer-&gt;AddActor(actor);
+  renderer-&gt;SetBackground(0.15, 0.15, 0.15);       // 深灰背景
+  renderer-&gt;GetActiveCamera()-&gt;SetPosition(8, 6, 10);
+  renderer-&gt;GetActiveCamera()-&gt;SetFocalPoint(0, 0, 0);
+  renderer-&gt;ResetCamera();
+
+  renderWindow-&gt;Render();
+  interactor-&gt;Start();
+
+  return 0;
+}
+</code></pre>
+<p><strong>代码要点解析：</strong></p>
+<ol>
+<li>
+<p><strong>回调函数的<code>void* arg</code>参数</strong>：通过<code>SetExecuteMethod(func, this)</code>将<code>vtkProgrammableSource</code>自身的指针传递给回调函数，这样回调函数就可以通过<code>source-&gt;GetPolyDataOutput()</code>获取输出对象。</p>
+</li>
+<li>
+<p><strong>网格拓扑</strong>：50x50的顶点网格产生了49x49=2401个四边形，每个四边形拆分为2个三角形，共4802个三角形。顶点总数是2500个。这是一个典型的结构化网格生成模式。</p>
+</li>
+<li>
+<p><strong>使用<code>vtkNew&lt;vtkTriangle&gt;</code>辅助构建</strong>：虽然我们可以直接通过<code>InsertNextCell(3, ids)</code>等原始接口构建三角形，但使用<code>vtkTriangle</code>对象的<code>GetPointIds()-&gt;SetId()</code>在逻辑上更清晰。两种方式都将在4.4节中详细讲解。</p>
+</li>
+<li>
+<p><strong>法向量</strong>：本例没有为曲面计算法向量。在实际渲染中，VTK的Mapper可以通过<code>vtkPolyDataNormals</code>过滤器自动计算法向量以获得正确的光照效果（在管道中插入一个<code>vtkPolyDataNormals</code>过滤器即可）。对于<code>vtkProgrammableSource</code>生成的任意曲面，建议在管道中添加法向量计算：</p>
+</li>
+</ol>
+<pre><code class="language-cpp">vtkNew&lt;vtkPolyDataNormals&gt; normals;
+normals-&gt;SetInputConnection(progSource-&gt;GetOutputPort());
+mapper-&gt;SetInputConnection(normals-&gt;GetOutputPort());
+</code></pre>
+<p><strong><code>vtkProgrammableSource</code>的局限性：</strong> 虽然功能强大，但它有一个显著的缺点——回调函数在每次管道更新时被调用（取决于MTime机制）。如果你的回调函数中包含昂贵的计算，需要注意性能影响。此外，回调函数不能是类的非静态成员方法（除非通过额外的包装），这在与面向对象设计的代码集成时可能不太方便。对于复杂的自定义数据生成，手动构建<code>vtkPolyData</code>（见4.4节）通常更为直接和可控。</p>
+<hr />
+<h2 id="44">4.4 手动构建点与单元</h2>
+<p>当内置数据源和<code>vtkProgrammableSource</code>都不能满足你的需求时——或者当你需要完全掌控数据的每一处细节时——你需要手动构建VTK的数据结构。本节将详细讲解如何从零开始创建<code>vtkPolyData</code>，这是VTK中最灵活、最常用的数据格式。</p>
+<h3 id="441">4.4.1 构建的基本流程</h3>
+<p>手动构建<code>vtkPolyData</code>的流程遵循以下步骤：</p>
+<pre><code>1. 创建 vtkPoints 对象
+      ↓
+2. 添加顶点坐标（InsertNextPoint / SetPoint）
+      ↓
+3. 创建 vtkCellArray 对象
+      ↓
+4. 定义单元拓扑（InsertNextCell 配合顶点索引）
+      ↓
+5. 将 Points 和 CellArray 组装到 vtkPolyData
+      ↓
+6. （可选）添加属性数据（标量、矢量等）
+</code></pre>
+<p>这个流程的核心思想是：<strong>顶点坐标和单元拓扑是分离的</strong>。<code>vtkPoints</code>只存储顶点的空间位置（x, y, z），<code>vtkCellArray</code>只存储单元如何由顶点组成（顶点索引列表）。这种分离设计使得同一组顶点可以被多个不同的单元集合复用——例如，同一个点集可以同时定义三角形面和线框边。</p>
+<h3 id="442-vtkpoints">4.4.2 创建 vtkPoints</h3>
+<p><code>vtkPoints</code>是VTK中存储顶点坐标的标准容器。它内部使用<code>vtkDataArray</code>（通常是<code>vtkFloatArray</code>）来高效存储坐标数据。</p>
+<pre><code class="language-cpp">#include &quot;vtkPoints.h&quot;
+#include &quot;vtkNew.h&quot;
+
+vtkNew&lt;vtkPoints&gt; points;
+
+// 方式一：顺序插入（自动分配索引 0, 1, 2, ...）
+points-&gt;InsertNextPoint(0.0, 0.0, 0.0);  // 索引 0
+points-&gt;InsertNextPoint(1.0, 0.0, 0.0);  // 索引 1
+points-&gt;InsertNextPoint(0.0, 1.0, 0.0);  // 索引 2
+points-&gt;InsertNextPoint(0.0, 0.0, 1.0);  // 索引 3
+
+// 方式二：指定索引设置（适合提前知道顶点数量的场景）
+points-&gt;SetNumberOfPoints(4);
+points-&gt;SetPoint(0, 0.0, 0.0, 0.0);
+points-&gt;SetPoint(1, 1.0, 0.0, 0.0);
+points-&gt;SetPoint(2, 0.0, 1.0, 0.0);
+points-&gt;SetPoint(3, 0.0, 0.0, 1.0);
+
+// 查询
+vtkIdType numPoints = points-&gt;GetNumberOfPoints();
+double* coords = points-&gt;GetPoint(0);       // 返回指向内部数组的指针
+double x = coords[0], y = coords[1], z = coords[2];
+</code></pre>
+<p><code>InsertNextPoint()</code>适用于无法提前预知顶点数量的场景；<code>SetPoint()</code>适用于已知顶点数量的场景，且性能更好（避免了动态数组扩容的开销）。</p>
+<h3 id="443-vtkcellarray">4.4.3 创建 vtkCellArray</h3>
+<p><code>vtkCellArray</code>存储单元的拓扑信息——每个单元是哪些顶点的组合。VTK支持多种单元类型，以下是最常用的几种：</p>
+<table>
+<thead>
+<tr>
+<th>单元类型常量</th>
+<th>含义</th>
+<th>最少顶点数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>VTK_VERTEX</code></td>
+<td>点</td>
+<td>1</td>
+<td>孤立的点精灵</td>
+</tr>
+<tr>
+<td><code>VTK_LINE</code></td>
+<td>线段</td>
+<td>2</td>
+<td>两个顶点之间的线段</td>
+</tr>
+<tr>
+<td><code>VTK_POLY_LINE</code></td>
+<td>折线</td>
+<td>2+</td>
+<td>多个连续的线段</td>
+</tr>
+<tr>
+<td><code>VTK_TRIANGLE</code></td>
+<td>三角形</td>
+<td>3</td>
+<td>三个顶点的三角面</td>
+</tr>
+<tr>
+<td><code>VTK_QUAD</code></td>
+<td>四边形</td>
+<td>4</td>
+<td>四个顶点的四边形面</td>
+</tr>
+<tr>
+<td><code>VTK_POLYGON</code></td>
+<td>多边形</td>
+<td>3+</td>
+<td>任意数量的顶点构成的多边形</td>
+</tr>
+<tr>
+<td><code>VTK_TETRA</code></td>
+<td>四面体</td>
+<td>4</td>
+<td>四个顶点的体单元</td>
+</tr>
+<tr>
+<td><code>VTK_TRIANGLE_STRIP</code></td>
+<td>三角形带</td>
+<td>3+</td>
+<td>连续三角形共享边</td>
+</tr>
+</tbody>
+</table>
+<p>构建<code>vtkCellArray</code>有以下几种主要方式：</p>
+<pre><code class="language-cpp">#include &quot;vtkCellArray.h&quot;
+#include &quot;vtkNew.h&quot;
+
+vtkNew&lt;vtkCellArray&gt; cells;
+
+// ---- 方式一：使用 InsertNextCell 的便捷重载（VTK 9 推荐） ----
+
+// 添加两个三角形构成一个正方形
+// 三角形顶点按逆时针排列（从法向量指向的一侧看）
+cells-&gt;InsertNextCell(3);  // 声明接下来的3个顶点构成一个单元
+cells-&gt;InsertCellPoint(0); // 三角形的顶点0
+cells-&gt;InsertCellPoint(1); // 三角形的顶点1
+cells-&gt;InsertCellPoint(2); // 三角形的顶点2
+
+cells-&gt;InsertNextCell(3);
+cells-&gt;InsertCellPoint(1);
+cells-&gt;InsertCellPoint(3);
+cells-&gt;InsertCellPoint(2);
+
+// ---- 方式二：使用 vtkIdList + InsertNextCell ----
+
+vtkNew&lt;vtkIdList&gt; ids;
+ids-&gt;SetNumberOfIds(3);
+ids-&gt;SetId(0, 0);
+ids-&gt;SetId(1, 1);
+ids-&gt;SetId(2, 2);
+cells-&gt;InsertNextCell(ids);  // 整批插入
+
+// ---- 方式三：使用原始数组一次性传递大量数据（高性能场景） ----
+// 这涉及直接操作vtkCellArray的内部存储，适合数据量极大时的批量构建
+</code></pre>
+<p><strong>关于顶点顺序的重要约定：</strong> 对于面单元（三角形、四边形、多边形），VTK要求顶点按<strong>逆时针顺序</strong>排列（从单元的外部观察）。这个顺序决定了面法向量的方向——法向量根据右手定则由顶点顺序导出。如果顶点顺序混乱，渲染结果中的光照将不正确（面可能看起来"黑"的，因为法向量指向了内部）。</p>
+<h3 id="444-vtkpolydata">4.4.4 组装 vtkPolyData</h3>
+<p>有了<code>vtkPoints</code>和<code>vtkCellArray</code>之后，将它们组装成<code>vtkPolyData</code>：</p>
+<pre><code class="language-cpp">#include &quot;vtkPolyData.h&quot;
+
+vtkNew&lt;vtkPolyData&gt; polyData;
+polyData-&gt;SetPoints(points);   // 设置顶点
+polyData-&gt;SetPolys(cells);     // 设置多边形面单元
+
+// 如果还需要线和点单元：
+// polyData-&gt;SetLines(lineCells);   // 设置线单元
+// polyData-&gt;SetVerts(vertCells);    // 设置点单元
+</code></pre>
+<p><code>vtkPolyData</code>支持同时包含多种单元类型——例如，同一个PolyData可以既有三角形面（polys）又有边界线（lines）和孤立点（verts）。这些不同的单元类型共享同一套顶点集。</p>
+<h3 id="445">4.4.5 完整示例：手动构建一个四面体</h3>
+<p>下面的示例展示如何从零开始创建一个四面体（由四个三角形面组成的三维体），并在窗口中渲染出来。四面体是最简单的三维体单元（4个顶点、4个三角面），是理解三维几何数据结构的理想教学示例。</p>
+<pre><code class="language-cpp">// ============================================================================
+// TetrahedronExample.cxx
+// 手动构建一个四面体并渲染
+// ============================================================================
+
+#include &quot;vtkActor.h&quot;
+#include &quot;vtkCellArray.h&quot;
+#include &quot;vtkInteractorStyleTrackballCamera.h&quot;
+#include &quot;vtkNew.h&quot;
+#include &quot;vtkPoints.h&quot;
+#include &quot;vtkPolyData.h&quot;
+#include &quot;vtkPolyDataMapper.h&quot;
+#include &quot;vtkProperty.h&quot;
+#include &quot;vtkRenderWindow.h&quot;
+#include &quot;vtkRenderWindowInteractor.h&quot;
+#include &quot;vtkRenderer.h&quot;
+
+#include &lt;iostream&gt;
+
+int main(int argc, char* argv[])
+{
+  // ====================================================================
+  // 第一步：手动定义四面体的4个顶点
+  // ====================================================================
+  // 四面体的顶点坐标（一个正四面体，中心在原点附近）
+  // 高度约为单位长度
+  vtkNew&lt;vtkPoints&gt; points;
+  points-&gt;InsertNextPoint(0.0,  0.0,  1.0);  // 顶点0：顶部
+  points-&gt;InsertNextPoint(0.0,  0.943, -0.333); // 顶点1：底部后方
+  points-&gt;InsertNextPoint(-0.816, -0.471, -0.333); // 顶点2：底部左前方
+  points-&gt;InsertNextPoint(0.816, -0.471, -0.333);  // 顶点3：底部右前方
+
+  std::cout &lt;&lt; &quot;=== 手动构建四面体 ===&quot; &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;顶点数量: &quot; &lt;&lt; points-&gt;GetNumberOfPoints() &lt;&lt; std::endl;
+  for (vtkIdType i = 0; i &lt; points-&gt;GetNumberOfPoints(); ++i)
+  {
+    double p[3];
+    points-&gt;GetPoint(i, p);
+    std::cout &lt;&lt; &quot;  顶点 &quot; &lt;&lt; i &lt;&lt; &quot;: (&quot;
+              &lt;&lt; p[0] &lt;&lt; &quot;, &quot; &lt;&lt; p[1] &lt;&lt; &quot;, &quot; &lt;&lt; p[2] &lt;&lt; &quot;)&quot; &lt;&lt; std::endl;
+  }
+
+  // ====================================================================
+  // 第二步：定义四面体的4个三角面的顶点索引
+  // ====================================================================
+  // 每个面由3个顶点索引组成，顶点按逆时针排列（从外部看向该面）
+  vtkNew&lt;vtkCellArray&gt; triangles;
+
+  // 面0: 底部三角形 (顶点3 -&gt; 顶点2 -&gt; 顶点1) —— 从下方看，逆时针
+  vtkNew&lt;vtkTriangle&gt; face0;
+  face0-&gt;GetPointIds()-&gt;SetId(0, 3);
+  face0-&gt;GetPointIds()-&gt;SetId(1, 2);
+  face0-&gt;GetPointIds()-&gt;SetId(2, 1);
+  triangles-&gt;InsertNextCell(face0);
+
+  // 面1: 侧面 (顶点0, 顶点1, 顶点2)
+  vtkNew&lt;vtkTriangle&gt; face1;
+  face1-&gt;GetPointIds()-&gt;SetId(0, 0);
+  face1-&gt;GetPointIds()-&gt;SetId(1, 1);
+  face1-&gt;GetPointIds()-&gt;SetId(2, 2);
+  triangles-&gt;InsertNextCell(face1);
+
+  // 面2: 侧面 (顶点0, 顶点2, 顶点3)
+  vtkNew&lt;vtkTriangle&gt; face2;
+  face2-&gt;GetPointIds()-&gt;SetId(0, 0);
+  face2-&gt;GetPointIds()-&gt;SetId(1, 2);
+  face2-&gt;GetPointIds()-&gt;SetId(2, 3);
+  triangles-&gt;InsertNextCell(face2);
+
+  // 面3: 侧面 (顶点0, 顶点3, 顶点1)
+  vtkNew&lt;vtkTriangle&gt; face3;
+  face3-&gt;GetPointIds()-&gt;SetId(0, 0);
+  face3-&gt;GetPointIds()-&gt;SetId(1, 3);
+  face3-&gt;GetPointIds()-&gt;SetId(2, 1);
+  triangles-&gt;InsertNextCell(face3);
+
+  std::cout &lt;&lt; &quot;三角面数量: &quot; &lt;&lt; triangles-&gt;GetNumberOfCells() &lt;&lt; std::endl;
+  std::cout &lt;&lt; std::endl;
+
+  // ====================================================================
+  // 第三步：组装 vtkPolyData
+  // ====================================================================
+  vtkNew&lt;vtkPolyData&gt; tetrahedron;
+  tetrahedron-&gt;SetPoints(points);
+  tetrahedron-&gt;SetPolys(triangles);
+
+  // ====================================================================
+  // 第四步：构建渲染管道
+  // ====================================================================
+  // 注意：这里使用 SetInputData 而不是 SetInputConnection
+  // 因为 tetrahedron 不是一个 vtkAlgorithm —— 它是手动构建的静态数据
+  // 这样使用是合理的（见2.2.3节的讨论）
+  vtkNew&lt;vtkPolyDataMapper&gt; mapper;
+  mapper-&gt;SetInputData(tetrahedron);
+
+  vtkNew&lt;vtkActor&gt; actor;
+  actor-&gt;SetMapper(mapper);
+  actor-&gt;GetProperty()-&gt;SetColor(0.2, 0.7, 0.3);   // 绿色表面
+  actor-&gt;GetProperty()-&gt;SetEdgeVisibility(1);        // 显示边线
+  actor-&gt;GetProperty()-&gt;SetEdgeColor(0.1, 0.1, 0.1); // 深灰色边线
+  actor-&gt;GetProperty()-&gt;SetLineWidth(2.0);
+
+  // ====================================================================
+  // 第五步：设置渲染基础设施并显示
+  // ====================================================================
+  vtkNew&lt;vtkRenderer&gt; renderer;
+  renderer-&gt;AddActor(actor);
+  renderer-&gt;SetBackground(0.15, 0.15, 0.15);
+
+  vtkNew&lt;vtkRenderWindow&gt; renderWindow;
+  renderWindow-&gt;AddRenderer(renderer);
+  renderWindow-&gt;SetSize(500, 500);
+  renderWindow-&gt;SetWindowName(&quot;Tetrahedron - Manual Construction&quot;);
+
+  vtkNew&lt;vtkRenderWindowInteractor&gt; interactor;
+  interactor-&gt;SetRenderWindow(renderWindow);
+
+  vtkNew&lt;vtkInteractorStyleTrackballCamera&gt; style;
+  style-&gt;SetDefaultRenderer(renderer);
+  interactor-&gt;SetInteractorStyle(style);
+
+  renderWindow-&gt;Render();
+  std::cout &lt;&lt; &quot;渲染完成。可旋转场景观察四面体的四个三角面。&quot; &lt;&lt; std::endl;
+  interactor-&gt;Start();
+
+  return 0;
+}
+</code></pre>
+<p><strong>代码要点解析：</strong></p>
+<ol>
+<li>
+<p><strong>SetInputData vs SetInputConnection</strong>：本例使用了<code>mapper-&gt;SetInputData(tetrahedron)</code>而不是<code>SetInputConnection()</code>，因为<code>tetrahedron</code>是一个手动创建的<code>vtkPolyData</code>对象，不是<code>vtkAlgorithm</code>——它没有输出端口，因此不存在<code>GetOutputPort()</code>。这种场景正是2.2.3节中讨论的<code>SetInputData()</code>合理使用场景之一。</p>
+</li>
+<li>
+<p><strong>顶点坐标的选取</strong>：正四面体的顶点坐标基于几何计算得出。顶点0位于正上方（z=1），顶点1-3均匀分布在底面的外接圆上，z坐标均为-1/3。这样构成了一个以原点附近为中心的正四面体。</p>
+</li>
+<li>
+<p><strong>使用<code>vtkTriangle</code>辅助对象</strong>：<code>vtkTriangle</code>（注意不是<code>vtkTriangle</code>——VTK中确实有这个类，全名为<code>vtkTriangle</code>）提供了<code>GetPointIds()</code>方法，返回一个<code>vtkIdList</code>用于设置三个顶点的全局索引。这是一种清晰易读的单元构建方式。</p>
+</li>
+<li>
+<p><strong>面的可见性取决于顶点顺序</strong>：如果你发现渲染出的四面体某些面是"黑色"的（不响应光照），检查该面对应的三角面顶点是否按逆时针排列（从外部观察时）。</p>
+</li>
+</ol>
+<h3 id="446">4.4.6 更简洁的单元构建方式</h3>
+<p>对于简单的单元拓扑，你还可以使用更底层的接口，避免创建<code>vtkTriangle</code>临时对象：</p>
+<pre><code class="language-cpp">// 方式A：使用 InsertNextCell(npts) + InsertCellPoint
+vtkNew&lt;vtkCellArray&gt; cells;
+cells-&gt;InsertNextCell(3);
+cells-&gt;InsertCellPoint(0);
+cells-&gt;InsertCellPoint(1);
+cells-&gt;InsertCellPoint(2);
+
+// 方式B：使用数组批量插入（最高效）
+vtkNew&lt;vtkCellArray&gt; cells;
+vtkIdType tri1[3] = {0, 1, 2};
+vtkIdType tri2[3] = {1, 3, 2};
+cells-&gt;InsertNextCell(3, tri1);
+cells-&gt;InsertNextCell(3, tri2);
+</code></pre>
+<p>方式B在需要构建大量单元时性能最优——它避免了为每个单元创建临时<code>vtkIdList</code>或<code>vtkTriangle</code>对象的开销。</p>
+<hr />
+<h2 id="45">4.5 代码示例：多数据源对比展示</h2>
+<p>本节提供一个完整的综合示例，在单个窗口中创建2x2的四视图布局，每个子视图展示一种不同的几何体数据源。这个示例综合运用了前三章的知识（管道连接、Actor配置、Renderer布局），并展示了本章介绍的多种Source的实际效果。</p>
+<h3 id="451">4.5.1 完整代码</h3>
+<p>将以下代码保存为<code>MultiSourceDemo.cxx</code>：</p>
+<pre><code class="language-cpp">// ============================================================================
+// MultiSourceDemo.cxx
+// 第四章综合示例：2x2 四视图展示四种不同几何体数据源
+// ============================================================================
+
+#include &quot;vtkActor.h&quot;
+#include &quot;vtkCamera.h&quot;
+#include &quot;vtkConeSource.h&quot;
+#include &quot;vtkCubeSource.h&quot;
+#include &quot;vtkCylinderSource.h&quot;
+#include &quot;vtkInteractorStyleTrackballCamera.h&quot;
+#include &quot;vtkNew.h&quot;
+#include &quot;vtkPolyDataMapper.h&quot;
+#include &quot;vtkProperty.h&quot;
+#include &quot;vtkRenderWindow.h&quot;
+#include &quot;vtkRenderWindowInteractor.h&quot;
+#include &quot;vtkRenderer.h&quot;
+#include &quot;vtkSphereSource.h&quot;
+#include &quot;vtkTextActor.h&quot;
+#include &quot;vtkTextProperty.h&quot;
+
+// ============================================================================
+// 辅助函数：创建一个Actor，关联给定的Source
+// ============================================================================
+vtkSmartPointer&lt;vtkActor&gt; CreateActorForSource(
+    vtkAlgorithm* source,
+    double r, double g, double b,
+    bool showEdges = true)
+{
+  vtkNew&lt;vtkPolyDataMapper&gt; mapper;
+  mapper-&gt;SetInputConnection(source-&gt;GetOutputPort());
+
+  vtkSmartPointer&lt;vtkActor&gt; actor = vtkSmartPointer&lt;vtkActor&gt;::New();
+  actor-&gt;SetMapper(mapper);
+  actor-&gt;GetProperty()-&gt;SetColor(r, g, b);
+  actor-&gt;GetProperty()-&gt;SetEdgeVisibility(showEdges ? 1 : 0);
+  actor-&gt;GetProperty()-&gt;SetEdgeColor(0.1, 0.1, 0.1);
+  actor-&gt;GetProperty()-&gt;SetLineWidth(1.0);
+
+  return actor;
+}
+
+// ============================================================================
+// 辅助函数：在指定Renderer中添加文字标签（左上角）
+// ============================================================================
+void AddLabel(vtkRenderer* renderer, const char* text,
+              double r, double g, double b)
+{
+  vtkNew&lt;vtkTextActor&gt; label;
+  label-&gt;SetInput(text);
+  label-&gt;GetTextProperty()-&gt;SetFontSize(16);
+  label-&gt;GetTextProperty()-&gt;SetColor(r, g, b);
+  label-&gt;GetTextProperty()-&gt;SetFontFamilyToCourier();
+  label-&gt;GetTextProperty()-&gt;BoldOn();
+  label-&gt;SetDisplayPosition(10, 10);  // 左下角偏移（像素坐标）
+  renderer-&gt;AddActor2D(label);
+}
+
+int main(int argc, char* argv[])
+{
+  // ====================================================================
+  // 第一步：创建渲染窗口（将容纳4个Renderer）
+  // ====================================================================
+  vtkNew&lt;vtkRenderWindow&gt; renderWindow;
+  renderWindow-&gt;SetSize(800, 600);
+  renderWindow-&gt;SetMultiSamples(4);  // 4x MSAA 抗锯齿
+  renderWindow-&gt;SetWindowName(&quot;多数据源对比演示 - 2x2 四视图&quot;);
+
+  vtkNew&lt;vtkRenderWindowInteractor&gt; interactor;
+  interactor-&gt;SetRenderWindow(renderWindow);
+
+  // ====================================================================
+  // 第二步：创建4个Renderer，分别占据窗口的四个象限
+  // ====================================================================
+  // Viewport坐标: (xmin, ymin, xmax, ymax)，范围 [0,1]
+  // 布局：
+  //   +-------+-------+
+  //   | (0,0) | (1,0) |    其中 (col, row)
+  //   | 球体  | 圆柱  |
+  //   +-------+-------+
+  //   | (0,1) | (1,1) |
+  //   | 立方体| 圆锥  |
+  //   +-------+-------+
+
+  vtkNew&lt;vtkRenderer&gt; rendererSphere;    // 左上: 球体
+  vtkNew&lt;vtkRenderer&gt; rendererCylinder;  // 右上: 圆柱
+  vtkNew&lt;vtkRenderer&gt; rendererCube;      // 左下: 立方体
+  vtkNew&lt;vtkRenderer&gt; rendererCone;      // 右下: 圆锥
+
+  // 设置各Renderer的viewport
+  // viewport = (xmin, ymin, xmax, ymax) —— 归一化坐标
+  rendererSphere-&gt;SetViewport(0.0, 0.5, 0.5, 1.0);    // 左上
+  rendererCylinder-&gt;SetViewport(0.5, 0.5, 1.0, 1.0);  // 右上
+  rendererCube-&gt;SetViewport(0.0, 0.0, 0.5, 0.5);      // 左下
+  rendererCone-&gt;SetViewport(0.5, 0.0, 1.0, 0.5);      // 右下
+
+  renderWindow-&gt;AddRenderer(rendererSphere);
+  renderWindow-&gt;AddRenderer(rendererCylinder);
+  renderWindow-&gt;AddRenderer(rendererCube);
+  renderWindow-&gt;AddRenderer(rendererCone);
+
+  // ====================================================================
+  // 第三步：创建4种几何体数据源
+  // ====================================================================
+
+  // --- 球体 ---
+  vtkNew&lt;vtkSphereSource&gt; sphereSource;
+  sphereSource-&gt;SetRadius(0.8);
+  sphereSource-&gt;SetThetaResolution(40);
+  sphereSource-&gt;SetPhiResolution(40);
+
+  // --- 圆柱体 ---
+  vtkNew&lt;vtkCylinderSource&gt; cylinderSource;
+  cylinderSource-&gt;SetHeight(1.5);
+  cylinderSource-&gt;SetRadius(0.5);
+  cylinderSource-&gt;SetResolution(40);
+
+  // --- 立方体 ---
+  vtkNew&lt;vtkCubeSource&gt; cubeSource;
+  cubeSource-&gt;SetXLength(1.2);
+  cubeSource-&gt;SetYLength(0.8);
+  cubeSource-&gt;SetZLength(1.0);
+
+  // --- 圆锥体 ---
+  vtkNew&lt;vtkConeSource&gt; coneSource;
+  coneSource-&gt;SetHeight(1.5);
+  coneSource-&gt;SetRadius(0.6);
+  coneSource-&gt;SetResolution(40);
+
+  // ====================================================================
+  // 第四步：创建Actor（每个Source + Mapper + Actor是一个独立管道分支）
+  // ====================================================================
+  auto actorSphere = CreateActorForSource(sphereSource, 1.0, 0.3, 0.3);    // 红色
+  auto actorCylinder = CreateActorForSource(cylinderSource, 0.3, 0.7, 1.0); // 蓝色
+  auto actorCube = CreateActorForSource(cubeSource, 0.3, 1.0, 0.4);         // 绿色
+  auto actorCone = CreateActorForSource(coneSource, 1.0, 0.7, 0.1);         // 金色
+
+  // ====================================================================
+  // 第五步：将Actor添加到对应的Renderer
+  // ====================================================================
+  rendererSphere-&gt;AddActor(actorSphere);
+  rendererCylinder-&gt;AddActor(actorCylinder);
+  rendererCube-&gt;AddActor(actorCube);
+  rendererCone-&gt;AddActor(actorCone);
+
+  // ====================================================================
+  // 第六步：设置每个Renderer的背景色、相机位置和文字标签
+  // ====================================================================
+
+  // --- 球体视图（左上） ---
+  rendererSphere-&gt;SetBackground(0.12, 0.12, 0.18);
+  rendererSphere-&gt;GetActiveCamera()-&gt;SetPosition(0, 0, 2.5);
+  rendererSphere-&gt;GetActiveCamera()-&gt;SetFocalPoint(0, 0, 0);
+  AddLabel(rendererSphere, &quot;Sphere&quot;, 1.0, 0.8, 0.8);
+
+  // --- 圆柱视图（右上） ---
+  rendererCylinder-&gt;SetBackground(0.12, 0.12, 0.18);
+  rendererCylinder-&gt;GetActiveCamera()-&gt;SetPosition(0, 0, 2.5);
+  rendererCylinder-&gt;GetActiveCamera()-&gt;SetFocalPoint(0, 0, 0);
+  AddLabel(rendererCylinder, &quot;Cylinder&quot;, 0.8, 0.9, 1.0);
+
+  // --- 立方体视图（左下） ---
+  rendererCube-&gt;SetBackground(0.12, 0.12, 0.18);
+  rendererCube-&gt;GetActiveCamera()-&gt;SetPosition(1.5, 1.5, 1.5);
+  rendererCube-&gt;GetActiveCamera()-&gt;SetFocalPoint(0, 0, 0);
+  AddLabel(rendererCube, &quot;Cube&quot;, 0.8, 1.0, 0.8);
+
+  // --- 圆锥视图（右下） ---
+  rendererCone-&gt;SetBackground(0.12, 0.12, 0.18);
+  rendererCone-&gt;GetActiveCamera()-&gt;SetPosition(0, 0, 2.5);
+  rendererCone-&gt;GetActiveCamera()-&gt;SetFocalPoint(0, 0, 0);
+  AddLabel(rendererCone, &quot;Cone&quot;, 1.0, 0.9, 0.7);
+
+  // ====================================================================
+  // 第七步：设置共享交互样式
+  // ====================================================================
+  // 共享一个交互样式使得鼠标操作在四个视图中同时生效
+  vtkNew&lt;vtkInteractorStyleTrackballCamera&gt; style;
+
+  // 将每个Renderer设为交互样式的默认Renderer
+  // 当鼠标悬停在某个视图上时，交互操作作用于该视图
+  interactor-&gt;SetInteractorStyle(style);
+
+  // 为每个renderer设置独立的默认样式（确保各自独立响应）
+  // 实际上vtkRenderWindowInteractor会自动管理焦点renderer
+
+  // ====================================================================
+  // 第八步：首次渲染并启动交互
+  // ====================================================================
+  renderWindow-&gt;Render();
+
+  std::cout &lt;&lt; &quot;========================================&quot; &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;  多数据源对比演示&quot; &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;========================================&quot; &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;  左上: vtkSphereSource   - 红色球体&quot; &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;  右上: vtkCylinderSource - 蓝色圆柱&quot; &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;  左下: vtkCubeSource     - 绿色立方体&quot; &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;  右下: vtkConeSource     - 金色圆锥&quot; &lt;&lt; std::endl;
+  std::cout &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;  每个几何体均显示边界线以便观察网格结构。&quot; &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;  鼠标操作作用于当前悬停的视图。&quot; &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;========================================&quot; &lt;&lt; std::endl;
+
+  interactor-&gt;Start();
+
+  return 0;
+}
+</code></pre>
+<h3 id="452-cmakeliststxt">4.5.2 CMakeLists.txt</h3>
+<pre><code class="language-cmake">cmake_minimum_required(VERSION 3.20)
+project(MultiSourceDemo VERSION 1.0.0 LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+find_package(VTK 9.5.2
+  COMPONENTS
+    CommonCore
+    CommonColor
+    CommonDataModel
+    CommonExecutionModel
+    FiltersSources
+    InteractionStyle
+    RenderingCore
+    RenderingOpenGL2
+    RenderingFreeType   # vtkTextActor需要
+  REQUIRED
+)
+
+message(STATUS &quot;VTK version: ${VTK_VERSION}&quot;)
+
+add_executable(MultiSourceDemo MultiSourceDemo.cxx)
+
+target_link_libraries(MultiSourceDemo PRIVATE ${VTK_LIBRARIES})
+
+vtk_module_autoinit(
+  TARGETS MultiSourceDemo
+  MODULES ${VTK_LIBRARIES}
+)
+</code></pre>
+<h3 id="453">4.5.3 代码详解</h3>
+<p>本节对MultiSourceDemo示例的关键设计点进行深入分析。</p>
+<h4 id="viewport">Viewport布局</h4>
+<p><code>vtkRenderer::SetViewport(xmin, ymin, xmax, ymax)</code>是创建多视图布局的核心方法。Viewport的四个参数使用<strong>归一化坐标</strong>（范围0.0到1.0），定义每个Renderer在RenderWindow中所占的矩形区域：</p>
+<pre><code>(0,1) +-------+-------+ (1,1)
+      |       |       |
+      | Sphere |Cylin- |
+      |        |der    |
+0.5 -- +-------+-------+  &lt;-- y=0.5 水平分割线
+      |       |       |
+      | Cube  | Cone  |
+      |       |       |
+(0,0) +-------+-------+ (1,0)
+      ^       ^       ^
+      x=0    x=0.5   x=1.0
+      垂直分割线
+</code></pre>
+<ul>
+<li>左上（Sphere）：   (0.0, 0.5, 0.5, 1.0)</li>
+<li>右上（Cylinder）： (0.5, 0.5, 1.0, 1.0)</li>
+<li>左下（Cube）：     (0.0, 0.0, 0.5, 0.5)</li>
+<li>右下（Cone）：     (0.5, 0.0, 1.0, 0.5)</li>
+</ul>
+<p>VTK中viewport的原点在<strong>左下角</strong>（与屏幕坐标Y轴向上的惯例一致）。这与某些二维图形库（Y轴向下）不同，需要注意。</p>
+<h4 id="createactorforsource">CreateActorForSource 辅助函数</h4>
+<pre><code class="language-cpp">vtkSmartPointer&lt;vtkActor&gt; CreateActorForSource(
+    vtkAlgorithm* source, double r, double g, double b, bool showEdges)
+</code></pre>
+<p>这个辅助函数封装了最常见的管道构建模式——Source -&gt; Mapper -&gt; Actor。它接受任何<code>vtkAlgorithm*</code>（所以所有Source都可以用），内部通过<code>SetInputConnection()</code>建立管道连接，确保了按需执行机制的正常运作。</p>
+<p>函数返回类型为<code>vtkSmartPointer&lt;vtkActor&gt;</code>——使用引用计数智能指针——确保Actor在函数返回后仍然存活（回顾第一章：<code>vtkNew&lt;&gt;</code>只能在栈作用域内使用，需要跨函数传递的所有权使用<code>vtkSmartPointer&lt;&gt;</code>）。</p>
+<h4 id="addlabel-actor">AddLabel 辅助函数与二维Actor</h4>
+<pre><code class="language-cpp">void AddLabel(vtkRenderer* renderer, const char* text, double r, double g, double b)
+</code></pre>
+<p>这个函数使用<code>vtkTextActor</code>在视图中添加二维文字标签。关键区别：</p>
+<ul>
+<li><code>renderer-&gt;AddActor(actor)</code>：添加<strong>三维</strong>Actor（<code>vtkActor</code>），受到相机透视和旋转的影响。</li>
+<li><code>renderer-&gt;AddActor2D(actor2D)</code>：添加<strong>二维</strong>Actor（如<code>vtkTextActor</code>），使用屏幕坐标，不受相机影响——文字始终正对屏幕，不会因为旋转场景而翻转。</li>
+</ul>
+<p><code>SetDisplayPosition(10, 10)</code>设置标签在viewport中的像素位置（以该Renderer所占区域的左下角为原点）。对于多视图布局，标签只在对应的Renderer区域内可见。</p>
+<h4 id="_3">管道结构</h4>
+<p>本例的数据流拓扑是一个"一对多"的广播型管道分支：</p>
+<pre><code>                              +---&gt; (Mapper) ---&gt; ActorSphere  ---&gt; RendererSphere
+                              |
+                              +---&gt; (Mapper) ---&gt; ActorCylinder -&gt; RendererCylinder
+                              |
+   (无共享Source —— 4个独立管道)
+                              |
+                              +---&gt; (Mapper) ---&gt; ActorCube    ---&gt; RendererCube
+                              |
+                              +---&gt; (Mapper) ---&gt; ActorCone    ---&gt; RendererCone
+</code></pre>
+<p>四个管道完全独立——每个都有自己的Source、Mapper和Actor。这不是分支（Forking），而是四个并列的管道，分别馈送到四个Renderer中，最终由同一个RenderWindow呈现。</p>
+<h3 id="454">4.5.4 实验拓展建议</h3>
+<p>运行此示例后，建议尝试以下修改：</p>
+<ol>
+<li><strong>替换几何体</strong>：将某个视图中Source替换为<code>vtkArrowSource</code>、<code>vtkDiskSource</code>等本章介绍的其他Source，观察其外观。</li>
+<li><strong>调整viewport</strong>：修改<code>SetViewport</code>的参数，尝试3x1的水平排列或1x3的垂直排列。</li>
+<li><strong>添加Filter</strong>：在某个管道中插入一个Filter（例如<code>vtkShrinkPolyData</code>），观察处理后的效果。</li>
+<li><strong>共享数据源</strong>：将四个分支全部连接到同一个Source（如一个<code>vtkSphereSource</code>），实现真正的管道分叉——同一个球体在不同视图中被渲染为不同颜色。</li>
+<li><strong>关闭边界线</strong>：将<code>showEdges</code>参数改为<code>false</code>，对比有边线和无边线的视觉效果差异。</li>
+</ol>
+<hr />
+<h2 id="46">4.6 本章小结</h2>
+<p>本章系统地介绍了VTK中生成数据的三种方式：内置几何体Source、<code>vtkProgrammableSource</code>程序化生成、以及手动构建<code>vtkPoints</code>和<code>vtkCellArray</code>。让我们回顾核心要点：</p>
+<h3 id="_4">要点速览</h3>
+<ol>
+<li>
+<p><strong>Source是管道的起点——是"只有输出、没有输入"的特殊Filter。</strong> 所有Source继承自<code>vtkAlgorithm</code>，其<code>GetNumberOfInputPorts()</code>返回0。这个看似简单的定义使得Source成为<code>Update()</code>向上游追溯的终点，也是数据向下游流动的起点。</p>
+</li>
+<li>
+<p><strong>VTK提供了十种常用的内置几何体数据源</strong>，覆盖了球体、圆柱、立方体、圆锥、圆盘、箭头、正多边形、平面、线段和文字。每种Source通过固定的参数接口控制形状，参数修改后MTime自动更新，管道自动响应——这是快速原型开发和教学演示的理想选择。</p>
+</li>
+<li>
+<p><strong><code>vtkProgrammableSource</code>通过<code>SetExecuteMethod()</code>注册回调函数</strong>，允许你用自定义的C++代码生成任意形状的<code>vtkPolyData</code>。4.3节的数学曲面示例展示了如何使用这一机制生成z = sin(x) * cos(y)曲面。需要记住的是，对于<code>vtkProgrammableSource</code>生成的曲面，通常需要在管道中添加<code>vtkPolyDataNormals</code>来计算法向量以获得正确的光照。</p>
+</li>
+<li>
+<p><strong>手动构建<code>vtkPolyData</code>的流程是：创建<code>vtkPoints</code>放置顶点坐标 -&gt; 创建<code>vtkCellArray</code>定义单元拓扑 -&gt; 组装到<code>vtkPolyData</code>对象。</strong> 4.4节展示的四面体示例完整地演示了这一流程。手动构建数据后，使用<code>SetInputData()</code>而非<code>SetInputConnection()</code>将数据传递给Mapper——这是<code>SetInputData()</code>的合理使用场景之一。</p>
+</li>
+<li>
+<p><strong>多视图布局通过<code>vtkRenderer::SetViewport()</code>实现</strong>——每个Renderer占据RenderWindow的一个归一化坐标矩形区域。4.5节的综合示例展示了如何在一个窗口中创建2x2的四视图布局，分别展示四种不同颜色和形状的几何体。</p>
+</li>
+</ol>
+<h3 id="_5">使用场景速查</h3>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>推荐方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>快速原型、教学演示、测试数据</td>
+<td>内置Source（<code>vtkSphereSource</code>等）</td>
+</tr>
+<tr>
+<td>数学函数可视化曲面</td>
+<td><code>vtkProgrammableSource</code> 或手动构建</td>
+</tr>
+<tr>
+<td>外部算法产生的自定义形状</td>
+<td>手动构建<code>vtkPoints</code> + <code>vtkCellArray</code></td>
+</tr>
+<tr>
+<td>文件导入的几何数据</td>
+<td>使用Reader（详见第七章）</td>
+</tr>
+<tr>
+<td>需要完全控制拓扑结构</td>
+<td>手动构建<code>vtkPolyData</code></td>
+</tr>
+<tr>
+<td>组合多个简单形状</td>
+<td>多个内置Source + <code>vtkAppendPolyData</code>合并</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_6">一条核心洞察</h3>
+<blockquote>
+<p><strong>Source就是Input数量为0的Filter。</strong></p>
+</blockquote>
+<p>这一洞察将Source与Filter统一在同一个概念框架下。它们共享着相同的管道基础架构（<code>vtkAlgorithm</code>、<code>vtkExecutive</code>、MTime机制），区别仅仅在于输入端口的数量。当你真正消化了这个观点，VTK的整个类继承体系和管道设计会突然变得清晰而优雅。</p>
+<h3 id="_7">进入下一章之前</h3>
+<p>在进入第五章（颜色、材质与光照）之前，建议你：</p>
+<ol>
+<li>运行4.5节的MultiSourceDemo示例，观察四种几何体的外观差异，尝试旋转每个视图。</li>
+<li>动手实验：在MultiSourceDemo中替换其中一种Source为你感兴趣的其他类型（如<code>vtkArrowSource</code>、<code>vtkDiskSource</code>）。</li>
+<li>尝试手动构建一个不同于四面体的简单形状（如八面体或金字塔），熟悉<code>vtkPoints</code>和<code>vtkCellArray</code>的API。</li>
+<li>思考：如果你需要在场景中放置1000个不同位置、不同大小的球体，你会怎么做？（提示：第八章的Glyph机制正是为此而设计。）</li>
+</ol>
+<p>第五章将带你进入VTK的外观定制世界——你将学会如何控制物体的颜色、透明度、材质属性（环境光、漫反射、镜面反射），以及如何在场景中布置光源来增强可视化效果。这些内容将让你从"会画形状"进阶到"能创造有视觉吸引力的场景"。</p>
+<hr />
+<blockquote>
+<p><strong>本章关键记忆口诀</strong>："内置Source可速查，程序化生成靠回调，手动构建三点一线（Points + CellArray + PolyData），多视图用Viewport分象限。"</p>
+</blockquote>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

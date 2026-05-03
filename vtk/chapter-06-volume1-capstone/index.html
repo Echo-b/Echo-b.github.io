@@ -1,0 +1,3351 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../chapter-05-rendering-and-interactor/">
+      
+      
+        <link rel="next" href="../chapter-07-polydata/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>第六章 入门篇综合实战——3D几何画廊 - Echo-b's Tech Notes</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#3d" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Echo-b&#39;s Tech Notes" class="md-header__button md-logo" aria-label="Echo-b's Tech Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Echo-b's Tech Notes
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              第六章 入门篇综合实战——3D几何画廊
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Echo-b&#39;s Tech Notes" class="md-nav__button md-logo" aria-label="Echo-b's Tech Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Echo-b's Tech Notes
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VTK 教程
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    VTK 教程
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    入门篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    入门篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-01-vtk-overview-and-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第一章 VTK概述与环境搭建
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-02-visualization-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二章 可视化管线
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-03-data-model-basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第三章 数据模型基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-04-geometry-and-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第四章 基本几何体与数据源
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-05-rendering-and-interactor/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第五章 渲染与交互机
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第六章 入门篇综合实战——3D几何画廊
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第六章 入门篇综合实战——3D几何画廊
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        本章导读
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#61" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 项目概述
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6.1 项目概述">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#611-3d" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1.1 什么是"3D几何画廊"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#612" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1.2 项目将演示的核心概念
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#613" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1.3 预期效果描述
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#62" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 项目架构设计
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6.2 项目架构设计">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#621" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2.1 管道全景图
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#622" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2.2 数据源选择
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#623" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2.3 视口布局规划
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#624" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2.4 辅助函数设计
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#63" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3 完整代码
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6.3 完整代码">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#631-cmakeliststxt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3.1 CMakeLists.txt
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#64" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4 代码逐段解析
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6.4 代码逐段解析">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#641" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4.1 头文件与辅助函数设计
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#642-createcoloredactor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4.2 CreateColoredActor——原始形状的辅助函数
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#643-createshrunkactor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4.3 CreateShrunkActor——收缩形状的辅助函数
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#644-createlabel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4.4 CreateLabel——文本标注的辅助函数
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#645-3x2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4.5 视口布局——3x2网格的精确构建
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#646" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4.6 管道分支——本章最重要的代码段
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#647" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4.7 相机配置
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#648" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4.8 交互机制
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#649" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4.9 渲染流程
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#65" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.5 编译与运行
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6.5 编译与运行">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#651" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.5.1 目录结构
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#652" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.5.2 编译步骤
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#653-cmake" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.5.3 CMake配置成功输出
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#654" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.5.4 运行程序
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#655" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.5.5 预期运行效果
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#656" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.5.6 常见问题排查
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#66" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.6 扩展练习
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6.6 扩展练习">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#661" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.6.1 练习一：添加第四种几何体
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#662" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.6.2 练习二：添加键盘回调切换过滤器
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#663-vtkglyph3dvtkshrinkpolydata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.6.3 练习三：使用vtkGlyph3D替代vtkShrinkPolyData
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#664" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.6.4 练习四：添加交互式收缩因子调节
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#67" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.7 第一卷总结与第二卷预告
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6.7 第一卷总结与第二卷预告">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#671" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.7.1 第一卷回顾：你学到了什么
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#672" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.7.2 第二卷预告：进阶之路
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#673" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.7.3 进入第二卷前的建议
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#674" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.7.4 最后的话
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    实战篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    实战篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-07-polydata/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第七章 PolyData详解
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-08-unstructured-grid/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第八章 非结构化网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-09-structured-data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第九章 结构化数据
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-10-data-io/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十章 数据I/O
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-11-common-filters/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十一章 常用过滤器
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-12-color-mapping/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十二章 颜色映射与标量可视化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-13-advanced-rendering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十三章 高级渲染技术
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-14-multi-dataset/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十四章 多个数据集处理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-15-volume2-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十五章 实战篇综合实战——CFD后处理可视化工具
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    进阶篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    进阶篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-16-volume-rendering-basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十六章 体渲染基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-17-volume-rendering-advanced/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十七章 体渲染高级技术
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-18-charts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十八章 2D图表系统
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-19-annotation-and-widgets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十九章 三维标注与交互组件
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-20-custom-interaction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十章 自定义交互与Widget
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-21-qt-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十一章 Qt集成
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-22-smp-parallel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十二章 SMP并行入门
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-23-volume3-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十三章 进阶篇综合实战
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        本章导读
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#61" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 项目概述
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6.1 项目概述">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#611-3d" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1.1 什么是"3D几何画廊"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#612" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1.2 项目将演示的核心概念
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#613" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1.3 预期效果描述
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#62" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 项目架构设计
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6.2 项目架构设计">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#621" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2.1 管道全景图
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#622" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2.2 数据源选择
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#623" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2.3 视口布局规划
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#624" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2.4 辅助函数设计
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#63" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3 完整代码
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6.3 完整代码">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#631-cmakeliststxt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3.1 CMakeLists.txt
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#64" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4 代码逐段解析
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6.4 代码逐段解析">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#641" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4.1 头文件与辅助函数设计
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#642-createcoloredactor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4.2 CreateColoredActor——原始形状的辅助函数
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#643-createshrunkactor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4.3 CreateShrunkActor——收缩形状的辅助函数
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#644-createlabel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4.4 CreateLabel——文本标注的辅助函数
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#645-3x2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4.5 视口布局——3x2网格的精确构建
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#646" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4.6 管道分支——本章最重要的代码段
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#647" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4.7 相机配置
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#648" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4.8 交互机制
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#649" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4.9 渲染流程
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#65" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.5 编译与运行
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6.5 编译与运行">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#651" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.5.1 目录结构
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#652" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.5.2 编译步骤
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#653-cmake" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.5.3 CMake配置成功输出
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#654" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.5.4 运行程序
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#655" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.5.5 预期运行效果
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#656" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.5.6 常见问题排查
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#66" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.6 扩展练习
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6.6 扩展练习">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#661" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.6.1 练习一：添加第四种几何体
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#662" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.6.2 练习二：添加键盘回调切换过滤器
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#663-vtkglyph3dvtkshrinkpolydata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.6.3 练习三：使用vtkGlyph3D替代vtkShrinkPolyData
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#664" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.6.4 练习四：添加交互式收缩因子调节
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#67" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.7 第一卷总结与第二卷预告
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6.7 第一卷总结与第二卷预告">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#671" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.7.1 第一卷回顾：你学到了什么
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#672" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.7.2 第二卷预告：进阶之路
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#673" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.7.3 进入第二卷前的建议
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#674" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.7.4 最后的话
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="3d">第六章 入门篇综合实战：3D几何画廊</h1>
+<h2 id="_1">本章导读</h2>
+<p>你在前五章中学到了VTK入门的全部基础知识。第一章让你了解了VTK是什么，搭建了开发环境，跑通了第一个Cone示例。第二章带你深入了管道架构——Source、Filter、Mapper、Actor、Renderer、RenderWindow，以及<code>SetInputConnection()</code>和MTime的核心运作机制。第三章展开了VTK的数据模型五层体系（尤其是<code>vtkPolyData</code>），以及Points、Cells、属性数据的概念。第四章让你熟悉了十种内置几何数据源，以及手动构建点和单元的方法。第五章讲解了渲染管道的右半侧——Renderer、RenderWindow、Camera、Interactor以及多视口布局。</p>
+<p>现在，是时候将这些知识整合成一个完整的应用了。</p>
+<p>本章是入门篇（第一卷）的收官之作。我们将构建一个<strong>"3D几何画廊"（3D Shape Gallery）</strong>——一个多视口、多数据源、带实际过滤器处理的交互式可视化程序。它不是演示单一概念的"玩具示例"，而是一个有工程结构的、可用作模板的小型项目。</p>
+<p>本章的核心目标有三个：</p>
+<ol>
+<li><strong>综合运用第一卷全部知识</strong>——管道架构、数据模型、几何数据源、过滤器、渲染器、相机、多视口布局、交互器，所有这些组件将在一个程序中协同工作。</li>
+<li><strong>理解管道分支的实际应用</strong>——一个数据源同时驱动两条渲染分支（原始形状 + 收缩形状），演示VTK管道复用数据的核心优势。</li>
+<li><strong>建立编写VTK项目的工程意识</strong>——通过辅助函数封装重复逻辑、清晰的代码组织、视口规划、标签标注等实践，让你的代码从"能跑"升级到"可维护"。</li>
+</ol>
+<p>读完本章后，你不仅将看到一个令人满意的综合成果，还将带着扎实的基础进入第二卷（进阶篇）的学习。第二卷将深入PolyData的精细操作、非结构化网格、结构化数据、I/O、高级过滤器、颜色映射、高级渲染以及多数据集场景——但那些都需要建立在第一卷的坚实基础之上。</p>
+<hr />
+<h2 id="61">6.1 项目概述</h2>
+<h3 id="611-3d">6.1.1 什么是"3D几何画廊"</h3>
+<p>"3D几何画廊"是一个桌面应用程序，在一个窗口中同时展示六种几何体，分为两列：</p>
+<ul>
+<li><strong>左列（3个视口）：原始形状</strong>——以标准表面渲染呈现，让观众看到光滑、完整的几何体外观。</li>
+<li><strong>右列（3个视口）：收缩版本</strong>——同样的形状经过<code>vtkShrinkPolyData</code>过滤器处理后展示，单元边线可见，让观众看到几何体的内部构造（三角形面片的排列方式）。</li>
+</ul>
+<p>这种左右对比的布局直观地展示了VTK过滤器的作用：同样的数据源，经过不同的处理，产生截然不同的可视化效果。</p>
+<h3 id="612">6.1.2 项目将演示的核心概念</h3>
+<table>
+<thead>
+<tr>
+<th>概念</th>
+<th>在项目中的体现</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>管道架构</strong></td>
+<td>每条几何管线都是 Source -&gt; Filter -&gt; Mapper -&gt; Actor -&gt; Renderer 的完整实例</td>
+</tr>
+<tr>
+<td><strong>SetInputConnection()</strong></td>
+<td>所有管道连接均使用管道式连接，保持按需执行</td>
+</tr>
+<tr>
+<td><strong>管道分支</strong></td>
+<td>同一个Source同时输出到原始Mapper和ShrinkFilter-&gt;ShrinkMapper</td>
+</tr>
+<tr>
+<td><strong>多数据类型</strong></td>
+<td>使用vtkSphereSource、vtkCylinderSource、vtkCubeSource三种不同的几何生成器</td>
+</tr>
+<tr>
+<td><strong>过滤器</strong></td>
+<td>vtkShrinkPolyData对每个几何体执行收缩变换，vtkTriangleFilter确保正确的shrink行为</td>
+</tr>
+<tr>
+<td><strong>多视口布局</strong></td>
+<td>3行x2列共6个视口，使用<code>SetViewport()</code>精确分配</td>
+</tr>
+<tr>
+<td><strong>文本标注</strong></td>
+<td>每个视口上方显示描述性标签</td>
+</tr>
+<tr>
+<td><strong>辅助函数模式</strong></td>
+<td>用辅助函数封装Actor创建逻辑，消除重复代码</td>
+</tr>
+<tr>
+<td><strong>统一渲染风格</strong></td>
+<td>一致的背景色、统一的相机初始参数、统一的窗宽线宽</td>
+</tr>
+</tbody>
+</table>
+<h3 id="613">6.1.3 预期效果描述</h3>
+<p>程序运行后，你将看到一个约1200x800像素的窗口，背景统一为深蓝灰色。窗口被划分为3行x2列的网格：</p>
+<pre><code>+----------------------------------+----------------------------------+
+|  &quot;原始球体 (Original Sphere)&quot;    |  &quot;收缩球体 (Shrunk Sphere)&quot;      |
+|   [光滑球体，浅蓝色]              |   [收缩三角形块，边缘可见]          |
+|                                  |                                  |
++----------------------------------+----------------------------------+
+|  &quot;原始圆柱 (Original Cylinder)&quot;  |  &quot;收缩圆柱 (Shrunk Cylinder)&quot;    |
+|   [光滑圆柱，浅绿色]              |   [收缩三角形块，边缘可见]          |
+|                                  |                                  |
++----------------------------------+----------------------------------+
+|  &quot;原始立方体 (Original Cube)&quot;    |  &quot;收缩立方体 (Shrunk Cube)&quot;      |
+|   [光滑立方体，浅橙色]             |   [收缩三角形块，边缘可见]          |
++----------------------------------+----------------------------------+
+</code></pre>
+<ul>
+<li><strong>左列</strong>：表面光滑渲染，颜色柔和，展示几何体的完整外观。</li>
+<li><strong>右列</strong>：三角形面片向中心收缩约15%，边缘线（Edge）可见，展示几何体的网格结构。</li>
+<li><strong>交互</strong>：每个视口独立响应鼠标操作（旋转、缩放、平移），使用TrackballCamera风格。</li>
+<li><strong>标签</strong>：每个视口下方有文字标签，指示当前显示的内容。</li>
+</ul>
+<hr />
+<h2 id="62">6.2 项目架构设计</h2>
+<h3 id="621">6.2.1 管道全景图</h3>
+<p>在"3D几何画廊"中，数据流遵循一个可复用的模式。每个几何形状都使用完全相同的管道拓扑，区别仅在于Source的类型和参数：</p>
+<pre><code>                       可视化管道（每个形状一组）
+   +-------------------------------------------------------------------+
+   |                                                                   |
+   |                        +--- 分支A: 原始渲染 ---+                   |
+   |                        |                      |                   |
+   |  vtkSphereSource  -----+-&gt; vtkPolyDataMapper -&gt; vtkActor (蓝色)    |
+   |  (或其他Source)       |                      |                   |
+   |                        |                      |                   |
+   |                        +--- 分支B: 收缩渲染 ---+                   |
+   |                        |                      |                   |
+   |                        +-&gt; vtkTriangleFilter                        |
+   |                            |                                      |
+   |                            v                                      |
+   |                        vtkShrinkPolyData                          |
+   |                            |                                      |
+   |                            v                                      |
+   |                        vtkPolyDataMapper -&gt; vtkActor (收缩,边线)    |
+   |                                                                   |
+   +-------------------------------------------------------------------+
+</code></pre>
+<p><strong>关键设计决策：管道分支共享同一数据源</strong></p>
+<p>请注意上图中，<code>vtkSphereSource</code>（或其他Source）的<code>GetOutputPort()</code>同时被传入两个下游：
+- 分支A的<code>vtkPolyDataMapper::SetInputConnection()</code>
+- 分支B的<code>vtkTriangleFilter::SetInputConnection()</code></p>
+<p>这就是第二章2.4.1节介绍的管道分支（Forking）。同一份Source数据被两个下游消费者复用：
+- 当Source参数被修改时（虽然本项目不做这件事），两个分支都会自动检测MTime变化并更新。
+- Source中的数据只需计算一次——无论有多少个下游分支。</p>
+<p><strong>为什么在分支B中使用vtkTriangleFilter？</strong></p>
+<p><code>vtkShrinkPolyData</code>的工作方式是将每个多边形单元的顶点沿单元中心方向收缩。对于像<code>vtkCubeSource</code>这样的Source，其输出的四边形（Quad）和三角形（Triangle）混合体在收缩后会产生不均匀的视觉效果。通过在Shrink之前插入<code>vtkTriangleFilter</code>，确保所有多边形都被预先三角化，使得收缩效果均匀一致。</p>
+<h3 id="622">6.2.2 数据源选择</h3>
+<table>
+<thead>
+<tr>
+<th>几何体</th>
+<th>Source类</th>
+<th>关键参数</th>
+<th>颜色方案</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>球体</td>
+<td><code>vtkSphereSource</code></td>
+<td>ThetaResolution=32, PhiResolution=32</td>
+<td>浅蓝 (0.4, 0.6, 0.9)</td>
+</tr>
+<tr>
+<td>圆柱</td>
+<td><code>vtkCylinderSource</code></td>
+<td>Resolution=32, Height=2.0</td>
+<td>浅绿 (0.4, 0.8, 0.5)</td>
+</tr>
+<tr>
+<td>立方体</td>
+<td><code>vtkCubeSource</code></td>
+<td>默认尺寸</td>
+<td>浅橙 (0.9, 0.7, 0.4)</td>
+</tr>
+</tbody>
+</table>
+<p>三种几何体的选择是有意为之的：
+- <strong>球体</strong>代表光滑曲面（全部由三角面片逼近），顶点法向变化连续。
+- <strong>圆柱</strong>代表具有直纹面的几何体（侧面可展，顶底为平面），是光滑与平坦的结合。
+- <strong>立方体</strong>代表完全的平坦面（六个四边形面），面与面之间存在法向不连续。</p>
+<p>这三种形状覆盖了从"全光滑"到"全平坦"的几何频谱，使得收缩效果在三种形状上的视觉对比更加丰富。</p>
+<h3 id="623">6.2.3 视口布局规划</h3>
+<pre><code>    0.0              0.5              1.0
+  0.0 +----------------+----------------+
+      |                |                |
+      |   视口 (0,0)   |   视口 (0,1)   |  0.333
+      |  原始球体       |  收缩球体       |
+      |                |                |
+      +----------------+----------------+
+      |                |                |
+      |   视口 (1,0)   |   视口 (1,1)   |  0.666
+      |  原始圆柱       |  收缩圆柱       |
+      |                |                |
+      +----------------+----------------+
+      |                |                |
+      |   视口 (2,0)   |   视口 (2,1)   |  1.0
+      |  原始立方体     |  收缩立方体     |
+      +----------------+----------------+
+</code></pre>
+<p>每个视口占据窗口的 <code>(xmin, ymin, xmax, ymax)</code> 归一化坐标区域：
+- 视口 (row=0, col=0)：原始球体 — <code>(0.00, 0.666, 0.50, 1.000)</code>
+- 视口 (row=0, col=1)：收缩球体 — <code>(0.50, 0.666, 1.00, 1.000)</code>
+- 视口 (row=1, col=0)：原始圆柱 — <code>(0.00, 0.333, 0.50, 0.666)</code>
+- 视口 (row=1, col=1)：收缩圆柱 — <code>(0.50, 0.333, 1.00, 0.666)</code>
+- 视口 (row=2, col=0)：原始立方体 — <code>(0.00, 0.000, 0.50, 0.333)</code>
+- 视口 (row=2, col=1)：收缩立方体 — <code>(0.50, 0.000, 1.00, 0.333)</code></p>
+<h3 id="624">6.2.4 辅助函数设计</h3>
+<p>为了避免为每种几何体重复书写15行几乎完全相同的管道连接代码，我们设计两个辅助函数：</p>
+<p><strong><code>CreateColoredActor(source, r, g, b)</code></strong>
+- 接收一个Source对象和RGB颜色值。
+- 内部创建Mapper，用<code>SetInputConnection()</code>连接。
+- 创建Actor，设置Mapper和颜色属性。
+- 返回<code>vtkActor*</code>供调用者添加到Renderer。</p>
+<p><strong><code>CreateShrunkActor(source, r, g, b)</code></strong>
+- 接收一个Source对象和RGB颜色值。
+- 内部创建<code>vtkTriangleFilter</code>和<code>vtkShrinkPolyData</code>。
+- 用管道式连接：Source -&gt; TriangleFilter -&gt; ShrinkFilter -&gt; Mapper。
+- 创建Actor，设置Mapper、颜色、<strong>开启边线可见</strong>、设置边线颜色。
+- 返回<code>vtkActor*</code>。</p>
+<p>这两个函数使得主程序的流程清晰如画：</p>
+<pre><code class="language-cpp">// 球体管线
+auto sphereSource = vtkSmartPointer&lt;vtkSphereSource&gt;::New();
+sphereSource-&gt;SetThetaResolution(32);
+sphereSource-&gt;SetPhiResolution(32);
+
+auto origSphereActor = CreateColoredActor(sphereSource, 0.4, 0.6, 0.9);
+auto shrunkSphereActor = CreateShrunkActor(sphereSource, 0.4, 0.6, 0.9);
+
+// 同样的模式用于圆柱和立方体...
+</code></pre>
+<p>这样可读性极佳——每个几何体的创建压缩到3-4行，意图一目了然。</p>
+<hr />
+<h2 id="63">6.3 完整代码</h2>
+<p>下面是完整的C++源代码。建议你将其保存为<code>ShapeGallery.cxx</code>，与项目根目录下的<code>CMakeLists.txt</code>配套使用。</p>
+<pre><code class="language-cpp">// ============================================================================
+// ShapeGallery.cxx
+// VTK 第一卷综合实战：3D几何画廊
+// 演示：管道分支、多视口布局、过滤器、文本标注、辅助函数模式
+// ============================================================================
+
+#include &quot;vtkActor.h&quot;
+#include &quot;vtkCamera.h&quot;
+#include &quot;vtkCubeSource.h&quot;
+#include &quot;vtkCylinderSource.h&quot;
+#include &quot;vtkInteractorStyleTrackballCamera.h&quot;
+#include &quot;vtkNamedColors.h&quot;
+#include &quot;vtkNew.h&quot;
+#include &quot;vtkPolyDataMapper.h&quot;
+#include &quot;vtkProperty.h&quot;
+#include &quot;vtkRenderWindow.h&quot;
+#include &quot;vtkRenderWindowInteractor.h&quot;
+#include &quot;vtkRenderer.h&quot;
+#include &quot;vtkShrinkPolyData.h&quot;
+#include &quot;vtkSmartPointer.h&quot;
+#include &quot;vtkSphereSource.h&quot;
+#include &quot;vtkTextActor.h&quot;
+#include &quot;vtkTextProperty.h&quot;
+#include &quot;vtkTriangleFilter.h&quot;
+
+#include &lt;array&gt;
+#include &lt;string&gt;
+
+// ============================================================================
+// 辅助函数1：从数据源创建彩色Actor（原始形状，光滑渲染）
+// ============================================================================
+// 参数:
+//   source - 输入的数据源对象（vtkSphereSource、vtkCylinderSource等）
+//   r,g,b  - RGB颜色分量，取值范围 [0.0, 1.0]
+// 返回:
+//   配置好的vtkActor指针，已设置Mapper和表面颜色
+// ============================================================================
+vtkSmartPointer&lt;vtkActor&gt; CreateColoredActor(
+    vtkAlgorithmOutput* sourceOutput,
+    double r, double g, double b)
+{
+  // --- Mapper：将Source输出的几何数据映射为图形基元 ---
+  auto mapper = vtkSmartPointer&lt;vtkPolyDataMapper&gt;::New();
+  mapper-&gt;SetInputConnection(sourceOutput);
+
+  // --- Actor：场景中的可视化实体 ---
+  auto actor = vtkSmartPointer&lt;vtkActor&gt;::New();
+  actor-&gt;SetMapper(mapper);
+  actor-&gt;GetProperty()-&gt;SetColor(r, g, b);              // 表面颜色
+  actor-&gt;GetProperty()-&gt;SetDiffuse(1.0);                 // 漫反射系数（最大）
+  actor-&gt;GetProperty()-&gt;SetSpecular(0.3);                // 镜面反射系数
+  actor-&gt;GetProperty()-&gt;SetSpecularPower(10.0);          // 高光锐度
+
+  return actor;
+}
+
+// ============================================================================
+// 辅助函数2：从数据源创建收缩+边线可见的Actor（展示几何结构）
+// ============================================================================
+// 管道：Source -&gt; TriangleFilter -&gt; ShrinkPolyData -&gt; Mapper -&gt; Actor
+//
+// 参数:
+//   source - 输入的数据源对象，将被分支复用
+//   r,g,b  - RGB颜色分量，取值范围 [0.0, 1.0]
+//   shrinkFactor - 收缩因子，0.0=完全收缩到中心，1.0=保持原始尺寸
+// 返回:
+//   配置好的vtkActor指针，已应用收缩过滤器并开启边线可见
+// ============================================================================
+vtkSmartPointer&lt;vtkActor&gt; CreateShrunkActor(
+    vtkAlgorithmOutput* sourceOutput,
+    double r, double g, double b,
+    double shrinkFactor = 0.80)
+{
+  // --- 第一步：三角化 ---
+  // 确保所有多边形被转换为三角形，使收缩效果均匀一致
+  auto triangleFilter = vtkSmartPointer&lt;vtkTriangleFilter&gt;::New();
+  triangleFilter-&gt;SetInputConnection(sourceOutput);
+
+  // --- 第二步：收缩过滤器 ---
+  // 将每个三角形的顶点沿单元中心方向收缩，露出单元间的缝隙
+  auto shrinkFilter = vtkSmartPointer&lt;vtkShrinkPolyData&gt;::New();
+  shrinkFilter-&gt;SetInputConnection(triangleFilter-&gt;GetOutputPort());
+  shrinkFilter-&gt;SetShrinkFactor(shrinkFactor);
+
+  // --- Mapper ---
+  auto mapper = vtkSmartPointer&lt;vtkPolyDataMapper&gt;::New();
+  mapper-&gt;SetInputConnection(shrinkFilter-&gt;GetOutputPort());
+
+  // --- Actor：展示结构细节的版本 ---
+  auto actor = vtkSmartPointer&lt;vtkActor&gt;::New();
+  actor-&gt;SetMapper(mapper);
+  actor-&gt;GetProperty()-&gt;SetColor(r, g, b);
+  actor-&gt;GetProperty()-&gt;SetDiffuse(0.9);
+  actor-&gt;GetProperty()-&gt;SetSpecular(0.2);
+
+  // ★ 关键：开启边线可见，使逐个三角形单元清晰可见
+  actor-&gt;GetProperty()-&gt;SetEdgeVisibility(1);
+  // 边线颜色：深灰色，与表面形成对比但不至于太突兀
+  actor-&gt;GetProperty()-&gt;SetEdgeColor(0.1, 0.1, 0.15);
+  actor-&gt;GetProperty()-&gt;SetLineWidth(1.0);
+
+  return actor;
+}
+
+// ============================================================================
+// 辅助函数3：创建文本标注Actor
+// ============================================================================
+// 参数:
+//   text     - 要显示的文本内容
+//   position - 归一化视口坐标中的位置（与vtkTextActor的Position一致）
+//              (x, y) 表示文本左下角在视口中的归一化位置
+//   fontSize - 字体大小（像素）
+// 返回:
+//   配置好的vtkTextActor指针
+// ============================================================================
+vtkSmartPointer&lt;vtkTextActor&gt; CreateLabel(
+    const std::string&amp; text,
+    double x, double y,
+    int fontSize = 12)
+{
+  auto textActor = vtkSmartPointer&lt;vtkTextActor&gt;::New();
+  textActor-&gt;SetInput(text.c_str());
+  textActor-&gt;SetPosition(x, y);
+  textActor-&gt;GetTextProperty()-&gt;SetFontSize(fontSize);
+  textActor-&gt;GetTextProperty()-&gt;SetColor(1.0, 1.0, 1.0);  // 白色
+  textActor-&gt;GetTextProperty()-&gt;SetFontFamilyToCourier();   // 等宽字体
+  textActor-&gt;GetTextProperty()-&gt;SetJustificationToLeft();
+  textActor-&gt;GetTextProperty()-&gt;SetVerticalJustificationToBottom();
+
+  return textActor;
+}
+
+// ============================================================================
+// 辅助函数4：为渲染器统一设置初始相机
+// ============================================================================
+// 对所有的渲染器应用相同的初始相机位置和朝向，以确保视觉一致性
+// ============================================================================
+void SetupCamera(vtkRenderer* renderer)
+{
+  auto camera = renderer-&gt;GetActiveCamera();
+  camera-&gt;SetPosition(1.5, 1.5, 3.0);    // 相机位于右上方前方
+  camera-&gt;SetFocalPoint(0.0, 0.0, 0.0);  // 注视原点
+  camera-&gt;SetViewUp(0.0, 1.0, 0.0);       // Y轴向上
+  camera-&gt;SetClippingRange(0.1, 100.0);   // 裁剪平面范围
+  // 使用平行投影（正交投影），使所有形状以一致的方式显示
+  camera-&gt;ParallelProjectionOn();
+  camera-&gt;SetParallelScale(1.5);
+}
+
+// ============================================================================
+// 主程序入口
+// ============================================================================
+int main(int argc, char* argv[])
+{
+  // ==========================================================================
+  // 第一步：创建渲染基础设施
+  // ==========================================================================
+
+  // 创建渲染窗口——容纳所有视口的顶层窗口
+  auto renderWindow = vtkSmartPointer&lt;vtkRenderWindow&gt;::New();
+  renderWindow-&gt;SetMultiSamples(4);        // 4x多重采样抗锯齿
+  renderWindow-&gt;SetSize(1200, 800);        // 窗口客户区大小
+  renderWindow-&gt;SetWindowName(&quot;VTK 3D Shape Gallery -- Volume 1 Capstone&quot;);
+
+  // 统一的背景色——深蓝灰色
+  const double bgColor[3] = {0.15, 0.20, 0.30};
+
+  // ==========================================================================
+  // 第二步：定义视口布局（3行 x 2列）
+  // ==========================================================================
+  //
+  // 每个视口由 (xmin, ymin, xmax, ymax) 四个归一化坐标定义。
+  // 6个视口均匀分布在3行x2列的网格中。
+  //
+  // 布局索引:
+  //   左列 (col=0): 原始形状
+  //   右列 (col=1): 收缩形状
+  //   第0行: 球体
+  //   第1行: 圆柱
+  //   第2行: 立方体
+
+  const int numRows = 3;
+  const int numCols = 2;
+
+  // 创建6个渲染器，一个用于一个视口
+  // 使用二维数组存储，方便按行列索引访问
+  vtkSmartPointer&lt;vtkRenderer&gt; renderers[numRows][numCols];
+
+  // 初始化每个渲染器并设置其视口区域
+  for (int row = 0; row &lt; numRows; ++row)
+  {
+    for (int col = 0; col &lt; numCols; ++col)
+    {
+      double ymin = 1.0 - static_cast&lt;double&gt;(row + 1) / numRows;
+      double ymax = 1.0 - static_cast&lt;double&gt;(row)     / numRows;
+      double xmin =       static_cast&lt;double&gt;(col)     / numCols;
+      double xmax =       static_cast&lt;double&gt;(col + 1) / numCols;
+
+      auto renderer = vtkSmartPointer&lt;vtkRenderer&gt;::New();
+      renderer-&gt;SetViewport(xmin, ymin, xmax, ymax);
+      renderer-&gt;SetBackground(bgColor);
+      SetupCamera(renderer);
+
+      renderers[row][col] = renderer;
+      renderWindow-&gt;AddRenderer(renderer);
+    }
+  }
+
+  // ==========================================================================
+  // 第三步：定义几何体颜色方案
+  // ==========================================================================
+  //
+  // 为三种几何体分配不同的柔和颜色，使它们在视觉上容易区分
+
+  // 球体 — 浅蓝色（sky blue）
+  const double sphereColor[3] = {0.35, 0.58, 0.85};
+  // 圆柱 — 浅绿色（mint green）
+  const double cylinderColor[3] = {0.35, 0.78, 0.50};
+  // 立方体 — 浅橙色（warm peach）
+  const double cubeColor[3] = {0.90, 0.65, 0.35};
+
+  // ==========================================================================
+  // 第四步：创建球体数据源及其两个渲染分支
+  // ==========================================================================
+
+  auto sphereSource = vtkSmartPointer&lt;vtkSphereSource&gt;::New();
+  sphereSource-&gt;SetThetaResolution(48);   // 经线方向分段数（越高越光滑）
+  sphereSource-&gt;SetPhiResolution(48);     // 纬线方向分段数
+  sphereSource-&gt;SetRadius(0.8);           // 球体半径
+
+  // ★ 管道分支：同一个Source的输出端口同时注入原始分支和收缩分支
+  //   这就是第二章2.4.1节介绍的&quot;管道分叉&quot;——数据只计算一次，两个分支共享
+  auto origSphereActor = CreateColoredActor(
+      sphereSource-&gt;GetOutputPort(),
+      sphereColor[0], sphereColor[1], sphereColor[2]);
+
+  auto shrunkSphereActor = CreateShrunkActor(
+      sphereSource-&gt;GetOutputPort(),
+      sphereColor[0], sphereColor[1], sphereColor[2],
+      0.80);  // 收缩因子0.80：每个三角形收缩20%
+
+  // 添加到对应的渲染器
+  renderers[0][0]-&gt;AddActor(origSphereActor);
+  renderers[0][1]-&gt;AddActor(shrunkSphereActor);
+
+  // 添加文本标签
+  auto labelSphereOrig = CreateLabel(&quot;Original Sphere&quot;, 0.05, 0.92);
+  auto labelSphereShrunk = CreateLabel(&quot;Shrunk Sphere&quot;, 0.05, 0.92);
+
+  renderers[0][0]-&gt;AddActor2D(labelSphereOrig);
+  renderers[0][1]-&gt;AddActor2D(labelSphereShrunk);
+
+  // ==========================================================================
+  // 第五步：创建圆柱数据源及其两个渲染分支
+  // ==========================================================================
+
+  auto cylinderSource = vtkSmartPointer&lt;vtkCylinderSource&gt;::New();
+  cylinderSource-&gt;SetResolution(48);      // 圆周分段数
+  cylinderSource-&gt;SetHeight(1.8);         // 圆柱高度
+  cylinderSource-&gt;SetRadius(0.65);        // 圆柱半径
+  cylinderSource-&gt;CappingOn();            // 生成顶面和底面（默认开启）
+
+  auto origCylinderActor = CreateColoredActor(
+      cylinderSource-&gt;GetOutputPort(),
+      cylinderColor[0], cylinderColor[1], cylinderColor[2]);
+
+  auto shrunkCylinderActor = CreateShrunkActor(
+      cylinderSource-&gt;GetOutputPort(),
+      cylinderColor[0], cylinderColor[1], cylinderColor[2],
+      0.80);
+
+  renderers[1][0]-&gt;AddActor(origCylinderActor);
+  renderers[1][1]-&gt;AddActor(shrunkCylinderActor);
+
+  auto labelCylOrig = CreateLabel(&quot;Original Cylinder&quot;, 0.05, 0.92);
+  auto labelCylShrunk = CreateLabel(&quot;Shrunk Cylinder&quot;, 0.05, 0.92);
+
+  renderers[1][0]-&gt;AddActor2D(labelCylOrig);
+  renderers[1][1]-&gt;AddActor2D(labelCylShrunk);
+
+  // ==========================================================================
+  // 第六步：创建立方体数据源及其两个渲染分支
+  // ==========================================================================
+
+  auto cubeSource = vtkSmartPointer&lt;vtkCubeSource&gt;::New();
+  cubeSource-&gt;SetXLength(1.4);            // X方向边长
+  cubeSource-&gt;SetYLength(1.4);            // Y方向边长
+  cubeSource-&gt;SetZLength(1.4);            // Z方向边长
+  // cubeSource默认中心位于原点 (0, 0, 0)
+
+  auto origCubeActor = CreateColoredActor(
+      cubeSource-&gt;GetOutputPort(),
+      cubeColor[0], cubeColor[1], cubeColor[2]);
+
+  auto shrunkCubeActor = CreateShrunkActor(
+      cubeSource-&gt;GetOutputPort(),
+      cubeColor[0], cubeColor[1], cubeColor[2],
+      0.80);
+
+  renderers[2][0]-&gt;AddActor(origCubeActor);
+  renderers[2][1]-&gt;AddActor(shrunkCubeActor);
+
+  auto labelCubeOrig = CreateLabel(&quot;Original Cube&quot;, 0.05, 0.92);
+  auto labelCubeShrunk = CreateLabel(&quot;Shrunk Cube&quot;, 0.05, 0.92);
+
+  renderers[2][0]-&gt;AddActor2D(labelCubeOrig);
+  renderers[2][1]-&gt;AddActor2D(labelCubeShrunk);
+
+  // ==========================================================================
+  // 第七步：创建交互器和交互样式
+  // ==========================================================================
+
+  auto interactor = vtkSmartPointer&lt;vtkRenderWindowInteractor&gt;::New();
+  interactor-&gt;SetRenderWindow(renderWindow);
+
+  // 使用轨迹球相机交互样式
+  // 每个渲染器独立响应其所在视口内的鼠标事件
+  auto style = vtkSmartPointer&lt;vtkInteractorStyleTrackballCamera&gt;::New();
+  interactor-&gt;SetInteractorStyle(style);
+
+  // ==========================================================================
+  // 第八步：渲染并启动交互循环
+  // ==========================================================================
+
+  // 首帧渲染
+  renderWindow-&gt;Render();
+
+  // 输出程序使用说明到终端
+  std::cout &lt;&lt; &quot;\n&quot;
+            &lt;&lt; &quot;========================================\n&quot;
+            &lt;&lt; &quot;  VTK 3D Shape Gallery\n&quot;
+            &lt;&lt; &quot;  Volume 1 Capstone Project\n&quot;
+            &lt;&lt; &quot;========================================\n&quot;
+            &lt;&lt; &quot;\n&quot;
+            &lt;&lt; &quot;左列：原始几何体（光滑表面渲染）\n&quot;
+            &lt;&lt; &quot;右列：收缩几何体（vtkShrinkPolyData，边线可见）\n&quot;
+            &lt;&lt; &quot;\n&quot;
+            &lt;&lt; &quot;交互操作：\n&quot;
+            &lt;&lt; &quot;  - 鼠标左键拖拽：旋转场景\n&quot;
+            &lt;&lt; &quot;  - 鼠标右键拖拽：缩放（Dolly）\n&quot;
+            &lt;&lt; &quot;  - 鼠标中键拖拽：平移场景\n&quot;
+            &lt;&lt; &quot;  - 滚轮：缩放\n&quot;
+            &lt;&lt; &quot;  - 按 R 键：重置当前视口的相机\n&quot;
+            &lt;&lt; &quot;\n&quot;
+            &lt;&lt; &quot;每个视口独立响应交互。\n&quot;
+            &lt;&lt; &quot;关闭窗口退出程序。\n&quot;
+            &lt;&lt; &quot;========================================\n&quot;
+            &lt;&lt; std::endl;
+
+  // 进入事件循环——程序在此阻塞，直到用户关闭窗口
+  interactor-&gt;Start();
+
+  return 0;
+}
+</code></pre>
+<h3 id="631-cmakeliststxt">6.3.1 CMakeLists.txt</h3>
+<pre><code class="language-cmake">cmake_minimum_required(VERSION 3.20 FATAL_ERROR)
+project(ShapeGallery VERSION 1.0.0 LANGUAGES CXX)
+
+# 设置C++标准
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+# 查找VTK 9.5.2及其所需组件
+find_package(VTK 9.5.2
+  COMPONENTS
+    CommonCore
+    CommonColor
+    CommonDataModel
+    CommonExecutionModel
+    FiltersCore
+    FiltersSources
+    InteractionStyle
+    RenderingCore
+    RenderingOpenGL2
+    RenderingFreeType
+  REQUIRED
+)
+
+# 打印VTK信息（可选，用于调试确认版本）
+message(STATUS &quot;VTK version: ${VTK_VERSION}&quot;)
+message(STATUS &quot;VTK rendering backend: OpenGL2&quot;)
+
+# 创建可执行文件
+add_executable(ShapeGallery ShapeGallery.cxx)
+
+# 链接VTK库
+target_link_libraries(ShapeGallery
+  PRIVATE
+    ${VTK_LIBRARIES}
+)
+
+# ★ 关键：VTK模块自动初始化
+# 这行宏会生成代码在main()之前注册所有需要的对象工厂
+# 如果忘记这行，运行时会出现&quot;No override found&quot;错误
+vtk_module_autoinit(
+  TARGETS ShapeGallery
+  MODULES ${VTK_LIBRARIES}
+)
+</code></pre>
+<p><strong>新增模块说明：</strong></p>
+<table>
+<thead>
+<tr>
+<th>模块</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>FiltersCore</code></td>
+<td>提供<code>vtkShrinkPolyData</code>和<code>vtkTriangleFilter</code></td>
+</tr>
+<tr>
+<td><code>RenderingFreeType</code></td>
+<td>提供文本渲染支持（<code>vtkTextActor</code>依赖FreeType字体引擎）</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="64">6.4 代码逐段解析</h2>
+<h3 id="641">6.4.1 头文件与辅助函数设计</h3>
+<pre><code class="language-cpp">#include &quot;vtkSmartPointer.h&quot;
+#include &quot;vtkNew.h&quot;
+// ... 以及其他头文件
+</code></pre>
+<p>程序中同时引入了<code>vtkSmartPointer</code>和<code>vtkNew</code>。在本章的代码中，为了展示更灵活的所有权管理，源数据对象使用了<code>vtkSmartPointer</code>（因为它们需要被传递给辅助函数并可能跨越多个函数作用域），而辅助函数内部的Mapper、Filter等局部对象使用<code>vtkSmartPointer</code>以便安全地从函数返回Actor。</p>
+<p>回顾第一章1.5.2节的内容：<code>vtkNew&lt;&gt;</code>是栈分配的智能指针，适合在单一作用域内使用；<code>vtkSmartPointer&lt;&gt;</code>是引用计数智能指针，适合需要在函数之间传递共享所有权。本章使用<code>vtkSmartPointer</code>作为统一选择，以简化代码风格。</p>
+<h3 id="642-createcoloredactor">6.4.2 CreateColoredActor——原始形状的辅助函数</h3>
+<pre><code class="language-cpp">vtkSmartPointer&lt;vtkActor&gt; CreateColoredActor(
+    vtkAlgorithmOutput* sourceOutput,
+    double r, double g, double b)
+</code></pre>
+<p>这个函数封装了"Source -&gt; Mapper -&gt; Actor"的标准三段式。注意以下设计决策：</p>
+<p><strong>参数使用<code>vtkAlgorithmOutput*</code>而非<code>vtkAlgorithm*</code>：</strong>
+函数接收的是一个输出端口（Output Port），而非算法对象本身。这样做的好处是：
+- 调用者可以传入任何算法的输出端口，无论它是Source还是Filter。
+- 函数不需要知道上游数据来自什么类型的对象——它只关心"有一个端口可以接"。</p>
+<p>这是VTK多态的经典用法：<code>vtkAlgorithmOutput</code>是所有算法输出端口的统一类型，使得管道组件可以松散耦合。</p>
+<p><strong>材质属性设置：</strong></p>
+<pre><code class="language-cpp">actor-&gt;GetProperty()-&gt;SetDiffuse(1.0);
+actor-&gt;GetProperty()-&gt;SetSpecular(0.3);
+actor-&gt;GetProperty()-&gt;SetSpecularPower(10.0);
+</code></pre>
+<ul>
+<li><code>SetDiffuse(1.0)</code>：满漫反射，使颜色在正面直射时饱和。</li>
+<li><code>SetSpecular(0.3)</code>：适中的镜面高光强度。</li>
+<li><code>SetSpecularPower(10.0)</code>：高光聚拢（值越小高光越弥散，值越大高光越集中尖锐）。10.0产生一个柔和的高光光斑，适合展示曲面。</li>
+</ul>
+<h3 id="643-createshrunkactor">6.4.3 CreateShrunkActor——收缩形状的辅助函数</h3>
+<pre><code class="language-cpp">vtkSmartPointer&lt;vtkActor&gt; CreateShrunkActor(
+    vtkAlgorithmOutput* sourceOutput,
+    double r, double g, double b,
+    double shrinkFactor = 0.80)
+</code></pre>
+<p>这是本项目中管道最复杂的部分——一条完整的三级管道：</p>
+<pre><code>Source Output --&gt; vtkTriangleFilter --&gt; vtkShrinkPolyData --&gt; vtkPolyDataMapper --&gt; vtkActor
+</code></pre>
+<p><strong>为什么需要vtkTriangleFilter？</strong></p>
+<p><code>vtkCubeSource</code>生成的几何体包含四边形（VTK_QUAD）单元。如果直接将四边形送入<code>vtkShrinkPolyData</code>，收缩后的四边形可能看起来像是变小的四边形而不是一个个独立的三角形碎片。而球体和圆柱的输出中也可能包含三角形带（Triangle Strip），其收缩行为与普通三角形不完全一致。</p>
+<p>通过在收缩前插入<code>vtkTriangleFilter</code>，确保所有多边形都被转化为标准的独立三角形（VTK_TRIANGLE），这带来两个好处：
+1. 收缩效果均匀——每个三角形独立向各自中心收缩。
+2. 边线显示准确——所有三角形的三条边都被绘制，不会出现四边形中缺失对角线边线的情况。</p>
+<p><strong>边线可见设置：</strong></p>
+<pre><code class="language-cpp">actor-&gt;GetProperty()-&gt;SetEdgeVisibility(1);
+actor-&gt;GetProperty()-&gt;SetEdgeColor(0.1, 0.1, 0.15);
+actor-&gt;GetProperty()-&gt;SetLineWidth(1.0);
+</code></pre>
+<ul>
+<li><code>SetEdgeVisibility(1)</code>是收缩版本的核心视觉差异——它让每个三角形单元的边界以深色线条绘制出来，使得网格结构一目了然。</li>
+<li>边线颜色选为近乎黑色的深蓝灰色（0.1, 0.1, 0.15），与任何表面颜色都能形成清晰对比而不喧宾夺主。</li>
+<li>线宽1.0是最细的线条，避免在高分辨率屏幕上显得过于粗糙。</li>
+</ul>
+<p><strong>shrinkFactor参数：</strong>
+- 0.0 = 所有三角形完全收缩到它们的几何中心（成为点）。
+- 1.0 = 不收缩，保持原始尺寸（但边线仍然可见）。
+- 0.80 = 每个三角形向其中心收缩20%，露出单元间的明显缝隙。</p>
+<p>0.80是一个经过视觉调试后的值：缝隙足够显眼，能清楚看到网格结构，但形状的整体轮廓仍然保留。</p>
+<h3 id="644-createlabel">6.4.4 CreateLabel——文本标注的辅助函数</h3>
+<pre><code class="language-cpp">vtkSmartPointer&lt;vtkTextActor&gt; CreateLabel(
+    const std::string&amp; text,
+    double x, double y,
+    int fontSize = 12)
+</code></pre>
+<p><code>vtkTextActor</code>是一个特殊的Actor（继承自<code>vtkActor2D</code>，而非<code>vtkActor</code>），用于在视口中叠加二维文本。它的关键特点：</p>
+<ul>
+<li><strong>通过<code>AddActor2D()</code>添加</strong>：区别于普通的3D Actor使用<code>AddActor()</code>，2D Actor使用<code>AddActor2D()</code>添加到Renderer。2D Actor不受3D相机变换影响，始终以屏幕坐标显示。</li>
+<li><strong>Position是归一化视口坐标</strong>：<code>SetPosition(0.05, 0.92)</code> 表示文本左下角位于视口的水平5%、垂直92%位置。这个坐标独立于窗口的像素尺寸——窗口放大缩小时，文本始终保持在视口中的相对位置。</li>
+<li><strong>字体设置</strong>：<code>SetFontFamilyToCourier()</code>选择等宽字体，确保在不同平台上显示一致。<code>SetJustificationToLeft()</code>和<code>SetVerticalJustificationToBottom()</code>设定文本对齐方式。</li>
+</ul>
+<h3 id="645-3x2">6.4.5 视口布局——3x2网格的精确构建</h3>
+<pre><code class="language-cpp">for (int row = 0; row &lt; numRows; ++row)
+{
+  for (int col = 0; col &lt; numCols; ++col)
+  {
+    double ymin = 1.0 - static_cast&lt;double&gt;(row + 1) / numRows;
+    double ymax = 1.0 - static_cast&lt;double&gt;(row)     / numRows;
+    double xmin =       static_cast&lt;double&gt;(col)     / numCols;
+    double xmax =       static_cast&lt;double&gt;(col + 1) / numCols;
+    // ...
+  }
+}
+</code></pre>
+<p>这个双重循环计算每个视口的归一化坐标边界。以第0行第0列（球体，原始）为例：
+- <code>xmin = 0/2 = 0.00</code>, <code>xmax = 1/2 = 0.50</code>
+- <code>ymin = 1.0 - 1/3 = 0.666</code>, <code>ymax = 1.0 - 0/3 = 1.000</code></p>
+<p>结果：视口占据窗口的左上1/6区域。这与6.2.3节中规划的手动计算的坐标完全一致。</p>
+<p><strong>为什么y坐标是反向计算的？</strong></p>
+<p>VTK的视口坐标系将原点放在左下角（与OpenGL一致）：(0,0)是左下角，(1,1)是右上角。但我们的布局规划习惯上把第0行视为"最上面一行"。因此：
+- 第0行（最上面）的ymax应该接近1.0。
+- 第2行（最下面）的ymin应该接近0.0。</p>
+<p><code>1.0 - row/numRows</code> 实现了这种反向映射：row=0 时 ymax=1.0，row=2 时 ymin=1.0-3/3=0.0。</p>
+<h3 id="646">6.4.6 管道分支——本章最重要的代码段</h3>
+<p>让我们专注看球体的例子：</p>
+<pre><code class="language-cpp">auto sphereSource = vtkSmartPointer&lt;vtkSphereSource&gt;::New();
+sphereSource-&gt;SetThetaResolution(48);
+// ...
+
+// 分支A：原始渲染
+auto origSphereActor = CreateColoredActor(
+    sphereSource-&gt;GetOutputPort(),
+    sphereColor[0], sphereColor[1], sphereColor[2]);
+
+// 分支B：收缩渲染
+auto shrunkSphereActor = CreateShrunkActor(
+    sphereSource-&gt;GetOutputPort(),
+    sphereColor[0], sphereColor[1], sphereColor[2],
+    0.80);
+</code></pre>
+<p><strong>这里发生的关键事件是：<code>sphereSource-&gt;GetOutputPort()</code>被调用了两次，每次传入不同的辅助函数。</strong> 这两个函数各自内部调用了<code>SetInputConnection()</code>，建立了两个独立的管道分支。</p>
+<p>管道连接示意图：</p>
+<pre><code>                        sphereSource-&gt;GetOutputPort()
+                                   |
+                  +----------------+----------------+
+                  |                                 |
+                  v                                 v
+      CreateColoredActor()              CreateShrunkActor()
+                  |                                 |
+                  v                                 v
+        vtkPolyDataMapper                 vtkTriangleFilter
+                  |                                 |
+                  v                                 v
+           vtkActor (蓝)                     vtkShrinkPolyData
+                  |                                 |
+                  |                                 v
+                  |                        vtkPolyDataMapper
+                  |                                 |
+                  |                                 v
+                  |                          vtkActor (蓝+边线)
+                  |                                 |
+       +----------+---------------+-----------------+
+       |                          |
+       v                          v
+  renderers[0][0]          renderers[0][1]
+  (左上视口)                 (右上视口)
+</code></pre>
+<p><strong>管道分支的关键优势在本项目中体现为：</strong></p>
+<ol>
+<li><strong>数据只生成一次</strong>：球体的几何数据（2304个三角形，对应ThetaResolution=48和PhiResolution=48）由<code>vtkSphereSource</code>生成一次。两个分支都使用这份数据，不产生重复计算。</li>
+<li><strong>参数传播自动</strong>：如果我们后续调用<code>sphereSource-&gt;SetRadius(1.0)</code>改变球体大小，两个分支都会在下一次渲染时自动更新——因为MTime机制会在两个分支的Mapper各自向上游追溯时检测到Source的MTime变化。</li>
+<li><strong>分支之间独立</strong>：修改原始分支的Actor属性（如颜色）不会影响收缩分支，反之亦然。管道分支共享的是数据（Source的输出），而不是渲染属性。</li>
+</ol>
+<h3 id="647">6.4.7 相机配置</h3>
+<pre><code class="language-cpp">void SetupCamera(vtkRenderer* renderer)
+{
+  auto camera = renderer-&gt;GetActiveCamera();
+  camera-&gt;SetPosition(1.5, 1.5, 3.0);
+  camera-&gt;SetFocalPoint(0.0, 0.0, 0.0);
+  camera-&gt;SetViewUp(0.0, 1.0, 0.0);
+  camera-&gt;SetClippingRange(0.1, 100.0);
+  camera-&gt;ParallelProjectionOn();
+  camera-&gt;SetParallelScale(1.5);
+}
+</code></pre>
+<p>所有六个视口使用完全相同的初始相机参数。这确保了视觉上的一致性——当你在不同的视口之间切换观察时，视角不会突然跳变。</p>
+<p><strong>使用平行投影（正交投影）而非透视投影的原因：</strong></p>
+<p>在透视投影中，距离相机越远的物体看起来越小——这会在3x2的布局中产生不一致的视觉效果，因为不同视口中的几何体虽然大小相同，但由于它们在各自视口中与相机的相对距离微妙差异，看起来大小可能不一致。使用平行投影消除了这种透视畸变，使得所有视口中的几何体以统一的尺度呈现。</p>
+<p><code>SetParallelScale(1.5)</code>控制了平行投影的"缩放级别"——更小的值产生更大的放大效果。1.5使得半径为0.8的球体和高度为1.8的圆柱都能完整适当地填充视口区域，而不会过大或过小。</p>
+<h3 id="648">6.4.8 交互机制</h3>
+<pre><code class="language-cpp">auto style = vtkSmartPointer&lt;vtkInteractorStyleTrackballCamera&gt;::New();
+interactor-&gt;SetInteractorStyle(style);
+</code></pre>
+<p>本程序使用TrackballCamera交互样式——与第一章的Cone示例相同。但这里有一个需要澄清的重要细节：</p>
+<p><strong>每个渲染器是否独立响应交互？</strong></p>
+<p>答案是：<strong>是的，但只有一个渲染器在任意时刻响应用户交互。</strong> <code>vtkInteractorStyleTrackballCamera</code>在内部使用了一个"当前渲染器"的概念。当用户的鼠标悬停在某个视口上并开始拖拽时，交互器会确定鼠标下的渲染器，并将该渲染器的相机绑定到轨迹球操作。</p>
+<p>这意味着：
+- 你的鼠标在左上视口（原始球体）时，旋转操作只影响左上视口的相机。
+- 你的鼠标在右下视口（收缩立方体）时，旋转操作只影响右下视口的相机。
+- 每个视口的相机独立变化，互不影响。</p>
+<p>这是一种自然且直观的多视图交互模式——正如你在ParaView或3D Slicer等专业可视化工具中所体验到的。</p>
+<h3 id="649">6.4.9 渲染流程</h3>
+<pre><code class="language-cpp">renderWindow-&gt;Render();
+// ... 打印使用说明 ...
+interactor-&gt;Start();
+</code></pre>
+<p>首帧<code>Render()</code>确保用户在进入交互循环前就能看到完整的场景。如果没有这一行，窗口在<code>Start()</code>之前会保持空白。</p>
+<p>在<code>Render()</code>执行时，管道的执行顺序是：</p>
+<ol>
+<li>RenderWindow遍历其注册的6个Renderer。</li>
+<li>每个Renderer遍历其Actor列表（原始Actor和文本Actor）。</li>
+<li>对于每个可见的3D Actor，Renderer请求其Mapper执行<code>Update()</code>。</li>
+<li>每个Mapper沿着<code>SetInputConnection()</code>连接向上游追溯：</li>
+<li>原始Actor的Mapper -&gt; Source（对球体而言是sphereSource）</li>
+<li>收缩Actor的Mapper -&gt; ShrinkFilter -&gt; TriangleFilter -&gt; Source</li>
+<li>对于共享同一Source的两个分支，Source在第一个分支的追溯中被请求计算，结果被缓存；第二个分支的追溯发现Source的MTime未变化，直接使用缓存结果。</li>
+<li>所有数据到达Mapper后，Mapper转换为图形基元。</li>
+<li>Renderer执行相机投影、光照计算和光栅化。</li>
+<li>所有Renderer的输出被合成到RenderWindow的各个视口区域。</li>
+<li>最终帧缓冲交换到屏幕。</li>
+</ol>
+<hr />
+<h2 id="65">6.5 编译与运行</h2>
+<h3 id="651">6.5.1 目录结构</h3>
+<pre><code>ShapeGallery/
+├── CMakeLists.txt       # CMake构建配置文件
+└── ShapeGallery.cxx     # 源代码文件（约330行）
+</code></pre>
+<h3 id="652">6.5.2 编译步骤</h3>
+<p>打开终端，进入项目目录并执行以下命令：</p>
+<pre><code class="language-bash"># 1. 进入项目根目录
+cd ShapeGallery
+
+# 2. 创建构建目录
+mkdir build
+cd build
+
+# 3. 运行CMake配置
+#    对于通过常规方式安装的VTK（APT/Homebrew/官方安装包）：
+cmake ..
+
+#    如果你使用vcpkg：
+cmake .. -DCMAKE_TOOLCHAIN_FILE=[path-to-vcpkg]/scripts/buildsystems/vcpkg.cmake
+
+#    如果VTK安装在自定义路径：
+cmake .. -DVTK_DIR=[path-to-vtk-install]/lib/cmake/vtk-9.5
+
+# 4. 编译项目
+cmake --build . --config Release
+
+#    使用多核加速（Windows/MSVC）：
+cmake --build . --config Release --parallel 8
+
+#    在Linux/macOS上：
+cmake --build . -- -j 8
+</code></pre>
+<h3 id="653-cmake">6.5.3 CMake配置成功输出</h3>
+<p>你应该看到类似以下的关键输出行：</p>
+<pre><code>-- VTK version: 9.5.2
+-- VTK rendering backend: OpenGL2
+-- Configuring done
+-- Generating done
+-- Build files have been written to: .../ShapeGallery/build
+</code></pre>
+<h3 id="654">6.5.4 运行程序</h3>
+<p><strong>Windows（PowerShell）：</strong></p>
+<pre><code class="language-powershell">.\Release\ShapeGallery.exe
+</code></pre>
+<p><strong>Linux/macOS：</strong></p>
+<pre><code class="language-bash">./ShapeGallery
+</code></pre>
+<h3 id="655">6.5.5 预期运行效果</h3>
+<p>程序启动后，你将看到一个1200x800像素的窗口，背景为深蓝灰色。窗口中包含3行x2列共6个视口：</p>
+<ul>
+<li><strong>左上（0,0）</strong>：浅蓝色光滑球体，标签"Original Sphere"。</li>
+<li><strong>右上（0,1）</strong>：浅蓝色收缩球体，三角形单元清晰可见，边线为深色，标签"Shrunk Sphere"。</li>
+<li><strong>左中（1,0）</strong>：浅绿色光滑圆柱（含顶面和底面），标签"Original Cylinder"。</li>
+<li><strong>右中（1,1）</strong>：浅绿色收缩圆柱，每个三角形单元独立可见，标签"Shrunk Cylinder"。</li>
+<li><strong>左下（2,0）</strong>：浅橙色光滑立方体，标签"Original Cube"。</li>
+<li><strong>右下（2,1）</strong>：浅橙色收缩立方体，三角形——而非四边形——单元清晰可见，标签"Shrunk Cube"。</li>
+</ul>
+<p>终端将输出程序使用说明。</p>
+<p>交互操作（TrackballCamera风格）：
+- <strong>鼠标左键拖拽</strong>：旋转当前鼠标所在的视口的场景。
+- <strong>鼠标右键上下拖拽</strong>：缩放（Dolly）当前视口。
+- <strong>鼠标中键拖拽</strong>：平移当前视口。
+- <strong>鼠标滚轮</strong>：缩放当前视口。
+- <strong>键盘 R 键</strong>：重置当前活跃视口的相机到初始位置。</p>
+<h3 id="656">6.5.6 常见问题排查</h3>
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>可能原因</th>
+<th>解决方法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>文本标签不显示</td>
+<td>缺少<code>RenderingFreeType</code>组件</td>
+<td>在CMakeLists.txt的<code>find_package</code>中添加<code>RenderingFreeType</code></td>
+</tr>
+<tr>
+<td><code>No override found for vtkPolyDataMapper</code></td>
+<td>缺少<code>vtk_module_autoinit</code></td>
+<td>确认CMakeLists.txt中包含<code>vtk_module_autoinit</code>宏</td>
+</tr>
+<tr>
+<td>收缩版本无效果（看起来和原始版本一样）</td>
+<td>shrinkFactor设置为1.0</td>
+<td>检查<code>CreateShrunkActor</code>的调用参数，确保shrinkFactor &lt; 1.0</td>
+</tr>
+<tr>
+<td>窗口空白（六个视口全白）</td>
+<td>Actor未添加到Renderer</td>
+<td>确认每个<code>renderers[row][col]-&gt;AddActor(...)</code>已正确执行</td>
+</tr>
+<tr>
+<td>链接错误：<code>undefined reference to vtkShrinkPolyData</code></td>
+<td>缺少<code>FiltersCore</code>组件</td>
+<td>在<code>find_package</code>中添加<code>FiltersCore</code></td>
+</tr>
+<tr>
+<td>收缩版本的立方体看起来不规则</td>
+<td>缺少<code>vtkTriangleFilter</code>预三角化</td>
+<td>确认<code>CreateShrunkActor</code>函数中包含了<code>vtkTriangleFilter</code></td>
+</tr>
+<tr>
+<td>编译错误：<code>vtkTextActor.h</code>找不到</td>
+<td>缺少<code>RenderingFreeType</code>组件</td>
+<td>添加<code>RenderingFreeType</code>到CMake组件列表</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="66">6.6 扩展练习</h2>
+<p>完成本章项目后，建议你尝试以下扩展练习来加深理解。每个练习都建立在本章代码的基础上，鼓励你亲自动手修改代码并观察效果。</p>
+<h3 id="661">6.6.1 练习一：添加第四种几何体</h3>
+<p><strong>目标：</strong> 在3x2布局的基础上扩展为包含第四种几何体。</p>
+<p><strong>具体任务：</strong>
+1. 修改视口布局从3x2变为4x2（4行x2列），共8个视口。
+2. 第四行使用<code>vtkArrowSource</code>生成箭头形状（<code>#include "vtkArrowSource.h"</code>）。
+3. 选择一种新的颜色（如浅紫色 <code>{0.7, 0.4, 0.85}</code>）。
+4. 调整窗口高度（如从800改为1000）以容纳新的视口行。</p>
+<p><strong>提示：</strong> <code>vtkArrowSource</code>默认生成一个从原点指向(1,0,0)的带轴箭头。它没有<code>SetResolution</code>参数——箭头的弯曲精度由<code>SetTipResolution()</code>和<code>SetShaftResolution()</code>控制。</p>
+<p><strong>这个练习将巩固：</strong> 视口布局计算、新数据源的引入、颜色方案设计。</p>
+<h3 id="662">6.6.2 练习二：添加键盘回调切换过滤器</h3>
+<p><strong>目标：</strong> 通过按键动态切换收缩过滤器的开/关状态，实时观察过滤器的效果。</p>
+<p><strong>具体任务：</strong>
+1. 创建一个自定义回调类（继承<code>vtkCallbackCommand</code>）或使用<code>vtkCallbackCommand</code>。
+2. 按键盘<code>S</code>键时，在"显示原始Actor"和"显示收缩Actor"之间切换（每个视口）。
+3. 移除右列的收缩视口——改为只有3个视口（一行一个），按S键切换显示模式。</p>
+<p><strong>提示：</strong></p>
+<pre><code class="language-cpp">// 回调函数框架
+void KeypressCallbackFunction(
+    vtkObject* caller, long unsigned int eventId,
+    void* clientData, void* callData)
+{
+  auto interactor = static_cast&lt;vtkRenderWindowInteractor*&gt;(caller);
+  std::string key = interactor-&gt;GetKeySym();
+  if (key == &quot;s&quot; || key == &quot;S&quot;) {
+    // 切换每个视口中Actor的可见性
+  }
+}
+
+// 注册回调
+auto callback = vtkSmartPointer&lt;vtkCallbackCommand&gt;::New();
+callback-&gt;SetCallback(KeypressCallbackFunction);
+interactor-&gt;AddObserver(vtkCommand::KeyPressEvent, callback);
+</code></pre>
+<p><strong>这个练习将巩固：</strong> 观察者模式、键盘事件处理、Actor可见性控制、管道分支持久化。</p>
+<h3 id="663-vtkglyph3dvtkshrinkpolydata">6.6.3 练习三：使用vtkGlyph3D替代vtkShrinkPolyData</h3>
+<p><strong>目标：</strong> 体验不同的过滤器，用球体符号（Glyph）替代收缩效果来展示网格结构。</p>
+<p><strong>具体任务：</strong>
+1. 将右列的<code>CreateShrunkActor</code>替换为一个新的<code>CreateGlyphedActor</code>辅助函数。
+2. 在新的辅助函数中，使用<code>vtkGlyph3D</code>滤波器：在输入数据的每个点上放置一个小球体，以显示点的分布。
+3. 球体符号的半径应小到足以看出网格结构（如0.05），但大到足以可见。</p>
+<p><strong>提示：</strong></p>
+<pre><code class="language-cpp">vtkSmartPointer&lt;vtkActor&gt; CreateGlyphedActor(
+    vtkAlgorithmOutput* sourceOutput,
+    double r, double g, double b)
+{
+  // 创建小球体作为符号
+  auto glyphSource = vtkSmartPointer&lt;vtkSphereSource&gt;::New();
+  glyphSource-&gt;SetRadius(0.05);  // 小半径——仅标记每个点
+  glyphSource-&gt;SetThetaResolution(8);
+  glyphSource-&gt;SetPhiResolution(8);
+
+  // Glyph3D在输入数据的每个点上放置符号
+  auto glyphFilter = vtkSmartPointer&lt;vtkGlyph3D&gt;::New();
+  glyphFilter-&gt;SetInputConnection(sourceOutput);
+  glyphFilter-&gt;SetSourceConnection(glyphSource-&gt;GetOutputPort());
+  // 注意：Glyph3D需要设置Scaling为off或提供标量数据
+  glyphFilter-&gt;SetScaleModeToDataScalingOff();
+
+  // ... Mapper, Actor ...
+}
+</code></pre>
+<p><strong>这个练习将巩固：</strong> 多输入过滤器（Glyph3D需要两个输入：被采样的数据 + 符号形状）、不同过滤器的视觉差异、管道连接的多端口用法。</p>
+<h3 id="664">6.6.4 练习四：添加交互式收缩因子调节</h3>
+<p><strong>目标：</strong> 通过鼠标滚轮或滑块实时调节ShrinkFilter的参数，体验MTime驱动的自动更新。</p>
+<p><strong>具体任务：</strong>
+1. 创建一个自定义的InteractorStyle子类，重写<code>OnMouseWheelForward()</code>和<code>OnMouseWheelBackward()</code>方法。
+2. 滚轮滚动时，增加或减少所有收缩Actor的ShrinkFactor（范围0.1到1.0）。
+3. 在终端打印当前的ShrinkFactor值。
+4. 注意：你需要存储对所有<code>vtkShrinkPolyData</code>对象的引用（指针），以便在回调中访问它们。</p>
+<p><strong>提示：</strong></p>
+<pre><code class="language-cpp">class CustomInteractorStyle : public vtkInteractorStyleTrackballCamera
+{
+public:
+  static CustomInteractorStyle* New();
+  vtkTypeMacro(CustomInteractorStyle, vtkInteractorStyleTrackballCamera);
+
+  void SetShrinkFilters(
+      std::vector&lt;vtkSmartPointer&lt;vtkShrinkPolyData&gt;&gt; filters)
+  { shrinkFilters = filters; }
+
+  void OnMouseWheelForward() override
+  {
+    adjustShrinkFactor(0.05);  // 增加收缩（减小shrinkFactor）
+    vtkInteractorStyleTrackballCamera::OnMouseWheelForward();
+  }
+
+  void OnMouseWheelBackward() override
+  {
+    adjustShrinkFactor(-0.05); // 减少收缩（增大shrinkFactor）
+    vtkInteractorStyleTrackballCamera::OnMouseWheelBackward();
+  }
+
+private:
+  void adjustShrinkFactor(double delta)
+  {
+    for (auto&amp; f : shrinkFilters)
+    {
+      double current = f-&gt;GetShrinkFactor();
+      double newVal = current - delta;
+      if (newVal &lt; 0.1) newVal = 0.1;
+      if (newVal &gt; 1.0) newVal = 1.0;
+      f-&gt;SetShrinkFactor(newVal);
+    }
+    // 触发重新渲染
+    // 通过Interactor获取RenderWindow并调用Render()
+  }
+
+  std::vector&lt;vtkSmartPointer&lt;vtkShrinkPolyData&gt;&gt; shrinkFilters;
+};
+</code></pre>
+<p><strong>这个练习将巩固：</strong> 自定义InteractorStyle、MTime驱动的参数更新、Render()的显式触发、实时交互式可视化。</p>
+<hr />
+<h2 id="67">6.7 第一卷总结与第二卷预告</h2>
+<h3 id="671">6.7.1 第一卷回顾：你学到了什么</h3>
+<p>祝贺你完成了入门篇（第一卷）的全部六章内容。让我们回顾你走过的学习路径：</p>
+<table>
+<thead>
+<tr>
+<th>章节</th>
+<th>主题</th>
+<th>核心收获</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>第一章</strong></td>
+<td>VTK概述与环境搭建</td>
+<td>理解VTK的定位和管道架构概念；完成环境安装与CMake项目配置；运行并理解第一个Cone程序。</td>
+</tr>
+<tr>
+<td><strong>第二章</strong></td>
+<td>可视化管道</td>
+<td>掌握管道的六个阶段（Source/Filter/Mapper/Actor/Renderer/RenderWindow）；理解<code>SetInputConnection()</code>与<code>SetInputData()</code>的根本区别；掌握MTime驱动的按需执行机制；理解管道分支与合并。</td>
+</tr>
+<tr>
+<td><strong>第三章</strong></td>
+<td>数据模型基础</td>
+<td>掌握五种主要数据集类型（ImageData/RectilinearGrid/StructuredGrid/PolyData/UnstructuredGrid）；理解Points与Cells的拓扑-几何分离设计；熟悉属性数据体系（Scalars/Vectors/Normals/TCoords/Tensors）；能够编程检查数据集内部结构。</td>
+</tr>
+<tr>
+<td><strong>第四章</strong></td>
+<td>基本几何体与数据源</td>
+<td>熟悉十种内置几何数据源及其参数；掌握<code>vtkProgrammableSource</code>的程序化数据生成；能够手动构建<code>vtkPoints</code>和<code>vtkCellArray</code>创建任意形状；完成2x2多视图演示。</td>
+</tr>
+<tr>
+<td><strong>第五章</strong></td>
+<td>渲染与交互</td>
+<td>深入理解Renderer/RenderWindow/Interactor的层级关系；掌握多视口布局的<code>SetViewport()</code>用法；理解Camera的透视/平行投影及参数控制；熟悉TrackballCamera交互样式。</td>
+</tr>
+<tr>
+<td><strong>第六章</strong></td>
+<td>入门篇综合实战</td>
+<td>综合运用全部知识构建完整的"3D几何画廊"应用；实践管道分支、多视口布局、过滤器配置、文本标注、辅助函数封装等工程化技能。</td>
+</tr>
+</tbody>
+</table>
+<p>通过第一卷的学习，你已经具备了以下能力：</p>
+<ol>
+<li><strong>从零搭建VTK开发环境</strong>并编译运行C++可视化程序。</li>
+<li><strong>设计并实现可视化管道</strong>——选择正确的Source，插入合适的Filter，连接Mapper和Actor。</li>
+<li><strong>理解数据如何流动</strong>——知道何时使用<code>SetInputConnection()</code>（默认），何时使用<code>SetInputData()</code>（特殊场景）。</li>
+<li><strong>创建多视口布局</strong>——在一个窗口中展示多个视图，每个视图拥有独立的Renderer和Camera。</li>
+<li><strong>编写结构良好的代码</strong>——使用辅助函数封装重复逻辑，使用智能指针管理VTK对象生命周期。</li>
+</ol>
+<p>更重要的是，你现在拥有一个<strong>心智模型（Mental Model）</strong>：当你看到任何VTK代码或文档时，你能够迅速地将它定位在管道的正确位置——"这是一个Source，它产生数据"、"这是一个Filter，它接收数据并输出变换后的数据"、"这是一个Mapper，它将数据翻译为图形"、"这是一个Actor，它代表场景中的实体"。</p>
+<h3 id="672">6.7.2 第二卷预告：进阶之路</h3>
+<p>入门篇的结束不是终点，而是进阶之路的起点。第二卷（进阶篇）将带领你深入VTK更专业、更强大的领域。以下是第二卷各章的预告：</p>
+<p><strong>第七章：PolyData深度操作</strong>
+- PolyData的内部数据结构详解（点列表、单元连接性数组）。
+- 法向量计算与曲面平滑（<code>vtkSmoothPolyDataFilter</code>、<code>vtkPolyDataNormals</code>）。
+- 网格简化与细分（<code>vtkDecimatePro</code>、<code>vtkLinearSubdivisionFilter</code>）。
+- 拓扑重构（<code>vtkCleanPolyData</code>、<code>vtkStripper</code>）。</p>
+<p><strong>第八章：非结构化网格（Unstructured Grid）</strong>
+- 任意单元类型的处理：四面体、六面体、棱柱、金字塔。
+- 有限元分析结果的可视化（应力场、位移场）。
+- 网格质量评估与修复。</p>
+<p><strong>第九章：结构化数据与图像数据处理</strong>
+- vtkImageData的深度操作。
+- 体数据切片与重切片（Reslice）。
+- 医学图像数据（DICOM）的加载与显示。
+- 三维图像滤波器（高斯平滑、中值滤波、形态学操作）。</p>
+<p><strong>第十章：数据I/O——读写各种文件格式</strong>
+- VTK原生格式详解（<code>.vtk</code> Legacy、<code>.vtp</code>/<code>.vtu</code>/<code>.vts</code> XML格式）。
+- 标准工业格式：STL、OBJ、PLY、VTU。
+- 科学计算格式：NetCDF、ExodusII、EnSight。
+- 自定义Reader/Writer开发入门。</p>
+<p><strong>第十一章：高级过滤器</strong>
+- 等值面提取（Marching Cubes，<code>vtkContourFilter</code>）。
+- 数据裁剪与提取（<code>vtkClipDataSet</code>、<code>vtkExtractVOI</code>、<code>vtkThreshold</code>）。
+- 流线与粒子追踪（<code>vtkStreamTracer</code>、<code>vtkParticleTracer</code>）。
+- 数据重采样与探测（<code>vtkProbeFilter</code>、<code>vtkResampleWithDataSet</code>）。</p>
+<p><strong>第十二章：标量颜色映射（Scalar Colormap）</strong>
+- 查找表（Lookup Table, LUT）的创建与自定义。
+- 颜色空间与传递函数（Transfer Function）设计。
+- 标量条（Scalar Bar）与图例。
+- 对数映射、离散映射、自定义映射策略。</p>
+<p><strong>第十三章：高级渲染技术</strong>
+- 体渲染（Volume Rendering）——直接体绘制与最大密度投影（MIP）。
+- 透明渲染与深度剥离（Depth Peeling）。
+- 环境光遮蔽（SSAO）与阴影映射（Shadow Mapping）。
+- 基于物理的渲染（PBR）材质。
+- 离屏渲染（Off-screen Rendering）与动画输出。</p>
+<p><strong>第十四章：多数据集与复合可视化</strong>
+- <code>vtkMultiBlockDataSet</code>——层次化场景管理。
+- 复合管道的组织与遍历。
+- 多数据集的时间序列动画。
+- 场景标注（三维文本、图例、坐标轴）。</p>
+<p><strong>第十五章：性能优化与大规模数据</strong>
+- 管道分析与瓶颈诊断。
+- LOD（Level of Detail）策略。
+- 流式处理（Streaming）大规模数据。
+- 多线程处理（SMP）实践。
+- VTK与ParaView的协同工作流。</p>
+<h3 id="673">6.7.3 进入第二卷前的建议</h3>
+<p>在进入第二卷之前，建议你完成以下准备工作：</p>
+<ol>
+<li><strong>完成6.6节的扩展练习</strong>——至少完成练习一和练习二。亲手修改代码是巩固理解的最有效方式。</li>
+<li><strong>回顾你的代码库</strong>——将第一卷中每个章节的示例代码整理到一个项目中，并确保它们都能独立编译运行。这些代码将在第二卷中作为基础不断被引用和扩展。</li>
+<li><strong>熟悉VTK文档</strong>——访问 <a href="https://examples.vtk.org/">https://examples.vtk.org/</a> 浏览官方示例。不需要逐一看完，但浏览目录能让你对"VTK能做什么"有一个更广阔的预期。</li>
+<li><strong>选择一个个人项目</strong>——如果你在做科学研究、课程设计、或出于个人兴趣有一个可视化需求，现在就是开始的时候。即使是简单的"加载一个STL文件并旋转观察"也是很好的起点。</li>
+</ol>
+<h3 id="674">6.7.4 最后的话</h3>
+<p>第一卷教给了你VTK的<strong>基本词汇和语法</strong>。你现在能流畅地写出VTK代码——你知道如何创建Source，如何连接Filter，如何设置Mapper和Actor，如何将一切组装到渲染窗口中。</p>
+<p>但就像学习一门自然语言一样，流利的表达需要的不仅是词汇和语法，还需要对这门语言的<strong>惯用表达、风格和文化</strong>的熟悉。第二卷将帮助你建立这种更深的熟悉度——你将学习如何处理真实世界的复杂数据，如何优化性能，如何创造出不仅"正确"而且"美观"的可视化效果。</p>
+<p><strong>可视化不仅是一门技术，更是一门艺术。</strong> VTK是你的画笔和调色板——而现在，你已经知道如何握笔了。</p>
+<hr />
+<p><em>第一卷（入门篇）完。感谢你的阅读，第二卷再见。</em></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

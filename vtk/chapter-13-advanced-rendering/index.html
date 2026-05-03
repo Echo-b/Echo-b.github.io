@@ -1,0 +1,3553 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../chapter-12-color-mapping/">
+      
+      
+        <link rel="next" href="../chapter-14-multi-dataset/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>第十三章 高级渲染技术 - Echo-b's Tech Notes</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#advanced-rendering" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Echo-b&#39;s Tech Notes" class="md-header__button md-logo" aria-label="Echo-b's Tech Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Echo-b's Tech Notes
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              第十三章 高级渲染技术
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Echo-b&#39;s Tech Notes" class="md-nav__button md-logo" aria-label="Echo-b's Tech Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Echo-b's Tech Notes
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VTK 教程
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    VTK 教程
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    入门篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    入门篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-01-vtk-overview-and-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第一章 VTK概述与环境搭建
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-02-visualization-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二章 可视化管线
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-03-data-model-basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第三章 数据模型基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-04-geometry-and-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第四章 基本几何体与数据源
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-05-rendering-and-interactor/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第五章 渲染与交互机
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-06-volume1-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第六章 入门篇综合实战——3D几何画廊
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    实战篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    实战篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-07-polydata/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第七章 PolyData详解
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-08-unstructured-grid/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第八章 非结构化网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-09-structured-data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第九章 结构化数据
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-10-data-io/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十章 数据I/O
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-11-common-filters/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十一章 常用过滤器
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-12-color-mapping/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十二章 颜色映射与标量可视化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十三章 高级渲染技术
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十三章 高级渲染技术
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        本章导读
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#131-vtkproperty" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.1 材质属性（vtkProperty）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="13.1 材质属性（vtkProperty）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1311-vtkproperty" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.1.1 vtkProperty 概述
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1312-phong" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.1.2 Phong光照模型参数
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1313-setcolor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.1.3 SetColor() 与各分量颜色的关系
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1314-setopacity-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.1.4 SetOpacity() -- 透明度
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1315-setrepresentation-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.1.5 SetRepresentation -- 表示模式
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1316-setedgevisibility-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.1.6 SetEdgeVisibility() -- 边缘叠加显示
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1317" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.1.7 插值模式
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1318" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.1.8 小示例：材质球对比
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#132" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.2 光照模型
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="13.2 光照模型">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1321-vtklight" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.2.1 vtkLight 概述
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1322-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.2.2 光源的基本API
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1323" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.2.3 光源类型
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1324-setcolor-setintensity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.2.4 SetColor() 与 SetIntensity()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1325-three-point-lighting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.2.5 三点式布光（Three-Point Lighting）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1326" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.2.6 光照强度衰减
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1327" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.2.7 锥形光源与位置光源
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1328" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.2.8 环境光
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#133" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.3 纹理映射
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="13.3 纹理映射">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1331" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.3.1 纹理映射概述
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1332-vtktexture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.3.2 vtkTexture 的基本用法
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1333" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.3.3 纹理坐标
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1334" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.3.4 纹理属性控制
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1335" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.3.5 程序化纹理生成
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1336" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.3.6 纹理映射到不同几何体
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1337" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.3.7 纹理映射中的注意事项
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#134" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.4 透明渲染
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="13.4 透明渲染">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1341-vtk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.4.1 透明度在VTK中的挑战
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1342" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.4.2 基本透明度设置
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1343-depth-peeling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.4.3 深度剥离（Depth Peeling）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1344-depth-sorting-for-polydata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.4.4 深度排序（Depth Sorting for PolyData）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1345" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.4.5 两种透明策略的对比
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1346" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.4.6 透明度渲染的实践建议
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1347" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.4.7 小示例：半透明球体展示内部结构
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#135" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.5 代码示例：材质展示画廊
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="13.5 代码示例：材质展示画廊">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1351" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.5.1 程序概述
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1352-c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.5.2 完整C++代码
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1353-cmakeliststxt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.5.3 CMakeLists.txt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1354" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.5.4 编译与运行说明
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#136" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.6 本章小结
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-14-multi-dataset/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十四章 多个数据集处理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-15-volume2-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十五章 实战篇综合实战——CFD后处理可视化工具
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    进阶篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    进阶篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-16-volume-rendering-basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十六章 体渲染基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-17-volume-rendering-advanced/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十七章 体渲染高级技术
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-18-charts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十八章 2D图表系统
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-19-annotation-and-widgets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十九章 三维标注与交互组件
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-20-custom-interaction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十章 自定义交互与Widget
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-21-qt-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十一章 Qt集成
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-22-smp-parallel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十二章 SMP并行入门
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-23-volume3-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十三章 进阶篇综合实战
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        本章导读
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#131-vtkproperty" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.1 材质属性（vtkProperty）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="13.1 材质属性（vtkProperty）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1311-vtkproperty" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.1.1 vtkProperty 概述
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1312-phong" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.1.2 Phong光照模型参数
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1313-setcolor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.1.3 SetColor() 与各分量颜色的关系
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1314-setopacity-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.1.4 SetOpacity() -- 透明度
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1315-setrepresentation-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.1.5 SetRepresentation -- 表示模式
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1316-setedgevisibility-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.1.6 SetEdgeVisibility() -- 边缘叠加显示
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1317" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.1.7 插值模式
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1318" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.1.8 小示例：材质球对比
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#132" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.2 光照模型
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="13.2 光照模型">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1321-vtklight" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.2.1 vtkLight 概述
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1322-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.2.2 光源的基本API
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1323" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.2.3 光源类型
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1324-setcolor-setintensity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.2.4 SetColor() 与 SetIntensity()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1325-three-point-lighting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.2.5 三点式布光（Three-Point Lighting）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1326" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.2.6 光照强度衰减
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1327" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.2.7 锥形光源与位置光源
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1328" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.2.8 环境光
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#133" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.3 纹理映射
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="13.3 纹理映射">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1331" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.3.1 纹理映射概述
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1332-vtktexture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.3.2 vtkTexture 的基本用法
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1333" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.3.3 纹理坐标
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1334" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.3.4 纹理属性控制
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1335" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.3.5 程序化纹理生成
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1336" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.3.6 纹理映射到不同几何体
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1337" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.3.7 纹理映射中的注意事项
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#134" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.4 透明渲染
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="13.4 透明渲染">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1341-vtk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.4.1 透明度在VTK中的挑战
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1342" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.4.2 基本透明度设置
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1343-depth-peeling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.4.3 深度剥离（Depth Peeling）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1344-depth-sorting-for-polydata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.4.4 深度排序（Depth Sorting for PolyData）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1345" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.4.5 两种透明策略的对比
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1346" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.4.6 透明度渲染的实践建议
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1347" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.4.7 小示例：半透明球体展示内部结构
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#135" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.5 代码示例：材质展示画廊
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="13.5 代码示例：材质展示画廊">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1351" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.5.1 程序概述
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1352-c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.5.2 完整C++代码
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1353-cmakeliststxt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.5.3 CMakeLists.txt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1354" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.5.4 编译与运行说明
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#136" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.6 本章小结
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="advanced-rendering">第十三章 高级渲染技术 (Advanced Rendering)</h1>
+<h2 id="_1">本章导读</h2>
+<p>在前面几章中，你已经学会了如何构建各种数据类型、配置Mapper、应用颜色映射来为数据赋予有意义的视觉编码。你也掌握了渲染管道的基本概念——Actor、Renderer、RenderWindow、Interactor之间的协作关系，以及如何设置Camera和Light。然而，到目前为止，我们使用的渲染配置是相当基础的：所有Actor都使用默认的白色材质，光照系统只有一个默认的头灯，纹理和透明度等高级特性尚未涉及。</p>
+<p>本章将带你深入VTK的渲染系统，系统地讲解四大高级渲染技术：</p>
+<ol>
+<li><strong>材质属性（vtkProperty）</strong>——从简单的单一颜色到完整的Phong光照模型参数控制。你将学习漫反射、环境光、镜面反射、自发光等物理启发的外观参数，以及点/线框/表面的表示模式切换。</li>
+<li><strong>光照模型（vtkLight）</strong>——VTK的光照系统支持多种光源类型，包括头灯（Headlight）、相机灯（CameraLight）和场景灯（SceneLight）。你将学习如何配置多光源场景，包括经典的三点式布光（三点照明）用于专业级的科学可视化展示。</li>
+<li><strong>纹理映射（vtkTexture）</strong>——为几何表面贴上图像纹理，极大地增强视觉丰富度。从加载外部图像文件到程序化生成纹理，再到控制纹理的插值、重复和边缘夹持行为。</li>
+<li><strong>透明渲染（Transparency）</strong>——透明度是实现"看穿"效果的关键工具，用于展示物体的内部结构或在不同数据层之间建立深度关系。你将了解深度剥离（Depth Peeling）和深度排序（Depth Sorting）这两种核心的透明度处理方法，以及它们的适用场景和局限性。</li>
+</ol>
+<p>此外，本章提供了一个综合性的"材质展示画廊"代码示例，将所有概念整合到一个可运行的演示程序中：在5x4的网格中排列20个球体，每个球体具有不同的材质参数组合，辅助以三点式布光和透明外球壳，让你直观地感受不同参数对渲染效果的影响。</p>
+<p>本章需要的前置知识包括第5章（渲染管道基础）和
+第12章（颜色映射）。如果你对Actor/Mapper/Renderer的关系还不太清楚，建议先回顾第5章。</p>
+<hr />
+<h2 id="131-vtkproperty">13.1 材质属性（vtkProperty）</h2>
+<h3 id="1311-vtkproperty">13.1.1 vtkProperty 概述</h3>
+<p>在VTK中，<code>vtkProperty</code>是Actor的外观描述器。每个<code>vtkActor</code>持有一个<code>vtkProperty</code>实例，通过<code>actor-&gt;GetProperty()</code>获取。Property控制着渲染的几乎所有外观参数：颜色、光泽度、透明度、表示模式（点/线框/表面）等。</p>
+<p>回顾第5章中Actor的组成：</p>
+<pre><code>vtkActor
+  ├── vtkMapper      -- 定义&quot;画什么&quot;（几何形状）
+  ├── vtkProperty    -- 定义&quot;怎么画&quot;（外观材质）
+  └── Transform      -- 定义&quot;在哪里&quot;（位置、朝向、缩放）
+</code></pre>
+<p>Mapper负责生成几何图元（顶点、索引），Property负责告诉OpenGL如何着色这些图元。当渲染后端（vtkOpenGLPolyDataMapper等）在GPU上绘制时，Property中的参数被翻译为着色器中的统一变量（Uniform），直接影响最终的像素颜色。</p>
+<h3 id="1312-phong">13.1.2 Phong光照模型参数</h3>
+<p>VTK使用经典的<strong>Phong光照模型</strong>（Phong Lighting Model）来模拟材质对光的反应。Phong模型将材质对入射光的反应分解为三个分量：</p>
+<pre><code>最终颜色 = 环境光分量 + 漫反射分量 + 镜面反射分量
+         = Ambient     + Diffuse       + Specular
+</code></pre>
+<p><strong>分量说明：</strong></p>
+<ul>
+<li><strong>环境光（Ambient）</strong>：模拟场景中无处不在的间接光照。即使物体的某个面不直接面向光源，环境光分量也会确保它不完全黑暗。环境光就像是"包围着整个场景的柔和光线"。</li>
+<li><strong>漫反射（Diffuse）</strong>：模拟光线打到粗糙表面时向各个方向均匀散射的效果。漫反射的强度取决于表面法线方向与光源方向之间的夹角——当表面对向光源时最亮，背离光源时最暗。这是通常人们所说的"物体颜色"的主要来源。</li>
+<li><strong>镜面反射（Specular）</strong>：模拟光线在光滑表面上的集中反射，产生高光（Highlight）。镜面反射的强度和集中程度取决于表面的光泽度（Shininess）。镜面反射产生的那一小块明亮区域极大地增强了物体材质的可辨识性——让人一眼看出表面是"金属的"还是"塑料的"。</li>
+</ul>
+<p>此外，还有一个第四分量：</p>
+<ul>
+<li><strong>自发光（Emission）</strong>：模拟物体自身发光的效果。这不是对外部光源的反应，而是物体本身就有颜色输出。自发光颜色会直接加到最终颜色上，不受场景光源的影响。</li>
+</ul>
+<p><strong>VTK中的对应API：</strong></p>
+<pre><code class="language-cpp">// 获取Property对象
+vtkProperty* property = actor-&gt;GetProperty();
+
+// 设置漫反射颜色 -- 物体在光照下的&quot;本色&quot;
+property-&gt;SetDiffuseColor(r, g, b);
+
+// 设置环境光颜色 -- 通常与漫反射颜色相同或稍暗
+property-&gt;SetAmbientColor(r, g, b);
+
+// 设置镜面反射颜色 -- 高光的颜色，通常是白色或浅色
+property-&gt;SetSpecularColor(r, g, b);
+
+// 设置镜面反射强度系数（0.0 到 1.0）
+property-&gt;SetSpecular(0.5);
+
+// 设置镜面反射光泽度/锐度（典型值：10-100）
+property-&gt;SetSpecularPower(30.0);
+
+// 设置自发光颜色 -- 模拟物体自身发光
+property-&gt;SetColor(r, g, b);  // 同时设置漫反射、环境光和镜面反射为同一颜色
+</code></pre>
+<h3 id="1313-setcolor">13.1.3 SetColor() 与各分量颜色的关系</h3>
+<p><code>SetColor(r, g, b)</code>是一个便捷方法，它同时设置漫反射颜色、环境光颜色和镜面反射颜色为相同的值。当你只需要快速设置"物体是什么颜色的"时，这一个调用就够了。</p>
+<p>但在更高级的材质控制中，你通常希望三个分量有不同的值：</p>
+<pre><code class="language-cpp">// 创建一个&quot;金色金属&quot;的材质效果
+property-&gt;SetDiffuseColor(0.8, 0.6, 0.2);     // 金色基调
+property-&gt;SetAmbientColor(0.4, 0.3, 0.1);     // 环境光暗于漫反射（50%）
+property-&gt;SetSpecularColor(1.0, 0.9, 0.6);    // 高光为浅金色（接近白色）
+property-&gt;SetSpecular(0.8);                    // 较强的镜面反射
+property-&gt;SetSpecularPower(60);                 // 集中而尖锐的高光
+
+// 创建一个&quot;哑光塑料&quot;的材质效果
+property-&gt;SetDiffuseColor(0.2, 0.6, 0.8);     // 蓝绿色基调
+property-&gt;SetAmbientColor(0.1, 0.3, 0.4);     // 环境光暗于漫反射
+property-&gt;SetSpecularColor(1.0, 1.0, 1.0);    // 白色高光
+property-&gt;SetSpecular(0.1);                    // 微弱的镜面反射
+property-&gt;SetSpecularPower(5.0);               // 分散而柔和的高光（哑光效果）
+</code></pre>
+<p>经验法则：
+- <strong>金属</strong>：高Specular（0.5-1.0）、高SpecularPower（40-100）、SpecularColor接近光源颜色（白色）。
+- <strong>哑光/橡胶/塑料</strong>：低Specular（0.0-0.2）、低SpecularPower（1-15）。
+- <strong>陶瓷/光泽塑料</strong>：中Specular（0.2-0.6）、中SpecularPower（15-40）。</p>
+<h3 id="1314-setopacity-">13.1.4 SetOpacity() -- 透明度</h3>
+<pre><code class="language-cpp">// 设置不透明度，范围 0.0（完全透明）到 1.0（完全不透明）
+property-&gt;SetOpacity(0.5);   // 50%透明
+</code></pre>
+<p><code>SetOpacity()</code>控制Actor的整体不透明度。值为1.0时物体完全不透明（默认值），值为0.5时物体半透明，值为0.0时物体完全不可见。</p>
+<p>注意：仅仅设置Opacity并不足以获得正确的透明渲染结果。要使透明度正常工作的完整设置，请参考第13.4节（透明渲染）。这里先给出一个快速片段：</p>
+<pre><code class="language-cpp">// 使Actor半透明的快速三步设置
+property-&gt;SetOpacity(0.5);
+renderer-&gt;SetUseDepthPeeling(1);              // 开启深度剥离
+renderer-&gt;SetMaximumNumberOfPeels(10);         // 设置剥离层数
+renderer-&gt;SetOcclusionRatio(0.0);              // 遮挡比例阈值
+</code></pre>
+<h3 id="1315-setrepresentation-">13.1.5 SetRepresentation -- 表示模式</h3>
+<p><code>vtkProperty</code>支持三种基本的表示模式，通过<code>SetRepresentation()</code>切换：</p>
+<pre><code class="language-cpp">// 点模式 -- 每个顶点绘制为一个点
+property-&gt;SetRepresentationToPoints();
+
+// 线框模式 -- 仅绘制多边形边缘，不填充面
+property-&gt;SetRepresentationToWireframe();
+
+// 表面模式 -- 标准的多边形填充绘制（默认）
+property-&gt;SetRepresentationToSurface();
+</code></pre>
+<p><strong>点模式和线框模式下的尺寸控制：</strong></p>
+<pre><code class="language-cpp">// 点模式下每个点的大小（像素单位）
+property-&gt;SetPointSize(5.0);
+
+// 线框模式下线的宽度（像素单位）
+property-&gt;SetLineWidth(2.0);
+</code></pre>
+<h3 id="1316-setedgevisibility-">13.1.6 SetEdgeVisibility() -- 边缘叠加显示</h3>
+<p>有时候，同时看到表面和网格线是非常有用的——比如在有限元分析中，你希望看到网格的拓扑结构同时保持对形状的感知。<code>SetEdgeVisibility()</code>提供了这种能力：</p>
+<pre><code class="language-cpp">// 在表面绘制的基础上叠加显示多边形的边缘
+property-&gt;SetEdgeVisibility(true);
+
+// 设置边缘的颜色
+property-&gt;SetEdgeColor(0.0, 0.0, 0.0);  // 黑色边缘线
+
+// 设置边缘线的宽度
+property-&gt;SetLineWidth(1.5);
+</code></pre>
+<p>当<code>SetEdgeVisibility(true)</code>与表面模式组合使用时，Actor首先绘制填充的多边形表面，然后在每个多边形的边缘上叠加线段。这是一种高效的"线框叠加"技术，比纯粹的线框模式更美观，比纯粹的表面模式展示了更多的几何信息。</p>
+<h3 id="1317">13.1.7 插值模式</h3>
+<p>对于光照计算在多边形内部的插值方式，VTK支持两种模式：</p>
+<pre><code class="language-cpp">// 平面着色（Flat Shading）-- 每个多边形使用单一法线，产生棱角分明的外观
+property-&gt;SetInterpolationToFlat();
+
+// 光滑着色（Gouraud Shading）-- 顶点法线在多边形内部线性插值，产生平滑外观
+property-&gt;SetInterpolationToGouraud();
+
+// Phong着色 -- 逐像素法线插值，比Gouraud产生更真实的高光
+property-&gt;SetInterpolationToPhong();
+</code></pre>
+<p>默认情况下，VTK使用Gouraud着色。对于粗糙的多边形网格（低分辨率球体等），Phong着色可以显著改善视觉质量，但需要额外的GPU计算。</p>
+<h3 id="1318">13.1.8 小示例：材质球对比</h3>
+<p>下面是一个快速示例，在并排的视口中展示具有不同材质属性的两个球体：</p>
+<pre><code class="language-cpp">#include &lt;vtkActor.h&gt;
+#include &lt;vtkCamera.h&gt;
+#include &lt;vtkNamedColors.h&gt;
+#include &lt;vtkPolyDataMapper.h&gt;
+#include &lt;vtkProperty.h&gt;
+#include &lt;vtkRenderWindow.h&gt;
+#include &lt;vtkRenderWindowInteractor.h&gt;
+#include &lt;vtkRenderer.h&gt;
+#include &lt;vtkSphereSource.h&gt;
+
+int main()
+{
+    // --- 数据源：两个球体 ---
+    vtkNew&lt;vtkSphereSource&gt; sphere1;
+    sphere1-&gt;SetThetaResolution(64);
+    sphere1-&gt;SetPhiResolution(64);
+
+    vtkNew&lt;vtkSphereSource&gt; sphere2;
+    sphere2-&gt;SetThetaResolution(64);
+    sphere2-&gt;SetPhiResolution(64);
+
+    // --- 左侧球体：金属金色材质 ---
+    vtkNew&lt;vtkPolyDataMapper&gt; mapper1;
+    mapper1-&gt;SetInputConnection(sphere1-&gt;GetOutputPort());
+
+    vtkNew&lt;vtkActor&gt; actor1;
+    actor1-&gt;SetMapper(mapper1);
+    actor1-&gt;GetProperty()-&gt;SetDiffuseColor(0.8, 0.6, 0.2);
+    actor1-&gt;GetProperty()-&gt;SetAmbientColor(0.4, 0.3, 0.1);
+    actor1-&gt;GetProperty()-&gt;SetSpecularColor(1.0, 0.9, 0.6);
+    actor1-&gt;GetProperty()-&gt;SetSpecular(0.9);
+    actor1-&gt;GetProperty()-&gt;SetSpecularPower(80);
+
+    // --- 右侧球体：蓝色哑光塑料材质 ---
+    vtkNew&lt;vtkPolyDataMapper&gt; mapper2;
+    mapper2-&gt;SetInputConnection(sphere2-&gt;GetOutputPort());
+
+    vtkNew&lt;vtkActor&gt; actor2;
+    actor2-&gt;SetMapper(mapper2);
+    actor2-&gt;GetProperty()-&gt;SetDiffuseColor(0.2, 0.4, 0.8);
+    actor2-&gt;GetProperty()-&gt;SetAmbientColor(0.1, 0.2, 0.4);
+    actor2-&gt;GetProperty()-&gt;SetSpecularColor(1.0, 1.0, 1.0);
+    actor2-&gt;GetProperty()-&gt;SetSpecular(0.15);
+    actor2-&gt;GetProperty()-&gt;SetSpecularPower(8);
+
+    // --- 左侧渲染器 ---
+    vtkNew&lt;vtkRenderer&gt; renderer1;
+    renderer1-&gt;SetViewport(0.0, 0.0, 0.5, 1.0);
+    renderer1-&gt;AddActor(actor1);
+    renderer1-&gt;SetBackground(0.15, 0.15, 0.15);
+    renderer1-&gt;GetActiveCamera()-&gt;SetPosition(0, 0, 6);
+
+    // --- 右侧渲染器 ---
+    vtkNew&lt;vtkRenderer&gt; renderer2;
+    renderer2-&gt;SetViewport(0.5, 0.0, 1.0, 1.0);
+    renderer2-&gt;AddActor(actor2);
+    renderer2-&gt;SetBackground(0.15, 0.15, 0.15);
+    renderer2-&gt;SetActiveCamera(renderer1-&gt;GetActiveCamera()); // 共享相机
+
+    // --- 渲染窗口 ---
+    vtkNew&lt;vtkRenderWindow&gt; renderWindow;
+    renderWindow-&gt;SetSize(800, 400);
+    renderWindow-&gt;AddRenderer(renderer1);
+    renderWindow-&gt;AddRenderer(renderer2);
+
+    vtkNew&lt;vtkRenderWindowInteractor&gt; interactor;
+    interactor-&gt;SetRenderWindow(renderWindow);
+    interactor-&gt;Initialize();
+    interactor-&gt;Start();
+
+    return 0;
+}
+</code></pre>
+<p>从运行结果中，你可以清楚地观察到：左边的金色球体有锐利而明亮的高光（镜面反射分量强），而右边的蓝色球体则呈现柔和均匀的外观（镜面反射分量弱）。</p>
+<hr />
+<h2 id="132">13.2 光照模型</h2>
+<h3 id="1321-vtklight">13.2.1 vtkLight 概述</h3>
+<p><code>vtkLight</code>是VTK中光源的抽象。每个<code>vtkRenderer</code>维护一组光源，默认情况下包含一个<strong>头灯</strong>（Headlight）——一个位置始终跟随相机的光源函数。你可以添加、移除和修改光源来创建所需的光照环境。</p>
+<p>光源控制是创建专业级可视化作品的关键技能。一个精心布置的光照方案可以使数据的形状和结构更加清晰可辨，而糟糕的光照则会让最精细的模型也显得平板无趣。</p>
+<h3 id="1322-api">13.2.2 光源的基本API</h3>
+<pre><code class="language-cpp">#include &lt;vtkLight.h&gt;
+
+vtkNew&lt;vtkLight&gt; light;
+
+// 设置光源位置（世界坐标系）
+light-&gt;SetPosition(x, y, z);
+
+// 设置光源的焦点/目标点 -- 光源指向这个点
+light-&gt;SetFocalPoint(x, y, z);
+
+// 设置光源颜色
+light-&gt;SetColor(r, g, b);
+
+// 设置光源强度（默认1.0）
+light-&gt;SetIntensity(1.0);
+
+// 打开/关闭光源
+light-&gt;SwitchOn();
+light-&gt;SwitchOff();
+
+// 将光源添加到渲染器
+renderer-&gt;AddLight(light);
+
+// 移除默认头灯
+renderer-&gt;RemoveAllLights();
+</code></pre>
+<h3 id="1323">13.2.3 光源类型</h3>
+<p>VTK定义了三种光源类型，通过<code>SetLightType()</code>设置：</p>
+<p><strong>1. 头灯（Headlight / VTK_LIGHT_TYPE_HEADLIGHT）</strong></p>
+<pre><code class="language-cpp">light-&gt;SetLightTypeToHeadlight();
+</code></pre>
+<p>头灯始终位于相机位置，照射方向与相机视线方向一致。这是默认光源的行为。头灯确保无论你将相机旋转到什么角度，场景始终有来自观察者方向的光照。头灯的缺点是：它会产生"平坦"的光照效果——因为光照方向与视线方向一致，所有面向相机的表面看起来都很亮，缺少阴影和立体感的提示。</p>
+<p><strong>2. 场景灯（SceneLight / VTK_LIGHT_TYPE_SCENE_LIGHT）</strong></p>
+<pre><code class="language-cpp">light-&gt;SetLightTypeToSceneLight();
+</code></pre>
+<p>场景灯的位置和焦点在世界坐标系中固定不变。无论相机如何旋转，光源始终照射场景的同一区域。这是创建真实世界光照效果的方式——模拟太阳从特定方向照射场景。</p>
+<p><strong>3. 相机灯（CameraLight / VTK_LIGHT_TYPE_CAMERA_LIGHT）</strong></p>
+<pre><code class="language-cpp">light-&gt;SetLightTypeToCameraLight();
+</code></pre>
+<p>相机灯的位置和焦点在相机坐标系中定义。当相机移动时，光源也跟随移动，但光源相对于相机的方向和位置保持不变。这介于Headlight和SceneLight之间——提供了比Headlight更灵活的光照方向控制，同时保持了相机移动时的便利性。</p>
+<p><strong>场景灯 vs. 相机灯的使用场景：</strong></p>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>推荐类型</th>
+<th>原因</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>单次检查数据</td>
+<td>头灯</td>
+<td>简单，不需要额外配置</td>
+</tr>
+<tr>
+<td>从固定角度展示</td>
+<td>场景灯</td>
+<td>保持光照一致性</td>
+</tr>
+<tr>
+<td>交互式探索</td>
+<td>相机灯</td>
+<td>跟随视角但保持光照方向感</td>
+</tr>
+<tr>
+<td>出版物级别图片</td>
+<td>场景灯（多点布光）</td>
+<td>精细控制每个光源的位置和方向</td>
+</tr>
+</tbody>
+</table>
+<h3 id="1324-setcolor-setintensity">13.2.4 SetColor() 与 SetIntensity()</h3>
+<p>光源的颜色和强度共同决定照射到物体表面的光的实际效果：</p>
+<pre><code class="language-cpp">// 偏暖的白色光（微微偏黄）
+light-&gt;SetColor(1.0, 0.95, 0.8);
+light-&gt;SetIntensity(1.2);  // 稍微增强
+
+// 冷色补光（偏蓝）
+light-&gt;SetColor(0.7, 0.8, 1.0);
+light-&gt;SetIntensity(0.5);  // 强度减半
+</code></pre>
+<p>光照强度的工作原理：光源颜色和强度相乘得到最终投射到物体表面的光量。因此，<code>SetColor(1.0, 0.5, 0.5)</code> + <code>SetIntensity(2.0)</code>等价于<code>SetColor(2.0, 1.0, 1.0)</code> + <code>SetIntensity(1.0)</code>。不过请注意，颜色值超过1.0时可能在渲染后端产生超亮度（HDR-like）效果，通常建议将颜色分量限制在[0, 1]范围内，通过调整Intensity来控制亮度。</p>
+<h3 id="1325-three-point-lighting">13.2.5 三点式布光（Three-Point Lighting）</h3>
+<p>三点式布光是影视和摄影中的经典布光技术，也是科学可视化中获得专业外观的主要方法。三点式布光包含三个光源：</p>
+<pre><code>        主光源 (Key Light)
+        │
+        │  45°
+        │╲
+        │ ╲
+        │  ╲
+        │  物体
+       ╱
+      ╱ 45°
+     ╱
+    补光 (Fill Light)
+    强度：主光源的40%-60%
+
+        背光源 (Back Light / Rim Light)
+        │ 从物体后方照射
+        │ 勾画轮廓边缘
+</code></pre>
+<p><strong>主光源（Key Light）</strong>：最主要的光源，提供场景的基本光照和方向感。通常放置在相机前方偏一侧约30-45度、偏上方约30-45度的位置。主光源的强度最高（1.0），色调偏暖。</p>
+<p><strong>补光（Fill Light）</strong>：放置在另一侧，用于填充主光源产生的阴影，避免暗面完全变黑。强度通常为主光源的40%-60%，色调偏中或偏冷。</p>
+<p><strong>背光源（Back Light / Rim Light）</strong>：从物体的后方或侧面照射，在物体边缘产生亮边（Rim Lighting），将物体与背景分离开来，增强立体感和深度感。强度可以接近主光源，位置在物体的后方。</p>
+<p><strong>三点式布光在VTK中的实现：</strong></p>
+<pre><code class="language-cpp">vtkNew&lt;vtkRenderer&gt; renderer;
+renderer-&gt;RemoveAllLights();  // 先移除默认头灯
+
+// --- 主光源（Key Light）：从右上方照射 ---
+vtkNew&lt;vtkLight&gt; keyLight;
+keyLight-&gt;SetLightTypeToSceneLight();
+keyLight-&gt;SetPosition(5.0, 5.0, 5.0);
+keyLight-&gt;SetFocalPoint(0.0, 0.0, 0.0);
+keyLight-&gt;SetColor(1.0, 0.95, 0.9);
+keyLight-&gt;SetIntensity(1.0);
+renderer-&gt;AddLight(keyLight);
+
+// --- 补光（Fill Light）：从左下方照射 ---
+vtkNew&lt;vtkLight&gt; fillLight;
+fillLight-&gt;SetLightTypeToSceneLight();
+fillLight-&gt;SetPosition(-4.0, -2.0, 0.0);
+fillLight-&gt;SetFocalPoint(0.0, 0.0, 0.0);
+fillLight-&gt;SetColor(0.7, 0.8, 1.0);
+fillLight-&gt;SetIntensity(0.5);
+renderer-&gt;AddLight(fillLight);
+
+// --- 背光源（Back Light）：从后方照射 ---
+vtkNew&lt;vtkLight&gt; backLight;
+backLight-&gt;SetLightTypeToSceneLight();
+backLight-&gt;SetPosition(0.0, 2.0, -6.0);
+backLight-&gt;SetFocalPoint(0.0, 0.0, 0.0);
+backLight-&gt;SetColor(1.0, 1.0, 1.0);
+backLight-&gt;SetIntensity(0.8);
+renderer-&gt;AddLight(backLight);
+</code></pre>
+<h3 id="1326">13.2.6 光照强度衰减</h3>
+<p>VTK光源支持距离衰减，使得离光源越远的物体越暗（模拟真实世界的平方反比定律）：</p>
+<pre><code class="language-cpp">// 启用光照衰减
+light-&gt;SetAttenuationValues(a0, a1, a2);
+
+// 最终的衰减因子 = 1.0 / (a0 + a1*d + a2*d*d)
+// 其中 d 是光源到物体表面点的距离
+
+// 示例：平方反比衰减（近似真实世界）
+light-&gt;SetAttenuationValues(0.0, 0.0, 1.0);
+
+// 示例：线性衰减
+light-&gt;SetAttenuationValues(0.0, 1.0, 0.0);
+
+// 示例：无衰减（默认）
+light-&gt;SetAttenuationValues(1.0, 0.0, 0.0);
+</code></pre>
+<p>默认情况下，VTK光源不使用距离衰减（<code>a0=1, a1=0, a2=0</code>）。这在科学可视化中通常是有意的设计选择——你通常希望场景中所有部分的光照均匀一致，以便准确比较不同区域的数据特征。但如果你在创建演示或动画，启用衰减可以增加真实感。</p>
+<h3 id="1327">13.2.7 锥形光源与位置光源</h3>
+<p>VTK支持将光源限制在一个锥形区域内（类似聚光灯效果）：</p>
+<pre><code class="language-cpp">// 设置锥形光源
+light-&gt;SetConeAngle(30.0);         // 锥角（度），范围 0-90
+
+// 设置光源的位置性
+light-&gt;SetPositional(true);        // 启用位置光源（有锥形和衰减）
+light-&gt;SetPositional(false);       // 方向光源（平行光，无锥形和衰减，默认）
+
+// 锥形光源的指数衰减
+light-&gt;SetExponent(5.0);           // 锥形区域内从中心到边缘的衰减指数
+</code></pre>
+<p>当<code>SetPositional(true)</code>且<code>SetConeAngle()</code>小于90度时，光源效果类似于一个聚光灯——只照射锥形区域内的物体。这在需要突出显示场景中某一特定部分时非常有用。</p>
+<h3 id="1328">13.2.8 环境光</h3>
+<p>除了点光源和方向光源外，VTK场景还有一个全局环境光设置：</p>
+<pre><code class="language-cpp">// 设置环境光强度（0.0 到 1.0）
+renderer-&gt;SetEnvironmentalLighting(true);   // 基于上/下方向的环境光（默认false）
+</code></pre>
+<p>或者，你可以手动设置一个带有高环境光分量的光源来模拟全局间接光照：</p>
+<pre><code class="language-cpp">// 不推荐，但在某些情况下有用：
+// 将renderer的全局环境光（与Property的ambient不同）设置为较高值
+renderer-&gt;SetEnvironmentLighting(true);
+renderer-&gt;SetEnvironmentConstantColor(0.2, 0.2, 0.25);   // 偏蓝的暗环境光
+</code></pre>
+<p>需要注意的是，<code>renderer</code>层面的环境光与<code>vtkProperty</code>上的<code>SetAmbientColor()</code>是不同的概念——前者是场景中无处不在的统一基底光照，后者是材质对环境光的反射率。两者共同决定了环境光分量对最终像素颜色的贡献。</p>
+<hr />
+<h2 id="133">13.3 纹理映射</h2>
+<h3 id="1331">13.3.1 纹理映射概述</h3>
+<p><strong>纹理映射</strong>（Texture Mapping）是将图像（纹理）贴附到三维几何表面上的技术。纹理映射极大地增强了视觉丰富度——用少量的三角形配合高分辨率的纹理，可以产生比纯几何建模更丰富的视觉细节。</p>
+<p>在VTK中，纹理映射由<code>vtkTexture</code>类实现。它的核心工作流程是：</p>
+<pre><code>图像数据（vtkImageData） --&gt; vtkTexture --&gt; Actor（通过 SetTexture()）
+</code></pre>
+<h3 id="1332-vtktexture">13.3.2 vtkTexture 的基本用法</h3>
+<pre><code class="language-cpp">#include &lt;vtkTexture.h&gt;
+#include &lt;vtkJPEGReader.h&gt;    // 或 vtkPNGReader, vtkBMPReader 等
+
+// 步骤1：加载图像数据
+vtkNew&lt;vtkJPEGReader&gt; reader;
+reader-&gt;SetFileName(&quot;texture.jpg&quot;);
+reader-&gt;Update();
+
+// 步骤2：创建纹理对象
+vtkNew&lt;vtkTexture&gt; texture;
+texture-&gt;SetInputConnection(reader-&gt;GetOutputPort());
+
+// 步骤3：将纹理应用到Actor
+actor-&gt;SetTexture(texture);
+</code></pre>
+<h3 id="1333">13.3.3 纹理坐标</h3>
+<p>为了让纹理正确地贴到几何表面上，几何数据必须包含<strong>纹理坐标</strong>（Texture Coordinates，通常称为TCoords或UV坐标）。纹理坐标是定义在每个顶点上的一组二维坐标（u, v），范围通常为[0, 1]，表示在纹理图像上的横向和纵向位置。</p>
+<pre><code>纹理图像的坐标系统：
+(0, 1) +---------------+ (1, 1)
+       |               |
+       |   纹理图像     |
+       |               |
+(0, 0) +---------------+ (1, 0)
+</code></pre>
+<p>VTK的内置源（<code>vtkSphereSource</code>、<code>vtkPlaneSource</code>、<code>vtkCylinderSource</code>等）默认会生成纹理坐标。如果你使用的是自定义几何数据，需要确保它包含TCoords数组。</p>
+<pre><code class="language-cpp">// 检查数据是否包含纹理坐标
+vtkDataArray* tcoords = polydata-&gt;GetPointData()-&gt;GetTCoords();
+if (tcoords)
+{
+    std::cout &lt;&lt; &quot;Texture coordinates found. Dimensions: &quot;
+              &lt;&lt; tcoords-&gt;GetNumberOfComponents() &lt;&lt; &quot; components.&quot; &lt;&lt; std::endl;
+}
+else
+{
+    std::cout &lt;&lt; &quot;No texture coordinates available.&quot; &lt;&lt; std::endl;
+}
+
+// 一些source提供了控制纹理坐标生成的选项
+sphereSource-&gt;SetGenerateTCoords(true);   // 某些source支持此选项
+</code></pre>
+<h3 id="1334">13.3.4 纹理属性控制</h3>
+<p><code>vtkTexture</code>提供了多种属性来控制纹理采样的行为：</p>
+<pre><code class="language-cpp">// 纹理插值
+texture-&gt;SetInterpolate(true);    // 开启双线性插值（默认）：纹理放大时平滑
+texture-&gt;SetInterpolate(false);   // 关闭插值：纹理放大时呈现像素块状
+
+// 纹理重复
+texture-&gt;SetRepeat(true);         // 允许纹理在[0,1]范围外重复
+texture-&gt;SetRepeat(false);        // [0,1]范围外的坐标被夹持到边缘（默认）
+
+// 边缘夹持
+texture-&gt;SetEdgeClamp(true);      // 限制纹理坐标不超出[0,1]范围
+texture-&gt;SetEdgeClamp(false);     // 允许纹理坐标超出（配合Repeat或镜像）
+
+// 纹理质量
+texture-&gt;SetQuality(32);          // 纹理采样的最大各向异性级别（默认1）
+
+// 纹理的颜色混合
+texture-&gt;SetBlendingMode(vtkTexture::VTK_TEXTURE_BLENDING_MODE_MODULATE);
+// 支持的模式：
+//   VTK_TEXTURE_BLENDING_MODE_NONE          -- 仅使用纹理颜色
+//   VTK_TEXTURE_BLENDING_MODE_REPLACE       -- 用纹理替换底层颜色
+//   VTK_TEXTURE_BLENDING_MODE_MODULATE      -- 纹理颜色与底层颜色相乘
+//   VTK_TEXTURE_BLENDING_MODE_ADD           -- 纹理颜色与底层颜色相加
+//   VTK_TEXTURE_BLENDING_MODE_ADD_SIGNED    -- 带符号的加法
+//   VTK_TEXTURE_BLENDING_MODE_INTERPOLATE   -- 插值混合
+//   VTK_TEXTURE_BLENDING_MODE_SUBTRACT      -- 底层颜色减去纹理颜色
+</code></pre>
+<h3 id="1335">13.3.5 程序化纹理生成</h3>
+<p>有时候你不需要从文件加载纹理图像，而是希望程序化地生成纹理。下面是一个创建棋盘格纹理的示例：</p>
+<pre><code class="language-cpp">#include &lt;vtkImageData.h&gt;
+#include &lt;vtkUnsignedCharArray.h&gt;
+
+vtkSmartPointer&lt;vtkTexture&gt; CreateCheckerboardTexture(
+    int size, int squaresPerRow, double r1, double g1, double b1,
+                                   double r2, double g2, double b2)
+{
+    // 创建图像数据
+    vtkNew&lt;vtkImageData&gt; image;
+    image-&gt;SetDimensions(size, size, 1);
+    image-&gt;AllocateScalars(VTK_UNSIGNED_CHAR, 3);  // RGB三通道
+
+    unsigned char* pixels = static_cast&lt;unsigned char*&gt;(
+        image-&gt;GetScalarPointer());
+
+    int squareSize = size / squaresPerRow;
+
+    for (int y = 0; y &lt; size; y++)
+    {
+        for (int x = 0; x &lt; size; x++)
+        {
+            int idx = (y * size + x) * 3;   // 3 channels per pixel
+            int sqX = x / squareSize;
+            int sqY = y / squareSize;
+
+            if ((sqX + sqY) % 2 == 0)
+            {
+                pixels[idx]     = static_cast&lt;unsigned char&gt;(r1 * 255);
+                pixels[idx + 1] = static_cast&lt;unsigned char&gt;(g1 * 255);
+                pixels[idx + 2] = static_cast&lt;unsigned char&gt;(b1 * 255);
+            }
+            else
+            {
+                pixels[idx]     = static_cast&lt;unsigned char&gt;(r2 * 255);
+                pixels[idx + 1] = static_cast&lt;unsigned char&gt;(g2 * 255);
+                pixels[idx + 2] = static_cast&lt;unsigned char&gt;(b2 * 255);
+            }
+        }
+    }
+
+    // 创建纹理
+    vtkNew&lt;vtkTexture&gt; texture;
+    texture-&gt;SetInputData(image);
+    texture-&gt;SetInterpolate(true);   // 插值以获得平滑的纹理采样
+
+    return texture;
+}
+
+// 使用示例：创建红色-浅灰色的棋盘格
+auto checkerTex = CreateCheckerboardTexture(256, 8,
+    0.9, 0.2, 0.2,    // 颜色1：红色
+    0.9, 0.9, 0.9);   // 颜色2：浅灰
+actor-&gt;SetTexture(checkerTex);
+</code></pre>
+<p>类似地，你可以创建条纹纹理、渐变纹理、噪点纹理等。程序化纹理在展示几何形状（如通过棋盘格展示曲面的参数化质量）和数据可视化中非常有用。</p>
+<h3 id="1336">13.3.6 纹理映射到不同几何体</h3>
+<p><strong>平面纹理映射：</strong></p>
+<p>对于<code>vtkPlaneSource</code>，纹理坐标默认在平面的四个角生成，纹理图像被拉伸以填充整个平面。</p>
+<pre><code class="language-cpp">vtkNew&lt;vtkPlaneSource&gt; plane;
+plane-&gt;SetOrigin(-2.0, -2.0, 0.0);
+plane-&gt;SetPoint1(4.0, 0.0, 0.0);
+plane-&gt;SetPoint2(0.0, 4.0, 0.0);
+// plane自动生成纹理坐标：(0,0), (1,0), (0,1), (1,1)
+</code></pre>
+<p><strong>球面纹理映射：</strong></p>
+<p>对于<code>vtkSphereSource</code>，纹理坐标通过球面参数化自动生成——纹理在球面上环绕，在两极处汇聚。这在两极附近会产生可见的纹理压缩（纹理畸变），这是球面参数化固有的特性。</p>
+<pre><code class="language-cpp">vtkNew&lt;vtkSphereSource&gt; sphere;
+sphere-&gt;SetThetaResolution(64);
+sphere-&gt;SetPhiResolution(64);
+// 纹理坐标自动生成：theta -&gt; u, phi -&gt; v
+</code></pre>
+<p><strong>圆柱纹理映射：</strong></p>
+<p>对于<code>vtkCylinderSource</code>，纹理沿圆周方向环绕，沿高度方向线性分布。</p>
+<h3 id="1337">13.3.7 纹理映射中的注意事项</h3>
+<ol>
+<li>
+<p><strong>纹理尺寸</strong>：OpenGL对纹理尺寸有限制。大多数现代GPU支持最高16384x16384的纹理，但为了性能和兼容性，建议使用2的幂次方尺寸（256x256、512x512、1024x1024等）。VTK会自动调整非2的幂次方纹理，但这会引入额外的处理开销。</p>
+</li>
+<li>
+<p><strong>纹理内存</strong>：每个RGB纹理占用的GPU内存为 <code>width * height * 3</code> 字节（未压缩）。单个4096x4096的RGB纹理占用约48MB显存。在场景中使用大量大尺寸纹理时要注意显存上限。</p>
+</li>
+<li>
+<p><strong>纹理坐标缺失</strong>：如果几何数据没有纹理坐标，纹理将无法正确显示。确保数据源包含TCoords，或使用<code>vtkTextureMapToPlane</code>/<code>vtkTextureMapToSphere</code>/<code>vtkTextureMapToCylinder</code>等过滤器来程序化生成纹理坐标。</p>
+</li>
+<li>
+<p><strong>纹理与光照的交互</strong>：当Actor同时设置了纹理和材质颜色（Property）时，最终颜色是纹理颜色与光照计算结果的组合。具体行为取决于<code>SetBlendingMode()</code>的设置。</p>
+</li>
+</ol>
+<hr />
+<h2 id="134">13.4 透明渲染</h2>
+<h3 id="1341-vtk">13.4.1 透明度在VTK中的挑战</h3>
+<p>透明度（半透明渲染）是科学可视化中的一个重要但具有挑战性的主题。核心困难在于：<strong>正确的透明度渲染要求从远到近的顺序绘制</strong>。这是因为当光线穿过多个半透明表面时，颜色混合的顺序决定了最终结果。</p>
+<p>考虑两个半透明物体：物体A（红色，位于后方）和物体B（蓝色，位于前方）。正确的渲染顺序是：
+1. 先绘制A（后方）
+2. 再绘制B（前方）——B的半透明蓝色与A的红色混合</p>
+<p>如果顺序反过来（先B后A），A的红色会错误地覆盖B的蓝色对应的像素。</p>
+<h3 id="1342">13.4.2 基本透明度设置</h3>
+<p>设置透明度的第一步是在Property上设置Opacity：</p>
+<pre><code class="language-cpp">actor-&gt;GetProperty()-&gt;SetOpacity(0.5);  // 50%透明
+</code></pre>
+<p>但仅仅设置Opacity是不够的。为了让VTK正确处理透明度，你需要选择以下几种策略之一。</p>
+<h3 id="1343-depth-peeling">13.4.3 深度剥离（Depth Peeling）</h3>
+<p><strong>深度剥离</strong>是VTK为透明渲染提供的最通用的解决方案。它通过多遍渲染（Multi-pass Rendering）逐层"剥离"深度信息，从最前面开始，一层层地渲染，最后按从后到前的顺序合成。</p>
+<pre><code class="language-cpp">// 在渲染器上启用深度剥离
+renderer-&gt;SetUseDepthPeeling(true);
+
+// 设置最大剥离层数（默认4，建议4-10）
+// 层数越多，能正确处理的透明层数越多，但性能越差
+renderer-&gt;SetMaximumNumberOfPeels(10);
+
+// 设置遮挡比例（0到1，默认0.0）
+// 当一段像素的透明片元比例超过此阈值时，停止剥离
+renderer-&gt;SetOcclusionRatio(0.0);
+</code></pre>
+<p><strong>深度剥离的工作原理：</strong></p>
+<p>深度剥离对每一轮（Peel）执行一次额外的渲染遍历：
+1. <strong>第一轮</strong>：渲染所有物体的最前面的可见表面，但不清除这些像素的深度缓冲。然后丢弃这些片元，为下一轮做准备。
+2. <strong>第二轮</strong>：渲染所有物体时跳过第一轮已经处理过的像素（通过比较深度缓冲），获得第二层可见表面。
+3. <strong>第三轮</strong>：类似地，获得第三层可见表面。
+4. ...依此类推。
+5. <strong>合成</strong>：将所有层按从后到前的顺序进行alpha混合，生成最终的透明效果。</p>
+<p><strong>优点</strong>：无需对几何体进行排序，可以直接处理交叉和重叠的复杂透明几何体。对<code>vtkActor</code>的绝大多数渲染场景都有效。</p>
+<p><strong>缺点</strong>：每增加一层剥离，就需要一次额外的全场景渲染遍历。10层剥离意味着渲染开销大约是正常的1+10=11倍。对于复杂的场景（大量多边形），这可能导致显著的性能下降。对于动画和实时交互场景，建议使用较少的剥离层数（4-6层）。</p>
+<h3 id="1344-depth-sorting-for-polydata">13.4.4 深度排序（Depth Sorting for PolyData）</h3>
+<p><strong>深度排序</strong>是针对<code>vtkPolyData</code>的另一种透明度处理策略。它通过对多边形进行排序来确保正确的绘制顺序。</p>
+<pre><code class="language-cpp">#include &lt;vtkDepthSortPolyData.h&gt;
+
+// 创建深度排序过滤器
+vtkNew&lt;vtkDepthSortPolyData&gt; depthSort;
+depthSort-&gt;SetInputConnection(source-&gt;GetOutputPort());
+depthSort-&gt;SetDirectionToBackToFront();   // 从后到前排序
+// 或 depthSort-&gt;SetDirectionToFrontToBack(); // 从前到后
+depthSort-&gt;SetCamera(renderer-&gt;GetActiveCamera());  // 排序依据的相机
+depthSort-&gt;SetSortScalarMode(VTK_SORT_BY_VALUE);   // 按深度值排序
+
+// 将排序后的数据输入Mapper
+vtkNew&lt;vtkPolyDataMapper&gt; mapper;
+mapper-&gt;SetInputConnection(depthSort-&gt;GetOutputPort());
+</code></pre>
+<p><strong>深度排序的工作方式：</strong></p>
+<p><code>vtkDepthSortPolyData</code>计算<code>vtkPolyData</code>中每个单元（Cell）的深度（到相机的距离），然后按照指定方向对单元重新排序。重新排序后的数据集被传递给Mapper渲染，由于单元已经按深度排列，alpha混合可以正确进行。</p>
+<p><strong>优点</strong>：单次渲染遍历，比深度剥离更快。对于简单的不交叉的透明PolyData效果很好。</p>
+<p><strong>缺点</strong>：排序是在CPU上按单元进行的，对于非常大的Polydata（数百万多边形），排序本身的开销可能很大。此外，深度排序只对每个模型的单元进行排序，<strong>不能处理不同Actor之间的深度关系</strong>（不同Actor之间的交叉仍然可能出现错误的渲染顺序）。它也不能处理单个多边形内部的深度交叉。</p>
+<h3 id="1345">13.4.5 两种透明策略的对比</h3>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>深度剥离（Depth Peeling）</th>
+<th>深度排序（DepthSortPolyData）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>工作原理</td>
+<td>多遍渲染，逐层剥离深度</td>
+<td>CPU排序多边形的绘制顺序</td>
+</tr>
+<tr>
+<td>处理交叉几何体</td>
+<td>正确</td>
+<td>单个Actor内可能出错</td>
+</tr>
+<tr>
+<td>处理多个Actor</td>
+<td>正确</td>
+<td>不同Actor间可能出错</td>
+</tr>
+<tr>
+<td>性能</td>
+<td>慢（每层一遍渲染）</td>
+<td>较快（但CPU排序开销）</td>
+</tr>
+<tr>
+<td>适用场景</td>
+<td>通用透明场景</td>
+<td>单个Actor的无交叉透明几何体</td>
+</tr>
+<tr>
+<td>GPU/CPU负载</td>
+<td>GPU负载高</td>
+<td>CPU排序负载高</td>
+</tr>
+<tr>
+<td>硬件要求</td>
+<td>需要GPU支持深度纹理</td>
+<td>无特殊要求</td>
+</tr>
+<tr>
+<td>建议</td>
+<td>质量优先的选择</td>
+<td>性能优先的选择</td>
+</tr>
+</tbody>
+</table>
+<h3 id="1346">13.4.6 透明度渲染的实践建议</h3>
+<ol>
+<li>
+<p><strong>优先使用深度剥离</strong>：对于大多数科学可视化场景，深度剥离是正确的选择。它虽然慢一些，但渲染结果是正确的。非交互式的出图渲染（如保存高分辨率截图）推荐使用深度剥离。</p>
+</li>
+<li>
+<p><strong>限制剥离层数</strong>：对于实时交互场景，将<code>SetMaximumNumberOfPeels()</code>设为4-6层可以在效果和性能之间取得不错的平衡。</p>
+</li>
+<li>
+<p><strong>减少透明物体的数量</strong>：如果可能，将不透明的物体和透明物体分开处理。不透明物体不受深度剥离影响，先渲染不透明物体可以减少后续剥离的像素数量。</p>
+</li>
+<li>
+<p><strong>避免复杂的深度交叉</strong>：尽量避免让多个高多边形数的半透明物体相互穿插。如果需要展示内部结构，考虑使用剪切平面（Clipping Plane）或"爆炸视图"（Exploded View）作为透明度之外的替代方案。</p>
+</li>
+<li>
+<p><strong>对点精灵使用深度排序</strong>：对于粒子系统（点精灵），使用<code>vtkDepthSortPolyData</code>通常是更高效的选择。</p>
+</li>
+<li>
+<p><strong>测试和验证</strong>：透明度相关的bug往往非常微妙——可能在特定角度看起来正确，旋转后在另一个角度出现明显的渲染错误。在完成透明渲染设置后，多旋转场景从不同角度验证效果。</p>
+</li>
+</ol>
+<h3 id="1347">13.4.7 小示例：半透明球体展示内部结构</h3>
+<pre><code class="language-cpp">#include &lt;vtkActor.h&gt;
+#include &lt;vtkCamera.h&gt;
+#include &lt;vtkNamedColors.h&gt;
+#include &lt;vtkPolyDataMapper.h&gt;
+#include &lt;vtkProperty.h&gt;
+#include &lt;vtkRenderWindow.h&gt;
+#include &lt;vtkRenderWindowInteractor.h&gt;
+#include &lt;vtkRenderer.h&gt;
+#include &lt;vtkSphereSource.h&gt;
+
+int main()
+{
+    // --- 外部球体：半透明 ---
+    vtkNew&lt;vtkSphereSource&gt; outerSphere;
+    outerSphere-&gt;SetRadius(2.0);
+    outerSphere-&gt;SetThetaResolution(100);
+    outerSphere-&gt;SetPhiResolution(100);
+
+    vtkNew&lt;vtkPolyDataMapper&gt; outerMapper;
+    outerMapper-&gt;SetInputConnection(outerSphere-&gt;GetOutputPort());
+
+    vtkNew&lt;vtkActor&gt; outerActor;
+    outerActor-&gt;SetMapper(outerMapper);
+    outerActor-&gt;GetProperty()-&gt;SetColor(0.6, 0.8, 1.0);
+    outerActor-&gt;GetProperty()-&gt;SetOpacity(0.3);          // 30%不透明
+    outerActor-&gt;GetProperty()-&gt;SetSpecular(0.4);
+    outerActor-&gt;GetProperty()-&gt;SetSpecularPower(30);
+    // 在表面基础上显示线框，增强结构感知
+    outerActor-&gt;GetProperty()-&gt;SetEdgeVisibility(true);
+    outerActor-&gt;GetProperty()-&gt;SetEdgeColor(0.1, 0.1, 0.3);
+
+    // --- 内部球体：不透明 ---
+    vtkNew&lt;vtkSphereSource&gt; innerSphere;
+    innerSphere-&gt;SetRadius(0.8);
+    innerSphere-&gt;SetThetaResolution(50);
+    innerSphere-&gt;SetPhiResolution(50);
+
+    vtkNew&lt;vtkPolyDataMapper&gt; innerMapper;
+    innerMapper-&gt;SetInputConnection(innerSphere-&gt;GetOutputPort());
+
+    vtkNew&lt;vtkActor&gt; innerActor;
+    innerActor-&gt;SetMapper(innerMapper);
+    innerActor-&gt;GetProperty()-&gt;SetColor(1.0, 0.3, 0.3);   // 红色
+    innerActor-&gt;GetProperty()-&gt;SetSpecular(0.5);
+    innerActor-&gt;GetProperty()-&gt;SetSpecularPower(20);
+
+    // --- 渲染器 ---
+    vtkNew&lt;vtkRenderer&gt; renderer;
+    renderer-&gt;AddActor(outerActor);
+    renderer-&gt;AddActor(innerActor);
+    renderer-&gt;SetBackground(0.15, 0.15, 0.15);
+
+    // 启用深度剥离以正确处理透明度
+    renderer-&gt;SetUseDepthPeeling(true);
+    renderer-&gt;SetMaximumNumberOfPeels(10);
+    renderer-&gt;SetOcclusionRatio(0.0);
+
+    // --- 渲染窗口 ---
+    vtkNew&lt;vtkRenderWindow&gt; renderWindow;
+    renderWindow-&gt;SetSize(600, 600);
+    renderWindow-&gt;SetMultiSamples(8);   // 8x多重采样抗锯齿
+    renderWindow-&gt;AddRenderer(renderer);
+
+    vtkNew&lt;vtkRenderWindowInteractor&gt; interactor;
+    interactor-&gt;SetRenderWindow(renderWindow);
+    interactor-&gt;Initialize();
+    interactor-&gt;Start();
+
+    return 0;
+}
+</code></pre>
+<p>运行这个示例，你会看到一个半透明的浅蓝色外壳包裹着一个不透明的红色内核。旋转场景，你能从不同角度看到内部的红色球体，同时蓝色外壳的线框叠加让你感知到外壳的几何形状。</p>
+<hr />
+<h2 id="135">13.5 代码示例：材质展示画廊</h2>
+<p>本节提供一个完整的C++程序，展示本章涵盖的所有核心概念。程序在5x4的网格中创建了20个球体，每个球体展示不同的材质属性组合。此外，还展示了三点式布光、棋盘格纹理映射以及半透明外层球体。</p>
+<h3 id="1351">13.5.1 程序概述</h3>
+<p><strong>布局设计：</strong></p>
+<p>程序在5列 x 4行的网格中排列20个球体，每个列代表一类材质参数变化：</p>
+<ul>
+<li><strong>第1列（Column 0）：颜色变化</strong>——展示不同漫反射颜色的纯色材质（红、橙、黄、绿）。</li>
+<li><strong>第2列（Column 1）：镜面反射变化</strong>——相同漫反射色，不同的Specular和SpecularPower（从哑光到高亮金属）。</li>
+<li><strong>第3列（Column 2）：表示模式变化</strong>——分别使用点模式、线框模式、表面模式、线框叠加模式。</li>
+<li><strong>第4列（Column 3）：纹理映射</strong>——棋盘格纹理与不同材质参数的组合。</li>
+<li><strong>第5列（Column 4）：特殊效果</strong>——自发光、极高镜面反射、半透明、线框覆盖。</li>
+</ul>
+<p><strong>光照方案：</strong>使用经典的三点式布光（Key + Fill + Back Light）。</p>
+<p><strong>附加效果：</strong>在场景中心放置一个大的半透明外球壳，展示透明渲染。</p>
+<h3 id="1352-c">13.5.2 完整C++代码</h3>
+<pre><code class="language-cpp">// ============================================================================
+// Chapter 13: Advanced Rendering Techniques
+// File: MaterialGallery.cxx
+// Description: A comprehensive demonstration of VTK advanced rendering:
+//              material properties, three-point lighting, texture mapping,
+//              and transparent rendering. 20 spheres are arranged in a 5x4
+//              grid, each with different material parameter combinations.
+//              A large semi-transparent outer sphere encloses the scene.
+// VTK Version: 9.5.2
+// ============================================================================
+
+#include &lt;vtkActor.h&gt;
+#include &lt;vtkCamera.h&gt;
+#include &lt;vtkImageData.h&gt;
+#include &lt;vtkLight.h&gt;
+#include &lt;vtkNamedColors.h&gt;
+#include &lt;vtkNew.h&gt;
+#include &lt;vtkPolyDataMapper.h&gt;
+#include &lt;vtkProperty.h&gt;
+#include &lt;vtkRenderWindow.h&gt;
+#include &lt;vtkRenderWindowInteractor.h&gt;
+#include &lt;vtkRenderer.h&gt;
+#include &lt;vtkSmartPointer.h&gt;
+#include &lt;vtkSphereSource.h&gt;
+#include &lt;vtkTexture.h&gt;
+#include &lt;vtkUnsignedCharArray.h&gt;
+
+#include &lt;vector&gt;
+
+// --------------------------------------------------------------------------
+// Helper: Create a procedural checkerboard texture
+// --------------------------------------------------------------------------
+vtkSmartPointer&lt;vtkTexture&gt; CreateCheckerboard(
+    int    size,
+    int    squaresPerRow,
+    double r1, double g1, double b1,
+    double r2, double g2, double b2)
+{
+    vtkNew&lt;vtkImageData&gt; image;
+    image-&gt;SetDimensions(size, size, 1);
+    image-&gt;AllocateScalars(VTK_UNSIGNED_CHAR, 3);
+
+    unsigned char* pixels = static_cast&lt;unsigned char*&gt;(
+        image-&gt;GetScalarPointer());
+
+    int squareSize = size / squaresPerRow;
+
+    for (int y = 0; y &lt; size; y++)
+    {
+        for (int x = 0; x &lt; size; x++)
+        {
+            int idx = (y * size + x) * 3;
+            int sqX = x / squareSize;
+            int sqY = y / squareSize;
+
+            if ((sqX + sqY) % 2 == 0)
+            {
+                pixels[idx]     = static_cast&lt;unsigned char&gt;(r1 * 255);
+                pixels[idx + 1] = static_cast&lt;unsigned char&gt;(g1 * 255);
+                pixels[idx + 2] = static_cast&lt;unsigned char&gt;(b1 * 255);
+            }
+            else
+            {
+                pixels[idx]     = static_cast&lt;unsigned char&gt;(r2 * 255);
+                pixels[idx + 1] = static_cast&lt;unsigned char&gt;(g2 * 255);
+                pixels[idx + 2] = static_cast&lt;unsigned char&gt;(b2 * 255);
+            }
+        }
+    }
+
+    vtkNew&lt;vtkTexture&gt; texture;
+    texture-&gt;SetInputData(image);
+    texture-&gt;SetInterpolate(true);
+
+    return texture;
+}
+
+// --------------------------------------------------------------------------
+// Helper: Create a sphere source with specified resolution
+// --------------------------------------------------------------------------
+vtkSmartPointer&lt;vtkSphereSource&gt; CreateSphere(double radius, int res)
+{
+    vtkNew&lt;vtkSphereSource&gt; sphere;
+    sphere-&gt;SetRadius(radius);
+    sphere-&gt;SetThetaResolution(res);
+    sphere-&gt;SetPhiResolution(res);
+    sphere-&gt;Update();
+    return sphere;
+}
+
+// --------------------------------------------------------------------------
+// Helper: Create an actor with a mapper connected to a sphere
+// --------------------------------------------------------------------------
+vtkSmartPointer&lt;vtkActor&gt; CreateSphereActor(
+    vtkSmartPointer&lt;vtkSphereSource&gt; sphere)
+{
+    vtkNew&lt;vtkPolyDataMapper&gt; mapper;
+    mapper-&gt;SetInputConnection(sphere-&gt;GetOutputPort());
+
+    vtkNew&lt;vtkActor&gt; actor;
+    actor-&gt;SetMapper(mapper);
+    return actor;
+}
+
+// --------------------------------------------------------------------------
+// Main program
+// --------------------------------------------------------------------------
+int main(int argc, char* argv[])
+{
+    // ======================================================================
+    // Lighting Setup: Three-point lighting for professional visualization
+    // ======================================================================
+    vtkNew&lt;vtkLight&gt; keyLight;
+    keyLight-&gt;SetLightTypeToSceneLight();
+    keyLight-&gt;SetPosition(10.0, 10.0, 15.0);
+    keyLight-&gt;SetFocalPoint(0.0, 0.0, 0.0);
+    keyLight-&gt;SetColor(1.0, 0.96, 0.9);
+    keyLight-&gt;SetIntensity(1.0);
+
+    vtkNew&lt;vtkLight&gt; fillLight;
+    fillLight-&gt;SetLightTypeToSceneLight();
+    fillLight-&gt;SetPosition(-8.0, -3.0, 2.0);
+    fillLight-&gt;SetFocalPoint(0.0, 0.0, 0.0);
+    fillLight-&gt;SetColor(0.7, 0.8, 1.0);
+    fillLight-&gt;SetIntensity(0.5);
+
+    vtkNew&lt;vtkLight&gt; backLight;
+    backLight-&gt;SetLightTypeToSceneLight();
+    backLight-&gt;SetPosition(0.0, 5.0, -12.0);
+    backLight-&gt;SetFocalPoint(0.0, 0.0, 0.0);
+    backLight-&gt;SetColor(1.0, 1.0, 1.0);
+    backLight-&gt;SetIntensity(0.7);
+
+    // ======================================================================
+    // Texture: Create two checkerboard textures
+    // ======================================================================
+    auto checkerRed = CreateCheckerboard(256, 8,
+        0.95, 0.15, 0.15,     // 颜色1：红色
+        0.95, 0.95, 0.95);    // 颜色2：白色
+
+    auto checkerBlue = CreateCheckerboard(256, 8,
+        0.15, 0.15, 0.95,     // 颜色1：蓝色
+        0.95, 0.95, 0.95);    // 颜色2：白色
+
+    // ======================================================================
+    // Scene: Create 20 spheres in a 5x4 grid
+    // ======================================================================
+    const int COLS = 5;
+    const int ROWS = 4;
+    const double SPACING = 3.5;
+    const double RADIUS = 1.2;
+
+    // Store all actors for later rendering
+    std::vector&lt;vtkSmartPointer&lt;vtkActor&gt;&gt; allActors;
+
+    // 5 columns x 4 rows = 20 spheres
+    // Each column demonstrates a different material category
+
+    for (int col = 0; col &lt; COLS; col++)
+    {
+        for (int row = 0; row &lt; ROWS; row++)
+        {
+            auto sphere = CreateSphere(RADIUS, 64);
+            auto actor = CreateSphereActor(sphere);
+
+            // Position the sphere in the grid
+            double x = (col - (COLS - 1) / 2.0) * SPACING;
+            double y = (row - (ROWS - 1) / 2.0) * SPACING;
+            actor-&gt;SetPosition(x, y, 0.0);
+
+            // --- Column 0: Color variations ---
+            if (col == 0)
+            {
+                // Same specular parameters, different diffuse colors
+                actor-&gt;GetProperty()-&gt;SetSpecular(0.4);
+                actor-&gt;GetProperty()-&gt;SetSpecularPower(25);
+                actor-&gt;GetProperty()-&gt;SetSpecularColor(1.0, 1.0, 1.0);
+
+                if (row == 0)
+                {
+                    actor-&gt;GetProperty()-&gt;SetDiffuseColor(1.0, 0.2, 0.2);   // Red
+                    actor-&gt;GetProperty()-&gt;SetAmbientColor(0.3, 0.05, 0.05);
+                }
+                else if (row == 1)
+                {
+                    actor-&gt;GetProperty()-&gt;SetDiffuseColor(1.0, 0.6, 0.1);   // Orange
+                    actor-&gt;GetProperty()-&gt;SetAmbientColor(0.3, 0.15, 0.02);
+                }
+                else if (row == 2)
+                {
+                    actor-&gt;GetProperty()-&gt;SetDiffuseColor(1.0, 0.9, 0.1);   // Yellow
+                    actor-&gt;GetProperty()-&gt;SetAmbientColor(0.3, 0.22, 0.02);
+                }
+                else // row == 3
+                {
+                    actor-&gt;GetProperty()-&gt;SetDiffuseColor(0.2, 0.8, 0.3);   // Green
+                    actor-&gt;GetProperty()-&gt;SetAmbientColor(0.05, 0.2, 0.07);
+                }
+            }
+            // --- Column 1: Specular variations ---
+            else if (col == 1)
+            {
+                // Same diffuse color, different specular parameters
+                actor-&gt;GetProperty()-&gt;SetDiffuseColor(0.3, 0.5, 0.9);
+                actor-&gt;GetProperty()-&gt;SetAmbientColor(0.07, 0.12, 0.25);
+
+                if (row == 0)
+                {
+                    // Matte finish -- very low specular
+                    actor-&gt;GetProperty()-&gt;SetSpecular(0.05);
+                    actor-&gt;GetProperty()-&gt;SetSpecularPower(5);
+                    actor-&gt;GetProperty()-&gt;SetSpecularColor(1.0, 1.0, 1.0);
+                }
+                else if (row == 1)
+                {
+                    // Satin finish -- medium-low specular
+                    actor-&gt;GetProperty()-&gt;SetSpecular(0.3);
+                    actor-&gt;GetProperty()-&gt;SetSpecularPower(20);
+                    actor-&gt;GetProperty()-&gt;SetSpecularColor(1.0, 1.0, 1.0);
+                }
+                else if (row == 2)
+                {
+                    // Glossy finish -- high specular, moderate power
+                    actor-&gt;GetProperty()-&gt;SetSpecular(0.7);
+                    actor-&gt;GetProperty()-&gt;SetSpecularPower(50);
+                    actor-&gt;GetProperty()-&gt;SetSpecularColor(1.0, 0.95, 0.8);
+                }
+                else // row == 3
+                {
+                    // Metallic finish -- very high specular and power
+                    actor-&gt;GetProperty()-&gt;SetSpecular(0.95);
+                    actor-&gt;GetProperty()-&gt;SetSpecularPower(90);
+                    actor-&gt;GetProperty()-&gt;SetSpecularColor(1.0, 0.9, 0.6);
+                }
+            }
+            // --- Column 2: Representation modes ---
+            else if (col == 2)
+            {
+                actor-&gt;GetProperty()-&gt;SetColor(0.8, 0.5, 0.2);
+                actor-&gt;GetProperty()-&gt;SetSpecular(0.3);
+                actor-&gt;GetProperty()-&gt;SetSpecularPower(20);
+                actor-&gt;GetProperty()-&gt;SetAmbientColor(0.2, 0.12, 0.05);
+
+                if (row == 0)
+                {
+                    // Points mode
+                    actor-&gt;GetProperty()-&gt;SetRepresentationToPoints();
+                    actor-&gt;GetProperty()-&gt;SetPointSize(4.0);
+                }
+                else if (row == 1)
+                {
+                    // Wireframe mode
+                    actor-&gt;GetProperty()-&gt;SetRepresentationToWireframe();
+                    actor-&gt;GetProperty()-&gt;SetLineWidth(1.5);
+                }
+                else if (row == 2)
+                {
+                    // Surface mode (default)
+                    actor-&gt;GetProperty()-&gt;SetRepresentationToSurface();
+                }
+                else // row == 3
+                {
+                    // Surface + wireframe overlay
+                    actor-&gt;GetProperty()-&gt;SetRepresentationToSurface();
+                    actor-&gt;GetProperty()-&gt;SetEdgeVisibility(true);
+                    actor-&gt;GetProperty()-&gt;SetEdgeColor(0.1, 0.1, 0.1);
+                    actor-&gt;GetProperty()-&gt;SetLineWidth(1.0);
+                }
+            }
+            // --- Column 3: Texture mapping ---
+            else if (col == 3)
+            {
+                actor-&gt;GetProperty()-&gt;SetSpecular(0.3);
+                actor-&gt;GetProperty()-&gt;SetSpecularPower(25);
+                actor-&gt;GetProperty()-&gt;SetSpecularColor(1.0, 1.0, 1.0);
+
+                if (row == 0)
+                {
+                    // Red checkerboard, no diffuse color -&gt; texture dominates
+                    actor-&gt;GetProperty()-&gt;SetDiffuseColor(1.0, 1.0, 1.0);
+                    actor-&gt;GetProperty()-&gt;SetAmbientColor(0.2, 0.2, 0.2);
+                    actor-&gt;SetTexture(checkerRed);
+                }
+                else if (row == 1)
+                {
+                    // Red checkerboard + yellow tint
+                    actor-&gt;GetProperty()-&gt;SetDiffuseColor(1.0, 0.95, 0.2);
+                    actor-&gt;GetProperty()-&gt;SetAmbientColor(0.25, 0.23, 0.05);
+                    actor-&gt;SetTexture(checkerRed);
+                }
+                else if (row == 2)
+                {
+                    // Blue checkerboard, neutral diffuse
+                    actor-&gt;GetProperty()-&gt;SetDiffuseColor(0.9, 0.9, 0.9);
+                    actor-&gt;GetProperty()-&gt;SetAmbientColor(0.2, 0.2, 0.2);
+                    actor-&gt;SetTexture(checkerBlue);
+                }
+                else // row == 3
+                {
+                    // Blue checkerboard + high specular for gloss
+                    actor-&gt;GetProperty()-&gt;SetDiffuseColor(0.8, 0.8, 0.8);
+                    actor-&gt;GetProperty()-&gt;SetAmbientColor(0.15, 0.15, 0.15);
+                    actor-&gt;GetProperty()-&gt;SetSpecular(0.8);
+                    actor-&gt;GetProperty()-&gt;SetSpecularPower(70);
+                    actor-&gt;SetTexture(checkerBlue);
+                }
+            }
+            // --- Column 4: Special effects ---
+            else if (col == 4)
+            {
+                if (row == 0)
+                {
+                    // Self-illuminating (emissive) green
+                    actor-&gt;GetProperty()-&gt;SetColor(0.2, 0.8, 0.3);
+                    actor-&gt;GetProperty()-&gt;SetAmbient(1.0);      // Full ambient
+                    actor-&gt;GetProperty()-&gt;SetDiffuse(0.3);
+                    actor-&gt;GetProperty()-&gt;SetAmbientColor(0.2, 0.8, 0.3);
+                    actor-&gt;GetProperty()-&gt;SetSpecular(0.0);
+                }
+                else if (row == 1)
+                {
+                    // Extreme metallic -- pure specular, almost no diffuse
+                    actor-&gt;GetProperty()-&gt;SetDiffuseColor(0.1, 0.1, 0.15);
+                    actor-&gt;GetProperty()-&gt;SetAmbientColor(0.02, 0.02, 0.03);
+                    actor-&gt;GetProperty()-&gt;SetSpecularColor(1.0, 0.95, 0.85);
+                    actor-&gt;GetProperty()-&gt;SetSpecular(1.0);
+                    actor-&gt;GetProperty()-&gt;SetSpecularPower(120);
+                }
+                else if (row == 2)
+                {
+                    // Semi-transparent
+                    actor-&gt;GetProperty()-&gt;SetColor(0.4, 0.6, 1.0);
+                    actor-&gt;GetProperty()-&gt;SetSpecular(0.5);
+                    actor-&gt;GetProperty()-&gt;SetSpecularPower(40);
+                    actor-&gt;GetProperty()-&gt;SetOpacity(0.5);
+                    actor-&gt;GetProperty()-&gt;SetEdgeVisibility(true);
+                    actor-&gt;GetProperty()-&gt;SetEdgeColor(0.0, 0.1, 0.3);
+                }
+                else // row == 3
+                {
+                    // Wireframe-only with thick lines
+                    actor-&gt;GetProperty()-&gt;SetRepresentationToWireframe();
+                    actor-&gt;GetProperty()-&gt;SetColor(1.0, 0.6, 0.2);
+                    actor-&gt;GetProperty()-&gt;SetLineWidth(3.0);
+                    actor-&gt;GetProperty()-&gt;SetSpecular(0.0);
+                }
+            }
+
+            allActors.push_back(actor);
+        }
+    }
+
+    // ======================================================================
+    // Add a large semi-transparent outer sphere at the center
+    // ======================================================================
+    auto outerSphere = CreateSphere(2.8, 120);
+
+    vtkNew&lt;vtkPolyDataMapper&gt; outerMapper;
+    outerMapper-&gt;SetInputConnection(outerSphere-&gt;GetOutputPort());
+
+    vtkNew&lt;vtkActor&gt; outerActor;
+    outerActor-&gt;SetMapper(outerMapper);
+    outerActor-&gt;GetProperty()-&gt;SetColor(0.7, 0.85, 1.0);
+    outerActor-&gt;GetProperty()-&gt;SetOpacity(0.15);
+    outerActor-&gt;GetProperty()-&gt;SetSpecular(0.2);
+    outerActor-&gt;GetProperty()-&gt;SetSpecularPower(30);
+    outerActor-&gt;GetProperty()-&gt;SetEdgeVisibility(true);
+    outerActor-&gt;GetProperty()-&gt;SetEdgeColor(0.3, 0.4, 0.6);
+    outerActor-&gt;SetPosition(0.0, 0.0, 0.0);
+
+    // ======================================================================
+    // Renderer and RenderWindow setup
+    // ======================================================================
+    vtkNew&lt;vtkRenderer&gt; renderer;
+
+    // Remove default headlight and add three-point lighting
+    renderer-&gt;RemoveAllLights();
+    renderer-&gt;AddLight(keyLight);
+    renderer-&gt;AddLight(fillLight);
+    renderer-&gt;AddLight(backLight);
+
+    // Add all actors to the renderer
+    for (auto&amp; actor : allActors)
+    {
+        renderer-&gt;AddActor(actor);
+    }
+    renderer-&gt;AddActor(outerActor);
+
+    // Enable depth peeling for transparent rendering
+    renderer-&gt;SetUseDepthPeeling(true);
+    renderer-&gt;SetMaximumNumberOfPeels(10);
+    renderer-&gt;SetOcclusionRatio(0.0);
+
+    // Background gradient: dark gray
+    renderer-&gt;SetBackground(0.12, 0.12, 0.15);
+    renderer-&gt;SetBackground2(0.05, 0.05, 0.08);
+    renderer-&gt;SetGradientBackground(true);
+    renderer-&gt;SetUseFXAA(true);  // Enable fast approximate anti-aliasing
+
+    // Camera setup
+    vtkCamera* camera = renderer-&gt;GetActiveCamera();
+    camera-&gt;SetPosition(0.0, -6.0, 18.0);
+    camera-&gt;SetFocalPoint(0.0, 0.0, 0.0);
+    camera-&gt;SetViewUp(0.0, 1.0, 0.0);
+    camera-&gt;SetClippingRange(0.5, 80.0);
+
+    // ======================================================================
+    // Render Window
+    // ======================================================================
+    vtkNew&lt;vtkRenderWindow&gt; renderWindow;
+    renderWindow-&gt;SetSize(1400, 1000);
+    renderWindow-&gt;SetMultiSamples(8);     // 8x MSAA
+    renderWindow-&gt;SetWindowName(&quot;Chapter 13: Advanced Rendering - Material Gallery&quot;);
+    renderWindow-&gt;AddRenderer(renderer);
+
+    // ======================================================================
+    // Interactor
+    // ======================================================================
+    vtkNew&lt;vtkRenderWindowInteractor&gt; interactor;
+    interactor-&gt;SetRenderWindow(renderWindow);
+
+    // Initialize and start the interaction loop
+    renderWindow-&gt;Render();
+    interactor-&gt;Initialize();
+    interactor-&gt;Start();
+
+    return 0;
+}
+</code></pre>
+<h3 id="1353-cmakeliststxt">13.5.3 CMakeLists.txt</h3>
+<pre><code class="language-cmake">cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
+
+# ============================================================================
+# Chapter 13: Advanced Rendering Techniques
+# File: CMakeLists.txt
+# ============================================================================
+
+project(MaterialGallery)
+
+# --------------------------------------------------------------------------
+# Find VTK 9.5.2
+# --------------------------------------------------------------------------
+find_package(VTK 9.5 REQUIRED COMPONENTS
+    CommonCore
+    CommonDataModel
+    CommonExecutionModel
+    FiltersSources
+    ImagingCore
+    InteractionStyle
+    RenderingCore
+    RenderingOpenGL2
+)
+
+# If VTK_DIR is not set, user must provide it via -DVTK_DIR=/path/to/vtk/build
+if(NOT VTK_FOUND)
+    message(FATAL_ERROR &quot;VTK 9.5 not found. Set -DVTK_DIR=/path/to/vtk/build&quot;)
+endif()
+
+message(STATUS &quot;VTK version: ${VTK_VERSION}&quot;)
+message(STATUS &quot;VTK libraries: ${VTK_LIBRARIES}&quot;)
+
+# --------------------------------------------------------------------------
+# Executable
+# --------------------------------------------------------------------------
+add_executable(MaterialGallery MaterialGallery.cxx)
+
+target_link_libraries(MaterialGallery PRIVATE
+    VTK::CommonCore
+    VTK::CommonDataModel
+    VTK::CommonExecutionModel
+    VTK::FiltersSources
+    VTK::ImagingCore
+    VTK::InteractionStyle
+    VTK::RenderingCore
+    VTK::RenderingOpenGL2
+)
+
+# --------------------------------------------------------------------------
+# C++ standard
+# --------------------------------------------------------------------------
+target_compile_features(MaterialGallery PRIVATE cxx_std_17)
+
+# --------------------------------------------------------------------------
+# Platform-specific settings
+# --------------------------------------------------------------------------
+if(WIN32)
+    # Suppress overly verbose MSVC warnings
+    target_compile_definitions(MaterialGallery PRIVATE
+        _CRT_SECURE_NO_WARNINGS
+        NOMINMAX
+    )
+endif()
+</code></pre>
+<h3 id="1354">13.5.4 编译与运行说明</h3>
+<p><strong>编译步骤：</strong></p>
+<pre><code class="language-bash"># 1. 创建构建目录
+mkdir build &amp;&amp; cd build
+
+# 2. 配置CMake（请将路径替换为你本地的VTK安装路径）
+cmake .. -DVTK_DIR=/path/to/vtk-9.5.2/build
+
+# 3. 编译
+cmake --build . --config Release
+
+# 4. 运行
+./MaterialGallery        # Linux/macOS
+MaterialGallery.exe      # Windows
+</code></pre>
+<p><strong>程序交互说明：</strong></p>
+<ul>
+<li><strong>鼠标左键拖拽</strong>：旋转场景（轨迹球交互）</li>
+<li><strong>鼠标滚轮 / 鼠标右键拖拽</strong>：缩放场景</li>
+<li><strong>鼠标中键拖拽</strong>：平移场景</li>
+<li><strong>R键</strong>：重置相机视角</li>
+<li><strong>E键</strong>：退出程序</li>
+</ul>
+<p><strong>预期效果：</strong></p>
+<p>运行后你将看到一个5列4行的球体网格，每个列展示不同类别的材质参数：</p>
+<ul>
+<li>第一列展示从红色到绿色的纯色材质变化，漫反射颜色依次为红、橙、黄、绿。</li>
+<li>第二列展示从哑光到高亮金属的镜面反射渐变，注意观察高光区域从柔和大面积变为尖锐小面积的过程。</li>
+<li>第三列展示四种不同的表现模式：点模式、线框模式、表面模式、带线框叠加的表面模式。</li>
+<li>第四列展示红蓝棋盘格纹理与不同材质参数的组合效果。</li>
+<li>第五列展示自发光、极限金属、半透明和厚线框等特殊效果。</li>
+</ul>
+<p>一个大的半透明浅蓝色球壳包围着所有球体，你可以透过它看到内部的20个球体。旋转场景来观察半透明渲染在不同角度下的效果。</p>
+<hr />
+<h2 id="136">13.6 本章小结</h2>
+<p>本章系统地讲解了VTK中的四大高级渲染技术：材质属性、光照模型、纹理映射和透明渲染。这些技术共同构成了你创建专业级和出版物级别可视化作品的核心工具箱。</p>
+<p><strong>一、材质属性（vtkProperty）</strong></p>
+<p>你在13.1节学习了Phong光照模型的各个分量以及如何在VTK中控制它们：
+- <code>SetDiffuseColor()</code>控制物体的基础颜色（漫反射分量）。
+- <code>SetAmbientColor()</code>配置环境光反射色。
+- <code>SetSpecularColor()</code>和<code>SetSpecularPower()</code>配置高光的颜色和锐度。
+- <code>SetOpacity()</code>控制整体透明度。
+- <code>SetRepresentation()</code>在点模式、线框模式和表面模式之间切换。
+- <code>SetEdgeVisibility()</code>在表面上叠加网格线。</p>
+<p>理解这些参数之间的相互作用是控制材质外观的关键。金属材质需要高镜面反射+高光泽度，哑光材质需要低镜面反射+低光泽度，自发光材质需要将环境光分量设得足够高。</p>
+<p><strong>二、光照模型（vtkLight）</strong></p>
+<p>你在13.2节学习了VTK光源系统的完整能力：
+- 三种光源类型：头灯（随相机移动）、场景灯（固定在世界空间）、相机灯（在相机空间中固定偏移）。
+- 多点布光：主光源+补光+背光源的三点式布光方案，这是影视摄影中沿用了近百年的经典技术。
+- 光源颜色和强度分别控制色调和亮度。
+- 距离衰减和锥形光源提供了更高级的光照控制。</p>
+<p>三点式布光是需要记住的核心模式——它适用于绝大多数科学可视化场景，能够以最小的光源数量产生立体感和专业感。</p>
+<p><strong>三、纹理映射（vtkTexture）</strong></p>
+<p>你在13.3节学习了纹理映射的完整工作流程，从加载图像文件到程序化生成纹理：
+- <code>vtkTexture</code>通过<code>SetInputConnection()</code>接收图像数据。
+- 纹理坐标（TCoords）是几何数据中必需的组成部分。
+- <code>SetInterpolate()</code>、<code>SetRepeat()</code>、<code>SetEdgeClamp()</code>控制纹理采样的行为细节。
+- 程序化纹理（如棋盘格）可以在不依赖外部文件的情况下产生丰富的视觉效果。</p>
+<p>纹理映射是几何复杂度与视觉丰富度之间的桥梁——用几张三角形加上高分辨率纹理，就能产生细节极其丰富的视觉效果。</p>
+<p><strong>四、透明渲染</strong></p>
+<p>你在13.4节学习了透明渲染的两种核心技术及其权衡：
+- 深度剥离：通用、正确、但性能开销大。通过多遍渲染逐层剥离获取正确的透明合成。
+- 深度排序：对单个Polydata的单元排序，更快但适用场景受限。
+- 一般建议：对于质量优先的出图场景使用深度剥离，对于性能敏感的交互场景使用较少的剥离层数或深度排序。</p>
+<p><strong>五、综合示例</strong></p>
+<p>你在13.5节看到了一个完整的材质展示画廊程序，将本章的所有概念整合到一起。这个程序本身也是一个有用的参考——你可以修改其中的参数来观察不同设置对渲染效果的影响，帮助你建立对材质参数的直觉理解。</p>
+<hr />
+<p><strong>继续学习建议：</strong></p>
+<p>掌握了本章的高级渲染技术后，你的可视化作品将拥有更丰富的视觉表达。以下是后续章节中将涉及的相关主题：</p>
+<ul>
+<li><strong>体积渲染（Volume Rendering）</strong>：将材质和光照概念扩展到三维体数据，使用传递函数直接对体积进行光学积分。</li>
+<li><strong>动画与关键帧</strong>：利用本章的光照和材质控制来创建动态的可视化演示。</li>
+<li><strong>标注与文字</strong>：为你的可视化场景添加文字标签、标题和图例。</li>
+<li><strong>剪切平面与等值面</strong>：使用剪切操作来揭示数据内部结构，配合透明度控制可以产生强大的洞察效果。</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

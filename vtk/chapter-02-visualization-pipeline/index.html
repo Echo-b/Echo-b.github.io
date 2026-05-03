@@ -1,0 +1,3694 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../chapter-01-vtk-overview-and-setup/">
+      
+      
+        <link rel="next" href="../chapter-03-data-model-basics/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>第二章 可视化管线 - Echo-b's Tech Notes</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#visualization-pipeline" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Echo-b&#39;s Tech Notes" class="md-header__button md-logo" aria-label="Echo-b's Tech Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Echo-b's Tech Notes
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              第二章 可视化管线
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Echo-b&#39;s Tech Notes" class="md-nav__button md-logo" aria-label="Echo-b's Tech Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Echo-b's Tech Notes
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VTK 教程
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    VTK 教程
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    入门篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    入门篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-01-vtk-overview-and-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第一章 VTK概述与环境搭建
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二章 可视化管线
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二章 可视化管线
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        本章导读
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#21" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 管道模型概述
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.1 管道模型概述">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#211" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1.1 什么是管道
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#212" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1.2 管道的六个阶段
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.1.2 管道的六个阶段">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#source" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        阶段一：数据源（Source）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#filter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        阶段二：过滤器（Filter）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mapper" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        阶段三：映射器（Mapper）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#actor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        阶段四：演员（Actor）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#renderer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        阶段五：渲染器（Renderer）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#renderwindow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        阶段六：渲染窗口（RenderWindow）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#213" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1.3 两条管道的分界
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#214-ascii" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1.4 ASCII全景图
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#215" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1.5 为什么管道架构如此重要
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#22" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 数据流与连接
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.2 数据流与连接">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#221-vtkalgorithm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2.1 vtkAlgorithm——管道世界的基石
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#222-vtkalgorithmoutput" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2.2 vtkAlgorithmOutput——输出端口
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#223-setinputconnection-vs-setinputdata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2.3 SetInputConnection() vs SetInputData()——本章最重要的概念
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.2.3 SetInputConnection() vs SetInputData()——本章最重要的概念">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#setinputconnection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SetInputConnection()——管道式连接
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#setinputdata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SetInputData()——快照式赋值
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        直观对比表
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        一个典型的错误用法
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#setinputdata_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        什么时候该用SetInputData()
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#224" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2.4 多输入端口
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#225" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2.5 管道连接的完整代码模式
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#23-demand-driven-execution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 按需执行机制（Demand-Driven Execution）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.3 按需执行机制（Demand-Driven Execution）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#231-vtk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3.1 "不请求，不计算"——VTK的惰性哲学
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#232-vtkexecutive" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3.2 vtkExecutive——管道的大脑
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#233-mtime" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3.3 MTime——管道的时间标尺
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.3.3 MTime——管道的时间标尺">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mtime" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MTime的基本概念
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mtime_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MTime在管道中的角色
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mtime_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        哪些操作会触发MTime更新
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mtime_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        验证MTime的效果——一个小实验
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#234-update" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3.4 Update()——触发的扳机
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#24" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4 管道分支与合并
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.4 管道分支与合并">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#241-forking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4.1 管道分支（Forking）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#242-merging" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4.2 管道合并（Merging）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#243-filter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4.3 Filter的类型分类
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#25-update" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.5 Update()与渲染触发
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.5 Update()与渲染触发">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#251-update" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.5.1 谁在调用Update()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#252-update" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.5.2 完整的Update()级联详解
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#253-update-vs-update" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.5.3 首次Update vs 后续Update
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#254" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.5.4 内存管理——中间结果的生命周期
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#26" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.6 完整示例：带过滤器的管道
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.6 完整示例：带过滤器的管道">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#261" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.6.1 示例代码
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#262-cmakeliststxt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.6.2 CMakeLists.txt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#263" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.6.3 程序运行输出解读
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#264" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.6.4 本示例的管道可视化
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#265" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.6.5 实验建议
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#27" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.7 本章小结
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.7 本章小结">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        要点速览
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        从本章到全书
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-03-data-model-basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第三章 数据模型基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-04-geometry-and-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第四章 基本几何体与数据源
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-05-rendering-and-interactor/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第五章 渲染与交互机
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-06-volume1-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第六章 入门篇综合实战——3D几何画廊
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    实战篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    实战篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-07-polydata/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第七章 PolyData详解
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-08-unstructured-grid/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第八章 非结构化网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-09-structured-data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第九章 结构化数据
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-10-data-io/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十章 数据I/O
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-11-common-filters/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十一章 常用过滤器
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-12-color-mapping/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十二章 颜色映射与标量可视化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-13-advanced-rendering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十三章 高级渲染技术
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-14-multi-dataset/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十四章 多个数据集处理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-15-volume2-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十五章 实战篇综合实战——CFD后处理可视化工具
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    进阶篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    进阶篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-16-volume-rendering-basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十六章 体渲染基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-17-volume-rendering-advanced/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十七章 体渲染高级技术
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-18-charts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十八章 2D图表系统
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-19-annotation-and-widgets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十九章 三维标注与交互组件
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-20-custom-interaction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十章 自定义交互与Widget
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-21-qt-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十一章 Qt集成
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-22-smp-parallel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十二章 SMP并行入门
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-23-volume3-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十三章 进阶篇综合实战
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        本章导读
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#21" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 管道模型概述
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.1 管道模型概述">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#211" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1.1 什么是管道
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#212" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1.2 管道的六个阶段
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.1.2 管道的六个阶段">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#source" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        阶段一：数据源（Source）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#filter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        阶段二：过滤器（Filter）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mapper" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        阶段三：映射器（Mapper）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#actor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        阶段四：演员（Actor）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#renderer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        阶段五：渲染器（Renderer）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#renderwindow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        阶段六：渲染窗口（RenderWindow）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#213" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1.3 两条管道的分界
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#214-ascii" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1.4 ASCII全景图
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#215" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1.5 为什么管道架构如此重要
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#22" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 数据流与连接
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.2 数据流与连接">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#221-vtkalgorithm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2.1 vtkAlgorithm——管道世界的基石
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#222-vtkalgorithmoutput" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2.2 vtkAlgorithmOutput——输出端口
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#223-setinputconnection-vs-setinputdata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2.3 SetInputConnection() vs SetInputData()——本章最重要的概念
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.2.3 SetInputConnection() vs SetInputData()——本章最重要的概念">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#setinputconnection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SetInputConnection()——管道式连接
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#setinputdata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SetInputData()——快照式赋值
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        直观对比表
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        一个典型的错误用法
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#setinputdata_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        什么时候该用SetInputData()
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#224" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2.4 多输入端口
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#225" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2.5 管道连接的完整代码模式
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#23-demand-driven-execution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 按需执行机制（Demand-Driven Execution）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.3 按需执行机制（Demand-Driven Execution）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#231-vtk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3.1 "不请求，不计算"——VTK的惰性哲学
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#232-vtkexecutive" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3.2 vtkExecutive——管道的大脑
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#233-mtime" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3.3 MTime——管道的时间标尺
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.3.3 MTime——管道的时间标尺">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mtime" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MTime的基本概念
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mtime_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MTime在管道中的角色
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mtime_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        哪些操作会触发MTime更新
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mtime_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        验证MTime的效果——一个小实验
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#234-update" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3.4 Update()——触发的扳机
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#24" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4 管道分支与合并
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.4 管道分支与合并">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#241-forking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4.1 管道分支（Forking）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#242-merging" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4.2 管道合并（Merging）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#243-filter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4.3 Filter的类型分类
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#25-update" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.5 Update()与渲染触发
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.5 Update()与渲染触发">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#251-update" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.5.1 谁在调用Update()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#252-update" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.5.2 完整的Update()级联详解
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#253-update-vs-update" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.5.3 首次Update vs 后续Update
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#254" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.5.4 内存管理——中间结果的生命周期
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#26" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.6 完整示例：带过滤器的管道
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.6 完整示例：带过滤器的管道">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#261" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.6.1 示例代码
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#262-cmakeliststxt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.6.2 CMakeLists.txt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#263" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.6.3 程序运行输出解读
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#264" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.6.4 本示例的管道可视化
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#265" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.6.5 实验建议
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#27" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.7 本章小结
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.7 本章小结">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        要点速览
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        从本章到全书
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="visualization-pipeline">第二章 可视化管线（Visualization Pipeline）</h1>
+<h2 id="_1">本章导读</h2>
+<p>如果你只打算认真读一章VTK教程，那就应该是这一章。</p>
+<p>第一章让你看到了VTK的"是什么"（What）——你安装好了环境，写出了一个Cone示例，知道VTK由Source、Mapper、Actor这些东西组成。但你不一定理解它们"为什么"（Why）要这么设计，以及"如何"（How）正确地组合它们。</p>
+<p>本章的目标就是回答这两个问题。我们将深入VTK最核心的设计概念——<strong>管道（Pipeline）</strong>。管道不是VTK的一个可选功能，也不是一种使用技巧；管道是VTK本身。VTK的每一个类、每一个方法、每一个设计决策，背后都贯穿着管道架构的逻辑。</p>
+<p>本章覆盖以下内容：</p>
+<ol>
+<li><strong>管道的整体模型</strong>——Source、Filter、Mapper、Actor、Renderer、RenderWindow各自扮演什么角色，以及可视化管道与渲染管道的分界线在哪。</li>
+<li><strong>数据如何沿着管道流动</strong>——<code>vtkAlgorithm</code>基类、<code>vtkAlgorithmOutput</code>输出端口、<code>SetInputConnection()</code>与<code>SetInputData()</code>的致命区别。</li>
+<li><strong>管道何时执行计算</strong>——按需执行（Demand-Driven Execution）机制、<code>Update()</code>的调用时机、修改时间戳（MTime）如何驱动缓存失效。</li>
+<li><strong>管道的分支与合并</strong>——一个数据源如何同时驱动多个可视化分支，以及如何将分叉的管道重新合并。</li>
+<li><strong>渲染触发链</strong>——从你调用<code>Render()</code>开始，VTK内部到底发生了什么。</li>
+<li><strong>一个贯穿全章的完整示例</strong>——用ConeSource + ShrinkFilter搭建一条真正有过滤器的管道，并观察参数修改后的行为。</li>
+</ol>
+<p>读完本章后，你应该能够自信地回答："我理解VTK是如何工作的。"从第三章开始，我们将在这个基础上逐一攻克具体的数据类型和过滤器——那时你会感谢自己在这一章花的每一个小时。</p>
+<hr />
+<h2 id="21">2.1 管道模型概述</h2>
+<h3 id="211">2.1.1 什么是管道</h3>
+<p>在计算机科学中，"管道"（Pipeline）是一种将复杂任务分解为一系列有序处理阶段的设计模式。每个阶段从一个方向接收输入，对数据执行某种变换，然后将结果传递给下一个阶段。这个模型在Unix命令行中广为人知：</p>
+<pre><code>cat data.txt | grep &quot;error&quot; | sort | uniq -c
+</code></pre>
+<p>上面的命令就是一个四阶段管道：读取文件、过滤包含"error"的行、排序、去重计数。每个命令只做一件事，数据像流水线一样从左向右流过。</p>
+<p>VTK的管道在概念上完全一致，只不过管道的节点不是命令行程序，而是C++对象：</p>
+<pre><code>数据源(Source) --&gt; 过滤器(Filter) --&gt; 映射器(Mapper) --&gt; 演员(Actor) --&gt; 渲染器(Renderer) --&gt; 渲染窗口(RenderWindow)
+</code></pre>
+<p>但这里有一个在Unix管道中看不到的关键特性：<strong>VTK管道是按需执行（Demand-Driven）的</strong>。Unix管道是"推"（Push）模型——上游产生数据，立即推给下游；VTK管道是"拉"（Pull）模型——下游请求数据，上游才去计算。这两个字的差别，决定了VTK整个执行引擎的设计。</p>
+<h3 id="212">2.1.2 管道的六个阶段</h3>
+<p>让我们——认识管道中每个阶段的角色。下面的描述中，我们会用到很多术语，但请不必记忆；把它们当作初次见面的朋友，在本章后续的深入讨论中你们会反复相遇。</p>
+<h4 id="source">阶段一：数据源（Source）</h4>
+<p><strong>Source是管道的起点——它是数据的生产者，不依赖任何上游输入。</strong></p>
+<p>Source的职责是"创造"数据：从文件读取、从算法生成、从外部设备采集。常见的Source包括：</p>
+<table>
+<thead>
+<tr>
+<th>类别</th>
+<th>示例</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>几何生成器</td>
+<td><code>vtkConeSource</code>、<code>vtkSphereSource</code>、<code>vtkCylinderSource</code></td>
+<td>用数学公式生成简单几何体</td>
+</tr>
+<tr>
+<td>文件读取器</td>
+<td><code>vtkSTLReader</code>、<code>vtkOBJReader</code>、<code>vtkXMLPolyDataReader</code></td>
+<td>从磁盘文件加载数据</td>
+</tr>
+<tr>
+<td>程序化数据源</td>
+<td><code>vtkProgrammableSource</code></td>
+<td>用自定义回调函数生成数据</td>
+</tr>
+</tbody>
+</table>
+<p>在VTK的类继承体系中，所有Source都继承自<code>vtkAlgorithm</code>。Source的特殊之处在于：它没有输入端口（Input Port），只有输出端口（Output Port）。这是它区别于Filter的判定标准。</p>
+<h4 id="filter">阶段二：过滤器（Filter）</h4>
+<p><strong>Filter是管道的加工车间——它接收数据，执行某种变换，输出变换后的数据。</strong></p>
+<p>Filter是VTK中最丰富、最灵活的部分。1000多个Filter类涵盖了科学可视化中几乎所有的数据处理需求：</p>
+<table>
+<thead>
+<tr>
+<th>类别</th>
+<th>示例</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>几何操作</td>
+<td><code>vtkShrinkPolyData</code>、<code>vtkSmoothPolyDataFilter</code>、<code>vtkDecimatePro</code></td>
+<td>收缩、平滑、简化多边形数据</td>
+</tr>
+<tr>
+<td>拓扑分析</td>
+<td><code>vtkContourFilter</code>、<code>vtkSliceFilter</code>、<code>vtkClipDataSet</code></td>
+<td>等值面提取、切片、裁剪</td>
+</tr>
+<tr>
+<td>属性计算</td>
+<td><code>vtkGradientFilter</code>、<code>vtkCurvatures</code>、<code>vtkMeshQuality</code></td>
+<td>梯度计算、曲率估计、网格质量评估</td>
+</tr>
+<tr>
+<td>类型转换</td>
+<td><code>vtkTriangleFilter</code>、<code>vtkDataSetTriangleFilter</code></td>
+<td>将多边形转换为三角形</td>
+</tr>
+<tr>
+<td>数据抽取</td>
+<td><code>vtkProbeFilter</code>、<code>vtkPointInterpolator</code></td>
+<td>在指定位置采样数据</td>
+</tr>
+</tbody>
+</table>
+<p>Filter同时拥有输入端口和输出端口。一个Filter可以将上一级的输出作为自己的输入——这正是管道可组合性的来源。</p>
+<h4 id="mapper">阶段三：映射器（Mapper）</h4>
+<p><strong>Mapper是可视化管道与渲染管道的分界桥——它将数据对象转换为图形基元（Graphics Primitives）。</strong></p>
+<p>在Mapper之前，管道处理的是"数据"（Points、Cells、Arrays）；在Mapper之后，管道处理的是"图形"（Triangles、Lines、Textures、Shaders）。可以说，Mapper是"数据世界"和"图形世界"之间的翻译官。</p>
+<p>Mapper的主要职责包括：</p>
+<ol>
+<li><strong>几何转换</strong>：将vtkDataSet中的点（Points）和单元（Cells）转换为OpenGL可渲染的顶点和三角形列表。</li>
+<li><strong>属性映射</strong>：将数据的标量场（Scalars）、矢量场（Vectors）映射为颜色、大小、纹理坐标等可视化属性。</li>
+<li><strong>LOD管理</strong>：一些Mapper支持多级细节（Level of Detail），在交互时降低几何复杂度以保持帧率。</li>
+</ol>
+<p>常用的Mapper包括：</p>
+<table>
+<thead>
+<tr>
+<th>Mapper</th>
+<th>适用数据类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>vtkPolyDataMapper</code></td>
+<td>vtkPolyData</td>
+<td>最常用的多边形数据映射器</td>
+</tr>
+<tr>
+<td><code>vtkDataSetMapper</code></td>
+<td>vtkDataSet</td>
+<td>通用数据集映射器（内部根据具体类型委派）</td>
+</tr>
+<tr>
+<td><code>vtkGlyph3DMapper</code></td>
+<td>vtkPolyData + vtkDataSet</td>
+<td>将点数据渲染为三维符号（箭头、球体等）</td>
+</tr>
+<tr>
+<td><code>vtkVolumeRayCastMapper</code></td>
+<td>vtkImageData</td>
+<td>光线投射体渲染映射器</td>
+</tr>
+</tbody>
+</table>
+<h4 id="actor">阶段四：演员（Actor）</h4>
+<p><strong>Actor是场景中的可视化实体——它不直接处理几何数据，而是持有Mapper和Property，描述"画什么"和"怎么画"。</strong></p>
+<p>Actor是你操作场景中物体的直接接口。一个Actor包含两个核心组件：</p>
+<ul>
+<li><strong>Mapper（映射器）</strong>：决定这个物体从哪种数据而来。</li>
+<li><strong>Property（属性）</strong>：决定这个物体的外观——颜色、材质、不透明度、边界线样式、着色模式等。</li>
+</ul>
+<p>Actor还负责管理物体的空间位置：你可以通过<code>actor-&gt;SetPosition(x, y, z)</code>、<code>actor-&gt;SetOrientation(rx, ry, rz)</code>、<code>actor-&gt;SetScale(sx, sy, sz)</code>来变换物体在场景中的位姿。</p>
+<p>重要概念：Actor与Mapper是一对一的关系（一个Actor只有一个Mapper），但Mapper与Actor是一对多的关系（多个Actor可以共享同一个Mapper，从而在不同的位置显示相同的数据）。</p>
+<h4 id="renderer">阶段五：渲染器（Renderer）</h4>
+<p><strong>Renderer是场景的舞台——它管理一组Actor、一个或多个光源（Light）、以及一台相机（Camera）。</strong></p>
+<p>Renderer的职责包括：</p>
+<ol>
+<li><strong>Actor管理</strong>：维护场景中的Actor列表，管理它们的添加、移除和可见性。</li>
+<li><strong>相机控制</strong>：持有<code>vtkCamera</code>对象，定义观察者的位置、朝向、投影方式（正交/透视）。</li>
+<li><strong>光照管理</strong>：持有光源列表，控制场景的照明环境。</li>
+<li><strong>背景设置</strong>：设置背景颜色、渐变、或背景纹理。</li>
+<li><strong>渲染执行</strong>：当收到渲染请求时，遍历Actor列表，调度Mapper执行数据到图形的转换，然后将结果绘制到RenderWindow。</li>
+</ol>
+<p>一个RenderWindow可以包含多个Renderer（每个占据窗口的一个矩形区域），这使得你可以在同一个窗口中创建多个视图——例如科学可视化的"前视图+顶视图+侧视图+三维透视图"四视图布局。</p>
+<h4 id="renderwindow">阶段六：渲染窗口（RenderWindow）</h4>
+<p><strong>RenderWindow是管道的终点——它代表屏幕上的一个窗口，负责将Renderer的渲染结果呈现给用户。</strong></p>
+<p>RenderWindow的职责是封装操作系统相关的窗口操作：窗口创建、大小调整、像素显示、用户输入事件路由。在VTK中，这些底层细节由具体的窗口后端实现（Windows上用Win32 API、Linux上用X11或Wayland、macOS上用Cocoa），而<code>vtkRenderWindow</code>提供了统一的抽象接口。</p>
+<p>RenderWindow本身不执行渲染计算——它将这个任务委派给Renderer，Renderer再委派给Mapper，逐级向上游请求，最终触发整条管道的执行。</p>
+<h3 id="213">2.1.3 两条管道的分界</h3>
+<p>现在我们来理清一个经常让初学者混淆的概念：VTK管道实际上由<strong>两层管道</strong>叠加而成。</p>
+<pre><code>+------------------------- 可视化管道 --------------------------+
+|                                                                |
+| Source --&gt; Filter --&gt; Filter --&gt; ... --&gt; Mapper                |
+|                                         |                      |
++-----------------------------------------+----------------------+
+                                          |
+                  +-----------------------+
+                  |
++-----------------+------------ 渲染管道 -------------------------+
+|                 |                                                |
+|                 v                                                |
+|              Actor --&gt; Renderer --&gt; RenderWindow                 |
+|                                                                |
++----------------------------------------------------------------+
+</code></pre>
+<p><strong>可视化管道（Visualization Pipeline）</strong> 处理的是数据：</p>
+<ul>
+<li>输入：原始数据（文件、算法生成的几何体、标量场、矢量场等）</li>
+<li>处理：几何变换、拓扑分析、属性计算、类型转换</li>
+<li>输出：经过Mapper转换后的图形基元</li>
+<li>核心类：<code>vtkAlgorithm</code>及其子类（XxxSource、XxxFilter、XxxMapper）</li>
+</ul>
+<p><strong>渲染管道（Rendering Pipeline）</strong> 处理的是显示：</p>
+<ul>
+<li>输入：Mapper产生的图形基元</li>
+<li>处理：空间变换、光照计算、相机投影、光栅化</li>
+<li>输出：屏幕上的像素</li>
+<li>核心类：<code>vtkProp</code>及其子类（<code>vtkActor</code>、<code>vtkVolume</code>等）、<code>vtkRenderer</code>、<code>vtkRenderWindow</code></li>
+</ul>
+<p>两条管道通过<strong>Mapper与Actor的绑定</strong>（<code>actor-&gt;SetMapper(mapper)</code>）连接在一起。这个绑定就像电源插座——可视化管道"供电"，渲染管道"用电"。</p>
+<p>理解这个分层对于调试问题至关重要。当你的程序"什么都不显示"时，你需要判断：是数据没有正确生成（可视化管道的问题），还是数据生成了但没有被正确渲染（渲染管道的问题）？两个层面的排查方法完全不同。</p>
+<h3 id="214-ascii">2.1.4 ASCII全景图</h3>
+<p>下面是管道数据流的完整ASCII示意图。建议你在继续阅读之前，花两分钟时间仔细看一下这幅图，在大脑中建立管道的空间结构。</p>
+<pre><code>                           可视化管道
+    +-----------------------------------------------------------+
+    |                                                           |
+    |  +----------+    +----------+    +----------+    +--------+-+
+    |  |  Source  |    |  Filter  |    |  Filter  |    | Mapper  |
+    |  |          |    |          |    |          |    |         |
+    |  | 生成数据  |---&gt;| 变换数据  |---&gt;| 再变换   |---&gt;| 数据-&gt;图形|
+    |  |          |    |          |    |          |    |         |
+    |  +----------+    +----------+    +----------+    +--------+-+
+    |                              ^                          |
+    |                              |                          |
+    |                    SetInputConnection()          SetInputConnection()
+    |                        连接上下游                    连接Mapper
+    +-----------------------------------------------------------+
+                                                           |
+                                       actor-&gt;SetMapper(mapper)
+                                                           |
+                           渲染管道                         |
+    +-----------------------------------------------------------+
+    |                                                      |    |
+    |  +--------+-+    +-----------+    +---------------+  |    |
+    |  |  Actor   |    | Renderer  |    | RenderWindow  |  |    |
+    |  |          |    |           |    |               |  |    |
+    |  | 持有Mapper|&lt;---| 管理Actor,|---&gt;| 屏幕上的窗口   |  |    |
+    |  | 持有属性  |    | 光源,相机  |    |               |  |    |
+    |  |          |    |           |    |               |  |    |
+    |  +----------+    +-----------+    +---------------+  |    |
+    |        ^                                              |    |
+    |        |                                              |    |
+    |  renderer-&gt;AddActor(actor)                            |    |
+    +-----------------------------------------------------------+
+</code></pre>
+<h3 id="215">2.1.5 为什么管道架构如此重要</h3>
+<p>如果你以前使用过Matplotlib或MATLAB来画图，你可能会觉得VTK的管道模型太"重"了。在Matplotlib中，画一个图形只需要<code>plt.plot(x, y)</code>——为什么VTK需要这么多步骤？</p>
+<p>答案是：<strong>管道架构为灵活性付出的代价，在复杂场景中会以百倍的形式回馈给你。</strong></p>
+<p>考虑以下实际场景：</p>
+<ol>
+<li>
+<p><strong>多视图可视化</strong>：同一个数据集，你想同时看到它的三维模型、二维切片、数值统计图表。在管道架构中，你只需将一个Source连接到三个不同的Filter分支，每个分支产生不同的可视化结果——数据只计算一次，但可以以多种方式观看。</p>
+</li>
+<li>
+<p><strong>交互式参数探索</strong>：你拖动一个滑块改变等值面的提取阈值。在管道架构中，当你改变阈值时，只有等值面提取及其下游节点需要重新计算——Source的数据一旦生成就被复用，不需要重新从文件读取。</p>
+</li>
+<li>
+<p><strong>计算缓存</strong>：你有一个昂贵的科学计算Source，生成数十GB的数据。在管道架构中，这个Source可以连接到多个Filter，每个Filter都复用同一份上游数据——而不是为每个下游处理都重新算一次。</p>
+</li>
+<li>
+<p><strong>管道组合</strong>：你可以将一个复杂的处理流程封装成一个自定义Filter，然后像搭乐高积木一样将它插入到任意管道中——因为所有Filter都遵循相同的输入/输出接口。</p>
+</li>
+</ol>
+<p>这些能力在简单的<code>plt.plot()</code>式API中是不可能实现的。VTK选择了前期学习成本更高但后期表达能力更强的设计——这就是管道架构存在的根本原因。</p>
+<hr />
+<h2 id="22">2.2 数据流与连接</h2>
+<h3 id="221-vtkalgorithm">2.2.1 vtkAlgorithm——管道世界的基石</h3>
+<p>在VTK中，<strong>所有参与管道的对象有一个共同的基类：<code>vtkAlgorithm</code></strong>。这个类定义了管道对象之间如何连接、如何传递数据、如何触发执行的统一接口。无论你是在处理一个ConeSource、一个ShrinkFilter、还是一个PolyDataMapper，它们都共享着从<code>vtkAlgorithm</code>继承来的管道行为。</p>
+<p><code>vtkAlgorithm</code>的核心职责包括：</p>
+<ol>
+<li><strong>端口管理（Port Management）</strong>：定义算法有多少个输入端口（Input Port）和多少个输出端口（Output Port）。</li>
+<li><strong>连接管理（Connection Management）</strong>：提供<code>SetInputConnection()</code>方法，使得一个算法的输出端口可以连接到另一个算法的输入端口。</li>
+<li><strong>执行调度（Execution Scheduling）</strong>：提供<code>Update()</code>方法，触发从当前节点往上游追溯、直到所有上游都完成计算。</li>
+<li><strong>信息查询（Information Query）</strong>：提供<code>GetOutput()</code>方法，让下游获取上游产生的数据结果。</li>
+</ol>
+<p>以下是一些关键方法的职责速览：</p>
+<pre><code class="language-cpp">// 获取指定输出端口（默认端口索引为0）
+vtkAlgorithmOutput* GetOutputPort(int port = 0);
+
+// 获取指定输出端口的数据（必须先Update()）
+vtkDataObject* GetOutputDataObject(int port = 0);
+
+// 设置第port个输入端口的连接
+void SetInputConnection(int port, vtkAlgorithmOutput* input);
+void SetInputConnection(vtkAlgorithmOutput* input);  // port=0
+
+// 直接设置第port个输入端口的输入数据（绕过管道连接）
+void SetInputDataObject(int port, vtkDataObject* data);
+void SetInputDataObject(vtkDataObject* data);        // port=0
+
+// 触发管道执行——从当前节点往上游追溯并计算
+virtual void Update(int port = 0);
+
+// 获取管道信息（元数据：数据范围、类型等，不触发执行）
+vtkInformation* GetOutputInformation(int port = 0);
+</code></pre>
+<p><code>GetOutputPort()</code>的返回值类型是<code>vtkAlgorithmOutput*</code>。这引出了管道中另一个关键概念——输出端口对象。</p>
+<h3 id="222-vtkalgorithmoutput">2.2.2 vtkAlgorithmOutput——输出端口</h3>
+<p><code>vtkAlgorithmOutput</code>是一个小而重要的类。它的作用很简单：<strong>代表一个算法的某个输出端口，作为下游算法SetInputConnection()的参数</strong>。</p>
+<p>你可以把它想象成一个"管道接头"：一个算法的输出是一根管子的出口端，另一个算法的输入是管子的入口端。<code>vtkAlgorithmOutput</code>就是这个接头——它让两根管子能够严丝合缝地对接。</p>
+<pre><code class="language-cpp">// Source产生输出端口
+vtkNew&lt;vtkConeSource&gt; cone;
+vtkAlgorithmOutput* sourceOutput = cone-&gt;GetOutputPort();  // 获取接头
+
+// Filter连接：将Source的输出接头插入Filter的输入端口
+vtkNew&lt;vtkShrinkPolyData&gt; shrink;
+shrink-&gt;SetInputConnection(sourceOutput);                  // 插入接头
+
+// 继续连接下游
+vtkNew&lt;vtkPolyDataMapper&gt; mapper;
+vtkAlgorithmOutput* filterOutput = shrink-&gt;GetOutputPort();
+mapper-&gt;SetInputConnection(filterOutput);
+</code></pre>
+<p>为什么VTK要设计一个专门的<code>vtkAlgorithmOutput</code>类，而不是让<code>GetOutputPort()</code>直接返回算法对象的指针？这是为了支持<strong>多输出端口</strong>。有些算法拥有不止一个输出端口（例如提取表面的Filter可能同时输出表面和内部数据），用专门的端口对象可以精确指定"到底是哪个输出"。此外，<code>vtkAlgorithmOutput</code>在内部维护了连接信息，使得管道能够高效地向上游追溯执行。</p>
+<h3 id="223-setinputconnection-vs-setinputdata">2.2.3 SetInputConnection() vs SetInputData()——本章最重要的概念</h3>
+<blockquote>
+<p><strong>如果你读到这里只能记住一件事，那就是这一节的内容。</strong></p>
+</blockquote>
+<p>VTK提供了两种将数据传递给下游算法的方式。它们在名称上只有几个字母的区别，但在行为上是天壤之别：</p>
+<ul>
+<li><strong><code>SetInputConnection()</code></strong>：连接管道，保留按需执行</li>
+<li><strong><code>SetInputData()</code></strong>：传递快照，打断管道</li>
+</ul>
+<h4 id="setinputconnection">SetInputConnection()——管道式连接</h4>
+<pre><code class="language-cpp">vtkNew&lt;vtkConeSource&gt; cone;
+vtkNew&lt;vtkShrinkPolyData&gt; shrink;
+
+// 【正确做法】用SetInputConnection建立管道连接
+shrink-&gt;SetInputConnection(cone-&gt;GetOutputPort());
+</code></pre>
+<p>当使用<code>SetInputConnection()</code>时，你做的事情是：告诉Shrink，"你的输入数据将从Cone的输出端口获取，但不必现在就问Cone要数据——等你被要求输出结果时再说。"</p>
+<p>此时，<strong>Cone和Shrink之间建立了一条"活的"连接</strong>。这条连接的生命周期行为如下：</p>
+<ol>
+<li>Shrink在初次被要求输出时，会沿着这条连接向上游追溯，找到Cone。</li>
+<li>Shrink请求Cone执行计算（如果Cone还没有计算过的话）。</li>
+<li>Shrink拿到Cone的输出数据，执行自己的处理，返回结果。</li>
+<li>此后，如果你修改了Cone的参数（例如调用<code>cone-&gt;SetResolution(100)</code>），Cone的MTime会更新。</li>
+<li>下次Shrink被要求输出时，它会发现Cone的MTime比它上次缓存的更新鲜——于是它再次请求Cone重新计算，然后基于新数据重新执行自己的处理。</li>
+</ol>
+<p><strong>这就是管道的精髓：下游始终能从上游获取最新的数据，不需要你手动管理数据一致性。</strong> 数据"按需流动"，计算"按需执行"。</p>
+<h4 id="setinputdata">SetInputData()——快照式赋值</h4>
+<pre><code class="language-cpp">vtkNew&lt;vtkConeSource&gt; cone;
+cone-&gt;Update();                    // 强制Cone立即计算
+vtkPolyData* snapshot = cone-&gt;GetOutput();  // 拿走结果
+
+vtkNew&lt;vtkShrinkPolyData&gt; shrink;
+
+// 【注意】这里打断了管道
+shrink-&gt;SetInputData(snapshot);    // 传递的是一个快照
+</code></pre>
+<p>当使用<code>SetInputData()</code>时，你做的事情是：直接把自己的数据塞给Shrink，说："这就是你的输入，拿去用，不用管数据从哪来的。"</p>
+<p>此时，<strong>Shrink的上游管道被切断了</strong>。Shrink不再知道自己处理的数据来自于Cone——它只知道手里有一份数据快照。这条连接的行为如下：</p>
+<ol>
+<li>Shrink被要求输出时，直接使用你传入的这份数据。</li>
+<li>如果你修改了Cone的参数（例如调用<code>cone-&gt;SetResolution(100)</code>），Shrink完全不知情——它手里还是那旧快照。</li>
+<li>要让Shrink使用新数据，你必须手动再次调用<code>cone-&gt;Update()</code>和<code>shrink-&gt;SetInputData(cone-&gt;GetOutput())</code>。</li>
+</ol>
+<p><strong>SetInputData()打断了管道的按需执行链路，把自动化的数据流变回了手动管理。</strong></p>
+<h4 id="_2">直观对比表</h4>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>SetInputConnection()</th>
+<th>SetInputData()</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>管道连续性</strong></td>
+<td>保持管道连接</td>
+<td>断开管道连接</td>
+</tr>
+<tr>
+<td><strong>参数变更传播</strong></td>
+<td>自动（通过MTime检测）</td>
+<td>不自动（需手动重新赋值）</td>
+</tr>
+<tr>
+<td><strong>执行时机</strong></td>
+<td>按需（下游请求时才计算）</td>
+<td>上游需手动Update()</td>
+</tr>
+<tr>
+<td><strong>内存使用</strong></td>
+<td>按需分配和释放</td>
+<td>数据一直保持在内存中</td>
+</tr>
+<tr>
+<td><strong>适用场景</strong></td>
+<td>标准管道，数据需要随参数变化</td>
+<td>静态快照，或需要脱离管道独立操作数据</td>
+</tr>
+<tr>
+<td><strong>执行效率</strong></td>
+<td>高（只计算需要的部分）</td>
+<td>低（可能做不必要的计算）</td>
+</tr>
+</tbody>
+</table>
+<h4 id="_3">一个典型的错误用法</h4>
+<p>以下是初学者经常写的代码——它表面看起来正确，但存在隐患：</p>
+<pre><code class="language-cpp">vtkNew&lt;vtkConeSource&gt; cone;
+cone-&gt;Update();  // 强制计算——但这破坏了按需执行的优雅性
+
+vtkNew&lt;vtkPolyDataMapper&gt; mapper;
+mapper-&gt;SetInputConnection(cone-&gt;GetOutputPort());  // 这里是Connection，管道还在
+</code></pre>
+<p>这段代码虽然能运行，但<code>cone-&gt;Update()</code>是完全多余的。因为<code>mapper-&gt;SetInputConnection(cone-&gt;GetOutputPort())</code>已经建立了管道连接——当渲染发生时，Mapper会自动向上游请求数据，Cone会自动计算。你手动调用的这个<code>Update()</code>破坏了管道的按需特性，使得Cone在真正需要它之前就执行了计算。</p>
+<p><strong>一条经验法则：在使用<code>SetInputConnection()</code>的管道中，你几乎永远不需要手动调用<code>Update()</code>。</strong> 渲染循环会帮你在正确的时机触发一切。</p>
+<h4 id="setinputdata_1">什么时候该用SetInputData()</h4>
+<p>当然，<code>SetInputData()</code>并非一无是处。以下场景中，使用<code>SetInputData()</code>是合理的：</p>
+<ol>
+<li><strong>手动构造的数据集</strong>：你自己用代码创建了一个<code>vtkPolyData</code>，手动填充了点和单元——它没有上游Source，自然也无管道可连。</li>
+</ol>
+<pre><code class="language-cpp">vtkNew&lt;vtkPoints&gt; points;
+// ... 手动添加点 ...
+vtkNew&lt;vtkPolyData&gt; manualData;
+manualData-&gt;SetPoints(points);
+// 没有Source——只能SetInputData
+mapper-&gt;SetInputData(manualData);
+</code></pre>
+<ol>
+<li>
+<p><strong>脱离管道的后处理</strong>：你想对管道中的某个中间结果进行复杂的自定义分析，而这些分析不需要VTK的Filter机制。</p>
+</li>
+<li>
+<p><strong>数据快照/对比场景</strong>：你想在管道中保留某时刻的数据"快照"，与后续的结果做对比。</p>
+</li>
+</ol>
+<p><strong>原则是：默认使用<code>SetInputConnection()</code>；只有在明确知道自己需要独立快照，或者数据来源不是VTK算法对象时，才使用<code>SetInputData()</code>。</strong></p>
+<h3 id="224">2.2.4 多输入端口</h3>
+<p>一些高级Filter拥有多个输入端口。例如，<code>vtkProbeFilter</code>需要两个输入：一个是被采样的数据集（输入端口0），另一个是采样点的数据集（输入端口1）。<code>vtkAppendPolyData</code>可以将多个PolyData合并为一个，它支持无限多个输入端口。</p>
+<p>多端口的连接方式是：</p>
+<pre><code class="language-cpp">vtkNew&lt;vtkProbeFilter&gt; probe;
+probe-&gt;SetInputConnection(0, sourceData-&gt;GetOutputPort());     // 端口0：被采样的数据
+probe-&gt;SetInputConnection(1, probePoints-&gt;GetOutputPort());    // 端口1：采样点位置
+</code></pre>
+<p>每个算法通过<code>GetNumberOfInputPorts()</code>声明它需要多少个输入端口。这是由算法类本身决定的，你不需要也不能改变。</p>
+<h3 id="225">2.2.5 管道连接的完整代码模式</h3>
+<p>将以上知识综合起来，以下是VTK管道连接的标准代码模式：</p>
+<pre><code class="language-cpp">// 模式1：直接串联管道（最常用）
+vtkNew&lt;SourceType&gt; source;
+vtkNew&lt;FilterType&gt; filter;
+filter-&gt;SetInputConnection(source-&gt;GetOutputPort());
+
+vtkNew&lt;MapperType&gt; mapper;
+mapper-&gt;SetInputConnection(filter-&gt;GetOutputPort());
+
+// 模式2：多Filter串联
+vtkNew&lt;SourceType&gt; source;
+vtkNew&lt;FilterA&gt; filterA;
+filterA-&gt;SetInputConnection(source-&gt;GetOutputPort());
+vtkNew&lt;FilterB&gt; filterB;
+filterB-&gt;SetInputConnection(filterA-&gt;GetOutputPort());
+vtkNew&lt;FilterC&gt; filterC;
+filterC-&gt;SetInputConnection(filterB-&gt;GetOutputPort());
+// 管道：source -&gt; filterA -&gt; filterB -&gt; filterC
+
+// 模式3：不经过Filter，Source直接连Mapper
+vtkNew&lt;SourceType&gt; source;
+vtkNew&lt;MapperType&gt; mapper;
+mapper-&gt;SetInputConnection(source-&gt;GetOutputPort());
+// 管道：source -&gt; mapper
+</code></pre>
+<p>这三种模式覆盖了绝大多数VTK使用场景。更深层的分支与合并将在2.4节讨论。</p>
+<hr />
+<h2 id="23-demand-driven-execution">2.3 按需执行机制（Demand-Driven Execution）</h2>
+<h3 id="231-vtk">2.3.1 "不请求，不计算"——VTK的惰性哲学</h3>
+<p>VTK管道最反直觉但也是最强大的特性是：<strong>当你创建一个Source或Filter时，它什么数据都没有生成。</strong> 你只是在搭建管道的骨架，数据要等到"有人真正需要"的时候才会被计算出来。</p>
+<p>来看一个具体的例子：</p>
+<pre><code class="language-cpp">// 创建Source，设置参数
+vtkNew&lt;vtkConeSource&gt; cone;
+cone-&gt;SetResolution(50);
+cone-&gt;SetHeight(2.0);
+cone-&gt;SetRadius(0.5);
+
+// 此时问一个看似合理的问题：cone已经生成数据了吗？
+// 答案：没有。cone只是记住了参数（resolution=50, height=2.0, radius=0.5），
+// 但还没有执行任何实质的几何计算。
+
+// 创建Filter，连接管道
+vtkNew&lt;vtkShrinkPolyData&gt; shrink;
+shrink-&gt;SetInputConnection(cone-&gt;GetOutputPort());
+shrink-&gt;SetShrinkFactor(0.7);
+
+// 此时问：shrink已经执行Shrink操作了吗？
+// 答案：也没有。shrink只是记住了它的上游是谁以及shrink factor是多少。
+
+// 数据直到下面这行才真正被计算：
+shrink-&gt;Update();  // 此时整条管道执行：Cone生成数据 -&gt; Shrink处理数据
+</code></pre>
+<p>这个设计的目的是什么？让我们考虑一个实际的交互场景：</p>
+<ol>
+<li>你的程序渲染了一个由锥体Source、ShrinkFilter、WarpFilter组成的复杂场景。</li>
+<li>用户拖动一个滑块，调整锥体的高度。</li>
+<li>你的回调函数调用<code>cone-&gt;SetHeight(newValue)</code>。</li>
+<li>窗口重新渲染（<code>RenderWindow-&gt;Render()</code>）。</li>
+<li>VTK检测到Cone的MTime已变化，重新执行整条受影响的上游管道。</li>
+<li>用户看到更新后的结果。</li>
+</ol>
+<p>在这个过程中，VTK只重新计算了"必须重新计算的部分"。如果用户只是旋转了相机而没有改变任何数据参数，那么管道的可视化部分完全不需要重新执行——渲染管道只需用新的相机参数重新绘制已有的图形基元。</p>
+<p>这就是按需执行的威力：<strong>VTK始终只做最少量的必要计算，没有冗余，没有浪费。</strong></p>
+<h3 id="232-vtkexecutive">2.3.2 vtkExecutive——管道的大脑</h3>
+<p>虽然你很少直接在代码中使用<code>vtkExecutive</code>，但理解它的存在和工作方式对于掌握管道机制很有帮助。</p>
+<p>每个<code>vtkAlgorithm</code>内部都持有一个<code>vtkExecutive</code>对象。Executive的职责是：</p>
+<ol>
+<li><strong>接收下游的更新请求</strong>：当某个算法被要求<code>Update()</code>时，实际上是它的Executive收到了请求。</li>
+<li><strong>向上游传播请求</strong>：Executive沿着<code>SetInputConnection()</code>建立的连接链，向上游追溯，请求上游算法先完成计算。</li>
+<li><strong>检查缓存有效性</strong>：Executive比较上游算法的MTime与自己缓存的MTime，判断是否需要重新执行。</li>
+<li><strong>调度算法执行</strong>：如果需要重新计算，Executive调用算法的<code>RequestData()</code>方法（这是由具体算法子类实现的）。</li>
+</ol>
+<p>VTK的标准Executive是<code>vtkDemandDrivenPipeline</code>（在VTK 9.5.2中，它继承自<code>vtkStreamingDemandDrivenPipeline</code>，但管道相关的核心行为仍然来自<code>vtkDemandDrivenPipeline</code>）。大多数情况下，你不需要关心Executive的具体类型——<code>vtkAlgorithm</code>在内部自动创建了正确的Executive。</p>
+<p>有一个例外值得一提：在并行计算（多线程）场景中，一些算法使用不同的Executive来支持分片（Piece）请求——允许每个线程只处理数据的一部分。但这属于高级话题，将在第十二章（并行处理）中详细讨论。</p>
+<h3 id="233-mtime">2.3.3 MTime——管道的时间标尺</h3>
+<p>MTime（Modified Time，修改时间）是VTK按需执行机制的核心引擎。它回答了一个简单但关键的问题：<strong>"你上次给我的数据还新鲜吗？"</strong></p>
+<h4 id="mtime">MTime的基本概念</h4>
+<p>VTK中每一个对象（都继承自<code>vtkObject</code>）都有一个内部的时间戳——MTime。这个时间戳不是真实世界的时钟时间，而是一个单调递增的全局计数器：</p>
+<ul>
+<li>当对象被创建时，MTime = 0。</li>
+<li>当对象的关键状态发生变化时（例如调用了某个<code>SetXXX()</code>方法），MTime被更新为当前的全局计数器的值。</li>
+<li>全局计数器每被查询一次就自增1。</li>
+</ul>
+<p>这样，两个MTime的比较就能精确地告诉我们：一个对象在另一个对象的某个参考时间点之后有没有被修改过。</p>
+<h4 id="mtime_1">MTime在管道中的角色</h4>
+<p>考虑这样一条管道：</p>
+<pre><code>ConeSource --&gt; ShrinkFilter --&gt; PolyDataMapper
+</code></pre>
+<p>当ShrinkFilter被要求输出结果时，它内部的执行逻辑大致如下（伪代码）：</p>
+<pre><code>ShrinkFilter::RequestData():
+    upstreamData = GetInputConnection()-&gt;GetProducer()-&gt;GetOutput()
+    // 内部逻辑：
+    // if (cachedUpstreamMTime &lt; upstreamAlgorithm-&gt;GetMTime())
+    //     需要重新获取上游数据
+    //     对上游数据执行shrink操作
+    //     更新 cachedUpstreamMTime = upstreamAlgorithm-&gt;GetMTime()
+    //     缓存shrink结果, 更新selfMTime
+    // else:
+    //     上游没变，我也没变，返回缓存的结果
+</code></pre>
+<p>关键点在于：<strong>每个算法缓存了它上次执行时上游的MTime</strong>。当新的请求到来时，它只需要比较"缓存的MTime"和"上游当前的MTime"——如果上游的MTime更新，说明上游数据变了，需要重新处理；如果两者相同，说明上游数据没变，可以直接使用缓存结果。</p>
+<p>这就像是超市里的食品标签：你买牛奶时会看生产日期（MTime），如果日期和上次买的一样，你就知道这瓶和上次的来自同一批次（数据没变）；如果日期更新，说明是新生产的（数据变了）。</p>
+<h4 id="mtime_2">哪些操作会触发MTime更新</h4>
+<pre><code class="language-cpp">vtkNew&lt;vtkConeSource&gt; cone;
+// 此时 cone-&gt;GetMTime() == 某个初始值
+
+cone-&gt;SetResolution(30);    // MTime 更新！
+cone-&gt;SetHeight(2.0);       // MTime 更新！
+cone-&gt;SetRadius(1.5);       // MTime 更新！
+cone-&gt;SetCenter(0, 1, 0);   // MTime 更新！
+
+// 但是：
+cone-&gt;GetResolution();      // MTime 不变——这只是查询，不是修改
+</code></pre>
+<p>VTK对象中几乎所有的<code>SetXXX()</code>方法都会触发<code>this-&gt;Modified()</code>，而<code>Modified()</code>将MTime更新为当前的全局计数器值。这意味着：<strong>只要你修改了管道的任何参数，MTime就会忠实地记录下这一事实。</strong> 下一次下游请求数据时，管道就会自动传播和执行这些变化。</p>
+<h4 id="mtime_3">验证MTime的效果——一个小实验</h4>
+<pre><code class="language-cpp">vtkNew&lt;vtkConeSource&gt; cone;
+cone-&gt;SetResolution(30);
+
+vtkNew&lt;vtkShrinkPolyData&gt; shrink;
+shrink-&gt;SetInputConnection(cone-&gt;GetOutputPort());
+
+// 第一次Update：Cone和Shrink都执行计算
+shrink-&gt;Update();
+
+// 记录此时的MTime
+unsigned long mtimeAfterFirstUpdate = cone-&gt;GetMTime();
+
+// 不修改任何参数，再次Update
+shrink-&gt;Update();
+// 第二次Update：MTime没有变化，什么都不会重新计算
+
+// 修改Cone参数
+cone-&gt;SetResolution(60);
+// 现在 cone-&gt;GetMTime() != mtimeAfterFirstUpdate
+
+// 再次Update：VTK检测到Cone的MTime变了，重新执行整条管道
+shrink-&gt;Update();
+// Shrink拿着新resolution生成的cone数据，重新执行shrink操作
+</code></pre>
+<p>这个实验揭示了MTime机制的优雅：你不需要手动通知下游"数据变了"，你甚至不需要知道下游是谁。你只需要修改参数，VTK在幕后自动追踪一切。</p>
+<h3 id="234-update">2.3.4 Update()——触发的扳机</h3>
+<p><code>Update()</code>是管道按需执行机制的"扳机"。当你调用<code>Update()</code>时，以下过程会依次发生：</p>
+<ol>
+<li><strong>向上游追溯</strong>：Executive沿着<code>SetInputConnection()</code>的连接链向上一级一级追溯，直到找到Source。</li>
+<li><strong>检查MTime链</strong>：对管道中的每一个算法，检查其MTime与缓存的上游MTime是否一致。</li>
+<li><strong>重新计算（如果需要）</strong>：从Source开始（因为它没有上游），依次执行每个需要重新计算的算法。</li>
+<li><strong>返回结果</strong>：调用<code>Update()</code>的算法现在拥有了最新的输出数据。</li>
+</ol>
+<p><code>Update()</code>的一个重要变体是<code>Update(int port)</code>：当一个算法有多个输出端口时，你可以指定只更新某个端口对应的管道分支。</p>
+<p>VTK还提供了更精细的更新方法：</p>
+<pre><code class="language-cpp">// 标准Update：更新到当前算法（包括其所有上游）
+algorithm-&gt;Update();
+
+// 按分片更新（用于并行处理）：
+// piece: 当前分片索引, numPieces: 总分片数, ghostLevels: 重叠层级
+algorithm-&gt;UpdatePiece(piece, numPieces, ghostLevels);
+
+// 按范围更新（用于大规模数据的子集提取）：
+// extent: {xmin, xmax, ymin, ymax, zmin, zmax}
+algorithm-&gt;UpdateExtent(extent);
+
+// 按时间步更新（用于时变数据）：
+algorithm-&gt;UpdateTimeStep(timeStep);
+</code></pre>
+<p>但在本章的范围内，你只需要记住<code>Update()</code>这一种形式。其余变体将在处理大规模数据和时变数据的章节中逐步引入。</p>
+<hr />
+<h2 id="24">2.4 管道分支与合并</h2>
+<p>管道之所以被称为"管道网络"（Pipeline Network）而非"管道线"（Pipeline Line），是因为它不仅支持线性的串联，还支持分叉和汇合。</p>
+<h3 id="241-forking">2.4.1 管道分支（Forking）</h3>
+<p><strong>管道分支指的是：一个算法的一个输出端口，连接到多个下游算法的输入端口。</strong></p>
+<p>这是VTK中最常见的复用模式。假设你有一个数据源，你想同时做三件事：显示原始模型、显示线框叠加、显示提取的边线。在VTK中，你可以这样做：</p>
+<pre><code class="language-cpp">// 公共数据源
+vtkNew&lt;vtkConeSource&gt; cone;
+
+// 分支A：显示原始着色模型
+vtkNew&lt;vtkPolyDataMapper&gt; mapperA;
+mapperA-&gt;SetInputConnection(cone-&gt;GetOutputPort());
+vtkNew&lt;vtkActor&gt; actorA;
+actorA-&gt;SetMapper(mapperA);
+actorA-&gt;GetProperty()-&gt;SetColor(1.0, 0.8, 0.6);  // 肤色
+
+// 分支B：显示线框叠加
+vtkNew&lt;vtkExtractEdges&gt; extractEdges;
+extractEdges-&gt;SetInputConnection(cone-&gt;GetOutputPort());
+vtkNew&lt;vtkPolyDataMapper&gt; mapperB;
+mapperB-&gt;SetInputConnection(extractEdges-&gt;GetOutputPort());
+vtkNew&lt;vtkActor&gt; actorB;
+actorB-&gt;SetMapper(mapperB);
+actorB-&gt;GetProperty()-&gt;SetColor(0.0, 0.0, 0.0);       // 黑色边线
+actorB-&gt;GetProperty()-&gt;SetLineWidth(2.0);
+
+// 分支C：显示法线方向（使用Glyph）
+vtkNew&lt;vtkSphereSource&gt; sphereGlyph;
+sphereGlyph-&gt;SetRadius(0.03);
+vtkNew&lt;vtkGlyph3DMapper&gt; mapperC;
+mapperC-&gt;SetInputConnection(cone-&gt;GetOutputPort());
+mapperC-&gt;SetSourceConnection(sphereGlyph-&gt;GetOutputPort());
+// ... actorC ...
+</code></pre>
+<p>数据流图示：</p>
+<pre><code>                    +---&gt; FilterA ---&gt; MapperA ---&gt; ActorA
+                    |
+ConeSource ---------+---&gt; FilterB ---&gt; MapperB ---&gt; ActorB
+                    |
+                    +---&gt; FilterC ---&gt; MapperC ---&gt; ActorC
+</code></pre>
+<p>所有三个分支共享同一个ConeSource。当ConeSource的参数发生变化时，所有三个分支都会按需自动更新——每个分支在自己的MTime检查中独立判断是否需要重新计算。</p>
+<p>这种分支设计的实际价值在于：</p>
+<ul>
+<li><strong>数据只生成一次</strong>：无论有多少个下游分支，ConeSource的输出只计算一次。</li>
+<li><strong>每个分支独立执行</strong>：分支之间的执行互不影响，一个分支的更新不会拖累其他分支。</li>
+<li><strong>灵活的组合</strong>：你可以随时添加或移除分支，而不需要重构已有的管道。</li>
+</ul>
+<h3 id="242-merging">2.4.2 管道合并（Merging）</h3>
+<p><strong>管道合并指的是：多个算法的输出，汇聚到一个算法的不同输入端口。</strong></p>
+<p>不是所有Filter都支持多输入，但那些做了设计的Filter可以接收来自多个上游的数据：</p>
+<pre><code class="language-cpp">// 两个独立的数据源
+vtkNew&lt;vtkSphereSource&gt; sphere;
+vtkNew&lt;vtkConeSource&gt; cone;
+
+// 合并为一个数据集
+vtkNew&lt;vtkAppendPolyData&gt; append;
+append-&gt;AddInputConnection(sphere-&gt;GetOutputPort());
+append-&gt;AddInputConnection(cone-&gt;GetOutputPort());
+
+// 下游统一处理合并后的数据
+vtkNew&lt;vtkPolyDataMapper&gt; mapper;
+mapper-&gt;SetInputConnection(append-&gt;GetOutputPort());
+</code></pre>
+<p>数据流图示：</p>
+<pre><code>SphereSource -----+
+                  +---&gt; AppendFilter ---&gt; Mapper ---&gt; Actor
+ConeSource -------+
+</code></pre>
+<p><code>vtkAppendPolyData</code>是一个特殊的Filter——它使用<code>AddInputConnection()</code>而不是<code>SetInputConnection()</code>来添加连接。这是因为它的输入端口数量是动态的（可以合并任意数量的数据集），而不是固定的1个或2个。</p>
+<p>除<code>vtkAppendPolyData</code>外，以下Filter也支持多输入合并：</p>
+<table>
+<thead>
+<tr>
+<th>Filter</th>
+<th>用途</th>
+<th>输入说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>vtkAppendPolyData</code></td>
+<td>合并多个PolyData</td>
+<td>动态数量的输入端口</td>
+</tr>
+<tr>
+<td><code>vtkAppendFilter</code></td>
+<td>合并多个DataSet</td>
+<td>动态数量，支持多种DataSet类型</td>
+</tr>
+<tr>
+<td><code>vtkProbeFilter</code></td>
+<td>采样</td>
+<td>端口0：源数据；端口1：采样点</td>
+</tr>
+<tr>
+<td><code>vtkResampleWithDataSet</code></td>
+<td>重采样</td>
+<td>端口0：源数据；端口1：目标网格</td>
+</tr>
+<tr>
+<td><code>vtkBooleanOperationPolyDataFilter</code></td>
+<td>布尔运算</td>
+<td>端口0和1：两个操作数</td>
+</tr>
+</tbody>
+</table>
+<h3 id="243-filter">2.4.3 Filter的类型分类</h3>
+<p>VTK中所有Filter都继承自<code>vtkAlgorithm</code>，但中间还有一些细分层次，用于表达Filter对输入数据类型的约束：</p>
+<table>
+<thead>
+<tr>
+<th>基类</th>
+<th>典型子类</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>vtkPassInputTypeAlgorithm</code></td>
+<td><code>vtkShrinkPolyData</code></td>
+<td>输出类型与输入类型相同（输入PolyData则输出PolyData）</td>
+</tr>
+<tr>
+<td><code>vtkPolyDataAlgorithm</code></td>
+<td><code>vtkSmoothPolyDataFilter</code>、<code>vtkDecimatePro</code></td>
+<td>专门处理PolyData，输出也是PolyData</td>
+</tr>
+<tr>
+<td><code>vtkImageAlgorithm</code></td>
+<td><code>vtkImageGaussianSmooth</code></td>
+<td>专门处理ImageData，输入输出均为ImageData</td>
+</tr>
+<tr>
+<td><code>vtkDataSetAlgorithm</code></td>
+<td><code>vtkClipDataSet</code>、<code>vtkAppendFilter</code></td>
+<td>处理通用DataSet</td>
+</tr>
+<tr>
+<td><code>vtkGraphAlgorithm</code></td>
+<td><code>vtkBoostBreadthFirstSearch</code></td>
+<td>专门处理图数据结构</td>
+</tr>
+</tbody>
+</table>
+<p>这些中间基类存在的意义是简化Filter的实现。如果你要写一个接收PolyData并输出PolyData的Filter，你只需要继承<code>vtkPolyDataAlgorithm</code>并重写<code>RequestData()</code>方法——输入类型检查和输出类型设置都已经由基类完成了。自定义Filter的开发将在第十九章详细讲解。</p>
+<hr />
+<h2 id="25-update">2.5 Update()与渲染触发</h2>
+<h3 id="251-update">2.5.1 谁在调用Update()</h3>
+<p>在VTK的日常使用中，你显式调用<code>Update()</code>的场景其实并不多。大多数时候，<code>Update()</code>是由渲染系统自动调用的。理解"谁在什么时候调用了Update()"对于掌握程序的执行时机和排查性能问题至关重要。</p>
+<p>VTK中Update()的触发可以分为两类：</p>
+<p><strong>隐式Update（由渲染触发）——最常见的情况：</strong></p>
+<pre><code class="language-cpp">// 你的代码
+renderWindow-&gt;Render();  // 这一行会触发整条Update()链
+</code></pre>
+<p>当<code>Render()</code>被调用时，内部执行路径大致是：</p>
+<pre><code>RenderWindow::Render()
+    --&gt; Renderer::DeviceRender()
+        --&gt; Actor::Render()
+            --&gt; Mapper::Update()          // Mapper需要图形数据
+                --&gt; Filter::Update()      // Filter需要输入数据
+                    --&gt; Source::Update()  // Source需要生成数据
+                        Source执行计算
+                    Filter拿到数据，执行处理
+                Mapper拿到处理后的数据，转换为图形基元
+            Actor将图形基元提交给OpenGL
+        Renderer执行相机投影和光照
+    RenderWindow将像素呈现到屏幕
+</code></pre>
+<p>这个调用链揭示了一个重要事实：<strong>Update()的传播方向是从下游往上游（从渲染端到数据端）</strong>，但<strong>实际的计算方向是从上游往下游（从数据端到渲染端）</strong>。这就像是——你要吃饭（渲染），于是你喊楼上的厨师（Mapper）做饭，厨师又喊农场（Source）送食材。顺序是："要吃饭" -&gt; "要菜" -&gt; "要食材" -&gt; "食材送达" -&gt; "做菜" -&gt; "吃饭"。</p>
+<p><strong>显式Update（由你手动调用）——特殊场景：</strong></p>
+<pre><code class="language-cpp">// 场景1：你想在渲染之前检查数据
+cone-&gt;Update();
+int numPoints = cone-&gt;GetOutput()-&gt;GetNumberOfPoints();
+std::cout &lt;&lt; &quot;Generated &quot; &lt;&lt; numPoints &lt;&lt; &quot; points.&quot; &lt;&lt; std::endl;
+
+// 场景2：你想将数据写入文件，而不需要渲染
+cone-&gt;Update();
+vtkNew&lt;vtkSTLWriter&gt; writer;
+writer-&gt;SetInputConnection(cone-&gt;GetOutputPort());
+writer-&gt;Write();  // Write内部也会调用Update()
+</code></pre>
+<p>在场景1中，你手动调用了<code>cone-&gt;Update()</code>是因为你想在渲染之前检查数据。这样做是可以的，但它破坏了管道的按需特性——Cone现在被强制提前执行了。如果之后渲染时Cone的参数没有变，这部分计算就是浪费的。</p>
+<p>更好的做法是：如果需要检查数据但不打断管道，可以在渲染之后获取数据。</p>
+<h3 id="252-update">2.5.2 完整的Update()级联详解</h3>
+<p>让我们用一个具体的代码示例来追踪完整的Update()级联过程：</p>
+<pre><code class="language-cpp">vtkNew&lt;vtkConeSource&gt; cone;
+cone-&gt;SetResolution(20);
+
+vtkNew&lt;vtkShrinkPolyData&gt; shrink;
+shrink-&gt;SetInputConnection(cone-&gt;GetOutputPort());
+shrink-&gt;SetShrinkFactor(0.8);
+
+vtkNew&lt;vtkPolyDataMapper&gt; mapper;
+mapper-&gt;SetInputConnection(shrink-&gt;GetOutputPort());
+
+vtkNew&lt;vtkActor&gt; actor;
+actor-&gt;SetMapper(mapper);
+
+renderer-&gt;AddActor(actor);
+renderWindow-&gt;Render();  // &lt;-- 从这一行开始，下面的一切自动发生
+</code></pre>
+<p>当<code>renderWindow-&gt;Render()</code>被执行时，以下是内部发生的完整步骤序列：</p>
+<p><strong>步骤1：RenderWindow::Render()</strong>
+RenderWindow知道自己含有一个或多个Renderer。它依次调用每个Renderer的渲染方法，准备将最终的像素结果合成到窗口的各区域。</p>
+<p><strong>步骤2：Renderer遍历Actor列表</strong>
+Renderer持有场景中的Actor列表。对于每个可见的Actor，Renderer准备执行渲染——这包括设置该Actor的模型-视图-投影矩阵，以及请求Actor生成用于绘制的图形基元。</p>
+<p><strong>步骤3：Actor请求Mapper执行</strong>
+Actor本身不包含任何几何信息——它只知道"我的Mapper是谁"。Actor调用<code>mapper-&gt;Render(renderer, actor)</code>，这内部会触发<code>mapper-&gt;Update()</code>，向Mapper索要图形基元。</p>
+<p><strong>步骤4：Mapper::Update()向上游追溯</strong>
+<code>vtkPolyDataMapper::Update()</code>被调用。Mapper的Executive检查："我上次渲染时缓存的上游MTime是多少？现在的上游MTime是多少？"（首次渲染时，缓存的MTime为0，一定小于当前的MTime，因此一定需要计算。）</p>
+<p><strong>步骤5：ShrinkFilter::Update()向上游追溯</strong>
+Mapper的上游是ShrinkFilter。ShrinkFilter的Executive同样执行MTime检查。但ShrinkFilter还需要它自己的上游（ConeSource）的数据才能执行处理——因此ShrinkFilter向上游ConeSource请求数据。</p>
+<p><strong>步骤6：ConeSource执行计算</strong>
+ConeSource是Source——它没有上游，没有输入数据可以依赖。ConeSource的Executive直接调用<code>ConeSource::RequestData()</code>。这个方法是ConeSource类的核心实现，它根据当前参数（Resolution=20, Height=1.0, Radius=0.5, etc.）生成一个圆锥体的PolyData——包括顶点坐标、面索引、法向量等。</p>
+<p><strong>步骤7：数据向下游返回</strong>
+ConeSource的计算完成。它的输出数据（一个<code>vtkPolyData</code>对象）现在可以被ShrinkFilter获取。</p>
+<p><strong>步骤8：ShrinkFilter执行处理</strong>
+ShrinkFilter拿到了ConeSource的输出数据。它的<code>RequestData()</code>方法对PolyData中的每个三角形执行收缩变换（将每个三角形的顶点向其中心点移动一定比例），生成收缩后的PolyData。</p>
+<p><strong>步骤9：Mapper执行图形转换</strong>
+ShrinkFilter的输出数据到达Mapper。<code>vtkPolyDataMapper</code>的<code>RequestData()</code>方法将PolyData的点、线、面转换为OpenGL可直接使用的顶点缓冲对象（VBO）、索引缓冲对象（IBO）和着色器程序。</p>
+<p><strong>步骤10：图形基元沿渲染管道下行</strong>
+Mapper的图形输出到达Actor。Actor结合自己的空间变换矩阵（Position、Orientation、Scale），将模型空间的图形基元变换到世界空间。</p>
+<p><strong>步骤11：Renderer执行投影和光照</strong>
+Renderer根据Camera的投影矩阵将世界空间的图形基元变换到屏幕空间。Renderer还计算光照效果（如果启用了光照的话），这包括漫反射、镜面反射、环境光分量。</p>
+<p><strong>步骤12：RenderWindow执行最终显示</strong>
+所有Renderer的输出被合成到RenderWindow的各个区域。RenderWindow将最终的帧缓冲交换到屏幕（双缓冲机制，避免闪烁）。</p>
+<p><strong>步骤1-4是Update()的向上追溯阶段（"我需要什么"），步骤5-12是计算的向下执行阶段（"给你，拿去吧"）。</strong></p>
+<h3 id="253-update-vs-update">2.5.3 首次Update vs 后续Update</h3>
+<p>让我们继续上面的例子，看看第二次渲染时发生了什么：</p>
+<pre><code class="language-cpp">// 首次渲染
+renderWindow-&gt;Render();  // 整条管道计算一次
+
+// 不修改任何参数，再次渲染
+renderWindow-&gt;Render();  // 管道没有计算——MTime都没有变化，全部使用缓存
+</code></pre>
+<p>第二个<code>Render()</code>的调用链仍然会经历步骤1-4的追溯过程，但在每个算法的MTime检查环节，结论都是"上游MTime == 缓存的MTime，不需要重新计算"。因此，步骤5-12中的实际计算被全部跳过，图形基元直接从缓存中获取。</p>
+<p>只有在参数被修改后，相关链路上的MTime才会被打破：</p>
+<pre><code class="language-cpp">// 修改Filter参数
+shrink-&gt;SetShrinkFactor(0.5);  // ShrinkFilter的MTime更新
+
+renderWindow-&gt;Render();  // 这次会重新计算
+
+// 执行链：
+// Mapper检查MTime: shrink的MTime变了 -&gt; 需要重新获取shrink的输出
+// ShrinkFilter检查MTime: cone的MTime没变 -&gt; 不需要重新获取cone的输出
+//   -&gt; ShrinkFilter直接用缓存的cone数据，只重新执行自己的shrink操作
+//   -&gt; 新的shrink结果返回到Mapper
+// Mapper用新的数据重新生成图形基元
+</code></pre>
+<p>注意上面的关键洞察：<strong>修改了ShrinkFilter的参数后，ConeSource不需要重新计算。</strong> ShrinkFilter缓存的ConeSource的MTime显示ConeSource的数据没有变化，因此ShrinkFilter直接使用之前缓存的ConeSource输出数据，只在已有的Cone数据基础上重新做shrink操作。这就是MTime机制的精妙——最小化重计算范围。</p>
+<h3 id="254">2.5.4 内存管理——中间结果的生命周期</h3>
+<p>管道中产生的中间数据何时被释放？这是一个既有理论意义又有实际影响的问题。</p>
+<p><strong>VTK使用引用计数（Reference Counting）来管理所有数据对象的生命周期。</strong> 当管道中一个算法的输出不再被任何对象引用时，它会被自动析构。</p>
+<p>在标准的管道使用模式中：</p>
+<pre><code class="language-cpp">vtkNew&lt;vtkConeSource&gt; cone;
+vtkNew&lt;vtkShrinkPolyData&gt; shrink;
+shrink-&gt;SetInputConnection(cone-&gt;GetOutputPort());
+
+shrink-&gt;Update();  // 此时cone的输出数据被shrink持有引用
+// cone的输出数据现在不会被释放——shrink还持有对它的引用
+
+// 如果你断开连接：
+shrink-&gt;RemoveAllInputConnections(0);
+// cone的输出数据现在没有引用者了，会在shrink的引用释放后自动析构
+</code></pre>
+<p>在实际的应用程序中，你几乎不需要手动管理这些中间数据的生命周期——VTK的引用计数机制会自动处理。但有两点值得留意：</p>
+<ol>
+<li>
+<p><strong>大型数据集的中间结果可能占用大量内存</strong>。如果你有数十GB的数据在管道中流动，你需要考虑是否某些中间结果可以释放。在某些极端情况下，可以手动调用<code>RemoveAllInputConnections()</code>来断开连接，释放上游数据。</p>
+</li>
+<li>
+<p><strong>SetInputData()传递的数据需要你手动管理生命周期</strong>。因为使用<code>SetInputData()</code>时断开的是管道连接，你传入的数据对象的生命周期完全由你（或持有它的智能指针）来管理。</p>
+</li>
+</ol>
+<hr />
+<h2 id="26">2.6 完整示例：带过滤器的管道</h2>
+<p>现在，让我们将本章学到的所有概念融入一个完整的工作示例。这个示例将展示：</p>
+<ul>
+<li>ConeSource -&gt; ShrinkFilter -&gt; PolyDataMapper -&gt; Actor -&gt; Renderer 的完整管道</li>
+<li>参数修改后管道的自动响应</li>
+<li>显式Update()与隐式Update()的对比效果</li>
+</ul>
+<h3 id="261">2.6.1 示例代码</h3>
+<p>将以下代码保存为<code>PipelineExample.cxx</code>：</p>
+<pre><code class="language-cpp">// ============================================================================
+// PipelineExample.cxx
+// VTK第二章示例：演示可视化管道的完整构建与按需执行机制
+// ============================================================================
+
+#include &quot;vtkActor.h&quot;
+#include &quot;vtkConeSource.h&quot;
+#include &quot;vtkInteractorStyleTrackballCamera.h&quot;
+#include &quot;vtkNew.h&quot;
+#include &quot;vtkPolyData.h&quot;
+#include &quot;vtkPolyDataMapper.h&quot;
+#include &quot;vtkProperty.h&quot;
+#include &quot;vtkRenderWindow.h&quot;
+#include &quot;vtkRenderWindowInteractor.h&quot;
+#include &quot;vtkRenderer.h&quot;
+#include &quot;vtkShrinkPolyData.h&quot;
+
+#include &lt;iostream&gt;
+#include &lt;string&gt;
+
+int main(int argc, char* argv[])
+{
+  // ======================================================================
+  // 第一步：创建渲染基础设施
+  // ======================================================================
+
+  vtkNew&lt;vtkRenderer&gt; renderer;
+  vtkNew&lt;vtkRenderWindow&gt; renderWindow;
+  renderWindow-&gt;SetMultiSamples(0);         // 演示用关闭多重采样
+  renderWindow-&gt;AddRenderer(renderer);
+  renderWindow-&gt;SetSize(600, 300);          // 宽窗口，便于展示两个视图
+  renderWindow-&gt;SetWindowName(&quot;VTK Pipeline Demo - Cone + ShrinkFilter&quot;);
+
+  vtkNew&lt;vtkRenderWindowInteractor&gt; interactor;
+  interactor-&gt;SetRenderWindow(renderWindow);
+
+  vtkNew&lt;vtkInteractorStyleTrackballCamera&gt; style;
+  style-&gt;SetDefaultRenderer(renderer);
+  interactor-&gt;SetInteractorStyle(style);
+
+  // ======================================================================
+  // 第二步：构建可视化管道
+  // ======================================================================
+  // 管道结构: ConeSource -&gt; ShrinkFilter -&gt; PolyDataMapper -&gt; Actor
+
+  // --- 数据源：生成圆锥体几何数据 ---
+  vtkNew&lt;vtkConeSource&gt; cone;
+  cone-&gt;SetResolution(30);     // 锥体的面数（越大越光滑）
+  cone-&gt;SetHeight(2.0);        // 锥体高度
+  cone-&gt;SetRadius(1.0);        // 锥体底面半径
+
+  // 注意：此时Cone还没有生成任何数据。
+  // 它只是&quot;记住&quot;了resolution=30, height=2.0, radius=1.0这些参数。
+
+  // --- 过滤器：收缩多边形 ---
+  vtkNew&lt;vtkShrinkPolyData&gt; shrink;
+  // 【关键】使用SetInputConnection建立管道连接
+  // 这告诉shrink：&quot;你的输入数据来自cone的输出端口，需要时去问它要&quot;
+  shrink-&gt;SetInputConnection(cone-&gt;GetOutputPort());
+  shrink-&gt;SetShrinkFactor(0.8);  // 收缩因子：0=完全收缩到中心，1=保持不变
+
+  // --- 映射器：将几何数据转换为图形基元 ---
+  vtkNew&lt;vtkPolyDataMapper&gt; mapper;
+  // 【关键】同样使用SetInputConnection保持管道连接
+  mapper-&gt;SetInputConnection(shrink-&gt;GetOutputPort());
+
+  // --- 演员：场景中的可视化实体 ---
+  vtkNew&lt;vtkActor&gt; actor;
+  actor-&gt;SetMapper(mapper);
+  actor-&gt;GetProperty()-&gt;SetColor(0.5, 0.8, 1.0);   // 浅蓝色
+  actor-&gt;GetProperty()-&gt;SetEdgeVisibility(1);        // 显示边界线
+  actor-&gt;GetProperty()-&gt;SetEdgeColor(0.0, 0.0, 0.3); // 深蓝灰色边界线
+
+  // ======================================================================
+  // 第三步：添加Actor到场景
+  // ======================================================================
+
+  renderer-&gt;AddActor(actor);
+
+  // ======================================================================
+  // 第四步：在渲染前检查管道状态
+  // ======================================================================
+
+  std::cout &lt;&lt; &quot;========================================&quot; &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;  VTK可视化管道示例&quot; &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;  管道: ConeSource -&gt; ShrinkFilter -&gt; Mapper -&gt; Actor&quot; &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;========================================&quot; &lt;&lt; std::endl;
+  std::cout &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;&gt;&gt;&gt; 首次渲染前（管道尚未执行）:&quot; &lt;&lt; std::endl;
+
+  // 在Update()之前尝试获取输出——这会触发一段零输出或者需要先Update
+  // 这里我们演示：在首次渲染之前，可以显式调用Update()来窥探数据
+
+  // 显式Update：触发ConeSource和ShrinkFilter都执行
+  shrink-&gt;Update();
+
+  // 现在可以安全地查询数据
+  vtkPolyData* output = shrink-&gt;GetOutput();
+  std::cout &lt;&lt; &quot;  ShrinkFilter输出数据点数量: &quot;
+            &lt;&lt; output-&gt;GetNumberOfPoints() &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;  ShrinkFilter输出数据单元数量: &quot;
+            &lt;&lt; output-&gt;GetNumberOfCells() &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;  Cone当前Resolution参数: &quot; &lt;&lt; cone-&gt;GetResolution() &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;  Shrink当前ShrinkFactor参数: &quot; &lt;&lt; shrink-&gt;GetShrinkFactor() &lt;&lt; std::endl;
+  std::cout &lt;&lt; std::endl;
+
+  // ======================================================================
+  // 第五步：首次渲染
+  // ======================================================================
+
+  renderer-&gt;SetBackground(0.2, 0.3, 0.4);
+  renderWindow-&gt;Render();
+  std::cout &lt;&lt; &quot;&gt;&gt;&gt; 首次渲染完成（管道已经执行）&quot; &lt;&lt; std::endl;
+
+  // ======================================================================
+  // 第六步：修改参数并重新渲染
+  // ======================================================================
+
+  std::cout &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;&gt;&gt;&gt; 修改Cone参数: SetResolution(30 -&gt; 10)&quot; &lt;&lt; std::endl;
+  cone-&gt;SetResolution(10);
+
+  // 注意：我们不需要手动通知shrink或mapper！
+  // MTime机制会自动检测到cone的修改。
+
+  std::cout &lt;&lt; &quot;&gt;&gt;&gt; 修改Shrink参数: SetShrinkFactor(0.8 -&gt; 0.5)&quot; &lt;&lt; std::endl;
+  shrink-&gt;SetShrinkFactor(0.5);
+
+  std::cout &lt;&lt; &quot;&gt;&gt;&gt; 重新渲染...&quot; &lt;&lt; std::endl;
+  renderWindow-&gt;Render();
+  std::cout &lt;&lt; &quot;&gt;&gt;&gt; 第二次渲染完成（管道自动重新计算了变化的部分）&quot; &lt;&lt; std::endl;
+
+  // 验证：渲染后查询数据
+  shrink-&gt;Update();  // Update()此时是便宜的——如果数据没变则不会重新计算
+  output = shrink-&gt;GetOutput();
+  std::cout &lt;&lt; &quot;  ShrinkFilter输出数据点数量（参数修改后）: &quot;
+            &lt;&lt; output-&gt;GetNumberOfPoints() &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;  ShrinkFilter输出数据单元数量（参数修改后）: &quot;
+            &lt;&lt; output-&gt;GetNumberOfCells() &lt;&lt; std::endl;
+  std::cout &lt;&lt; std::endl;
+
+  // ======================================================================
+  // 第七步：演示第二次渲染（参数不变）
+  // ======================================================================
+
+  std::cout &lt;&lt; &quot;&gt;&gt;&gt; 不修改任何参数，再次渲染...&quot; &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;    （这次渲染时管道不需要重新计算——所有MTime都没变）&quot; &lt;&lt; std::endl;
+  renderWindow-&gt;Render();
+  std::cout &lt;&lt; &quot;&gt;&gt;&gt; 第三次渲染完成（无计算发生，直接使用缓存）&quot; &lt;&lt; std::endl;
+
+  // ======================================================================
+  // 第八步：启动交互循环
+  // ======================================================================
+
+  std::cout &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;========================================&quot; &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;  窗口已打开。你可以:&quot; &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;  - 鼠标左键拖拽：旋转场景&quot; &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;  - 鼠标右键上下拖拽：缩放场景&quot; &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;  - 鼠标中键拖拽：平移场景&quot; &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;  关闭窗口退出程序。&quot; &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;========================================&quot; &lt;&lt; std::endl;
+
+  renderWindowInteractor-&gt;Start();
+
+  return 0;
+}
+</code></pre>
+<h3 id="262-cmakeliststxt">2.6.2 CMakeLists.txt</h3>
+<pre><code class="language-cmake">cmake_minimum_required(VERSION 3.20)
+project(PipelineExample)
+
+# 查找VTK 9.5.2
+find_package(VTK 9.5.2 REQUIRED
+  COMPONENTS
+    CommonCore
+    CommonColor
+    CommonDataModel
+    CommonExecutionModel
+    FiltersCore
+    FiltersSources
+    InteractionStyle
+    RenderingCore
+    RenderingOpenGL2
+)
+
+# 打印VTK信息（可选，帮助调试）
+message(STATUS &quot;VTK version: ${VTK_VERSION}&quot;)
+message(STATUS &quot;VTK include: ${VTK_INCLUDE_DIRS}&quot;)
+
+# 创建可执行文件
+add_executable(PipelineExample PipelineExample.cxx)
+
+# 链接VTK库
+target_link_libraries(PipelineExample PRIVATE ${VTK_LIBRARIES})
+
+# 自动初始化VTK模块工厂
+vtk_module_autoinit(
+  TARGETS PipelineExample
+  MODULES ${VTK_LIBRARIES}
+)
+</code></pre>
+<p>注意新增的组件依赖：</p>
+<ul>
+<li><strong><code>CommonExecutionModel</code></strong>：提供<code>vtkExecutive</code>、<code>vtkDemandDrivenPipeline</code>等执行管理类。虽然你在代码中没有直接引用它们，但它们被<code>vtkAlgorithm</code>内部使用，链接时需要这个模块。</li>
+<li><strong><code>FiltersCore</code></strong>：提供<code>vtkShrinkPolyData</code>等核心过滤器。这是我们在本章中使用的Filter所属的模块。</li>
+</ul>
+<h3 id="263">2.6.3 程序运行输出解读</h3>
+<p>运行程序后，终端将输出类似以下内容：</p>
+<pre><code>========================================
+  VTK可视化管道示例
+  管道: ConeSource -&gt; ShrinkFilter -&gt; Mapper -&gt; Actor
+========================================
+
+&gt;&gt;&gt; 首次渲染前（管道尚未执行）:
+  ShrinkFilter输出数据点数量: 62
+  ShrinkFilter输出数据单元数量: 90
+  Cone当前Resolution参数: 30
+  Shrink当前ShrinkFactor参数: 0.8
+
+&gt;&gt;&gt; 首次渲染完成（管道已经执行）
+
+&gt;&gt;&gt; 修改Cone参数: SetResolution(30 -&gt; 10)
+&gt;&gt;&gt; 修改Shrink参数: SetShrinkFactor(0.8 -&gt; 0.5)
+&gt;&gt;&gt; 重新渲染...
+&gt;&gt;&gt; 第二次渲染完成（管道自动重新计算了变化的部分）
+  ShrinkFilter输出数据点数量（参数修改后）: 22
+  ShrinkFilter输出数据单元数量（参数修改后）: 30
+
+&gt;&gt;&gt; 不修改任何参数，再次渲染...
+    （这次渲染时管道不需要重新计算——所有MTime都没变）
+&gt;&gt;&gt; 第三次渲染完成（无计算发生，直接使用缓存）
+
+========================================
+  窗口已打开。你可以:
+  - 鼠标左键拖拽：旋转场景
+  - 鼠标右键上下拖拽：缩放场景
+  - 鼠标中键拖拽：平移场景
+  关闭窗口退出程序。
+========================================
+</code></pre>
+<p>从输出中可以观察到：</p>
+<ol>
+<li>
+<p><strong>数据点数量</strong>：Resolution=30时产生62个点（30个底面顶点 x 2层 + 1个尖端 + 1个底面中心 = 62），Resolution=10时只有22个点。这说明ConeSource确实在重新计算。</p>
+</li>
+<li>
+<p><strong>收缩效果</strong>：由于ShrinkFilter的作用，显示的锥体看起来比原始ConeSource生成的小——每个三角形的顶点被向中心收缩了20%（ShrinkFactor=0.8时）或50%（ShrinkFactor=0.5时）。</p>
+</li>
+<li>
+<p><strong>参数不用手动传播</strong>：我们只调用了<code>cone-&gt;SetResolution(10)</code>和<code>shrink-&gt;SetShrinkFactor(0.5)</code>——不需要手动通知下游。MTime机制自动完成了变化检测和计算调度。</p>
+</li>
+</ol>
+<h3 id="264">2.6.4 本示例的管道可视化</h3>
+<pre><code>ConeSource                      可视化管道
+    |
+    |   SetInputConnection()
+    v
+ShrinkFilter
+    |
+    |   SetInputConnection()
+    v
+PolyDataMapper ============ 可视化/渲染分界 ============ 渲染管道
+    |
+    |   actor-&gt;SetMapper(mapper)
+    v
+Actor
+    |
+    |   renderer-&gt;AddActor(actor)
+    v
+Renderer
+    |
+    |   renderWindow-&gt;AddRenderer(renderer)
+    v
+RenderWindow
+</code></pre>
+<h3 id="265">2.6.5 实验建议</h3>
+<p>运行此示例后，建议你自行尝试以下修改，以加深对管道机制的理解：</p>
+<ol>
+<li>
+<p><strong>将<code>SetInputConnection</code>改为<code>SetInputData</code></strong>：把shrink到mapper的连接改为<code>mapper-&gt;SetInputData(shrink-&gt;GetOutput())</code>，观察修改cone参数后渲染是否会更新。你应该会发现不会——因为管道被SetInputData打断了。</p>
+</li>
+<li>
+<p><strong>在修改参数后手动调用<code>Update()</code></strong>：在<code>cone-&gt;SetResolution(10)</code>之后立即加上<code>shrink-&gt;Update()</code>，然后在<code>renderWindow-&gt;Render()</code>之前再查询一次数据点数量。观察中间结果的变化。</p>
+</li>
+<li>
+<p><strong>删除<code>SetInputConnection</code>改用直接SetInputData构造独立数据</strong>：完全抛弃cone，手动创建一个<code>vtkPolyData</code>对象，用<code>SetInputData</code>传给mapper。观察在不使用管道连接时，程序的行为有何不同。</p>
+</li>
+</ol>
+<p>这些实验将帮助你从"知道概念"转化为"真正理解"。</p>
+<hr />
+<h2 id="27">2.7 本章小结</h2>
+<p>本章深入讲解了VTK可视化管道的完整运作机制。让我们回顾一下核心要点：</p>
+<h3 id="_4">要点速览</h3>
+<ol>
+<li>
+<p><strong>管道由六个核心环节组成</strong>：Source（数据生产）、Filter（数据变换）、Mapper（数据到图形的翻译）、Actor（可视化实体）、Renderer（场景舞台）、RenderWindow（屏幕窗口）。这六个环节分为两层：可视化管道（Source -&gt; Filter -&gt; Mapper）处理数据，渲染管道（Actor -&gt; Renderer -&gt; RenderWindow）处理显示。</p>
+</li>
+<li>
+<p><strong><code>SetInputConnection()</code>是管道的血液</strong>。它建立算法之间的"活"连接，使得数据可以在需要时按需流动。<code>SetInputData()</code>则传递数据快照，打断管道连接——前者是默认选择，后者只在特殊场景使用。</p>
+</li>
+<li>
+<p><strong>VTK采用按需执行（Demand-Driven）模型</strong>。创建Source和Filter时不会执行任何计算；计算只在<code>Update()</code>被调用时（通常由<code>Render()</code>自动触发）才发生。这种设计避免了不必要的计算，支持高效的交互式参数探索。</p>
+</li>
+<li>
+<p><strong>MTime（修改时间戳）是管道的时钟</strong>。每次调用<code>SetXXX()</code>修改参数时，对象的MTime都会更新。下游算法通过比较缓存的MTime与上游的当前MTime来判断数据是否需要重新计算——这是VTK自动检测变化、自动调度的核心机制。</p>
+</li>
+<li>
+<p><strong>管道支持分叉（一个Source驱动多个下游）和合并（多个Source汇聚到一个Filter）</strong>。这使得VTK可以构建复杂的可视化网络，同时保持数据复用和按需计算的效率。</p>
+</li>
+<li>
+<p><strong><code>Render()</code>触发的Update()级联是从下游往上游追溯的</strong>：RenderWindow -&gt; Renderer -&gt; Actor -&gt; Mapper -&gt; Filter -&gt; Source。追溯完成后，计算从Source开始向下游流动。整个过程对应用代码透明——你只需要修改参数并重新渲染。</p>
+</li>
+</ol>
+<h3 id="_5">从本章到全书</h3>
+<p>如果说VTK是一门外语，那么管道就是它的语法规则。本章的内容将在全书中反复出现：</p>
+<ul>
+<li>第三章到第十章讲各种数据类型和Filter时，你会不断用到本章的<code>SetInputConnection()</code>模式。</li>
+<li>第十一章处理大规模数据时，管道的按需执行和MTime机制是分块加载（Streaming）的基础。</li>
+<li>第十二章讲多线程并行时，管道的分片更新（UpdatePiece）是核心概念。</li>
+<li>第十九章讲自定义Filter开发时，正是基于对<code>vtkAlgorithm</code>和管道机制的深入理解。</li>
+</ul>
+<p>在进入具体的Filter和数据操作之前，下一章（第三章：几何数据基础与PolyData）将带你了解VTK中最常用、最灵活的数据类型——<code>vtkPolyData</code>。你将学习如何构造、遍历和修改多边形数据，这将成为你构建一切可视化应用的数据基础。</p>
+<hr />
+<blockquote>
+<p><strong>本章关键记忆口诀</strong>："连接用Connection，更新靠MTime，渲染触发Update，数据按需流。"</p>
+<ul>
+<li>管道连接：<code>SetInputConnection(algorithm-&gt;GetOutputPort())</code></li>
+<li>按需更新：修改参数 -&gt; MTime变化 -&gt; 下游在<code>Update()</code>时检测 -&gt; 自动重算</li>
+<li>渲染触发：<code>Render()</code> -&gt; 向上游追溯 -&gt; 逐个检查MTime -&gt; 从Source开始执行</li>
+<li>数据流动：从Source到Mapper是数据加工，从Actor到窗口是图形渲染</li>
+</ul>
+</blockquote>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,3024 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../..">
+      
+      
+        <link rel="next" href="../chapter-02-visualization-pipeline/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>第一章 VTK概述与环境搭建 - Echo-b's Tech Notes</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#vtk" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Echo-b&#39;s Tech Notes" class="md-header__button md-logo" aria-label="Echo-b's Tech Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Echo-b's Tech Notes
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              第一章 VTK概述与环境搭建
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Echo-b&#39;s Tech Notes" class="md-nav__button md-logo" aria-label="Echo-b's Tech Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Echo-b's Tech Notes
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VTK 教程
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    VTK 教程
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    入门篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    入门篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第一章 VTK概述与环境搭建
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第一章 VTK概述与环境搭建
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        本章导读
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-vtk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 VTK是什么
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1.1 VTK是什么">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#111" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1.1 定义与背景
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#112-vtk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1.2 谁在用VTK
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#113" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1.3 跨平台支持
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 核心特性概览
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1.2 核心特性概览">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#121-pipeline-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2.1 管道架构（Pipeline Architecture）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#122" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2.2 丰富的数据模型
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#123-filters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2.3 过滤器（Filters）体系
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#124" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2.4 渲染抽象
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#125-interaction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2.5 交互工具（Interaction）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#126-charts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2.6 二维图表（Charts）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#127" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2.7 并行处理
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#13-vtk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 安装VTK
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1.3 安装VTK">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#131-windows" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3.1 Windows平台
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#132-ubuntudebian-linux" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3.2 Ubuntu/Debian Linux
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#133-macos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3.3 macOS
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#134" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3.4 从源码编译
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#14-cmake" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.4 CMake项目配置
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1.4 CMake项目配置">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#141" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.4.1 完整模板
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#142" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.4.2 逐行详解
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#143" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.4.3 组件选择指南
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#15-vtkcone" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.5 第一个VTK程序：Cone示例
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1.5 第一个VTK程序：Cone示例">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#151" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.5.1 完整代码
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#152" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.5.2 代码逐行详解
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1.5.2 代码逐行详解">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#headers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        头文件包含（Headers）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vtknew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        vtkNew智能指针
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        渲染基础设施
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#source" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        管道：数据源（Source）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mapper" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        管道：映射器（Mapper）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#actor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        管道：演员（Actor）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        场景组装与渲染
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#153" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.5.3 管道流程图解
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#154" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.5.4 常见修改实验
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#16" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.6 编译与运行
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1.6 编译与运行">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#161" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.6.1 目录结构
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#162" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.6.2 编译步骤
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#163-cmake" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.6.3 CMake配置过程中的关键信息
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#164" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.6.4 运行程序
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#165" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.6.5 常见问题排查
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#166" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.6.6 运行效果
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#17" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.7 本章小结
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1.7 本章小结">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        延伸阅读与资源
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        进入下一章之前
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-02-visualization-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二章 可视化管线
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-03-data-model-basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第三章 数据模型基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-04-geometry-and-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第四章 基本几何体与数据源
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-05-rendering-and-interactor/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第五章 渲染与交互机
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-06-volume1-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第六章 入门篇综合实战——3D几何画廊
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    实战篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    实战篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-07-polydata/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第七章 PolyData详解
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-08-unstructured-grid/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第八章 非结构化网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-09-structured-data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第九章 结构化数据
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-10-data-io/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十章 数据I/O
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-11-common-filters/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十一章 常用过滤器
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-12-color-mapping/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十二章 颜色映射与标量可视化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-13-advanced-rendering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十三章 高级渲染技术
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-14-multi-dataset/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十四章 多个数据集处理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-15-volume2-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十五章 实战篇综合实战——CFD后处理可视化工具
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    进阶篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    进阶篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-16-volume-rendering-basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十六章 体渲染基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-17-volume-rendering-advanced/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十七章 体渲染高级技术
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-18-charts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十八章 2D图表系统
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-19-annotation-and-widgets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十九章 三维标注与交互组件
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-20-custom-interaction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十章 自定义交互与Widget
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-21-qt-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十一章 Qt集成
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-22-smp-parallel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十二章 SMP并行入门
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-23-volume3-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十三章 进阶篇综合实战
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        本章导读
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-vtk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 VTK是什么
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1.1 VTK是什么">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#111" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1.1 定义与背景
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#112-vtk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1.2 谁在用VTK
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#113" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1.3 跨平台支持
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 核心特性概览
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1.2 核心特性概览">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#121-pipeline-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2.1 管道架构（Pipeline Architecture）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#122" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2.2 丰富的数据模型
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#123-filters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2.3 过滤器（Filters）体系
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#124" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2.4 渲染抽象
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#125-interaction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2.5 交互工具（Interaction）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#126-charts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2.6 二维图表（Charts）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#127" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2.7 并行处理
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#13-vtk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 安装VTK
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1.3 安装VTK">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#131-windows" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3.1 Windows平台
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#132-ubuntudebian-linux" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3.2 Ubuntu/Debian Linux
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#133-macos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3.3 macOS
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#134" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3.4 从源码编译
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#14-cmake" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.4 CMake项目配置
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1.4 CMake项目配置">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#141" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.4.1 完整模板
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#142" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.4.2 逐行详解
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#143" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.4.3 组件选择指南
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#15-vtkcone" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.5 第一个VTK程序：Cone示例
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1.5 第一个VTK程序：Cone示例">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#151" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.5.1 完整代码
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#152" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.5.2 代码逐行详解
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1.5.2 代码逐行详解">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#headers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        头文件包含（Headers）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vtknew" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        vtkNew智能指针
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        渲染基础设施
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#source" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        管道：数据源（Source）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mapper" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        管道：映射器（Mapper）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#actor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        管道：演员（Actor）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        场景组装与渲染
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#153" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.5.3 管道流程图解
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#154" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.5.4 常见修改实验
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#16" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.6 编译与运行
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1.6 编译与运行">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#161" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.6.1 目录结构
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#162" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.6.2 编译步骤
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#163-cmake" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.6.3 CMake配置过程中的关键信息
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#164" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.6.4 运行程序
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#165" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.6.5 常见问题排查
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#166" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.6.6 运行效果
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#17" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.7 本章小结
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1.7 本章小结">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        延伸阅读与资源
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        进入下一章之前
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="vtk">第一章 VTK概述与环境搭建</h1>
+<h2 id="_1">本章导读</h2>
+<p>欢迎来到VTK（Visualization Toolkit，可视化工具包）的世界。本章将帮助你建立对VTK的全局认知，并完成开发环境的搭建与第一个程序的运行。无论你是从事科学计算、医学影像、CFD（Computational Fluid Dynamics，计算流体力学）仿真还是地质勘探，VTK都是你将数据转化为直观三维图形的利器。</p>
+<p>本章的核心目标有三个：</p>
+<ol>
+<li><strong>理解VTK的定位与核心设计理念</strong>--什么是管道（Pipeline）架构，为什么这种设计能让你灵活地组合数据处理与渲染流程。</li>
+<li><strong>完成VTK的安装与CMake项目配置</strong>--从零开始搭建一个可编译、可运行的VTK开发环境。</li>
+<li><strong>运行并理解第一个VTK程序（Cone示例）</strong>--用代码亲手创建一个三维圆锥体，并逐行理解每一步在管道中扮演的角色。</li>
+</ol>
+<p>如果你是C++开发者，但对可视化领域或VTK完全陌生，那么本章就是为你准备的起点。我们将用足够的细节解释每一个概念，而不是简单地罗列术语。</p>
+<hr />
+<h2 id="11-vtk">1.1 VTK是什么</h2>
+<h3 id="111">1.1.1 定义与背景</h3>
+<p><strong>VTK</strong>（Visualization Toolkit）是一套开源的C++类库，专注于三维计算机图形学（3D Computer Graphics）、图像处理（Image Processing）、体渲染（Volume Rendering）和科学可视化（Scientific Visualization）。它由Kitware公司在1993年发起，至今已持续发展超过三十年，当前最新稳定版本为9.5.2。</p>
+<p>VTK采用<strong>BSD开源许可证</strong>，这意味着你可以在学术研究、商业产品、开源项目中自由使用、修改和分发它，而无需公开你的源代码或支付任何费用。</p>
+<p>VTK的底层构建于<strong>OpenGL</strong>之上（在其历史演进中，也支持过OpenGL2等后端），将对底层图形API的复杂调用抽象为高层次的、面向可视化的C++对象。你不必关心顶点缓冲如何填充、着色器如何编译--VTK已经为你完成了这些工程细节，你只需要关注"我的数据是什么样的"以及"我想怎么展现它"。</p>
+<h3 id="112-vtk">1.1.2 谁在用VTK</h3>
+<p>VTK广泛应用于以下领域：</p>
+<ul>
+<li><strong>医学影像（Medical Imaging）</strong>：CT、MRI数据的三维重建与可视化。例如，3D Slicer（一款开源医学图像分析平台）就重度依赖VTK。</li>
+<li><strong>计算流体力学（CFD）</strong>：流场数据的后处理，如速度场、压力场的等值面（Isosurface）提取与渲染。ParaView（Kitware出品的并行可视化工具）也构建于VTK之上。</li>
+<li><strong>有限元分析（FEA，Finite Element Analysis）</strong>：结构力学仿真结果的网格变形与应力云图展示。</li>
+<li><strong>地质勘探（Geoscience）</strong>：地震数据体渲染、地质构造可视化。</li>
+<li><strong>气象与海洋学（Meteorology &amp; Oceanography）</strong>：大气与海洋数据的三维可视化。</li>
+<li><strong>计算机图形学研究</strong>：作为原型验证和新算法实现的平台。</li>
+</ul>
+<p>简而言之，如果你手头有物理世界产生的三维数据，并且需要通过图形把它"画"出来以便理解、分析和沟通，VTK就是你工具箱里的基础组件。</p>
+<h3 id="113">1.1.3 跨平台支持</h3>
+<p>VTK是一套真正的跨平台库，官方支持以下操作系统和编译器：</p>
+<table>
+<thead>
+<tr>
+<th>操作系统</th>
+<th>推荐编译器</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Windows 10/11</td>
+<td>Microsoft Visual Studio 2019/2022</td>
+</tr>
+<tr>
+<td>macOS 11+</td>
+<td>Apple Clang (Xcode)</td>
+</tr>
+<tr>
+<td>Linux (Ubuntu 20.04+, CentOS 7+, 等)</td>
+<td>GCC 9+, Clang 10+</td>
+</tr>
+</tbody>
+</table>
+<p>VTK还提供了Python封装（通过<code>vtkmodules</code>包），以及Java和.NET的绑定，但本教程聚焦于C++接口--这是所有其他语言绑定的根基。理解C++层的设计，将使你在使用任何语言绑定（Language Binding）时都游刃有余。</p>
+<hr />
+<h2 id="12">1.2 核心特性概览</h2>
+<p>在动手写代码之前，先对VTK的能力版图做一个全景扫描。你不必立刻理解每一个术语，这里的目标是建立一个"思维地图"（mental map），让你知道遇到问题时去哪里寻找解决方案。</p>
+<h3 id="121-pipeline-architecture">1.2.1 管道架构（Pipeline Architecture）</h3>
+<p>管道是VTK最核心的设计概念。它借鉴了数据流编程（Dataflow Programming）的思想：</p>
+<pre><code>数据源(Source) --&gt; 过滤器(Filter) --&gt; 映射器(Mapper) --&gt; 演员(Actor) --&gt; 渲染器(Renderer) --&gt; 渲染窗口(RenderWindow)
+</code></pre>
+<p>这个架构的关键洞察在于：<strong>数据在沿着管道流动的过程中，每一步都只在上游数据被请求时才执行计算（按需执行，Demand-Driven）</strong>。VTK内部维护了一套复杂的执行时机制来管理这种惰性求值（Lazy Evaluation），使得你可以在不修改数据源的情况下，动态地插入、替换或调整下游的处理步骤。</p>
+<p>管道架构的优势：
+- <strong>模块化</strong>：每种过滤器只做一件事，你可以像搭积木一样组合它们。
+- <strong>可复用</strong>：同一个数据源可以连接到多个不同的可视化分支。
+- <strong>内存高效</strong>：VTK通过引用计数（Reference Counting）和智能指针（<code>vtkNew</code>、<code>vtkSmartPointer</code>）自动管理对象生命周期。</p>
+<h3 id="122">1.2.2 丰富的数据模型</h3>
+<p>VTK的核心数据结构是<strong>vtkDataSet</strong>及其派生类，它们覆盖了科学计算中最常见的数据组织形式：</p>
+<ul>
+<li><strong>vtkImageData</strong>：规则网格数据（如CT切片堆叠成的三维体数据），所有网格点的间距在各维度上均匀。</li>
+<li><strong>vtkRectilinearGrid</strong>：直线网格数据，每个维度的间距可以不均匀但网格线仍正交。</li>
+<li><strong>vtkStructuredGrid</strong>：结构化网格（曲线网格），拓扑规则但几何位置可以任意。</li>
+<li><strong>vtkPolyData</strong>：多边形数据，由点（Points）、线（Lines）、多边形（Polygons）、三角形带（Triangle Strips）组成。这是VTK中最灵活、最常用的数据表示。</li>
+<li><strong>vtkUnstructuredGrid</strong>：非结构化网格，可以表示任意拓扑的网格单元（四面体、六面体、棱柱、金字塔等）。这是有限元分析的典型输出格式。</li>
+</ul>
+<p>此外，VTK还内置了<strong>属性数据模型</strong>：每个数据集的点（Point）或单元（Cell）上可以附加任意数量的标量（Scalar）、矢量（Vector）、法向（Normal）、纹理坐标（Texture Coordinate）和张量（Tensor）数据。这种设计直接对应于物理仿真中的场数据（温度场标量、速度场矢量、应力张量等）。</p>
+<h3 id="123-filters">1.2.3 过滤器（Filters）体系</h3>
+<p>VTK提供数百种过滤器，按功能大致分为：</p>
+<ul>
+<li><strong>源过滤器（Sources）</strong>：生成数据的起点。例如<code>vtkConeSource</code>生成锥体几何，<code>vtkSphereSource</code>生成球体，<code>vtkPlaneSource</code>生成平面。</li>
+<li><strong>几何过滤器（Geometric Filters）</strong>：对几何数据进行变换或计算。例如<code>vtkClipDataSet</code>进行裁切，<code>vtkContourFilter</code>提取等值面，<code>vtkSmoothPolyDataFilter</code>进行表面平滑，<code>vtkDecimatePro</code>进行网格简化。</li>
+<li><strong>数据转换过滤器</strong>：在不同数据格式间转换。例如<code>vtkDataSetTriangleFilter</code>将非四面体单元四面体化，<code>vtkDelaunay2D</code>进行二维Delaunay三角剖分。</li>
+<li><strong>子集选择过滤器</strong>：提取数据的子集。例如<code>vtkExtractVOI</code>提取体数据的感兴趣区域（VOI，Volume of Interest），<code>vtkThreshold</code>根据标量值筛选单元。</li>
+<li><strong>属性过滤器</strong>：计算或操作属性数据。例如<code>vtkGradientFilter</code>计算梯度，<code>vtkMeshQuality</code>评估网格质量。</li>
+</ul>
+<p>在后续章节中，我们将逐一深入这些过滤器的用法。</p>
+<h3 id="124">1.2.4 渲染抽象</h3>
+<p>VTK的渲染系统不是单纯地"把三角形画到屏幕上"，而是提供了一套完整的场景管理抽象：</p>
+<ul>
+<li><strong>vtkRenderer</strong>：渲染器，管理一个三维场景中的所有光源、演员和相机。</li>
+<li><strong>vtkActor</strong>：演员/角色，代表场景中的一个可渲染对象。它关联一个映射器（决定几何形状）和一组属性（决定颜色、材质等外观）。</li>
+<li><strong>vtkVolume</strong>：体渲染对象，用于三维标量场的直接体绘制（区别于基于表面网格的几何渲染）。</li>
+<li><strong>vtkMapper</strong>：映射器，将数据集的几何表示转化为可渲染的图形基元（Graphics Primitives）。</li>
+<li><strong>vtkCamera</strong>：相机，控制视角、投影方式和观察位置。</li>
+<li><strong>vtkLight</strong>：光源，控制场景照明方向、颜色和强度。</li>
+<li><strong>vtkRenderWindow</strong>：渲染窗口，对应屏幕上的一个窗口，包含一个或多个渲染器。</li>
+<li><strong>vtkRenderWindowInteractor</strong>：交互器，捕获鼠标和键盘事件，驱动相机旋转、平移、缩放等交互行为。</li>
+</ul>
+<h3 id="125-interaction">1.2.5 交互工具（Interaction）</h3>
+<p>VTK内置了丰富的交互样式（Interactor Style），定义了用户与三维场景的交互语义：</p>
+<ul>
+<li><strong>vtkInteractorStyleTrackballCamera</strong>：轨迹球式相机操控（鼠标旋转、平移、缩放场景）。适合观察静态场景。</li>
+<li><strong>vtkInteractorStyleJoystickCamera</strong>：操纵杆式相机操控。</li>
+<li><strong>vtkInteractorStyleTrackballActor</strong>：轨迹球式演员操控（旋转的是对象本身，而非场景）。</li>
+<li><strong>vtkInteractorStyleImage</strong>：二维图像交互样式（用于医学图像切片浏览）。</li>
+</ul>
+<p>你还可以通过<strong>vtkWidget</strong>体系在场景中添加交互式控件，如测量尺、裁切平面操纵器、种子点放置器等。</p>
+<h3 id="126-charts">1.2.6 二维图表（Charts）</h3>
+<p>VTK自带一套二维图表子库（VTK Charts），通过<code>vtkChartXY</code>及相关类提供折线图、柱状图、散点图等常见的二维可视化形式。对于需要在三维场景旁搭配二维统计图表的应用场景（如科学仿真结果的分析面板），这可以避免引入额外的第三方图表库。</p>
+<h3 id="127">1.2.7 并行处理</h3>
+<p>对于海量数据，VTK通过以下机制支持并行计算：</p>
+<ul>
+<li><strong>vtkSMPTools</strong>：基于SMP（Symmetric Multi-Processing，对称多处理）的多线程加速。许多核心过滤器内部已经使用SMP进行了优化。</li>
+<li><strong>vtkMPIController</strong>：基于MPI（Message Passing Interface，消息传递接口）的分布式并行处理。适用于需要在多节点集群上处理TB级数据的场景。</li>
+<li><strong>vtkStreamingDemandDrivenPipeline</strong>：流式管道执行机制，支持分块（streaming piece）处理，避免一次性加载全部数据。</li>
+</ul>
+<hr />
+<h2 id="13-vtk">1.3 安装VTK</h2>
+<p>VTK的安装有三种主流方式：使用包管理器（最便捷）、下载预编译二进制包、或从源代码编译（灵活性最高）。根据你的平台选择最适合的方式。</p>
+<h3 id="131-windows">1.3.1 Windows平台</h3>
+<p><strong>方式一：使用vcpkg（推荐）</strong></p>
+<p><a href="https://github.com/microsoft/vcpkg">vcpkg</a>是微软维护的C++包管理器，可以自动解决依赖并生成CMake可用的工具链文件。</p>
+<pre><code class="language-powershell"># 安装vtk（默认构建常用模块）
+vcpkg install vtk
+
+# 或指定特定版本和三重目标（triplet）
+vcpkg install vtk:x64-windows
+
+# 集成到Visual Studio（可选）
+vcpkg integrate install
+</code></pre>
+<p>安装完成后，在CMake配置时指定vcpkg工具链文件：</p>
+<pre><code class="language-powershell">cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE=[vcpkg-root]/scripts/buildsystems/vcpkg.cmake
+</code></pre>
+<p><strong>方式二：下载预编译二进制包</strong></p>
+<p>从<a href="https://vtk.org/download/">Kitware官方发布页</a>下载对应Visual Studio版本和架构（x64）的安装包，解压到本地目录（如<code>C:\VTK\9.5.2</code>）。安装包中通常包含头文件（<code>include</code>目录）、库文件（<code>lib</code>目录）和运行时DLL（<code>bin</code>目录）。</p>
+<h3 id="132-ubuntudebian-linux">1.3.2 Ubuntu/Debian Linux</h3>
+<pre><code class="language-bash"># 从APT仓库安装VTK开发包
+sudo apt update
+sudo apt install libvtk9-dev
+
+# 如需完整的工具集（包括vtkpython）
+sudo apt install vtk9
+</code></pre>
+<p>注意：不同Ubuntu版本的APT仓库中VTK版本可能较旧。如果需要9.5.2版本，建议从源码编译。</p>
+<h3 id="133-macos">1.3.3 macOS</h3>
+<pre><code class="language-bash"># 使用Homebrew安装
+brew install vtk
+</code></pre>
+<p>Homebrew会自动处理依赖关系并将VTK安装到<code>/usr/local/opt/vtk</code>（Intel Mac）或<code>/opt/homebrew/opt/vtk</code>（Apple Silicon Mac）。</p>
+<h3 id="134">1.3.4 从源码编译</h3>
+<p>当预编译包无法满足需求（如需要特定模块、调试版本或自定义配置）时，应选择从源码编译。</p>
+<p><strong>前置依赖：</strong></p>
+<ul>
+<li>CMake 3.8+</li>
+<li>支持C++17的编译器（Visual Studio 2019+, GCC 9+, Clang 10+）</li>
+<li>OpenGL开发库</li>
+<li>Git（用于克隆仓库）</li>
+</ul>
+<p><strong>编译步骤：</strong></p>
+<pre><code class="language-bash"># 1. 克隆VTK源码
+git clone --branch v9.5.2 --depth 1 https://gitlab.kitware.com/vtk/vtk.git
+cd vtk
+
+# 2. 创建构建目录
+mkdir build
+cd build
+
+# 3. 配置CMake（Release构建，启用示例）
+cmake .. \
+  -DCMAKE_BUILD_TYPE=Release \
+  -DVTK_BUILD_TESTING=OFF \
+  -DVTK_GROUP_ENABLE_StandAlone=YES \
+  -DVTK_GROUP_ENABLE_Rendering=YES
+
+# 4. 编译（-j参数根据你的CPU核心数调整）
+cmake --build . --config Release -j 8
+
+# 5. 安装（可选，安装到系统目录）
+sudo cmake --install . --config Release
+</code></pre>
+<p>常用CMake配置选项说明：</p>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CMAKE_BUILD_TYPE</code></td>
+<td>构建类型：<code>Release</code>、<code>Debug</code>、<code>RelWithDebInfo</code></td>
+</tr>
+<tr>
+<td><code>VTK_BUILD_TESTING</code></td>
+<td>是否构建测试程序（<code>ON</code>/<code>OFF</code>）</td>
+</tr>
+<tr>
+<td><code>CMAKE_INSTALL_PREFIX</code></td>
+<td>安装目标路径</td>
+</tr>
+<tr>
+<td><code>VTK_GROUP_ENABLE_Rendering</code></td>
+<td>是否启用渲染相关模块（<code>YES</code>/<code>NO</code>/<code>WANT</code>/<code>DONT_WANT</code>）</td>
+</tr>
+<tr>
+<td><code>VTK_GROUP_ENABLE_StandAlone</code></td>
+<td>是否启用独立功能模块</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="14-cmake">1.4 CMake项目配置</h2>
+<p>VTK使用CMake作为构建系统。下面是一个完整的CMakeLists.txt模板，它将成为你所有VTK项目的起点。</p>
+<h3 id="141">1.4.1 完整模板</h3>
+<pre><code class="language-cmake">cmake_minimum_required(VERSION 3.8 FATAL_ERROR)
+project(ConeExample VERSION 1.0.0 LANGUAGES CXX)
+
+# 设置C++标准
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+# 查找VTK及其所需组件
+find_package(VTK
+  COMPONENTS
+    CommonCore
+    CommonColor
+    FiltersSources
+    InteractionStyle
+    RenderingCore
+    RenderingOpenGL2
+  REQUIRED
+)
+
+# 创建可执行文件
+add_executable(ConeExample ConeExample.cxx)
+
+# 链接VTK库
+target_link_libraries(ConeExample
+  PRIVATE
+    ${VTK_LIBRARIES}
+)
+
+# VTK模块自动初始化（关键步骤）
+vtk_module_autoinit(
+  TARGETS ConeExample
+  MODULES ${VTK_LIBRARIES}
+)
+</code></pre>
+<h3 id="142">1.4.2 逐行详解</h3>
+<p><strong><code>cmake_minimum_required(VERSION 3.8 FATAL_ERROR)</code></strong></p>
+<p>声明项目所需的最低CMake版本为3.8。如果你的系统中CMake版本低于3.8，配置阶段将立即报错并停止（<code>FATAL_ERROR</code>），而不是生成一个无法正确工作的构建系统。VTK 9.5.2的CMake配置文件依赖3.8+版本提供的新特性。</p>
+<p><strong><code>project(ConeExample VERSION 1.0.0 LANGUAGES CXX)</code></strong></p>
+<p>定义项目名称为<code>ConeExample</code>，版本号1.0.0，编程语言为C++（<code>CXX</code>）。<code>LANGUAGES CXX</code>显式告知CMake不需要检查C编译器，这能略微加速配置过程。</p>
+<p><strong><code>set(CMAKE_CXX_STANDARD 17 ...)</code></strong></p>
+<p>三条<code>set</code>命令将项目的C++标准锁定为C++17。<code>CMAKE_CXX_STANDARD_REQUIRED ON</code>表示如果编译器不支持C++17则配置失败（不允许自动回退到更低版本）。<code>CMAKE_CXX_EXTENSIONS OFF</code>关闭编译器特定的扩展（如GCC的<code>-std=gnu++17</code>），确保代码的可移植性。</p>
+<p><strong><code>find_package(VTK COMPONENTS ... REQUIRED)</code></strong></p>
+<p>这是CMake配置的核心步骤。<code>find_package</code>命令会搜索系统中安装的VTK包，并导入其CMake配置文件（VTKConfig.cmake或vtk-config.cmake）。<code>COMPONENTS</code>之后列出了本项目需要用到的VTK模块：</p>
+<table>
+<thead>
+<tr>
+<th>模块名</th>
+<th>功能</th>
+<th>提供的关键类</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CommonCore</code></td>
+<td>VTK核心运行时</td>
+<td><code>vtkObject</code>基础类、<code>vtkNew</code>/<code>vtkSmartPointer</code>智能指针、引用计数机制</td>
+</tr>
+<tr>
+<td><code>CommonColor</code></td>
+<td>颜色处理</td>
+<td>颜色空间转换、颜色表、颜色序列化</td>
+</tr>
+<tr>
+<td><code>FiltersSources</code></td>
+<td>数据源过滤器</td>
+<td><code>vtkConeSource</code>、<code>vtkSphereSource</code>、<code>vtkCylinderSource</code>等几何生成器</td>
+</tr>
+<tr>
+<td><code>InteractionStyle</code></td>
+<td>交互样式</td>
+<td><code>vtkInteractorStyleTrackballCamera</code>等鼠标/键盘交互行为定义</td>
+</tr>
+<tr>
+<td><code>RenderingCore</code></td>
+<td>渲染核心抽象</td>
+<td><code>vtkRenderer</code>、<code>vtkActor</code>、<code>vtkMapper</code>、<code>vtkCamera</code>等</td>
+</tr>
+<tr>
+<td><code>RenderingOpenGL2</code></td>
+<td>OpenGL2渲染后端</td>
+<td>将渲染抽象转换为实际的OpenGL调用</td>
+</tr>
+</tbody>
+</table>
+<p><code>REQUIRED</code>关键字表示这些模块中任意一个找不到时，CMake将报错并停止--没有它们程序无法编译。</p>
+<p><strong><code>add_executable(ConeExample ConeExample.cxx)</code></strong></p>
+<p>创建一个名为<code>ConeExample</code>的可执行文件构建目标，其源文件为<code>ConeExample.cxx</code>。VTK社区惯用<code>.cxx</code>作为C++源文件的扩展名（你也可以使用<code>.cpp</code>）。</p>
+<p><strong><code>target_link_libraries(ConeExample PRIVATE ${VTK_LIBRARIES})</code></strong></p>
+<p>将VTK的库文件链接到<code>ConeExample</code>目标。<code>${VTK_LIBRARIES}</code>是由<code>find_package(VTK)</code>自动填充的CMake变量，它包含了与<code>COMPONENTS</code>列表对应的所有库文件的完整路径。<code>PRIVATE</code>关键字表示VTK库的链接依赖不会传递给依赖<code>ConeExample</code>的其他目标--对于可执行文件，使用<code>PRIVATE</code>是最佳实践。</p>
+<p><strong><code>vtk_module_autoinit(TARGETS ConeExample MODULES ${VTK_LIBRARIES})</code></strong></p>
+<p>这是VTK构建系统特有的关键宏。VTK使用了工厂模式（Factory Pattern）和对象工厂（Object Factory）机制来支持运行时多态：例如，当代码中请求创建一个<code>vtkPolyDataMapper</code>时，VTK需要根据当前启用的渲染后端自动选择正确的具体实现类（在OpenGL2后端中，实际上是<code>vtkOpenGLPolyDataMapper</code>）。</p>
+<p><code>vtk_module_autoinit</code>宏会自动生成初始化代码，在<code>main()</code>函数执行之前注册所有所需模块的工厂。如果你忘记这行，程序在编译时会显示"未定义引用"的错误，或者在运行时报告找不到具体的实现类。这是初学者最容易遗漏的CMake配置项。</p>
+<h3 id="143">1.4.3 组件选择指南</h3>
+<p>对于不同的VTK程序，你需要的组件各不相同。以下是常见场景的组件推荐清单：</p>
+<p><strong>最小渲染程序（如Cone示例）：</strong></p>
+<pre><code>CommonCore CommonColor FiltersSources InteractionStyle RenderingCore RenderingOpenGL2
+</code></pre>
+<p><strong>读取文件并进行渲染：</strong></p>
+<pre><code>CommonCore CommonColor FiltersSources InteractionStyle RenderingCore RenderingOpenGL2 IOGeometry IOLegacy
+</code></pre>
+<p><strong>加入体渲染（Volume Rendering）：</strong></p>
+<pre><code>... RenderingVolumeOpenGL2
+</code></pre>
+<p><strong>加入二维图表（Charts）：</strong></p>
+<pre><code>... ChartsCore RenderingContext2D
+</code></pre>
+<p><strong>加入并行处理（Multi-threading）：</strong></p>
+<pre><code>... CommonCore CommonDataModel FiltersCore
+    (大部分核心过滤器内部已启用SMP，无需额外组件)
+</code></pre>
+<p>本教程在后续各章中都会明确给出该章示例所需的完整CMakeLists.txt。</p>
+<hr />
+<h2 id="15-vtkcone">1.5 第一个VTK程序：Cone示例</h2>
+<p>现在，我们将亲手创建一个完整的VTK程序--在窗口中显示一个紫色边框的三维圆锥体。这个示例虽然简单，但它完整展示了VTK管道的每个环节，是理解后续所有内容的基石。</p>
+<h3 id="151">1.5.1 完整代码</h3>
+<p>将以下代码保存为<code>ConeExample.cxx</code>：</p>
+<pre><code class="language-cpp">#include &quot;vtkActor.h&quot;
+#include &quot;vtkConeSource.h&quot;
+#include &quot;vtkInteractorStyleTrackballCamera.h&quot;
+#include &quot;vtkNew.h&quot;
+#include &quot;vtkPolyData.h&quot;
+#include &quot;vtkPolyDataMapper.h&quot;
+#include &quot;vtkProperty.h&quot;
+#include &quot;vtkRenderWindow.h&quot;
+#include &quot;vtkRenderWindowInteractor.h&quot;
+#include &quot;vtkRenderer.h&quot;
+
+int main(int argc, char* argv[])
+{
+  // ====================================================================
+  // 第一步：创建渲染基础设施（Renderer, RenderWindow, Interactor）
+  // ====================================================================
+
+  // 创建渲染器：管理场景中的所有演员、光源和相机
+  vtkNew&lt;vtkRenderer&gt; renderer;
+
+  // 创建渲染窗口：对应屏幕上的一个窗口，容纳渲染器的输出
+  vtkNew&lt;vtkRenderWindow&gt; renderWindow;
+  renderWindow-&gt;SetMultiSamples(0);        // 关闭多重采样（演示用，实际项目可开启）
+  renderWindow-&gt;AddRenderer(renderer);     // 将渲染器添加到窗口中
+
+  // 创建交互器：捕获鼠标/键盘事件，实现场景旋转、平移、缩放
+  vtkNew&lt;vtkRenderWindowInteractor&gt; renderWindowInteractor;
+  renderWindowInteractor-&gt;SetRenderWindow(renderWindow);
+
+  // 设置交互样式：轨迹球式相机操控（鼠标拖拽旋转、右键缩放、中键平移）
+  vtkNew&lt;vtkInteractorStyleTrackballCamera&gt; style;
+  renderWindowInteractor-&gt;SetInteractorStyle(style);
+  style-&gt;SetDefaultRenderer(renderer);     // 指定交互样式作用于哪个渲染器
+
+  // ====================================================================
+  // 第二步：构建可视化管道（Source -&gt; Mapper -&gt; Actor）
+  // ====================================================================
+
+  // 数据源：生成一个圆锥体的几何数据（vtkPolyData格式）
+  vtkNew&lt;vtkConeSource&gt; coneSource;
+  coneSource-&gt;Update();                    // 显式更新，强制生成数据
+
+  // 映射器：将几何数据转换为图形渲染基元
+  vtkNew&lt;vtkPolyDataMapper&gt; mapper;
+  mapper-&gt;SetInputConnection(coneSource-&gt;GetOutputPort());
+
+  // 演员：场景中的可视化实体，绑定映射器和外观属性
+  vtkNew&lt;vtkActor&gt; actor;
+  actor-&gt;SetMapper(mapper);
+  actor-&gt;GetProperty()-&gt;SetEdgeVisibility(1);  // 显示多边形的边界线
+  actor-&gt;GetProperty()-&gt;SetEdgeColor(1, 0, 1); // 边界线颜色：紫色 (R=1, G=0, B=1)
+
+  // ====================================================================
+  // 第三步：将演员添加到场景
+  // ====================================================================
+  renderer-&gt;AddActor(actor);
+
+  // ====================================================================
+  // 第四步：配置渲染环境并启动交互循环
+  // ====================================================================
+
+  // 设置渲染器背景色：深蓝灰色 (RGB分量均为0-1范围的浮点数)
+  renderer-&gt;SetBackground(0.2, 0.3, 0.4);
+
+  // 设置渲染窗口大小：300x300像素
+  renderWindow-&gt;SetSize(300, 300);
+
+  // 执行首帧渲染
+  renderWindow-&gt;Render();
+
+  // 启动事件循环：程序在此处进入交互等待，直到用户关闭窗口
+  renderWindowInteractor-&gt;Start();
+
+  return 0;
+}
+</code></pre>
+<h3 id="152">1.5.2 代码逐行详解</h3>
+<p>本节对程序的每一部分进行详细解释。如果你暂时无法完全理解所有细节，不必焦虑--这些概念将在后续各章中反复出现并加深。</p>
+<h4 id="headers">头文件包含（Headers）</h4>
+<pre><code class="language-cpp">#include &quot;vtkActor.h&quot;
+#include &quot;vtkConeSource.h&quot;
+#include &quot;vtkInteractorStyleTrackballCamera.h&quot;
+#include &quot;vtkNew.h&quot;
+#include &quot;vtkPolyData.h&quot;
+#include &quot;vtkPolyDataMapper.h&quot;
+#include &quot;vtkProperty.h&quot;
+#include &quot;vtkRenderWindow.h&quot;
+#include &quot;vtkRenderWindowInteractor.h&quot;
+#include &quot;vtkRenderer.h&quot;
+</code></pre>
+<p>VTK采用"一个类，一个头文件"的命名约定。每个<code>#include</code>引入了一个VTK类的声明。相比使用一个大而全的主头文件，这种精细化的包含方式可以显著减少编译时间。注意：虽然我们在CMakeLists.txt中没有显式声明<code>vtkPolyData</code>所在的模块，但它被<code>FiltersSources</code>间接依赖，因此头文件可用。</p>
+<h4 id="vtknew">vtkNew智能指针</h4>
+<pre><code class="language-cpp">vtkNew&lt;vtkRenderer&gt; renderer;
+</code></pre>
+<p><code>vtkNew&lt;&gt;</code>是VTK提供的栈分配智能指针模板类，它在当前作用域内自动管理VTK对象的生命周期。等价于在堆上分配一个对象并持有引用计数为1的所有权，但省去了手动调用<code>New()</code>和<code>Delete()</code>的繁琐工作。</p>
+<p>VTK对象通常通过静态工厂方法<code>New()</code>创建（而非C++的<code>new</code>运算符），返回一个原始指针。<code>vtkNew&lt;&gt;</code>封装了这一模式：</p>
+<pre><code class="language-cpp">// vtkNew的实际效果等价于：
+// vtkRenderer* renderer = vtkRenderer::New();
+// ... 使用 renderer ...
+// renderer-&gt;Delete();  // vtkNew在析构时自动完成
+</code></pre>
+<p>对于需要在函数间传递或共享所有权的对象，应使用<code>vtkSmartPointer&lt;&gt;</code>--它本质上是一个侵入式引用计数（Intrusive Reference Counting）的智能指针。<code>vtkNew&lt;&gt;</code>与<code>vtkSmartPointer&lt;&gt;</code>的区别将在第二章详细讨论。</p>
+<h4 id="_2">渲染基础设施</h4>
+<pre><code class="language-cpp">vtkNew&lt;vtkRenderWindow&gt; renderWindow;
+renderWindow-&gt;SetMultiSamples(0);
+renderWindow-&gt;AddRenderer(renderer);
+</code></pre>
+<p><code>vtkRenderWindow</code>是对操作系统窗口的VTK封装。<code>SetMultiSamples(0)</code>关闭了多重采样抗锯齿（MSAA，Multi-Sample Anti-Aliasing）--在开发阶段关闭它可以减少GPU开销，实际项目中将此值设为4或8可获得更光滑的边缘。<code>AddRenderer(renderer)</code>将渲染器注册到窗口中，一个渲染窗口可以包含多个渲染器（例如通过<code>SetViewport</code>分区显示不同视角）。</p>
+<pre><code class="language-cpp">vtkNew&lt;vtkRenderWindowInteractor&gt; renderWindowInteractor;
+renderWindowInteractor-&gt;SetRenderWindow(renderWindow);
+</code></pre>
+<p><code>vtkRenderWindowInteractor</code>是事件处理中枢。它将对渲染窗口的鼠标、键盘事件路由到当前激活的交互样式（InteractorStyle）。<code>SetRenderWindow</code>建立了交互器与渲染窗口的双向关联。</p>
+<pre><code class="language-cpp">vtkNew&lt;vtkInteractorStyleTrackballCamera&gt; style;
+renderWindowInteractor-&gt;SetInteractorStyle(style);
+style-&gt;SetDefaultRenderer(renderer);
+</code></pre>
+<p><code>vtkInteractorStyleTrackballCamera</code>实现了"轨迹球相机"交互范式：</p>
+<ul>
+<li><strong>鼠标左键拖拽</strong>：绕场景旋转相机</li>
+<li><strong>鼠标中键拖拽 / 滚轮</strong>：平移相机（Pan）</li>
+<li><strong>鼠标右键拖拽 / 滚轮缩放</strong>：推进/拉远相机（Dolly/Zoom）</li>
+</ul>
+<p>这是观察静态三维模型时最自然的交互方式。你也可以通过继承<code>vtkInteractorStyle</code>来实现自定义的交互逻辑。</p>
+<h4 id="source">管道：数据源（Source）</h4>
+<pre><code class="language-cpp">vtkNew&lt;vtkConeSource&gt; coneSource;
+coneSource-&gt;Update();
+</code></pre>
+<p><code>vtkConeSource</code>是一个<strong>源对象（Source）</strong>，即管道的起点。它不接收输入数据，而是通过算法生成数据。默认参数生成一个底面半径为0.5、高度为1.0、分辨率为6（六边形近似）的圆锥体。</p>
+<p><code>Update()</code>方法触发管道执行：它通知源对象"下游需要数据"，源对象随即计算并将结果存储在内部。这个过程是<strong>按需驱动（Demand-Driven）</strong>的--在VTK的常规用法中，当渲染发生时，<code>vtkMapper</code>会自动请求上游数据，你并不需要手动调用<code>Update()</code>。但显式调用在调试和ensure数据就绪时非常有用。</p>
+<p>你可以通过以下方法自定义锥体形状（本章暂不展开，先知道有这些接口即可）：</p>
+<pre><code class="language-cpp">coneSource-&gt;SetHeight(2.0);      // 设置高度
+coneSource-&gt;SetRadius(0.8);      // 设置底面半径
+coneSource-&gt;SetResolution(32);   // 设置分辨率（边数，越大越接近真圆锥）
+coneSource-&gt;SetCenter(1, 0, 0);  // 设置中心位置
+</code></pre>
+<h4 id="mapper">管道：映射器（Mapper）</h4>
+<pre><code class="language-cpp">vtkNew&lt;vtkPolyDataMapper&gt; mapper;
+mapper-&gt;SetInputConnection(coneSource-&gt;GetOutputPort());
+</code></pre>
+<p><code>vtkPolyDataMapper</code>是<strong>映射器（Mapper）</strong>，它是数据世界与图形世界之间的桥梁。它接收<code>vtkPolyData</code>格式的几何数据（由上游源对象或过滤器产生），将其转换为OpenGL可以渲染的图形基元数组（顶点、索引、法向等）。</p>
+<p><strong><code>SetInputConnection(coneSource-&gt;GetOutputPort())</code></strong> 这行代码是管道连接的关键操作。让我们拆解开来看：</p>
+<ul>
+<li><code>coneSource-&gt;GetOutputPort()</code>返回源的<strong>输出端口（Output Port）</strong>。在VTK中，每个算法对象（<code>vtkAlgorithm</code>）可以有多个输出端口，每个端口输出不同内容。端口是一个逻辑连接点，而不是数据本身。</li>
+<li><code>mapper-&gt;SetInputConnection(...)</code>将映射器的输入端口连接到源的输出端口，建立了管道连接。</li>
+</ul>
+<p>重要的是，你<strong>没有传递数据本身</strong>，而是建立了"谁产出、谁消费"的关系。当渲染发生时，映射器通过这条连接向源头请求数据，源头才执行计算。这就是管道（Pipeline）的本质。</p>
+<p><strong>连接方法对比：</strong> VTK提供两种输入连接方式：
+- <code>SetInputConnection(port)</code>：管道连接（Pipeline Connection），保持上下游的惰性求值关系。<strong>推荐使用。</strong>
+- <code>SetInputData(dataObject)</code>：直接设置数据对象（Data Object），打断了管道。之后数据源的参数变更不再传递。仅用于不需要动态更新的场景。</p>
+<h4 id="actor">管道：演员（Actor）</h4>
+<pre><code class="language-cpp">vtkNew&lt;vtkActor&gt; actor;
+actor-&gt;SetMapper(mapper);
+</code></pre>
+<p><code>vtkActor</code>代表场景中的一个<strong>可视实体</strong>。它持有：
+- 一个映射器（Mapper）：决定"画什么形状"（几何）
+- 一组属性（Property）：决定"怎么画"（颜色、材质、光照响应等）</p>
+<pre><code class="language-cpp">actor-&gt;GetProperty()-&gt;SetEdgeVisibility(1);
+actor-&gt;GetProperty()-&gt;SetEdgeColor(1, 0, 1);
+</code></pre>
+<p><code>GetProperty()</code>返回指向<code>vtkProperty</code>对象的指针，它控制着演员的外观。这两行设置了：</p>
+<ul>
+<li><strong><code>SetEdgeVisibility(1)</code></strong>：显示多边形网格的边线。这使得圆锥体的每个三角面片的边界可见，方便观察网格结构。对于调试和教学演示非常有用。</li>
+<li><strong><code>SetEdgeColor(1, 0, 1)</code></strong>：将边线颜色设为品红色/紫色（R=1.0, G=0.0, B=1.0）。在VTK中，颜色分量通常使用0.0到1.0的浮点数表示（也可以使用0到255的整数格式）。</li>
+</ul>
+<p><code>vtkProperty</code>提供的其他常用外观控制方法包括：
+- <code>SetColor(r, g, b)</code>：设置表面颜色
+- <code>SetOpacity(v)</code>：设置不透明度（0.0完全透明到1.0完全不透明）
+- <code>SetAmbient(v)</code> / <code>SetDiffuse(v)</code> / <code>SetSpecular(v)</code>：设置环境光/漫反射/高光反射系数
+- <code>SetSpecularPower(v)</code>：设置高光锐度（Phong光照模型）
+- <code>SetRepresentationToWireframe()</code>：仅显示线框
+- <code>SetRepresentationToSurface()</code>：仅显示表面（默认）
+- <code>SetRepresentationToPoints()</code>：仅显示顶点</p>
+<h4 id="_3">场景组装与渲染</h4>
+<pre><code class="language-cpp">renderer-&gt;AddActor(actor);
+</code></pre>
+<p>将演员注册到渲染器中。一个渲染器可以管理多个演员，它们按照添加顺序和透明度排序后渲染。</p>
+<pre><code class="language-cpp">renderer-&gt;SetBackground(0.2, 0.3, 0.4);
+</code></pre>
+<p>设置渲染器的背景色。这里使用了一个偏蓝的深灰色（RGB: 51/77/102），使得白色/紫色的模型清晰可见。颜色分量范围为0.0到1.0。</p>
+<pre><code class="language-cpp">renderWindow-&gt;SetSize(300, 300);
+</code></pre>
+<p>设置渲染窗口的客户区大小为300x300像素。注意这是渲染画面的大小（不包括窗口标题栏和边框）。</p>
+<pre><code class="language-cpp">renderWindow-&gt;Render();
+</code></pre>
+<p><strong>手动触发首帧渲染</strong>。在交互式程序中，首帧渲染是必要的--它确保用户在事件循环开始之前就能看到画面，而不是看到一片空白。在非交互式的离屏（Off-screen）渲染场景中，每次<code>Render()</code>调用生成一帧图像。</p>
+<pre><code class="language-cpp">renderWindowInteractor-&gt;Start();
+</code></pre>
+<p><strong>启动交互事件循环</strong>。这行代码会阻塞当前线程，进入一个无限的事件处理循环，等待用户与窗口的交互（鼠标点击、拖拽、按键、窗口关闭等）。事件循环会持续运行，直到用户关闭窗口或程序调用<code>TerminateApp()</code>。</p>
+<p>此后，每当用户操作触发视图变化（如旋转场景），交互器会自动调用<code>RenderWindow-&gt;Render()</code>重新绘制画面，无需你编写任何交互回调。</p>
+<h3 id="153">1.5.3 管道流程图解</h3>
+<p>下面的ASCII图表展示了本示例中数据的流向：</p>
+<pre><code>                    管道 (Pipeline)
+   ┌───────────────────────────────────────────────────┐
+   │                                                     │
+   │  [vtkConeSource]                                    │
+   │        │                                            │
+   │        │ GetOutputPort()   (输出端口 -- 逻辑连接点)    │
+   │        ▼                                            │
+   │  [vtkPolyDataMapper]                                │
+   │        │   SetInputConnection(...)                  │
+   │        │   (将几何数据转换为图形渲染基元)              │
+   │        ▼                                            │
+   │  [vtkActor]                                         │
+   │   ├── SetMapper(...)  (几何形状 -- &quot;画什么&quot;)          │
+   │   └── GetProperty()  (材质外观 -- &quot;怎么画&quot;)           │
+   │        │                                            │
+   │        │ AddActor(...)                              │
+   │        ▼                                            │
+   │  [vtkRenderer]  (场景管理器)                         │
+   │        │                                            │
+   │        │ AddRenderer(...)                           │
+   │        ▼                                            │
+   │  [vtkRenderWindow]  (窗口)                           │
+   │        │                                            │
+   │        │ SetRenderWindow(...)                       │
+   │        ▼                                            │
+   │  [vtkRenderWindowInteractor]  (交互事件循环)          │
+   │                                                     │
+   └───────────────────────────────────────────────────┘
+</code></pre>
+<p><strong>关键理解：</strong> 管道中的箭头不代表"数据立即流动"，而是代表"我承诺在需要的时候向你索要数据"。这种惰性连接（Lazy Connection）使得VTK可以非常高效地处理大型数据集：如果你修改了某个过滤器的参数，只有受影响的下游部分才会被重新执行。</p>
+<h3 id="154">1.5.4 常见修改实验</h3>
+<p>在理解代码后，建议你尝试以下修改来加深理解（每次只改一处，观察效果）：</p>
+<p><strong>实验一：修改锥体参数</strong></p>
+<pre><code class="language-cpp">coneSource-&gt;SetResolution(8);    // 从默认的6改为8，锥体会更圆滑
+coneSource-&gt;SetHeight(1.5);      // 拉长锥体
+coneSource-&gt;SetRadius(0.3);      // 收窄底面
+</code></pre>
+<p><strong>实验二：修改外观</strong></p>
+<pre><code class="language-cpp">actor-&gt;GetProperty()-&gt;SetColor(0.2, 0.7, 0.3);    // 表面改为绿色
+actor-&gt;GetProperty()-&gt;SetEdgeVisibility(0);         // 关闭边界线
+actor-&gt;GetProperty()-&gt;SetRepresentationToWireframe(); // 仅显示线框
+</code></pre>
+<p><strong>实验三：修改背景和窗口</strong></p>
+<pre><code class="language-cpp">renderer-&gt;SetBackground(1.0, 1.0, 1.0);  // 白色背景
+renderWindow-&gt;SetSize(800, 600);          // 更大的窗口
+</code></pre>
+<hr />
+<h2 id="16">1.6 编译与运行</h2>
+<h3 id="161">1.6.1 目录结构</h3>
+<p>在开始编译之前，确保你的项目目录结构如下：</p>
+<pre><code>ConeExample/
+├── CMakeLists.txt       # CMake构建配置文件
+└── ConeExample.cxx      # 源代码文件
+</code></pre>
+<h3 id="162">1.6.2 编译步骤</h3>
+<p>打开终端（Windows上使用PowerShell或命令提示符，Linux/macOS上使用终端），执行以下命令：</p>
+<pre><code class="language-bash"># 1. 进入项目根目录
+cd ConeExample
+
+# 2. 创建构建目录（build directory -- 所有中间文件和最终产物存放于此）
+mkdir build
+cd build
+
+# 3. 运行CMake配置
+#    对于通过常规方式安装的VTK（APT/Homebrew/官方安装包）：
+cmake ..
+
+#    如果你使用vcpkg，需指定工具链文件：
+cmake .. -DCMAKE_TOOLCHAIN_FILE=[path-to-vcpkg]/scripts/buildsystems/vcpkg.cmake
+
+#    如果你从源码编译并安装在自定义路径：
+cmake .. -DVTK_DIR=[path-to-vtk-install]/lib/cmake/vtk-9.5
+
+# 4. 编译项目
+cmake --build . --config Release
+
+#    或者使用多核编译加速（Windows/MSVC）：
+cmake --build . --config Release --parallel 8
+
+#    在Linux/macOS上使用make加速：
+cmake --build . -- -j 8
+</code></pre>
+<h3 id="163-cmake">1.6.3 CMake配置过程中的关键信息</h3>
+<p>运行<code>cmake ..</code>后，你应该看到类似以下输出（关键行摘要）：</p>
+<pre><code>-- Selecting Windows SDK version 10.0.xxxxx.x to target Windows 10.0.xxxxx.
+-- Found VTK 9.5.2
+-- VTK_FOUND: TRUE
+-- VTK_VERSION: 9.5.2
+-- VTK_RENDERING_BACKEND: OpenGL2
+-- Configuring done
+-- Generating done
+-- Build files have been written to: .../ConeExample/build
+</code></pre>
+<p>需要特别关注的信息：</p>
+<ul>
+<li><strong><code>Found VTK 9.5.2</code></strong>：确认CMake找到了正确版本的VTK。如果显示的是其他版本或出现<code>VTK_NOT_FOUND</code>，说明VTK的安装或路径配置有问题。</li>
+<li><strong><code>VTK_RENDERING_BACKEND: OpenGL2</code></strong>：确认渲染后端为OpenGL2。这是当前VTK 9.x的默认和推荐后端。</li>
+<li><strong><code>Configuring done</code> / <code>Generating done</code></strong>：确认配置和生成阶段均成功完成，无错误。</li>
+</ul>
+<h3 id="164">1.6.4 运行程序</h3>
+<p>编译完成后，在构建目录中运行可执行文件：</p>
+<p><strong>Windows（PowerShell）：</strong></p>
+<pre><code class="language-powershell">.\Release\ConeExample.exe
+</code></pre>
+<p><strong>Linux/macOS：</strong></p>
+<pre><code class="language-bash">./ConeExample
+</code></pre>
+<p>你将看到一个标题为"ConeExample"的窗口，其中显示一个紫色的三维锥体，背景为深蓝灰色。使用鼠标可以旋转、平移和缩放场景。</p>
+<h3 id="165">1.6.5 常见问题排查</h3>
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>可能原因</th>
+<th>解决方法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Could NOT find VTK</code></td>
+<td>VTK未安装或CMake找不到</td>
+<td>设置<code>-DVTK_DIR</code>指向VTK的CMake配置目录，或设置<code>CMAKE_PREFIX_PATH</code></td>
+</tr>
+<tr>
+<td>链接错误：<code>undefined reference to vtkRenderingOpenGL2...</code></td>
+<td>缺少<code>vtk_module_autoinit</code></td>
+<td>在CMakeLists.txt中添加<code>vtk_module_autoinit</code>行</td>
+</tr>
+<tr>
+<td>运行时错误：<code>No override found for 'vtkPolyDataMapper'</code></td>
+<td>工厂模式初始化失败</td>
+<td>检查<code>vtk_module_autoinit</code>是否正确配置</td>
+</tr>
+<tr>
+<td>窗口弹出后立即消失</td>
+<td>缺少<code>renderWindowInteractor-&gt;Start()</code></td>
+<td>确认事件循环已启动</td>
+</tr>
+<tr>
+<td>程序启动后窗口为空白（白色）</td>
+<td>未调用<code>Render()</code>或Actor未添加</td>
+<td>确认<code>renderWindow-&gt;Render()</code>在<code>Start()</code>之前调用，且Actor已通过<code>AddActor</code>添加到Renderer</td>
+</tr>
+<tr>
+<td>编译时提示<code>vtkConeSource.h</code>找不到</td>
+<td>未在CMake中声明<code>FiltersSources</code>组件</td>
+<td>在<code>find_package(VTK COMPONENTS ...)</code>中添加<code>FiltersSources</code></td>
+</tr>
+<tr>
+<td>vcpkg安装的VTK找不到</td>
+<td>vcpkg triplet与项目配置不一致</td>
+<td>确认CMake配置时指定了正确的<code>CMAKE_TOOLCHAIN_FILE</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="166">1.6.6 运行效果</h3>
+<p>程序成功运行后，你将看到一个300x300像素的窗口，其中包含一个六棱锥形状的几何体（因为默认分辨率为6）。锥体表面为默认的白色，每个多边形面片的边缘为品红色（紫色），背景为深蓝灰色。</p>
+<p>你可以进行以下交互操作（TrackballCamera风格）：
+- <strong>按住鼠标左键并拖动</strong>：绕锥体旋转视角
+- <strong>按住鼠标右键并上下拖动</strong>：缩放（拉近/拉远）
+- <strong>按住鼠标中键并拖动</strong>：平移场景
+- <strong>滚动鼠标滚轮</strong>：缩放
+- <strong>按键盘 R 键</strong>：重置相机到默认视角</p>
+<hr />
+<h2 id="17">1.7 本章小结</h2>
+<p>本章完成了三件重要的事情：</p>
+<p><strong>第一，建立了对VTK的宏观认知。</strong> 你了解了VTK是一个面向科学可视化的C++类库，它区别于通用游戏引擎或普通三维图形库的核心特色在于：
+- <strong>管道架构（Pipeline Architecture）</strong>：通过连接源（Source）、过滤器（Filter）和映射器（Mapper）来构建复杂的数据处理流程。
+- <strong>面向物理数据的数据模型</strong>：将几何数据与属性数据（标量场、矢量场）统一管理。
+- <strong>按需计算（Demand-Driven Execution）</strong>：只有在真正需要数据时（如渲染时刻）才执行计算，避免了不必要的数据复制和内存浪费。</p>
+<p><strong>第二，搭建了可工作的开发环境。</strong> 从VTK安装到CMake项目配置，你现在拥有一个可以编译和运行VTK程序的基础设施。特别是<code>find_package</code>的组件列表和<code>vtk_module_autoinit</code>宏，这是每个VTK CMake项目的标准配置范式。</p>
+<p><strong>第三，运行并完全理解了第一个VTK程序。</strong> 通过Cone示例，你亲手走通了VTK管道的每一个环节：
+- <code>vtkConeSource</code>作为数据源生成几何数据
+- <code>vtkPolyDataMapper</code>将几何数据映射为图形渲染基元
+- <code>vtkActor</code>封装了映射器与外观属性
+- <code>vtkRenderer</code> / <code>vtkRenderWindow</code> / <code>vtkRenderWindowInteractor</code>构成了渲染与交互的基础设施</p>
+<p>这是VTK开发的"最小可行范式"（Minimal Viable Pattern）。几乎所有的VTK可视化程序，无论多么复杂，都遵循这个基本骨架：</p>
+<pre><code>Source / Reader --&gt; [可选: Filters] --&gt; Mapper --&gt; Actor --&gt; Renderer --&gt; RenderWindow --&gt; Interactor
+</code></pre>
+<h3 id="_4">延伸阅读与资源</h3>
+<ul>
+<li>VTK官方文档：https://docs.vtk.org/</li>
+<li>VTK GitLab仓库：https://gitlab.kitware.com/vtk/vtk</li>
+<li>VTK Examples（官方示例集）：https://examples.vtk.org/</li>
+<li>《The VTK User's Guide》（Kitware出版，PDF可从官网获取）</li>
+<li>《The Visualization Toolkit: An Object-Oriented Approach to 3D Graphics》（VTK权威教科书，Schroeder, Martin, Lorensen著）</li>
+</ul>
+<h3 id="_5">进入下一章之前</h3>
+<p>在进入第二章"VTK管道系统详解"之前，建议你：</p>
+<ol>
+<li>完成1.5.4节中的所有修改实验，亲手验证参数变化的效果。</li>
+<li>尝试将<code>vtkConeSource</code>替换为<code>vtkSphereSource</code>（需要调整CMake组件和头文件包含），观察球体与锥体的渲染差异。</li>
+<li>如果你的程序无法编译或运行，回到1.6.5节的排查表逐一核查。</li>
+</ol>
+<p>第二章将深入管道的内部工作机制--执行流程、惰性求值策略、端口与连接的细节，以及<code>vtkSmartPointer</code>与<code>vtkNew</code>在管道中的正确用法。这些知识将帮助你从"会用"进阶到"理解为什么这样用"。</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

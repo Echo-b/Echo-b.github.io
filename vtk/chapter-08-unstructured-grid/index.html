@@ -1,0 +1,3159 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../chapter-07-polydata/">
+      
+      
+        <link rel="next" href="../chapter-09-structured-data/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>第八章 非结构化网格 - Echo-b's Tech Notes</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#unstructured-grid" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Echo-b&#39;s Tech Notes" class="md-header__button md-logo" aria-label="Echo-b's Tech Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Echo-b's Tech Notes
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              第八章 非结构化网格
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Echo-b&#39;s Tech Notes" class="md-nav__button md-logo" aria-label="Echo-b's Tech Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Echo-b's Tech Notes
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VTK 教程
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    VTK 教程
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    入门篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    入门篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-01-vtk-overview-and-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第一章 VTK概述与环境搭建
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-02-visualization-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二章 可视化管线
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-03-data-model-basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第三章 数据模型基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-04-geometry-and-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第四章 基本几何体与数据源
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-05-rendering-and-interactor/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第五章 渲染与交互机
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-06-volume1-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第六章 入门篇综合实战——3D几何画廊
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    实战篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    实战篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-07-polydata/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第七章 PolyData详解
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第八章 非结构化网格
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第八章 非结构化网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        本章导读
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#81" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.1 什么是非结构化网格
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#82" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.2 常用单元类型详解
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8.2 常用单元类型详解">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#821-linear-cells" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.2.1 线性单元（Linear Cells）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8.2.1 线性单元（Linear Cells）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#vtk_tetra4-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VTK_TETRA（4点）-- 线性四面体
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vtk_hexahedron8-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VTK_HEXAHEDRON（8点）-- 线性六面体
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vtk_wedge6-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VTK_WEDGE（6点）-- 楔形体（三棱柱）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vtk_pyramid5-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VTK_PYRAMID（5点）-- 金字塔单元
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vtk_voxel8-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VTK_VOXEL（8点）-- 体素
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#822-quadratic-cells" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.2.2 二次单元（Quadratic Cells）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8.2.2 二次单元（Quadratic Cells）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#vtk_quadratic_tetra10-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VTK_QUADRATIC_TETRA（10点）-- 二次四面体
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vtk_quadratic_hexahedron20-serendipity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VTK_QUADRATIC_HEXAHEDRON（20点）-- 二次六面体（Serendipity单元）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#823" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.2.3 单元类型快速参考表
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#83" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.3 构建非结构化网格
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8.3 构建非结构化网格">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#831" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.3.1 构造流程
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#832-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.3.2 关键API
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#833" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.3.3 完整示例：构建包含三种混合单元的非结构化网格
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#834-setcells" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.3.4 通过SetCells()批量构建
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#84" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.4 常用操作与查询
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8.4 常用操作与查询">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#841" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.4.1 基本查询
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#842" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.4.2 获取特定类型的所有单元
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#843" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.4.3 提取表面网格
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#844" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.4.4 单元质量查询
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#85-fem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.5 代码示例：悬臂梁FEM可视化
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8.5 代码示例：悬臂梁FEM可视化">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#851" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.5.1 示例说明
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#852-c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.5.2 完整C++代码
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#853-cmakeliststxt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.5.3 CMakeLists.txt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#854" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.5.4 运行说明
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#86" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.6 本章小结
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8.6 本章小结">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#861" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.6.1 核心要点回顾
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#862" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.6.2 与前后章节的关系
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#863" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.6.3 扩展阅读方向
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-09-structured-data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第九章 结构化数据
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-10-data-io/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十章 数据I/O
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-11-common-filters/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十一章 常用过滤器
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-12-color-mapping/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十二章 颜色映射与标量可视化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-13-advanced-rendering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十三章 高级渲染技术
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-14-multi-dataset/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十四章 多个数据集处理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-15-volume2-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十五章 实战篇综合实战——CFD后处理可视化工具
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    进阶篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    进阶篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-16-volume-rendering-basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十六章 体渲染基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-17-volume-rendering-advanced/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十七章 体渲染高级技术
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-18-charts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十八章 2D图表系统
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-19-annotation-and-widgets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十九章 三维标注与交互组件
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-20-custom-interaction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十章 自定义交互与Widget
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-21-qt-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十一章 Qt集成
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-22-smp-parallel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十二章 SMP并行入门
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-23-volume3-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十三章 进阶篇综合实战
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        本章导读
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#81" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.1 什么是非结构化网格
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#82" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.2 常用单元类型详解
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8.2 常用单元类型详解">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#821-linear-cells" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.2.1 线性单元（Linear Cells）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8.2.1 线性单元（Linear Cells）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#vtk_tetra4-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VTK_TETRA（4点）-- 线性四面体
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vtk_hexahedron8-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VTK_HEXAHEDRON（8点）-- 线性六面体
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vtk_wedge6-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VTK_WEDGE（6点）-- 楔形体（三棱柱）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vtk_pyramid5-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VTK_PYRAMID（5点）-- 金字塔单元
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vtk_voxel8-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VTK_VOXEL（8点）-- 体素
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#822-quadratic-cells" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.2.2 二次单元（Quadratic Cells）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8.2.2 二次单元（Quadratic Cells）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#vtk_quadratic_tetra10-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VTK_QUADRATIC_TETRA（10点）-- 二次四面体
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vtk_quadratic_hexahedron20-serendipity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VTK_QUADRATIC_HEXAHEDRON（20点）-- 二次六面体（Serendipity单元）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#823" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.2.3 单元类型快速参考表
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#83" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.3 构建非结构化网格
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8.3 构建非结构化网格">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#831" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.3.1 构造流程
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#832-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.3.2 关键API
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#833" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.3.3 完整示例：构建包含三种混合单元的非结构化网格
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#834-setcells" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.3.4 通过SetCells()批量构建
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#84" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.4 常用操作与查询
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8.4 常用操作与查询">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#841" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.4.1 基本查询
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#842" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.4.2 获取特定类型的所有单元
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#843" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.4.3 提取表面网格
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#844" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.4.4 单元质量查询
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#85-fem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.5 代码示例：悬臂梁FEM可视化
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8.5 代码示例：悬臂梁FEM可视化">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#851" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.5.1 示例说明
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#852-c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.5.2 完整C++代码
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#853-cmakeliststxt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.5.3 CMakeLists.txt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#854" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.5.4 运行说明
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#86" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.6 本章小结
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8.6 本章小结">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#861" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.6.1 核心要点回顾
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#862" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.6.2 与前后章节的关系
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#863" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.6.3 扩展阅读方向
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="unstructured-grid">第八章 非结构化网格（Unstructured Grid）</h1>
+<h2 id="_1">本章导读</h2>
+<p>在第七章中，你深入学习了<code>vtkPolyData</code>--VTK中最灵活的多边形数据表示，它擅长描述曲面、线段和点集。在第九章中，你将遇见结构化数据家族--<code>vtkImageData</code>、<code>vtkRectilinearGrid</code>和<code>vtkStructuredGrid</code>，它们依靠隐式的IJK索引拓扑来实现极高的内存效率。</p>
+<p>本章聚焦于VTK数据模型中<strong>最通用、表达能力最强</strong>的数据集类型：<strong><code>vtkUnstructuredGrid</code>（非结构化网格）</strong>。它的核心特征是：<strong>一个网格中可以同时包含任意类型的单元（Cell）</strong>--四面体、六面体、楔形体、金字塔单元，甚至混合在一起。这是结构化数据和PolyData都无法做到的。</p>
+<p>本章将带你完成以下内容：</p>
+<ol>
+<li><strong>理解非结构化网格的本质</strong>--为什么需要显式存储拓扑，以及它与vtkPolyData和结构化数据的根本差异。</li>
+<li><strong>掌握常用单元类型</strong>--从线性四面体到二次六面体的点计数、拓扑结构和典型应用场景，配有完整的快速参考表。</li>
+<li><strong>手动构建非结构化网格</strong>--逐步掌握<code>vtkPoints</code> -&gt; <code>Allocate()</code> -&gt; <code>InsertNextCell()</code> -&gt; <code>SetPoints()</code>的构造流程。</li>
+<li><strong>常用查询与操作</strong>--获取指定单元、按类型筛选、提取表面、查询单元质量。</li>
+<li><strong>一个完整的FEM可视化示例</strong>--手动构建悬臂梁网格，模拟位移场，使用<code>vtkWarpVector</code>变形网格，并用查找表着色，包含完整的CMakeLists.txt。</li>
+</ol>
+<p>本章是连接"数据表示"与"科学计算可视化"的桥梁。读完本章后，你将对VTK的数据模型形成完整的认知，并具备将外部仿真数据（如FEM结果、CFD网格）导入VTK进行可视化的能力。</p>
+<hr />
+<h2 id="81">8.1 什么是非结构化网格</h2>
+<p><code>vtkUnstructuredGrid</code>是VTK中最通用的数据集类型。与其他数据集不同，它不要求网格具有规则的拓扑结构--每个单元可以属于不同的类型，且单元之间的连接关系（Connectivity）是<strong>显式存储</strong>的。</p>
+<p>理解这一点的最佳方式是与你已经学过的其他数据集进行对比：</p>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>vtkPolyData</th>
+<th>vtkStructuredGrid</th>
+<th>vtkUnstructuredGrid</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>单元维度</strong></td>
+<td>0D、1D、2D（点、线、面）</td>
+<td>2D四边形或3D六面体</td>
+<td>任意维度（含3D体单元）</td>
+</tr>
+<tr>
+<td><strong>单元类型</strong></td>
+<td>固定四类（Verts/Lines/Polys/Strips）</td>
+<td>隐式定义，通常为六面体</td>
+<td>任意类型，可混合</td>
+</tr>
+<tr>
+<td><strong>拓扑存储</strong></td>
+<td>显式（vtkCellArray）</td>
+<td>隐式（IJK索引推导）</td>
+<td>显式（每个单元存储点索引）</td>
+</tr>
+<tr>
+<td><strong>体单元支持</strong></td>
+<td>不支持</td>
+<td>支持（仅六面体）</td>
+<td>支持（四面体、六面体、楔形、金字塔等）</td>
+</tr>
+<tr>
+<td><strong>典型应用</strong></td>
+<td>曲面、轮廓、粒子轨迹</td>
+<td>贴体网格、变形几何</td>
+<td>FEM结果、CFD网格、工程仿真</td>
+</tr>
+</tbody>
+</table>
+<p><code>vtkUnstructuredGrid</code>的"非结构化"一词并不意味着网格是混乱的--它指的是网格的拓扑结构不遵循任何预设的规则模式。每一个单元都需要显式地记录"它由哪几个点组成"，而不是像结构化网格那样可以通过简单的数学公式从索引推导出邻居关系。</p>
+<p>这种显式拓扑存储带来了灵活性，也带来了内存开销。对于一个有N个点的六面体结构化网格，你可以不存储任何拓扑信息就确定所有单元的连接关系。而对于具有相同几何形状的非结构化网格，你必须为每个六面体存储其8个顶点索引。</p>
+<p><strong>非结构化网格的典型应用场景包括：</strong></p>
+<ul>
+<li><strong>有限元法（FEM）结果可视化</strong>：结构分析、热传导、电磁场仿真通常使用四面体或六面体网格，计算结果（位移、应力、温度）定义在网格节点或单元上。</li>
+<li><strong>计算流体力学（CFD）网格</strong>：边界层附近使用楔形体（棱柱）单元，核心区域使用四面体，壁面附近使用六面体。这些不同类型的单元需要共存于同一个网格中。</li>
+<li><strong>工程仿真数据交换</strong>：许多仿真软件（ANSYS、Abaqus、OpenFOAM、COMSOL）输出的网格本质上都是非结构化的。将这些数据导入VTK进行可视化，最自然的方式就是使用<code>vtkUnstructuredGrid</code>。</li>
+<li><strong>地质建模与油藏模拟</strong>：地下岩层的几何形状极其不规则，需要使用非结构化的四面体或六面体网格来离散化。</li>
+</ul>
+<p>总结来说：当你需要表达任意拓扑的三维体网格，尤其是当单个网格中需要混合多种单元类型时，<code>vtkUnstructuredGrid</code>是唯一的选择。</p>
+<hr />
+<h2 id="82">8.2 常用单元类型详解</h2>
+<p>VTK定义了超过70种单元类型（在<code>vtkCellType.h</code>中枚举），但实际工程中最常用的只有十余种。本节将逐一介绍每种核心单元类型的点计数、拓扑描述和典型应用场景。</p>
+<h3 id="821-linear-cells">8.2.1 线性单元（Linear Cells）</h3>
+<p>线性单元是指单元边上的几何映射是线性的--即单元内的任意点坐标由顶点坐标的线性插值得到。这些单元在工程仿真中最常见。</p>
+<h4 id="vtk_tetra4-">VTK_TETRA（4点）-- 线性四面体</h4>
+<p>四面体是最简单、最灵活的三维体单元。它由四个三角形面围成，是FEM仿真的"主力单元"--几乎所有的自动网格生成器（如TetGen、NETGEN）都能生成四面体网格。</p>
+<pre><code>      点3 (p3)
+       /|\
+      / | \
+     /  |  \
+    /   |   \
+   /    |    \
+点0 ----|---- 点2 (p2)
+  \     |     /
+   \    |    /
+    \   |   /
+     \  |  /
+      \ | /
+       \|/
+      点1 (p1)
+</code></pre>
+<ul>
+<li><strong>点数</strong>：4</li>
+<li><strong>面数</strong>：4（每个面是一个三角形）</li>
+<li><strong>边数</strong>：6</li>
+<li><strong>点排列</strong>：点0、1、2构成底面三角形（逆时针，从下方看），点3是顶点</li>
+<li><strong>典型应用</strong>：FEM结构分析、热传导仿真、电磁场仿真、自动网格生成</li>
+<li><strong>优点</strong>：可适应任意复杂几何形状，自动网格生成成熟</li>
+<li><strong>缺点</strong>：同等精度下需要比六面体更多的单元数量</li>
+</ul>
+<h4 id="vtk_hexahedron8-">VTK_HEXAHEDRON（8点）-- 线性六面体</h4>
+<p>六面体（也称砖块单元、Brick Element）是结构化网格区域的自然选择。在应力分析和CFD中，六面体单元通常比四面体提供更高的精度。</p>
+<pre><code>        点7__________点6
+        /|          /|
+       / |         / |
+    点4 --------- 点5 |
+      |  |        |  |
+      |  点3______|__点2
+      | /         | /
+      |/          |/
+    点0 --------- 点1
+</code></pre>
+<p>VTK中六面体顶点的标准排列顺序为：底面逆时针（0-1-2-3），然后顶面逆时针（4-5-6-7），其中点0在点4的下方。</p>
+<ul>
+<li><strong>点数</strong>：8</li>
+<li><strong>面数</strong>：6（每个面是一个四边形）</li>
+<li><strong>边数</strong>：12</li>
+<li><strong>点排列</strong>：底面<code>{0,1,2,3}</code>逆时针，顶面<code>{4,5,6,7}</code>逆时针，4在0上方，5在1上方，依此类推</li>
+<li><strong>典型应用</strong>：结构化网格区域的FEM分析、CFD核心区域、接触力学</li>
+<li><strong>优点</strong>：计算精度高，单元数量相对较少</li>
+<li><strong>缺点</strong>：难以自动生成复杂几何的纯六面体网格</li>
+</ul>
+<h4 id="vtk_wedge6-">VTK_WEDGE（6点）-- 楔形体（三棱柱）</h4>
+<p>楔形体单元在CFD中非常重要--它常用于边界层网格，其中从物面向外延伸的棱柱层自然形成楔形体单元。</p>
+<pre><code>      点5
+      /|\
+     / | \
+    /  |  \
+   /   |   \
+  /    |    \
+点3 ----|---- 点4
+ |      |      |
+ |    点2      |
+ |    / \      |
+ |   /   \     |
+ |  /     \    |
+ | /       \   |
+ |/         \  |
+点0 --------- 点1
+</code></pre>
+<ul>
+<li><strong>点数</strong>：6</li>
+<li><strong>面数</strong>：5（2个三角形面 + 3个四边形面）</li>
+<li><strong>边数</strong>：9</li>
+<li><strong>点排列</strong>：底面三角形<code>{0,1,2}</code>逆时针，顶面三角形<code>{3,4,5}</code>逆时针，3在0上方，4在1上方，5在2上方</li>
+<li><strong>典型应用</strong>：CFD边界层网格（从物面三角形挤出）、过渡区域</li>
+<li><strong>优点</strong>：自然表示挤出几何</li>
+<li><strong>缺点</strong>：使用场景较为特定</li>
+</ul>
+<h4 id="vtk_pyramid5-">VTK_PYRAMID（5点）-- 金字塔单元</h4>
+<p>金字塔单元的主要作用是<strong>过渡</strong>--在六面体网格区域和四面体网格区域之间建立连接。一个四边形面（底面）可以连接到四面体网格，而四个三角形面可以连接到六面体网格。</p>
+<pre><code>        点4 (顶点)
+        /|\
+       / | \
+      /  |  \
+     /   |   \
+    /    |    \
+   /     |     \
+  /      |      \
+ /       |       \
+点3 ------------- 点2
+ |\              /|
+ | \            / |
+ |  \          /  |
+ |   \        /   |
+ |    \      /    |
+ |     \    /     |
+ |      \  /      |
+ |       \/       |
+点0 ------------- 点1
+</code></pre>
+<ul>
+<li><strong>点数</strong>：5</li>
+<li><strong>面数</strong>：5（1个四边形底面 + 4个三角形侧面）</li>
+<li><strong>边数</strong>：8</li>
+<li><strong>点排列</strong>：底面四边形<code>{0,1,2,3}</code>逆时针，点4为顶点</li>
+<li><strong>典型应用</strong>：六面体到四面体的网格过渡区域</li>
+<li><strong>优点</strong>：唯一的四边形+三角形混合单元，过渡作用不可替代</li>
+<li><strong>缺点</strong>：单独使用场景较少</li>
+</ul>
+<h4 id="vtk_voxel8-">VTK_VOXEL（8点）-- 体素</h4>
+<p><code>VTK_VOXEL</code>与<code>VTK_HEXAHEDRON</code>看似相同（都是8点六面体），但<strong>点排列顺序不同</strong>。Voxel是专门为<code>vtkImageData</code>设计的单元类型。</p>
+<pre><code>        点6__________点7
+        /|          /|
+       / |         / |
+    点4 --------- 点5 |
+      |  |        |  |
+      |  点2______|__点3
+      | /         | /
+      |/          |/
+    点0 --------- 点1
+</code></pre>
+<p>Voxel的点排列按<strong>IJK顺序</strong>：对于索引空间中的<code>(i,j,k)</code>，8个顶点按<code>(0,0,0), (1,0,0), (0,1,0), (1,1,0), (0,0,1), (1,0,1), (0,1,1), (1,1,1)</code>的顺序排列。</p>
+<ul>
+<li><strong>点数</strong>：8</li>
+<li><strong>与HEXAHEDRON的区别</strong>：仅在于点排列顺序。Voxel的边平行于坐标轴，点的顺序是二进制的（按I、J、K的二进制增长）</li>
+<li><strong>典型应用</strong>：医学影像（CT/MRI体数据）、规则网格仿真中隐式定义的体素</li>
+</ul>
+<h3 id="822-quadratic-cells">8.2.2 二次单元（Quadratic Cells）</h3>
+<p>二次单元在每条边的中点增加了一个额外的节点，使得单元内的插值函数从线性提升为二次多项式。这允许用更少的单元捕获更复杂的场分布。</p>
+<h4 id="vtk_quadratic_tetra10-">VTK_QUADRATIC_TETRA（10点）-- 二次四面体</h4>
+<p>在标准四面体的4个顶点基础上，每条边的中点增加一个节点（共6个），总共10个点。</p>
+<pre><code>      点3 (顶点)
+       /|\
+      / | \
+    p7  |  p9    ← p7, p9 是边中点
+    /   |   \
+   /    p8    \   ← p8 是边中点
+  /     |      \
+点0 -- p4 ----- 点2
+  \     |      /
+   \    p6    /    ← p6 是边中点
+    \   |   /
+    p5  |  p10   ← p5, p10 是边中点
+      \ | /
+       \|/
+      点1
+</code></pre>
+<p>点排列顺序（按VTK约定）：
+- 0-3：4个顶点（与线性四面体相同顺序）
+- 4-9：6个边中点，依次位于边(0,1)、(1,2)、(0,2)、(0,3)、(1,3)、(2,3)上</p>
+<ul>
+<li><strong>点数</strong>：10</li>
+<li><strong>典型应用</strong>：高精度FEM分析、需要精确应力/应变梯度的区域</li>
+<li><strong>优点</strong>：用少量单元即可表示弯曲边界和复杂场分布</li>
+<li><strong>缺点</strong>：计算成本显著增加</li>
+</ul>
+<h4 id="vtk_quadratic_hexahedron20-serendipity">VTK_QUADRATIC_HEXAHEDRON（20点）-- 二次六面体（Serendipity单元）</h4>
+<p>在标准六面体的8个顶点基础上，每条边的中点增加一个节点（12个），总共20个点。注意这不是27点拉格朗日六面体（<code>VTK_TRIQUADRATIC_HEXAHEDRON</code>）--后者在面的中心还有节点。</p>
+<pre><code>        点7__________e18_________点6
+        /|                      /|
+       / |                     / |
+    e15 |                   e13 |
+     /  |                   /   |
+    /   |                  /    |
+  点4 __________e19_________点5   |
+   |    |                 |     |
+   |    |                 |     |
+   |   点3_______e17______|____点2
+   e14 /                 e16  /
+   |  /                  |   /
+   | /                   |  /
+   |/                    | /
+  点0__________e10_________点1
+</code></pre>
+<ul>
+<li><strong>点数</strong>：20（8个顶点 + 12个边中点）</li>
+<li><strong>典型应用</strong>：高精度结构分析、接触力学、需要精确挠度计算的梁/板分析</li>
+<li><strong>注意</strong>：在VTK的单元分类中，该类型编号为<code>VTK_QUADRATIC_HEXAHEDRON = 25</code></li>
+</ul>
+<h3 id="823">8.2.3 单元类型快速参考表</h3>
+<table>
+<thead>
+<tr>
+<th>单元类型</th>
+<th>VTK枚举值</th>
+<th>点数</th>
+<th>面类型</th>
+<th>典型应用</th>
+<th>维度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>VTK_TETRA</strong></td>
+<td>10</td>
+<td>4</td>
+<td>4个三角形</td>
+<td>FEM主力单元</td>
+<td>3D</td>
+</tr>
+<tr>
+<td><strong>VTK_HEXAHEDRON</strong></td>
+<td>12</td>
+<td>8</td>
+<td>6个四边形</td>
+<td>结构化FEM区域</td>
+<td>3D</td>
+</tr>
+<tr>
+<td><strong>VTK_WEDGE</strong></td>
+<td>13</td>
+<td>6</td>
+<td>2三角+3四边</td>
+<td>CFD边界层</td>
+<td>3D</td>
+</tr>
+<tr>
+<td><strong>VTK_PYRAMID</strong></td>
+<td>14</td>
+<td>5</td>
+<td>1四边+4三角</td>
+<td>六面体-四面体过渡</td>
+<td>3D</td>
+</tr>
+<tr>
+<td><strong>VTK_VOXEL</strong></td>
+<td>11</td>
+<td>8</td>
+<td>6个四边形</td>
+<td>医学影像、ImageData</td>
+<td>3D</td>
+</tr>
+<tr>
+<td><strong>VTK_QUADRATIC_TETRA</strong></td>
+<td>24</td>
+<td>10</td>
+<td>4个二次三角面</td>
+<td>高精度FEM</td>
+<td>3D</td>
+</tr>
+<tr>
+<td><strong>VTK_QUADRATIC_HEXAHEDRON</strong></td>
+<td>25</td>
+<td>20</td>
+<td>6个二次四边形面</td>
+<td>高精度结构分析</td>
+<td>3D</td>
+</tr>
+<tr>
+<td><strong>VTK_QUADRATIC_WEDGE</strong></td>
+<td>26</td>
+<td>15</td>
+<td>2个二次三角+3个二次四边</td>
+<td>高精度CFD边界层</td>
+<td>3D</td>
+</tr>
+<tr>
+<td><strong>VTK_QUADRATIC_PYRAMID</strong></td>
+<td>27</td>
+<td>13</td>
+<td>1个二次四边+4个二次三角</td>
+<td>高精度过渡区</td>
+<td>3D</td>
+</tr>
+<tr>
+<td><strong>VTK_TRIANGLE</strong></td>
+<td>5</td>
+<td>3</td>
+<td>--</td>
+<td>2D FEM</td>
+<td>2D</td>
+</tr>
+<tr>
+<td><strong>VTK_QUAD</strong></td>
+<td>9</td>
+<td>4</td>
+<td>--</td>
+<td>2D FEM</td>
+<td>2D</td>
+</tr>
+<tr>
+<td><strong>VTK_LINE</strong></td>
+<td>3</td>
+<td>2</td>
+<td>--</td>
+<td>1D杆单元</td>
+<td>1D</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>提示</strong>：VTK单元格类型的完整列表和枚举值可通过<code>vtkCellType.h</code>头文件查阅。本节涵盖的是实际工程中最常见的类型。</p>
+</blockquote>
+<hr />
+<h2 id="83">8.3 构建非结构化网格</h2>
+<h3 id="831">8.3.1 构造流程</h3>
+<p>构建一个<code>vtkUnstructuredGrid</code>遵循以下标准步骤：</p>
+<pre><code>vtkPoints (创建点)
+    ↓
+vtkUnstructuredGrid::Allocate() (预分配单元内存)
+    ↓
+InsertNextCell() × N (逐个插入单元)
+    ↓
+SetPoints() (将点关联到网格)
+    ↓
+（可选）关联点数据/单元数据（标量、向量等）
+</code></pre>
+<h3 id="832-api">8.3.2 关键API</h3>
+<p><strong><code>Allocate(vtkIdType numCells, int extSize=1000)</code></strong></p>
+<p>预分配单元存储空间。<code>numCells</code>指定初始容量，<code>extSize</code>指定当容量不足时每次扩展增加的数量。正确预估单元数量可以避免运行时的多次内存重分配。</p>
+<p><strong><code>InsertNextCell(int cellType, vtkIdType npts, const vtkIdType* pts)</code></strong></p>
+<p>向网格中插入一个单元，这是最核心的API：
+- <code>cellType</code>：单元类型枚举值（如<code>VTK_TETRA</code>、<code>VTK_HEXAHEDRON</code>等）
+- <code>npts</code>：该单元包含的点数（必须与cellType一致）
+- <code>pts</code>：指向点ID数组的指针，数组长度必须等于npts</p>
+<p>返回值是新插入单元的ID（从0开始递增）。</p>
+<p><strong><code>SetPoints(vtkPoints* points)</code></strong></p>
+<p>将预先构建的<code>vtkPoints</code>对象关联到网格。</p>
+<h3 id="833">8.3.3 完整示例：构建包含三种混合单元的非结构化网格</h3>
+<p>以下代码演示了如何手动构建一个同时包含四面体、六面体和楔形体的非结构化网格。</p>
+<pre><code class="language-cpp">// build_mixed_grid.cxx
+// 演示手动构建包含多种单元类型的 vtkUnstructuredGrid
+
+#include &lt;vtkNew.h&gt;
+#include &lt;vtkPoints.h&gt;
+#include &lt;vtkUnstructuredGrid.h&gt;
+#include &lt;vtkHexahedron.h&gt;
+#include &lt;vtkTetra.h&gt;
+#include &lt;vtkWedge.h&gt;
+#include &lt;vtkCellTypes.h&gt;
+#include &lt;vtkDataSetMapper.h&gt;
+#include &lt;vtkActor.h&gt;
+#include &lt;vtkRenderer.h&gt;
+#include &lt;vtkRenderWindow.h&gt;
+#include &lt;vtkRenderWindowInteractor.h&gt;
+#include &lt;vtkProperty.h&gt;
+#include &lt;vtkDataSetSurfaceFilter.h&gt;
+
+int main()
+{
+  // ============================================================
+  // 第一步：创建点
+  // ============================================================
+  // 我们将构建一个简单的3D场景：
+  //   - 一个六面体位于左侧
+  //   - 一个四面体通过金字塔过渡到六面体
+  //   - 一个楔形体位于右侧
+  //
+  // 为简化，我们手动定义所有点的坐标
+
+  vtkNew&lt;vtkPoints&gt; points;
+  points-&gt;InsertNextPoint( 0.0, 0.0, 0.0);  // 点0
+  points-&gt;InsertNextPoint( 1.0, 0.0, 0.0);  // 点1
+  points-&gt;InsertNextPoint( 1.0, 1.0, 0.0);  // 点2
+  points-&gt;InsertNextPoint( 0.0, 1.0, 0.0);  // 点3
+  points-&gt;InsertNextPoint( 0.0, 0.0, 1.0);  // 点4
+  points-&gt;InsertNextPoint( 1.0, 0.0, 1.0);  // 点5
+  points-&gt;InsertNextPoint( 1.0, 1.0, 1.0);  // 点6
+  points-&gt;InsertNextPoint( 0.0, 1.0, 1.0);  // 点7
+
+  // 四面体的额外顶点（位于六面体右侧上方）
+  points-&gt;InsertNextPoint( 2.5, 0.5, 2.0);  // 点8
+
+  // 楔形体的顶点（位于最右侧）
+  points-&gt;InsertNextPoint( 3.0, 0.0, 0.0);  // 点9
+  points-&gt;InsertNextPoint( 4.0, 0.0, 0.0);  // 点10
+  points-&gt;InsertNextPoint( 3.5, 0.5, 0.0);  // 点11
+  points-&gt;InsertNextPoint( 3.0, 0.0, 1.5);  // 点12
+  points-&gt;InsertNextPoint( 4.0, 0.0, 1.5);  // 点13
+  points-&gt;InsertNextPoint( 3.5, 0.5, 1.5);  // 点14
+
+  // 金字塔单元的顶点（六面体右侧面 + 四面体左侧的过渡）
+  // 使用六面体的右侧面(1,2,6,5)作为底面，点8的投影作为顶点
+  points-&gt;InsertNextPoint( 2.0, 0.5, 0.5);  // 点15（金字塔顶点）
+
+  // ============================================================
+  // 第二步：创建 vtkUnstructuredGrid 并预分配空间
+  // ============================================================
+  vtkNew&lt;vtkUnstructuredGrid&gt; ugrid;
+  ugrid-&gt;Allocate(4, 100);  // 预分配4个单元
+
+  // ============================================================
+  // 第三步：逐个插入单元
+  // ============================================================
+
+  // 单元0：六面体（点0-7）
+  //
+  //  底面 0-1-2-3（逆时针），顶面 4-5-6-7（逆时针）
+  //  4在0上方，5在1上方，6在2上方，7在3上方
+  {
+    vtkIdType hexPts[8] = {0, 1, 2, 3, 4, 5, 6, 7};
+    ugrid-&gt;InsertNextCell(VTK_HEXAHEDRON, 8, hexPts);
+  }
+
+  // 单元1：四面体（点1, 2, 5, 8）
+  //
+  //  底面 1-2-5（逆时针，从下方看），顶点 8
+  {
+    vtkIdType tetPts[4] = {1, 2, 5, 8};
+    ugrid-&gt;InsertNextCell(VTK_TETRA, 4, tetPts);
+  }
+
+  // 单元2：金字塔（点1, 2, 6, 5, 15）
+  //
+  //  底面 1-2-6-5（逆时针），顶点 15
+  {
+    vtkIdType pyrPts[5] = {1, 2, 6, 5, 15};
+    ugrid-&gt;InsertNextCell(VTK_PYRAMID, 5, pyrPts);
+  }
+
+  // 单元3：楔形体（点9, 10, 11, 12, 13, 14）
+  //
+  //  底面三角形 9-10-11（逆时针），顶面三角形 12-13-14（逆时针）
+  //  12在9上方，13在10上方，14在11上方
+  {
+    vtkIdType wedgePts[6] = {9, 10, 11, 12, 13, 14};
+    ugrid-&gt;InsertNextCell(VTK_WEDGE, 6, wedgePts);
+  }
+
+  // ============================================================
+  // 第四步：将点关联到网格
+  // ============================================================
+  ugrid-&gt;SetPoints(points);
+
+  // ============================================================
+  // 第五步：验证网格信息
+  // ============================================================
+  std::cout &lt;&lt; &quot;=== 非结构化网格信息 ===&quot; &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;总点数:     &quot; &lt;&lt; ugrid-&gt;GetNumberOfPoints() &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;总单元数:   &quot; &lt;&lt; ugrid-&gt;GetNumberOfCells()  &lt;&lt; std::endl;
+
+  for (vtkIdType i = 0; i &lt; ugrid-&gt;GetNumberOfCells(); ++i)
+  {
+    int cellType = ugrid-&gt;GetCellType(i);
+    vtkCell* cell = ugrid-&gt;GetCell(i);
+    std::cout &lt;&lt; &quot;单元[&quot; &lt;&lt; i &lt;&lt; &quot;] 类型=&quot; &lt;&lt; cellType
+              &lt;&lt; &quot; (&quot; &lt;&lt; cell-&gt;GetCellTypeAsString(cellType) &lt;&lt; &quot;)&quot;
+              &lt;&lt; &quot; 点数=&quot; &lt;&lt; cell-&gt;GetNumberOfPoints()
+              &lt;&lt; std::endl;
+  }
+
+  // ============================================================
+  // 第六步：可视化
+  // ============================================================
+  // 使用 vtkDataSetSurfaceFilter 提取表面用于渲染
+  vtkNew&lt;vtkDataSetSurfaceFilter&gt; surfaceFilter;
+  surfaceFilter-&gt;SetInputData(ugrid);
+  surfaceFilter-&gt;Update();
+
+  vtkNew&lt;vtkDataSetMapper&gt; mapper;
+  mapper-&gt;SetInputConnection(surfaceFilter-&gt;GetOutputPort());
+
+  vtkNew&lt;vtkActor&gt; actor;
+  actor-&gt;SetMapper(mapper);
+  actor-&gt;GetProperty()-&gt;SetColor(0.3, 0.7, 0.9);
+  actor-&gt;GetProperty()-&gt;SetEdgeVisibility(1);
+  actor-&gt;GetProperty()-&gt;SetEdgeColor(0.0, 0.0, 0.0);
+  actor-&gt;GetProperty()-&gt;SetLineWidth(1.0);
+
+  vtkNew&lt;vtkRenderer&gt; renderer;
+  renderer-&gt;AddActor(actor);
+  renderer-&gt;SetBackground(0.15, 0.15, 0.18);
+
+  vtkNew&lt;vtkRenderWindow&gt; renderWindow;
+  renderWindow-&gt;AddRenderer(renderer);
+  renderWindow-&gt;SetSize(800, 600);
+  renderWindow-&gt;SetWindowName(&quot;Mixed Unstructured Grid (Hex + Tet + Pyramid + Wedge)&quot;);
+
+  vtkNew&lt;vtkRenderWindowInteractor&gt; interactor;
+  interactor-&gt;SetRenderWindow(renderWindow);
+
+  vtkNew&lt;vtkInteractorStyleTrackballCamera&gt; style;
+  style-&gt;SetDefaultRenderer(renderer);
+  interactor-&gt;SetInteractorStyle(style);
+
+  renderWindow-&gt;Render();
+  std::cout &lt;&lt; &quot;\n渲染完成。旋转视角查看混合网格。关闭窗口退出。&quot; &lt;&lt; std::endl;
+  interactor-&gt;Start();
+
+  return 0;
+}
+</code></pre>
+<h3 id="834-setcells">8.3.4 通过SetCells()批量构建</h3>
+<p>对于大规模网格（数万至数百万个单元），使用<code>InsertNextCell()</code>逐单元插入的效率可能不够高。此时可以使用<code>SetCells()</code>方法批量设置：</p>
+<pre><code class="language-cpp">// 批量构建方式（高性能）
+
+vtkNew&lt;vtkCellArray&gt; cellArray;
+
+// 准备 Connectivity 和 Offsets 数组
+// (与 vtkCellArray 的现代存储格式一致，参见第七章7.1.3节)
+vtkNew&lt;vtkIdTypeArray&gt; connectivity;
+vtkNew&lt;vtkIdTypeArray&gt; offsets;
+vtkNew&lt;vtkUnsignedCharArray&gt; cellTypes;
+
+// 填充 connectivity、offsets、cellTypes 数组...
+// ...
+
+cellArray-&gt;SetData(offsets, connectivity);
+ugrid-&gt;SetCells(cellTypes, cellArray);
+ugrid-&gt;SetPoints(points);
+</code></pre>
+<p>对于超大规模网格，这种方式可以大幅减少函数调用开销，但也更复杂。日常开发中，对少于10万个单元的网格使用<code>InsertNextCell()</code>是完全可接受的。</p>
+<hr />
+<h2 id="84">8.4 常用操作与查询</h2>
+<h3 id="841">8.4.1 基本查询</h3>
+<pre><code class="language-cpp">// 获取单元总数
+vtkIdType numCells = ugrid-&gt;GetNumberOfCells();
+
+// 获取指定ID的单元类型
+int cellType = ugrid-&gt;GetCellType(cellId);
+
+// 获取指定ID的单元（返回vtkCell指针，可以进行进一步操作）
+vtkCell* cell = ugrid-&gt;GetCell(cellId);
+int npts = cell-&gt;GetNumberOfPoints();
+vtkIdList* ptIds = cell-&gt;GetPointIds();  // 获取单元的点ID列表
+
+// 遍历单元的所有点
+for (vtkIdType j = 0; j &lt; cell-&gt;GetNumberOfPoints(); ++j)
+{
+  vtkIdType ptId = cell-&gt;GetPointId(j);
+  double pt[3];
+  ugrid-&gt;GetPoint(ptId, pt);
+  // 对点的坐标进行处理...
+}
+</code></pre>
+<h3 id="842">8.4.2 获取特定类型的所有单元</h3>
+<p>在实际工作中，经常需要提取网格中某一特定类型的全部单元（例如只查看四面体，或只查看六面体）。VTK没有提供直接的"获取所有某类型单元"的API，但可以通过遍历筛选来实现：</p>
+<pre><code class="language-cpp">#include &lt;vector&gt;
+
+// 获取所有四面体单元的ID
+std::vector&lt;vtkIdType&gt; getCellsOfType(vtkUnstructuredGrid* grid, int targetType)
+{
+  std::vector&lt;vtkIdType&gt; result;
+  for (vtkIdType i = 0; i &lt; grid-&gt;GetNumberOfCells(); ++i)
+  {
+    if (grid-&gt;GetCellType(i) == targetType)
+    {
+      result.push_back(i);
+    }
+  }
+  return result;
+}
+
+// 使用示例
+std::vector&lt;vtkIdType&gt; tetraIds = getCellsOfType(ugrid, VTK_TETRA);
+std::cout &lt;&lt; &quot;四面体单元数量: &quot; &lt;&lt; tetraIds.size() &lt;&lt; std::endl;
+
+std::vector&lt;vtkIdType&gt; hexIds = getCellsOfType(ugrid, VTK_HEXAHEDRON);
+std::cout &lt;&lt; &quot;六面体单元数量: &quot; &lt;&lt; hexIds.size() &lt;&lt; std::endl;
+</code></pre>
+<h3 id="843">8.4.3 提取表面网格</h3>
+<p><code>vtkUnstructuredGrid</code>不能直接交给Mapper渲染--渲染管线需要的是表面（三角形或多边形）。VTK提供了<code>vtkDataSetSurfaceFilter</code>来从任意体网格中提取外表面：</p>
+<pre><code class="language-cpp">#include &lt;vtkDataSetSurfaceFilter.h&gt;
+
+vtkNew&lt;vtkDataSetSurfaceFilter&gt; surfaceFilter;
+surfaceFilter-&gt;SetInputData(ugrid);
+surfaceFilter-&gt;Update();
+
+vtkPolyData* surface = surfaceFilter-&gt;GetOutput();
+// surface 现在是一个 vtkPolyData，包含网格的外表面三角形
+// 可以直接用于渲染或进一步处理
+</code></pre>
+<p><code>vtkDataSetSurfaceFilter</code>的工作原理是：遍历所有单元的每个面，如果一个面只被一个单元引用（即它是边界上的面），则将其输出为表面三角形。内部单元的面（被两个单元共享）不会被输出。</p>
+<h3 id="844">8.4.4 单元质量查询</h3>
+<p>VTK提供了<code>vtkMeshQuality</code>过滤器来评估网格中每个单元的质量。不同的质量度量（Quality Metric）适用于不同类型的单元：</p>
+<pre><code class="language-cpp">#include &lt;vtkMeshQuality.h&gt;
+
+vtkNew&lt;vtkMeshQuality&gt; qualityFilter;
+qualityFilter-&gt;SetInputData(ugrid);
+
+// 设置质量度量类型
+// VTK_QUALITY_ASPECT_RATIO -- 纵横比（值越接近1越好）
+// VTK_QUALITY_JACOBIAN      -- 雅可比矩阵条件数
+// VTK_QUALITY_SKEW          -- 偏斜度
+// VTK_QUALITY_VOLUME        -- 单元体积
+qualityFilter-&gt;SetTriangleQualityMeasureToAspectRatio();
+qualityFilter-&gt;SetQuadQualityMeasureToAspectRatio();
+qualityFilter-&gt;SetTetQualityMeasureToAspectRatio();
+qualityFilter-&gt;SetHexQualityMeasureToAspectRatio();
+
+qualityFilter-&gt;Update();
+
+vtkUnstructuredGrid* qualityResult =
+  vtkUnstructuredGrid::SafeDownCast(qualityFilter-&gt;GetOutput());
+
+// 质量值存储在单元数据的 &quot;Quality&quot; 数组中
+vtkDataArray* qualityArray =
+  qualityResult-&gt;GetCellData()-&gt;GetArray(&quot;Quality&quot;);
+
+if (qualityArray)
+{
+  double range[2];
+  qualityArray-&gt;GetRange(range);
+  std::cout &lt;&lt; &quot;单元质量范围: [&quot; &lt;&lt; range[0] &lt;&lt; &quot;, &quot; &lt;&lt; range[1] &lt;&lt; &quot;]&quot; &lt;&lt; std::endl;
+}
+</code></pre>
+<p>单元质量信息在工程仿真中非常重要--质量差的单元（如过度拉伸或扭曲的四面体）可能导致FEM计算不收敛或精度下降。</p>
+<hr />
+<h2 id="85-fem">8.5 代码示例：悬臂梁FEM可视化</h2>
+<p>以下是一个完整的、可编译运行的C++程序。它模拟了悬臂梁（一端固定、另一端加载）的FEM位移场，并使用<code>vtkWarpVector</code>将标量位移场转换为几何变形，从而实现FEM后处理中常见的"变形网格+着色"可视化效果。</p>
+<h3 id="851">8.5.1 示例说明</h3>
+<p>本示例包含以下关键步骤：</p>
+<ol>
+<li><strong>手动构建悬臂梁网格</strong>：沿X方向生成一系列六面体单元，形成梁的几何形状</li>
+<li><strong>模拟位移场</strong>：在梁的自由端施加位移，位移大小沿梁长度线性增加（模拟悬臂梁的弯曲）</li>
+<li><strong>使用vtkWarpVector变形网格</strong>：将位移向量作用于网格点，产生视觉上的弯曲变形</li>
+<li><strong>通过查找表着色</strong>：将位移幅值映射为颜色，使大位移区域显示为红色，小位移区域显示为蓝色</li>
+<li><strong>同时显示原始网格和变形网格</strong>：通过并排或同窗口对比</li>
+</ol>
+<h3 id="852-c">8.5.2 完整C++代码</h3>
+<pre><code class="language-cpp">// cantilever_beam_fem.cxx
+//
+// 悬臂梁FEM可视化示例
+//
+// 功能：
+//   1. 手动构建悬臂梁的非结构化六面体网格
+//   2. 模拟FEM位移场（自由端位移最大，固定端为零）
+//   3. 使用 vtkWarpVector 变形网格
+//   4. 按位移幅值着色
+//   5. 完整可编译运行
+//
+// 编译：
+//   cmake -B build &amp;&amp; cmake --build build
+//   ./build/cantilever_beam_fem
+
+#include &lt;vtkActor.h&gt;
+#include &lt;vtkCellData.h&gt;
+#include &lt;vtkDoubleArray.h&gt;
+#include &lt;vtkDataSetMapper.h&gt;
+#include &lt;vtkDataSetSurfaceFilter.h&gt;
+#include &lt;vtkInteractorStyleTrackballCamera.h&gt;
+#include &lt;vtkLookupTable.h&gt;
+#include &lt;vtkNew.h&gt;
+#include &lt;vtkPointData.h&gt;
+#include &lt;vtkPoints.h&gt;
+#include &lt;vtkPolyData.h&gt;
+#include &lt;vtkPolyDataMapper.h&gt;
+#include &lt;vtkProperty.h&gt;
+#include &lt;vtkRenderWindow.h&gt;
+#include &lt;vtkRenderWindowInteractor.h&gt;
+#include &lt;vtkRenderer.h&gt;
+#include &lt;vtkScalarBarActor.h&gt;
+#include &lt;vtkSmartPointer.h&gt;
+#include &lt;vtkTextProperty.h&gt;
+#include &lt;vtkUnstructuredGrid.h&gt;
+#include &lt;vtkWarpVector.h&gt;
+
+#include &lt;cmath&gt;
+#include &lt;iostream&gt;
+#include &lt;vector&gt;
+
+int main()
+{
+  // ============================================================
+  // 参数定义
+  // ============================================================
+  // 梁的几何参数
+  const double beamLength = 10.0;    // 梁长度 (X方向)
+  const double beamWidth  =  1.0;    // 梁宽度 (Y方向)
+  const double beamHeight =  2.0;    // 梁高度 (Z方向)
+
+  // 网格分辨率（沿各方向的单元数）
+  const int nx = 20;  // 沿长度方向
+  const int ny = 4;   // 沿宽度方向
+  const int nz = 6;   // 沿高度方向
+
+  // 最大位移幅值（在自由端）
+  const double maxDisplacement = 1.5;
+
+  // ============================================================
+  // 第一步：生成网格点
+  // ============================================================
+  //
+  // 点的组织方式：沿X方向逐层排列
+  // 对于给定的 (ix, iy, iz)：
+  //   x = ix * (beamLength / nx)
+  //   y = iy * (beamWidth  / ny)
+  //   z = iz * (beamHeight / nz)
+  //
+  // 点的全局ID = (ix * (ny+1) + iy) * (nz+1) + iz
+
+  const int nxPoints = nx + 1;
+  const int nyPoints = ny + 1;
+  const int nzPoints = nz + 1;
+
+  vtkNew&lt;vtkPoints&gt; points;
+
+  double dx = beamLength / nx;
+  double dy = beamWidth  / ny;
+  double dz = beamHeight / nz;
+
+  for (int ix = 0; ix &lt; nxPoints; ++ix)
+  {
+    for (int iy = 0; iy &lt; nyPoints; ++iy)
+    {
+      for (int iz = 0; iz &lt; nzPoints; ++iz)
+      {
+        double x = ix * dx;
+        double y = iy * dy;
+        double z = iz * dz;
+        points-&gt;InsertNextPoint(x, y, z);
+      }
+    }
+  }
+
+  // ============================================================
+  // 第二步：生成六面体单元
+  // ============================================================
+  //
+  // 每个单元由8个相邻网格点组成
+  // 对于单元 (ix, iy, iz)，其8个顶点为：
+  //
+  //   (ix,   iy,   iz)   -- 点0
+  //   (ix+1, iy,   iz)   -- 点1
+  //   (ix+1, iy+1, iz)   -- 点2
+  //   (ix,   iy+1, iz)   -- 点3
+  //   (ix,   iy,   iz+1) -- 点4
+  //   (ix+1, iy,   iz+1) -- 点5
+  //   (ix+1, iy+1, iz+1) -- 点6
+  //   (ix,   iy+1, iz+1) -- 点7
+  //
+  // 点ID公式：pointId(ix, iy, iz) = (ix * nyPoints + iy) * nzPoints + iz
+
+  auto pointId = [nyPoints, nzPoints](int ix, int iy, int iz) -&gt; vtkIdType
+  {
+    return static_cast&lt;vtkIdType&gt;((ix * nyPoints + iy)) * nzPoints + iz;
+  };
+
+  vtkNew&lt;vtkUnstructuredGrid&gt; beamGrid;
+  beamGrid-&gt;Allocate(nx * ny * nz, 1000);
+
+  for (int ix = 0; ix &lt; nx; ++ix)
+  {
+    for (int iy = 0; iy &lt; ny; ++iy)
+    {
+      for (int iz = 0; iz &lt; nz; ++iz)
+      {
+        vtkIdType hexPts[8] = {
+          pointId(ix,   iy,   iz),     // 底面：0
+          pointId(ix+1, iy,   iz),     // 底面：1
+          pointId(ix+1, iy+1, iz),     // 底面：2
+          pointId(ix,   iy+1, iz),     // 底面：3
+          pointId(ix,   iy,   iz+1),   // 顶面：4
+          pointId(ix+1, iy,   iz+1),   // 顶面：5
+          pointId(ix+1, iy+1, iz+1),   // 顶面：6
+          pointId(ix,   iy+1, iz+1)    // 顶面：7
+        };
+        beamGrid-&gt;InsertNextCell(VTK_HEXAHEDRON, 8, hexPts);
+      }
+    }
+  }
+
+  beamGrid-&gt;SetPoints(points);
+
+  std::cout &lt;&lt; &quot;悬臂梁网格信息:&quot; &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;  总点数:   &quot; &lt;&lt; beamGrid-&gt;GetNumberOfPoints() &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;  总单元数: &quot; &lt;&lt; beamGrid-&gt;GetNumberOfCells()  &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;  梁尺寸:   &quot; &lt;&lt; beamLength &lt;&lt; &quot; x &quot; &lt;&lt; beamWidth
+            &lt;&lt; &quot; x &quot; &lt;&lt; beamHeight &lt;&lt; std::endl;
+
+  // ============================================================
+  // 第三步：模拟FEM位移场
+  // ============================================================
+  //
+  // 模拟悬臂梁在自由端受集中力作用的位移场
+  // 简化模型：位移沿X方向线性增加，沿Z方向受抛物线影响
+  //
+  // 理论背景（欧拉-伯努利梁理论）：
+  //   挠度 w(x) = (F * x^2) / (6 * E * I) * (3 * L - x)
+  //
+  // 为简化可视化，我们使用以下位移公式：
+  //   Displacement X: 0 (忽略轴向伸长)
+  //   Displacement Y: 0 (忽略横向膨胀)
+  //   Displacement Z: Uz_max * (x/L)^2 * (3 - 2 * (x/L))
+  //                   其中 Uz_max 是自由端最大挠度
+  //
+  // 此外再叠加一些Y方向的微小位移来展示泊松效应
+
+  vtkNew&lt;vtkDoubleArray&gt; displacements;
+  displacements-&gt;SetName(&quot;Displacement&quot;);
+  displacements-&gt;SetNumberOfComponents(3);  // 向量（3分量）
+  displacements-&gt;SetNumberOfTuples(beamGrid-&gt;GetNumberOfPoints());
+
+  vtkNew&lt;vtkDoubleArray&gt; displacementMag;
+  displacementMag-&gt;SetName(&quot;DisplacementMagnitude&quot;);
+  displacementMag-&gt;SetNumberOfComponents(1);  // 标量
+  displacementMag-&gt;SetNumberOfTuples(beamGrid-&gt;GetNumberOfPoints());
+
+  for (vtkIdType ptId = 0; ptId &lt; beamGrid-&gt;GetNumberOfPoints(); ++ptId)
+  {
+    double pt[3];
+    points-&gt;GetPoint(ptId, pt);
+
+    double x = pt[0];
+    double y = pt[1];
+    double z = pt[2];
+
+    double xNorm = x / beamLength;  // 归一化的X位置 [0, 1]
+
+    // Z方向位移（主弯曲方向）-- 使用三次多项式模拟梁的挠度
+    // w(x) = maxDisplacement * (xNorm)^2 * (3 - 2*xNorm)
+    double dz_disp = maxDisplacement * xNorm * xNorm * (3.0 - 2.0 * xNorm);
+
+    // Y方向位移（泊松效应引起的横向收缩）
+    // 简化为随Z坐标和X位置变化
+    double dy_disp = -0.05 * maxDisplacement * xNorm * (y - beamWidth / 2.0);
+
+    // X方向位移（中性轴以上压缩，以下拉伸）
+    double dx_disp = -0.02 * maxDisplacement * xNorm * (z - beamHeight / 2.0);
+
+    displacements-&gt;SetTuple3(ptId, dx_disp, dy_disp, dz_disp);
+
+    double mag = std::sqrt(dx_disp * dx_disp +
+                           dy_disp * dy_disp +
+                           dz_disp * dz_disp);
+    displacementMag-&gt;SetTuple1(ptId, mag);
+  }
+
+  // 将位移向量关联到点数据
+  beamGrid-&gt;GetPointData()-&gt;SetVectors(displacements);
+  // 将位移幅值关联到点数据（用于着色）
+  beamGrid-&gt;GetPointData()-&gt;SetScalars(displacementMag);
+
+  // ============================================================
+  // 第四步：使用 vtkWarpVector 变形网格
+  // ============================================================
+  //
+  // vtkWarpVector 读取Point Data中的向量数组，
+  // 并将每个点沿其向量方向移动相应的距离
+
+  vtkNew&lt;vtkWarpVector&gt; warpFilter;
+  warpFilter-&gt;SetInputData(beamGrid);
+  // 默认使用活动向量（active vectors），也可显式指定向量数组名
+  warpFilter-&gt;SetScaleFactor(1.0);  // 缩放因子：1.0表示使用原始位移量
+  warpFilter-&gt;Update();
+
+  vtkUnstructuredGrid* warpedGrid = warpFilter-&gt;GetUnstructuredGridOutput();
+
+  // ============================================================
+  // 第五步：创建查找表
+  // ============================================================
+  //
+  // 使用蓝-绿-红渐变色映射位移幅值
+  //   蓝色 = 小位移（固定端）
+  //   红色 = 大位移（自由端）
+
+  vtkNew&lt;vtkLookupTable&gt; lut;
+  lut-&gt;SetNumberOfTableValues(256);
+  lut-&gt;SetTableRange(0.0, maxDisplacement);  // 映射范围
+  lut-&gt;SetHueRange(0.667, 0.0);              // 蓝(0.667) -&gt; 红(0.0)
+  lut-&gt;SetSaturationRange(1.0, 1.0);
+  lut-&gt;SetValueRange(1.0, 1.0);
+  lut-&gt;Build();
+
+  // ============================================================
+  // 第六步：创建Mapper和Actor
+  // ============================================================
+
+  // 6a. 变形网格的表面提取
+  vtkNew&lt;vtkDataSetSurfaceFilter&gt; warpedSurface;
+  warpedSurface-&gt;SetInputConnection(warpFilter-&gt;GetOutputPort());
+  warpedSurface-&gt;Update();
+
+  // 6b. 变形网格的Mapper
+  vtkNew&lt;vtkPolyDataMapper&gt; warpedMapper;
+  warpedMapper-&gt;SetInputConnection(warpedSurface-&gt;GetOutputPort());
+  warpedMapper-&gt;SetLookupTable(lut);
+  warpedMapper-&gt;SetScalarRange(0.0, maxDisplacement);
+  warpedMapper-&gt;SetScalarModeToUsePointData();
+
+  // 6c. 变形网格的Actor
+  vtkNew&lt;vtkActor&gt; warpedActor;
+  warpedActor-&gt;SetMapper(warpedMapper);
+  warpedActor-&gt;GetProperty()-&gt;SetEdgeVisibility(0);  // 不显示边线
+  warpedActor-&gt;GetProperty()-&gt;SetSpecular(0.3);
+  warpedActor-&gt;GetProperty()-&gt;SetSpecularPower(30);
+
+  // 6d. 原始（未变形）网格的半透明叠加
+  //     用于对比变形前后的差异
+  vtkNew&lt;vtkDataSetSurfaceFilter&gt; originalSurface;
+  originalSurface-&gt;SetInputData(beamGrid);
+
+  vtkNew&lt;vtkPolyDataMapper&gt; originalMapper;
+  originalMapper-&gt;SetInputConnection(originalSurface-&gt;GetOutputPort());
+  originalMapper-&gt;ScalarVisibilityOff();  // 不参与标量着色
+
+  vtkNew&lt;vtkActor&gt; originalActor;
+  originalActor-&gt;SetMapper(originalMapper);
+  originalActor-&gt;GetProperty()-&gt;SetColor(0.6, 0.6, 0.6);    // 灰色
+  originalActor-&gt;GetProperty()-&gt;SetOpacity(0.25);             // 半透明
+  originalActor-&gt;GetProperty()-&gt;SetRepresentationToWireframe(); // 线框模式
+  // 设置线框的分辨率为1（使用单元的实际边）
+  originalActor-&gt;GetProperty()-&gt;SetLineWidth(0.5);
+
+  // ============================================================
+  // 第七步：添加标量条（Scalar Bar）
+  // ============================================================
+  vtkNew&lt;vtkScalarBarActor&gt; scalarBar;
+  scalarBar-&gt;SetLookupTable(lut);
+  scalarBar-&gt;SetTitle(&quot;Displacement Magnitude&quot;);
+  scalarBar-&gt;SetNumberOfLabels(6);
+  scalarBar-&gt;GetTitleTextProperty()-&gt;SetColor(1.0, 1.0, 1.0);
+  scalarBar-&gt;GetTitleTextProperty()-&gt;SetFontSize(5);
+  scalarBar-&gt;GetLabelTextProperty()-&gt;SetColor(1.0, 1.0, 1.0);
+  scalarBar-&gt;GetLabelTextProperty()-&gt;SetFontSize(4);
+
+  // ============================================================
+  // 第八步：创建渲染场景
+  // ============================================================
+  vtkNew&lt;vtkRenderer&gt; renderer;
+  renderer-&gt;AddActor(warpedActor);
+  renderer-&gt;AddActor(originalActor);
+  renderer-&gt;AddActor2D(scalarBar);
+  renderer-&gt;SetBackground(0.12, 0.13, 0.18);
+
+  // 设置相机位置以获得更好的视角
+  renderer-&gt;GetActiveCamera()-&gt;SetPosition(8.0, -6.0, 5.0);
+  renderer-&gt;GetActiveCamera()-&gt;SetFocalPoint(5.0, 0.5, 1.0);
+  renderer-&gt;GetActiveCamera()-&gt;SetViewUp(0.0, 0.0, 1.0);
+  renderer-&gt;GetActiveCamera()-&gt;SetClippingRange(0.1, 100.0);
+
+  vtkNew&lt;vtkRenderWindow&gt; renderWindow;
+  renderWindow-&gt;AddRenderer(renderer);
+  renderWindow-&gt;SetSize(1200, 800);
+  renderWindow-&gt;SetWindowName(&quot;Cantilever Beam FEM Visualization (vtkWarpVector)&quot;);
+
+  vtkNew&lt;vtkRenderWindowInteractor&gt; interactor;
+  interactor-&gt;SetRenderWindow(renderWindow);
+
+  vtkNew&lt;vtkInteractorStyleTrackballCamera&gt; style;
+  style-&gt;SetDefaultRenderer(renderer);
+  interactor-&gt;SetInteractorStyle(style);
+
+  // ============================================================
+  // 第九步：打印信息并启动交互
+  // ============================================================
+  std::cout &lt;&lt; &quot;\n悬臂梁FEM可视化&quot; &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;  固定端: X = 0 (蓝色区域，位移最小)&quot; &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;  自由端: X = &quot; &lt;&lt; beamLength
+            &lt;&lt; &quot; (红色区域，最大位移 = &quot; &lt;&lt; maxDisplacement &lt;&lt; &quot;)&quot; &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;  灰色线框: 原始未变形网格&quot; &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;  彩色实体: 变形后网格（按位移幅值着色）&quot; &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;\n旋转视角观察梁的弯曲变形。关闭窗口退出。&quot; &lt;&lt; std::endl;
+
+  renderWindow-&gt;Render();
+  interactor-&gt;Start();
+
+  return 0;
+}
+</code></pre>
+<h3 id="853-cmakeliststxt">8.5.3 CMakeLists.txt</h3>
+<pre><code class="language-cmake">cmake_minimum_required(VERSION 3.20 FATAL_ERROR)
+project(CantileverBeamFEM VERSION 1.0.0 LANGUAGES CXX)
+
+# 设置C++标准
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+# 查找VTK 9.5.2及其所需组件
+find_package(VTK 9.5.2
+  COMPONENTS
+    CommonCore
+    CommonDataModel
+    CommonExecutionModel
+    CommonMath
+    CommonTransforms
+    FiltersCore
+    FiltersGeneral
+    FiltersGeometry
+    FiltersSources
+    InteractionStyle
+    RenderingAnnotation
+    RenderingCore
+    RenderingOpenGL2
+  REQUIRED
+)
+
+# 打印VTK信息
+message(STATUS &quot;VTK version: ${VTK_VERSION}&quot;)
+message(STATUS &quot;VTK rendering backend: OpenGL2&quot;)
+
+# 创建可执行文件
+add_executable(cantilever_beam_fem cantilever_beam_fem.cxx)
+
+# 链接VTK库
+target_link_libraries(cantilever_beam_fem PRIVATE ${VTK_LIBRARIES})
+
+# 自动初始化VTK模块工厂
+vtk_module_autoinit(
+  TARGETS cantilever_beam_fem
+  MODULES ${VTK_LIBRARIES}
+)
+
+# 设置可执行文件的输出目录
+set_target_properties(cantilever_beam_fem PROPERTIES
+  RUNTIME_OUTPUT_DIRECTORY &quot;${CMAKE_BINARY_DIR}/bin&quot;
+)
+</code></pre>
+<h3 id="854">8.5.4 运行说明</h3>
+<p><strong>编译：</strong></p>
+<pre><code class="language-bash">cd cantilever_beam_fem/
+cmake -B build
+cmake --build build
+</code></pre>
+<p><strong>运行：</strong></p>
+<pre><code class="language-bash"># Windows
+.\build\bin\Release\cantilever_beam_fem.exe
+
+# Linux/macOS
+./build/bin/cantilever_beam_fem
+</code></pre>
+<p><strong>预期效果：</strong></p>
+<p>运行程序后，你将看到一个3D渲染窗口，其中包含：</p>
+<ol>
+<li><strong>彩色实体梁</strong>：显示变形后的悬臂梁。固定端（X=0）呈蓝色，自由端（X=10）呈红色。颜色渐变反映了位移幅值从固定端到自由端的增大。</li>
+<li><strong>灰色半透明线框</strong>：显示原始未变形的梁。这使你能直观地对比变形前后的差异。</li>
+<li><strong>标量条</strong>：显示颜色到位移幅值的映射关系。</li>
+<li><strong>交互控制</strong>：使用鼠标拖拽旋转、缩放、平移视角。</li>
+</ol>
+<p>你可以尝试以下操作来加深理解：
+- 修改<code>maxDisplacement</code>参数（第66行），观察不同加载强度下的变形效果
+- 修改<code>nx</code>、<code>ny</code>、<code>nz</code>参数来改变网格精度
+- 修改<code>SetScaleFactor()</code>的值为2.0或0.5来放大或缩小位移
+- 取消<code>originalActor</code>的创建（不显示原始网格），只看变形结果</p>
+<hr />
+<h2 id="86">8.6 本章小结</h2>
+<p>本章全面介绍了VTK中最通用的数据类型--<code>vtkUnstructuredGrid</code>（非结构化网格），涵盖了从概念理解到实战应用的完整知识链。</p>
+<h3 id="861">8.6.1 核心要点回顾</h3>
+<ol>
+<li>
+<p><strong>非结构化网格的本质</strong>：<code>vtkUnstructuredGrid</code>是VTK中表达能力最强的数据集，支持在单个网格中混合任意类型的单元。与<code>vtkPolyData</code>（仅支持0D-2D面单元）和结构化数据（隐式拓扑）不同，非结构化网格的拓扑需要显式存储，这带来了灵活性但增加了内存开销。</p>
+</li>
+<li>
+<p><strong>单元类型</strong>：VTK定义了70余种单元类型，工程中最常用的包括线性四面体（4点）、六面体（8点）、楔形体（6点）、金字塔（5点）和体素（8点），以及它们对应的二次版本（10点、20点、15点、13点）。选择哪种单元类型取决于仿真方法、几何复杂度和精度需求。</p>
+</li>
+<li>
+<p><strong>构造流程</strong>：<code>vtkPoints</code> -&gt; <code>Allocate()</code> -&gt; <code>InsertNextCell()</code> -&gt; <code>SetPoints()</code> 是手动构建非结构化网格的标准四步法。对于大规模网格，可以使用<code>SetCells()</code>批量构建以提高性能。</p>
+</li>
+<li>
+<p><strong>常用操作</strong>：<code>GetCell()</code>和<code>GetCellType()</code>用于查询单元信息；<code>vtkDataSetSurfaceFilter</code>用于从体网格中提取外表面以进行渲染；<code>vtkMeshQuality</code>用于评估单元质量。</p>
+</li>
+<li>
+<p><strong>FEM可视化模式</strong>：悬臂梁示例展示了科学可视化中最常见的后处理模式--使用<code>vtkWarpVector</code>将位移场作用于网格产生变形，使用查找表（Lookup Table）将标量场映射为颜色，叠加原始网格作为参考基准。</p>
+</li>
+</ol>
+<h3 id="862">8.6.2 与前后章节的关系</h3>
+<p>本章是第二卷（进阶篇）的第二章。第七章讲解了<code>vtkPolyData</code>（面数据的表示），第九章将讲解结构化数据（ImageData/RectilinearGrid/StructuredGrid）。至此，你将完整掌握VTK的所有主要数据集类型，为后续的过滤器、体渲染和高级可视化技术打下坚实基础。</p>
+<h3 id="863">8.6.3 扩展阅读方向</h3>
+<ul>
+<li><code>vtkCellType.h</code>：VTK中所有单元类型的完整枚举定义</li>
+<li><code>vtkUnstructuredGridReader</code> / <code>vtkUnstructuredGridWriter</code>：将非结构化网格读写为VTK的XML格式文件（.vtu）</li>
+<li><code>vtkExtractUnstructuredGrid</code>：按区域或单元类型提取子网格</li>
+<li><code>vtkAppendFilter</code>：将多个非结构化网格合并为一个</li>
+<li><code>vtkThreshold</code>：基于标量值提取部分单元（如只显示高应力区域）</li>
+<li><code>vtkShrinkFilter</code>：收缩每个单元以查看内部结构（爆炸视图）</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

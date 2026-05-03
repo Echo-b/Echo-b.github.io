@@ -1,0 +1,3455 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../chapter-02-visualization-pipeline/">
+      
+      
+        <link rel="next" href="../chapter-04-geometry-and-sources/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>第三章 数据模型基础 - Echo-b's Tech Notes</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#3-data-model-basics" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Echo-b&#39;s Tech Notes" class="md-header__button md-logo" aria-label="Echo-b's Tech Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Echo-b's Tech Notes
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              第三章 数据模型基础
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Echo-b&#39;s Tech Notes" class="md-nav__button md-logo" aria-label="Echo-b's Tech Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Echo-b's Tech Notes
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VTK 教程
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    VTK 教程
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    入门篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    入门篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-01-vtk-overview-and-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第一章 VTK概述与环境搭建
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-02-visualization-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二章 可视化管线
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第三章 数据模型基础
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第三章 数据模型基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#31" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 数据模型概览
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.1 数据模型概览">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#311-vtkdataobject" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1.1 数据对象的根基：vtkDataObject
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#312" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1.2 类层次结构
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#313-vs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1.3 数据对象 vs 算法对象
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#314-dataset-attributes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1.4 数据集属性（Dataset Attributes）的概念
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#32-vtkdataset" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 vtkDataSet层级体系
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.2 vtkDataSet层级体系">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#321-vtkdataset" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2.1 vtkDataSet：几何数据的公共基类
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#322" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2.2 五种主要子类
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.2.2 五种主要子类">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#3221-vtkimagedata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2.2.1 vtkImageData — 均匀网格
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3222-vtkrectilineargrid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2.2.2 vtkRectilinearGrid — 直线网格
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3223-vtkstructuredgrid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2.2.3 vtkStructuredGrid — 曲线结构网格
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3224-vtkpolydata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2.2.4 vtkPolyData — 多边形数据
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3225-vtkunstructuredgrid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2.2.5 vtkUnstructuredGrid — 非结构化网格
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#323" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2.3 数据集类型选择指南
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#33-pointscells" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 Points与Cells的基本概念
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.3 Points与Cells的基本概念">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#331-point3d" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3.1 Point：3D空间中的坐标点
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#332-cell" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3.2 Cell：由点索引定义的几何体素
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#333" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3.3 常用单元类型
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.3.3 常用单元类型">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#0" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0维单元
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1维单元
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2维单元
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3维单元
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#334-vs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3.4 单元拓扑 vs 单元几何
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#335" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3.5 点索引的工作方式
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#34-attribute-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 属性数据（Attribute Data）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.4 属性数据（Attribute Data）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#341-vtkpointdata-vtkcelldata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4.1 vtkPointData 与 vtkCellData
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#342" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4.2 属性类型
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#343" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4.3 属性数据在管线中的流转
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#344-vtkdataarray" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4.4 vtkDataArray 及其子类
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#345" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4.5 访问属性数据的常用方法
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#35-vtkdataset" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.5 代码示例：探索vtkDataSet
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.5 代码示例：探索vtkDataSet">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#351" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.5.1 源代码
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#352-cmakeliststxt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.5.2 CMakeLists.txt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#353" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.5.3 预期输出
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#36" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.6 代码示例：手动构建简单数据集
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.6 代码示例：手动构建简单数据集">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#361" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.6.1 问题描述
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#362" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.6.2 源代码
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#363-cmakeliststxt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.6.3 CMakeLists.txt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#364" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.6.4 代码解析
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#365" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.6.5 运行结果
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#37" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.7 本章小结
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-04-geometry-and-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第四章 基本几何体与数据源
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-05-rendering-and-interactor/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第五章 渲染与交互机
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-06-volume1-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第六章 入门篇综合实战——3D几何画廊
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    实战篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    实战篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-07-polydata/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第七章 PolyData详解
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-08-unstructured-grid/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第八章 非结构化网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-09-structured-data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第九章 结构化数据
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-10-data-io/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十章 数据I/O
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-11-common-filters/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十一章 常用过滤器
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-12-color-mapping/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十二章 颜色映射与标量可视化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-13-advanced-rendering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十三章 高级渲染技术
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-14-multi-dataset/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十四章 多个数据集处理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-15-volume2-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十五章 实战篇综合实战——CFD后处理可视化工具
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    进阶篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    进阶篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-16-volume-rendering-basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十六章 体渲染基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-17-volume-rendering-advanced/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十七章 体渲染高级技术
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-18-charts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十八章 2D图表系统
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-19-annotation-and-widgets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十九章 三维标注与交互组件
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-20-custom-interaction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十章 自定义交互与Widget
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-21-qt-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十一章 Qt集成
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-22-smp-parallel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十二章 SMP并行入门
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-23-volume3-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十三章 进阶篇综合实战
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#31" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 数据模型概览
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.1 数据模型概览">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#311-vtkdataobject" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1.1 数据对象的根基：vtkDataObject
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#312" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1.2 类层次结构
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#313-vs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1.3 数据对象 vs 算法对象
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#314-dataset-attributes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1.4 数据集属性（Dataset Attributes）的概念
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#32-vtkdataset" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 vtkDataSet层级体系
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.2 vtkDataSet层级体系">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#321-vtkdataset" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2.1 vtkDataSet：几何数据的公共基类
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#322" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2.2 五种主要子类
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.2.2 五种主要子类">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#3221-vtkimagedata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2.2.1 vtkImageData — 均匀网格
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3222-vtkrectilineargrid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2.2.2 vtkRectilinearGrid — 直线网格
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3223-vtkstructuredgrid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2.2.3 vtkStructuredGrid — 曲线结构网格
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3224-vtkpolydata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2.2.4 vtkPolyData — 多边形数据
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3225-vtkunstructuredgrid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2.2.5 vtkUnstructuredGrid — 非结构化网格
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#323" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2.3 数据集类型选择指南
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#33-pointscells" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 Points与Cells的基本概念
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.3 Points与Cells的基本概念">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#331-point3d" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3.1 Point：3D空间中的坐标点
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#332-cell" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3.2 Cell：由点索引定义的几何体素
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#333" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3.3 常用单元类型
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.3.3 常用单元类型">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#0" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0维单元
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1维单元
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2维单元
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3维单元
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#334-vs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3.4 单元拓扑 vs 单元几何
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#335" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3.5 点索引的工作方式
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#34-attribute-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 属性数据（Attribute Data）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.4 属性数据（Attribute Data）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#341-vtkpointdata-vtkcelldata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4.1 vtkPointData 与 vtkCellData
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#342" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4.2 属性类型
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#343" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4.3 属性数据在管线中的流转
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#344-vtkdataarray" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4.4 vtkDataArray 及其子类
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#345" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4.5 访问属性数据的常用方法
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#35-vtkdataset" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.5 代码示例：探索vtkDataSet
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.5 代码示例：探索vtkDataSet">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#351" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.5.1 源代码
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#352-cmakeliststxt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.5.2 CMakeLists.txt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#353" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.5.3 预期输出
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#36" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.6 代码示例：手动构建简单数据集
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.6 代码示例：手动构建简单数据集">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#361" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.6.1 问题描述
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#362" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.6.2 源代码
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#363-cmakeliststxt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.6.3 CMakeLists.txt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#364" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.6.4 代码解析
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#365" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.6.5 运行结果
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#37" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.7 本章小结
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="3-data-model-basics">第3章 数据模型基础 (Data Model Basics)</h1>
+<p>在第1章和第2章中，我们介绍了VTK的整体架构和可视化管线的工作机制。现在我们将深入VTK的核心——<strong>数据模型</strong>。VTK的强大之处，很大程度上在于其对科学数据的组织方式的精妙设计。理解数据模型是掌握VTK的关键一步。</p>
+<hr />
+<h2 id="31">3.1 数据模型概览</h2>
+<h3 id="311-vtkdataobject">3.1.1 数据对象的根基：vtkDataObject</h3>
+<p>VTK中所有数据类型的根类是 <strong><code>vtkDataObject</code></strong>。它是数据在VTK管线中流转的"通用货币"。无论是几何数据、图像数据还是表格数据，它们都继承自 <code>vtkDataObject</code>。</p>
+<p><code>vtkDataObject</code> 定义了所有VTK数据共有的基本接口和能力：</p>
+<ul>
+<li><strong>信息对象（vtkInformation）</strong>：存储描述数据的元信息，如数据的空间范围（bounds）、数据是否已被修改（MTime）等。</li>
+<li><strong>管线信息（PipelineInformation）</strong>：记录数据在管线中的角色，例如片（piece）编号、片总数，用于并行处理。</li>
+<li><strong>字段数据（FieldData）</strong>：存储在"数据集范围"但不直接关联几何元素的数据，例如时间戳、材料属性等。</li>
+</ul>
+<p>一个核心的工程准则贯穿VTK设计：<strong>数据对象只存储数据，不执行算法</strong>。算法是由 <code>vtkAlgorithm</code>（第2章中讨论的Source、Filter、Mapper）来执行的。这种"数据—算法"分离的设计让VTK既灵活又健壮。</p>
+<h3 id="312">3.1.2 类层次结构</h3>
+<p>VTK数据模型的继承关系如下：</p>
+<pre><code>vtkObject
+  └── vtkDataObject           ← 所有数据的根基
+        ├── vtkDataSet         ← 几何数据的公共基类（本章重点）
+        ├── vtkTable           ← 表格数据（类似数据库表）
+        ├── vtkGraph           ← 图/网络数据
+        ├── vtkTree            ← 树形层次结构数据
+        ├── vtkImageData       ← （也直接继承vtkDataSet的一些特性）
+        ├── vtkHyperTreeGrid   ← 层次化自适应网格
+        └── vtkCompositeDataSet ← 复合数据集
+              ├── vtkMultiBlockDataSet
+              ├── vtkMultiPieceDataSet
+              ├── vtkHierarchicalBoxDataSet
+              └── vtkOverlappingAMR
+</code></pre>
+<p>大多数科学与工程可视化场景使用的核心类是 <strong><code>vtkDataSet</code></strong>，它代表<strong>带有几何结构的数据</strong>——即数据同时包含空间位置信息和该位置上的属性值。</p>
+<h3 id="313-vs">3.1.3 数据对象 vs 算法对象</h3>
+<p>回顾第2章的管线概念，必须清晰区分两类VTK对象：</p>
+<table>
+<thead>
+<tr>
+<th>类别</th>
+<th>角色</th>
+<th>典型类</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>数据对象 (Data Object)</strong></td>
+<td>纯数据容器，存储点和单元信息</td>
+<td><code>vtkPolyData</code>, <code>vtkImageData</code>, <code>vtkUnstructuredGrid</code></td>
+</tr>
+<tr>
+<td><strong>算法对象 (Algorithm)</strong></td>
+<td>管线参与者，读取/处理/写入数据</td>
+<td><code>vtkAlgorithm</code> 的子类：<code>vtkConeSource</code>, <code>vtkContourFilter</code>, <code>vtkPolyDataMapper</code></td>
+</tr>
+</tbody>
+</table>
+<p>数据对象是被动的——它们不知道如何生成自己，只知道如何描述自身。算法对象是主动的——它们消费和产出数据对象。</p>
+<h3 id="314-dataset-attributes">3.1.4 数据集属性（Dataset Attributes）的概念</h3>
+<p>当我们讨论一个 <code>vtkDataSet</code> 时，最重要的概念之一就是<strong>属性数据 (Attribute Data)</strong>。</p>
+<p>想象一个三角形网格：网格上有N个顶点和M个三角形单元。除了几何坐标外，每个顶点可能还带有：
+- 温度值（标量）
+- 速度方向（矢量）
+- 法线方向（法向量）</p>
+<p>这些附加在几何元素上的信息就是<strong>属性数据</strong>。VTK将属性数据分为两大类：
+- <strong>点数据 (Point Data)</strong>：关联到每个点
+- <strong>单元数据 (Cell Data)</strong>：关联到每个单元</p>
+<hr />
+<h2 id="32-vtkdataset">3.2 vtkDataSet层级体系</h2>
+<h3 id="321-vtkdataset">3.2.1 vtkDataSet：几何数据的公共基类</h3>
+<p><code>vtkDataSet</code> 继承自 <code>vtkDataObject</code>，是所有<strong>具有显式或隐式几何结构</strong>的数据类型的公共基类。它定义了以下核心概念：</p>
+<ul>
+<li><strong>Points</strong>：空间中的坐标集合</li>
+<li><strong>Cells</strong>：由点索引定义的几何体素</li>
+<li><strong>Point Data</strong>：附加在点上的属性数组</li>
+<li><strong>Cell Data</strong>：附加在单元上的属性数组</li>
+</ul>
+<p>任何 <code>vtkDataSet</code> 的子类都可以通过统一的接口访问这些信息。这意味着一个为 <code>vtkImageData</code> 编写的过滤器，通常也能处理 <code>vtkUnstructuredGrid</code>（只要操作基于 <code>vtkDataSet</code> 的通用接口）。</p>
+<h3 id="322">3.2.2 五种主要子类</h3>
+<p>VTK提供了五种主要的 <code>vtkDataSet</code> 子类，覆盖了从简单规则网格到复杂非结构化网格的完整谱系。理解每种类型的特点和使用场景至关重要。</p>
+<h4 id="3221-vtkimagedata">3.2.2.1 vtkImageData — 均匀网格</h4>
+<p><strong><code>vtkImageData</code></strong> 表示一个在三个坐标轴方向上均匀分布的规则网格。它是VTK中最简单、最高效的数据集类型。</p>
+<pre><code>      Y方向 (3个点)
+        ↑
+        |
+        +---+---+
+        |   |   |
+        +---+---+
+        |   |   |
+        +---+---+
+        +---+---+
+        |   |   |
+        +---+---+
+                → X方向 (4个点)
+
+   Z方向 (2个点，仅一个切片)
+</code></pre>
+<p><strong>关键属性：</strong></p>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>含义</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Origin</code></td>
+<td>网格起点的3D坐标</td>
+<td><code>(0.0, 0.0, 0.0)</code></td>
+</tr>
+<tr>
+<td><code>Spacing</code></td>
+<td>三个方向上的网格间距</td>
+<td><code>(1.0, 0.5, 2.0)</code></td>
+</tr>
+<tr>
+<td><code>Extent</code></td>
+<td>六个方向上的索引范围</td>
+<td><code>(0, 9, 0, 9, 0, 4)</code></td>
+</tr>
+<tr>
+<td><code>Dimensions</code></td>
+<td>三个方向上的点数 = (nx, ny, nz)</td>
+<td><code>(10, 10, 5)</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>计算一个点的坐标：</strong></p>
+<pre><code>P[i, j, k] = Origin + (i * Spacing[0], j * Spacing[1], k * Spacing[2])
+</code></pre>
+<p><strong>使用场景：</strong>
+- 医学图像（CT、MRI）：规则的像素/体素网格
+- 流体模拟：在规则网格上的有限差分计算
+- 任何按规则阵列组织的体积数据</p>
+<p>由于网格是规则的，<code>vtkImageData</code> 不需要显式存储所有点的坐标——只需存储 <code>Origin</code>、<code>Spacing</code> 和 <code>Extent</code>，坐标可以通过上述公式<strong>隐式计算</strong>。这大大节省了内存。</p>
+<h4 id="3222-vtkrectilineargrid">3.2.2.2 vtkRectilinearGrid — 直线网格</h4>
+<p><strong><code>vtkRectilinearGrid</code></strong> 类似 <code>vtkImageData</code>，网格线仍沿坐标轴方向，但<strong>每个轴上的间距可以是非均匀的</strong>。</p>
+<pre><code>      Y方向 (间距不均匀)
+        ↑
+        |
+        +-----+---------+--+
+        |     |         |  |
+        +-----+---------+--+
+        |     |         |  |
+        +-----+---------+--+
+        |     |         |  |
+        +-----+---------+--+
+            → X方向 (间距也不均匀)
+</code></pre>
+<p>每个坐标轴分别存储一个坐标数组：</p>
+<pre><code class="language-cpp">xCoordinates = {0.0, 1.0, 2.5, 5.0, 10.0}
+yCoordinates = {0.0, 0.8, 2.0, 3.0}
+zCoordinates = {0.0, 5.0, 12.0}
+</code></pre>
+<p>点 <code>P[i, j, k]</code> 的坐标为 <code>(xCoords[i], yCoords[j], zCoords[k])</code>。</p>
+<p><strong>使用场景：</strong>
+- 在特定区域需要更高分辨率的流体模拟
+- 边界层网格（靠近壁面间距小，远离壁面间距大）</p>
+<h4 id="3223-vtkstructuredgrid">3.2.2.3 vtkStructuredGrid — 曲线结构网格</h4>
+<p><strong><code>vtkStructuredGrid</code></strong> 保持了规则的拓扑结构（每个点在逻辑上有明确的 <code>[i, j, k]</code> 索引），但<strong>几何位置可以是任意的</strong>——网格线不再沿坐标轴，也不一定是直的。</p>
+<pre><code>  逻辑结构：[0..4] × [0..3]
+  几何位置：每个点可以自由放置
+
+    (0,3)  (1,3)  (2,3)  (3,3)  (4,3)
+      *------*------*------*------*
+      |      |      |      |      |
+      *------*------*------*------*   ← 单元边界可以是曲线
+      |      |      |      |      |
+      *------*------*------*------*
+    (0,0)  (1,0)  (2,0)  (3,0)  (4,0)
+</code></pre>
+<p>与 <code>vtkImageData</code> 和 <code>vtkRectilinearGrid</code> 不同，<code>vtkStructuredGrid</code> 需要<strong>显式存储所有点的坐标</strong>（通过 <code>vtkPoints</code> 对象），但单元之间的连接关系仍然是隐式的——它总是由 <code>[i, j, k]</code> 与 <code>[i+1, j+1, k+1]</code> 等邻居构成。</p>
+<p><strong>使用场景：</strong>
+- 计算流体力学（CFD）中的贴体网格（body-fitted grid）
+- 有限元分析中的变形网格</p>
+<h4 id="3224-vtkpolydata">3.2.2.4 vtkPolyData — 多边形数据</h4>
+<p><strong><code>vtkPolyData</code></strong> 是VTK中最灵活、最常用的数据集类型之一。它由以下元素组成：</p>
+<table>
+<thead>
+<tr>
+<th>元素</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Points (顶点)</strong></td>
+<td>3D坐标集合</td>
+</tr>
+<tr>
+<td><strong>Verts (点元)</strong></td>
+<td>独立的点单元（0维）</td>
+</tr>
+<tr>
+<td><strong>Lines (线段)</strong></td>
+<td>由两个点索引定义的线段（1维）</td>
+</tr>
+<tr>
+<td><strong>Polys (多边形)</strong></td>
+<td>由3个或更多点索引定义的多边形（2维）</td>
+</tr>
+<tr>
+<td><strong>Strips (三角形带)</strong></td>
+<td>共享边的三角形序列</td>
+</tr>
+</tbody>
+</table>
+<pre><code>  vtkPolyData 的构成示意：
+
+  Points:  p0 p1 p2 p3 p4 p5 p6
+  Verts:   v(p0)
+  Lines:   l(p1, p2)
+  Polys:   tri(p1, p2, p3), quad(p3, p4, p5, p6)
+  Strips:  strip(p0, p1, p2, p3) → 两个三角形
+</code></pre>
+<p><code>vtkPolyData</code> 显式存储所有点坐标和单元连接关系。它可以描述任意复杂的曲面和线框结构。</p>
+<p><strong>使用场景：</strong>
+- 等值面提取（Marching Cubes 算法输出）
+- CAD模型的三角化曲面
+- 粒子轨迹线
+- 流线可视化</p>
+<h4 id="3225-vtkunstructuredgrid">3.2.2.5 vtkUnstructuredGrid — 非结构化网格</h4>
+<p><strong><code>vtkUnstructuredGrid</code></strong> 是最通的数据集类型。它可以包含<strong>任意类型、任意组合的单元</strong>（四面体、六面体、棱柱、金字塔等），适用于有限元分析（FEA）和计算流体力学（CFD）中极其复杂的几何体。</p>
+<pre><code>  一个混合单元类型的非结构化网格：
+
+       p3         p4
+        *---------*
+       /|        /|
+      / |       / |
+  p2 *--+------*p5+----* p7
+     |  *------|--*
+     | / p0    | / p1
+     *---------*/
+    p8         p9
+
+  包含：四面体(p0,p1,p2,p3), 六面体(p0,p1,p5,p4,p8,p9,p7,p6), 棱柱, 金字塔...
+</code></pre>
+<p><strong>使用场景：</strong>
+- 有限元分析（FEA）
+- CFD中的复杂几何体网格
+- 地质建模中的不规则地层
+- 任何需要灵活单元类型的场景</p>
+<h3 id="323">3.2.3 数据集类型选择指南</h3>
+<table>
+<thead>
+<tr>
+<th>你的数据特征</th>
+<th>推荐类型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>规则的三维阵列（如CT扫描）</td>
+<td><code>vtkImageData</code></td>
+</tr>
+<tr>
+<td>各轴间距不同但沿轴的网格</td>
+<td><code>vtkRectilinearGrid</code></td>
+</tr>
+<tr>
+<td>规则的逻辑结构但几何弯曲</td>
+<td><code>vtkStructuredGrid</code></td>
+</tr>
+<tr>
+<td>三角面片、线段、点云</td>
+<td><code>vtkPolyData</code></td>
+</tr>
+<tr>
+<td>混合单元类型（四面体+六面体+...）</td>
+<td><code>vtkUnstructuredGrid</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="33-pointscells">3.3 Points与Cells的基本概念</h2>
+<h3 id="331-point3d">3.3.1 Point：3D空间中的坐标点</h3>
+<p>在VTK中，一个<strong>Point（点）</strong> 就是一个三维空间中的坐标，由 <code>(x, y, z)</code> 三个浮点值组成。点是构成所有几何数据集的基石。</p>
+<pre><code class="language-cpp">// 创建一个点
+double point[3] = {1.0, 2.5, -3.0};
+</code></pre>
+<p>要点：
+- 点是纯粹的位置信息，没有"大小"
+- 点在数据集内部以数组形式存储（<code>vtkPoints</code>），每个点有一个隐式的整数ID（从0开始）
+- 点是单元（Cell）的构建块——单元并不包含点坐标，而只包含点ID</p>
+<h3 id="332-cell">3.3.2 Cell：由点索引定义的几何体素</h3>
+<p>一个<strong>Cell（单元）</strong> 是由一个有序的点ID列表定义的几何体素。每个单元有：</p>
+<ul>
+<li><strong>Cell Type</strong>：一个枚举值，标识单元的种类（三角形、四面体等）</li>
+<li><strong>Point IDs</strong>：一个有序的整数列表，每个整数是数据集点数组中某个点的索引</li>
+<li><strong>拓扑 (Topology)</strong>：点之间的连接关系（即"哪些点连在一起"）</li>
+<li><strong>几何 (Geometry)</strong>：由连接点的实际坐标决定的形状</li>
+</ul>
+<h3 id="333">3.3.3 常用单元类型</h3>
+<p>VTK支持超过20种单元类型。下面列出最常用的九种：</p>
+<h4 id="0">0维单元</h4>
+<pre><code>VTK_VERTEX (1)
+    *p0                          单个点。用于点云可视化。
+</code></pre>
+<h4 id="1">1维单元</h4>
+<pre><code>VTK_LINE (3)
+    p0 *---------* p1             由两个端点定义的线段。
+    p0, p1
+
+VTK_POLY_LINE (4)
+    p0 *---* p1---* p2---* p3    由N个点定义的折线段。
+    p0, p1, p2, ..., pN-1
+</code></pre>
+<h4 id="2">2维单元</h4>
+<pre><code>VTK_TRIANGLE (5)
+        p0
+        /\
+       /  \
+      /    \
+  p1 *------* p2               由三个点定义的三角形。
+    p0, p1, p2
+
+VTK_QUAD (9)
+    p0 *---------* p3
+       |         |
+       |         |
+    p1 *---------* p2           由四个点定义的四边四边形。
+    p0, p1, p2, p3
+
+VTK_POLYGON (7)
+    p0 *-------* p3
+       |       |
+       |       |
+    p1 *-------* p2            由N个共面点定义的凸多边形。
+    p0, p1, p2, ..., pN-1
+</code></pre>
+<h4 id="3">3维单元</h4>
+<pre><code>VTK_TETRA (10)
+           p0
+           /|\
+          / | \
+         /  |  \
+     p1 *---+---* p2
+         \  |  /
+          \ | /
+           \|/
+           p3                 由四个点定义的四面体。
+    p0, p1, p2, p3
+
+VTK_HEXAHEDRON (12)
+        p4 *---------* p7
+          /|        /|
+         / |       / |
+    p5  *--+------*p6|
+        |  *------|--*
+        | / p0    | / p3
+        |/        |/
+    p1  *---------* p2         由八个点定义的六面体（非体素顺序）。
+    p0, p1, p2, p3, p4, p5, p6, p7
+
+VTK_VOXEL (11)
+        p4 *---------* p5
+          /|        /|
+         / |       / |
+    p6  *--+------*p7|
+        |  *------|--*
+        | / p0    | / p1
+        |/        |/
+    p2  *---------* p3         也是六面体，但点顺序不同（像像素/体素排列）。
+    p0, p1, p2, p3, p4, p5, p6, p7
+
+VTK_WEDGE (13)
+        p0
+        /|\
+       / | \
+      /  |  \
+  p1 *---+---* p2
+      |  /|\  |
+      | / | \ |
+      |/  |  \|
+  p3  *---+---* p4             由六个点定义的楔形体（三棱柱）。
+    p0, p1, p2, p3, p4, p5
+
+VTK_PYRAMID (14)
+           p0
+          /|\
+         / | \
+        /  |  \
+    p1 *---+---* p2
+        \  |  /
+         \ | /
+          \|/
+          p3                   由五个点定义的金字塔形体。
+    p0, p1, p2, p3, p4
+      (p4在底面中心)
+</code></pre>
+<h3 id="334-vs">3.3.4 单元拓扑 vs 单元几何</h3>
+<p>理解<strong>拓扑 (Topology)</strong> 和<strong>几何 (Geometry)</strong> 的区别对于有效使用VTK至关重要：</p>
+<table>
+<thead>
+<tr>
+<th>概念</th>
+<th>定义</th>
+<th>VTK中的表示</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>拓扑</strong></td>
+<td>点之间的连接关系</td>
+<td>单元类型 + 点ID列表（整数）</td>
+</tr>
+<tr>
+<td><strong>几何</strong></td>
+<td>点在空间中的实际位置</td>
+<td>点坐标 <code>(x, y, z)</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>为什么这种分离很重要？</strong></p>
+<p>某个四面体单元的拓扑是 <code>{p0, p1, p2, p3}</code>，这是一个不变的关系。但如果网格变形了（比如在结构分析中受力弯曲），这四个点的坐标会变化——几何变了，但拓扑不变。</p>
+<p>这种分离允许VTK：
+- 高效地共享点（多个单元可以引用同一个点）
+- 只更新几何信息而不改变拓扑（如动画变形）
+- 对同样的拓扑在不同几何上执行操作</p>
+<h3 id="335">3.3.5 点索引的工作方式</h3>
+<p>单元不直接存储坐标，而是存储到点列表的整数索引。</p>
+<pre><code>  vtkPoints:
+    [0]: (0.0, 0.0, 0.0)
+    [1]: (1.0, 0.0, 0.0)
+    [2]: (0.0, 1.0, 0.0)
+    [3]: (1.0, 1.0, 0.0)
+    [4]: (0.5, 0.5, 1.0)
+
+  一个四面体单元（VTK_TETRA）:
+    类型: 10  (VTK_TETRA)
+    点列表: {0, 1, 2, 4}
+
+  解释：
+  - 点0是(0,0,0), 点1是(1,0,0), 点2是(0,1,0), 点4是(0.5,0.5,1.0)
+  - 这个四面体的四个顶点就是这四个点
+  - 如果点4的坐标变为(0.6, 0.6, 1.2)，四面体的形状会跟着变化
+    但单元本身的定义（点列表 {0,1,2,4}）不变
+</code></pre>
+<hr />
+<h2 id="34-attribute-data">3.4 属性数据（Attribute Data）</h2>
+<h3 id="341-vtkpointdata-vtkcelldata">3.4.1 vtkPointData 与 vtkCellData</h3>
+<p>属性数据是通过 <code>vtkPointData</code> 和 <code>vtkCellData</code>（两者都是 <code>vtkDataSetAttributes</code> 的子类）来附加到数据集上的。它们是数组的容器：</p>
+<ul>
+<li><strong><code>vtkPointData</code></strong>：每个数组的元素数量等于数据集的点数。每个数组的元素i对应第i个点。</li>
+<li><strong><code>vtkCellData</code></strong>：每个数组的元素数量等于数据集的单元数。每个数组的元素i对应第i个单元。</li>
+</ul>
+<pre><code class="language-cpp">vtkSmartPointer&lt;vtkPolyData&gt; data = ...;  // 某个多边形数据
+
+// 获取点数据
+vtkPointData* pointData = data-&gt;GetPointData();   // 点数据容器
+vtkCellData*  cellData  = data-&gt;GetCellData();    // 单元数据容器
+</code></pre>
+<h3 id="342">3.4.2 属性类型</h3>
+<p>VTK定义了五种特殊的属性类型，通过名称识别：</p>
+<table>
+<thead>
+<tr>
+<th>属性类型</th>
+<th>名称约定</th>
+<th>组件数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Scalars</strong></td>
+<td><code>"Scalars"</code></td>
+<td>1</td>
+<td>单值标量，如温度、压力、密度</td>
+</tr>
+<tr>
+<td><strong>Vectors</strong></td>
+<td><code>"Vectors"</code></td>
+<td>3</td>
+<td>三维矢量，如速度、位移、梯度</td>
+</tr>
+<tr>
+<td><strong>Normals</strong></td>
+<td><code>"Normals"</code></td>
+<td>3</td>
+<td>曲面法向量，用于光照计算</td>
+</tr>
+<tr>
+<td><strong>Texture Coordinates</strong></td>
+<td><code>"TCoords"</code></td>
+<td>1-3</td>
+<td>纹理坐标，用于纹理映射</td>
+</tr>
+<tr>
+<td><strong>Tensors</strong></td>
+<td><code>"Tensors"</code></td>
+<td>9 (3x3)</td>
+<td>对称张量，如应力、应变张量</td>
+</tr>
+</tbody>
+</table>
+<p><strong>命名约定的重要性：</strong></p>
+<p>VTK的许多过滤器、Mapper和渲染器通过名称来查找属性数据。例如：</p>
+<ul>
+<li><code>vtkWarpVector</code> 过滤器默认寻找名为 <code>"Vectors"</code> 的数组来变形几何体</li>
+<li><code>vtkPolyDataMapper</code> 默认使用名为 <code>"Scalars"</code> 的数组来进行颜色映射</li>
+<li>光照计算需要名为 <code>"Normals"</code> 的数组</li>
+</ul>
+<p>你可以设置某个数组为"活跃"属性：</p>
+<pre><code class="language-cpp">// 将名为 &quot;Temperature&quot; 的数组设置为活跃的标量属性
+pointData-&gt;SetActiveScalars(&quot;Temperature&quot;);
+
+// 将名为 &quot;Velocity&quot; 的数组设置为活跃的矢量属性
+pointData-&gt;SetActiveVectors(&quot;Velocity&quot;);
+</code></pre>
+<h3 id="343">3.4.3 属性数据在管线中的流转</h3>
+<p>属性数据沿管线传播，遵循以下规则：</p>
+<ol>
+<li><strong>Source</strong> 生成数据集时，通常会生成初始的属性数据（如 <code>vtkConeSource</code> 会生成法线）。</li>
+<li><strong>Filter</strong> 处理数据时，会尝试将输入属性传递到输出。如果过滤器生成新的几何体（如 <code>vtkClipFilter</code> 剪切单元），它会尽可能在输出上插值或映射原有的属性。</li>
+<li><strong>Mapper</strong> 使用活跃的属性来执行渲染（颜色映射、变形、光照）。</li>
+</ol>
+<pre><code>  Source                 Filter                  Mapper
+  ┌──────────┐         ┌──────────┐         ┌──────────┐
+  │生成几何体 │ ────→  │处理几何体 │ ────→  │渲染属性   │
+  │+ 点/单元属性│       │传播属性   │         │用于着色等  │
+  └──────────┘         └──────────┘         └──────────┘
+</code></pre>
+<h3 id="344-vtkdataarray">3.4.4 vtkDataArray 及其子类</h3>
+<p><code>vtkDataArray</code> 是所有属性数据数组的抽象基类。它的主要子类包括：</p>
+<pre><code class="language-cpp">vtkDataArray
+  ├── vtkFloatArray      // float 数组
+  ├── vtkDoubleArray     // double 数组
+  ├── vtkIntArray        // int 数组
+  ├── vtkUnsignedCharArray // unsigned char 数组
+  ├── vtkShortArray      // short 数组
+  └── vtkBitArray        // 位数组（按位存储Bool值）
+</code></pre>
+<p>创建和使用数组：</p>
+<pre><code class="language-cpp">// 创建一个 double 类型的标量数组
+vtkSmartPointer&lt;vtkDoubleArray&gt; scalars =
+    vtkSmartPointer&lt;vtkDoubleArray&gt;::New();
+scalars-&gt;SetName(&quot;Temperature&quot;);
+scalars-&gt;SetNumberOfComponents(1);  // 1 = 标量
+scalars-&gt;SetNumberOfTuples(numPoints);
+
+// 填充数据
+for (vtkIdType i = 0; i &lt; numPoints; ++i)
+{
+    scalars-&gt;SetValue(i, someFunction(x, y, z));
+}
+
+// 附加到点数据
+polyData-&gt;GetPointData()-&gt;SetScalars(scalars);
+</code></pre>
+<h3 id="345">3.4.5 访问属性数据的常用方法</h3>
+<pre><code class="language-cpp">vtkSmartPointer&lt;vtkDataSet&gt; data = ...;
+
+// ------ Point Data ------
+
+// 获取活跃的标量数组
+vtkDataArray* pointScalars = data-&gt;GetPointData()-&gt;GetScalars();
+
+// 获取活跃的矢量数组
+vtkDataArray* pointVectors = data-&gt;GetPointData()-&gt;GetVectors();
+
+// 获取活跃的法线数组
+vtkDataArray* pointNormals = data-&gt;GetPointData()-&gt;GetNormals();
+
+// 获取活跃的纹理坐标数组
+vtkDataArray* pointTCoords = data-&gt;GetPointData()-&gt;GetTCoords();
+
+// 获取活跃的张量数组
+vtkDataArray* pointTensors = data-&gt;GetPointData()-&gt;GetTensors();
+
+// 按名称获取任意数组
+vtkDataArray* customArray =
+    data-&gt;GetPointData()-&gt;GetArray(&quot;Displacement&quot;);
+
+// 获取点数据中的数组数量
+int numArrays = data-&gt;GetPointData()-&gt;GetNumberOfArrays();
+
+// 遍历所有数组
+for (int i = 0; i &lt; numArrays; ++i)
+{
+    vtkDataArray* arr = data-&gt;GetPointData()-&gt;GetArray(i);
+    std::cout &lt;&lt; &quot;Array &quot; &lt;&lt; i &lt;&lt; &quot;: &quot; &lt;&lt; arr-&gt;GetName()
+              &lt;&lt; &quot; (&quot; &lt;&lt; arr-&gt;GetNumberOfComponents() &lt;&lt; &quot; comps)&quot;
+              &lt;&lt; std::endl;
+}
+
+// ------ Cell Data ------
+
+// 同样的模式
+vtkDataArray* cellScalars = data-&gt;GetCellData()-&gt;GetScalars();
+vtkDataArray* cellVectors = data-&gt;GetCellData()-&gt;GetVectors();
+vtkDataArray* cellArray   = data-&gt;GetCellData()-&gt;GetArray(&quot;Stress&quot;);
+</code></pre>
+<hr />
+<h2 id="35-vtkdataset">3.5 代码示例：探索vtkDataSet</h2>
+<p>下面是一个完整的C++程序，它创建一个 <code>vtkConeSource</code>，提取输出的 <code>vtkPolyData</code>，并详细打印数据集的内部结构。</p>
+<h3 id="351">3.5.1 源代码</h3>
+<pre><code class="language-cpp">// explore_dataset.cxx
+// 探索 vtkDataSet 的内部结构
+// 使用 vtkConeSource 生成数据，然后遍历点、单元和属性数据
+
+#include &lt;vtkSmartPointer.h&gt;
+#include &lt;vtkConeSource.h&gt;
+#include &lt;vtkPolyData.h&gt;
+#include &lt;vtkPointData.h&gt;
+#include &lt;vtkCellData.h&gt;
+#include &lt;vtkDataArray.h&gt;
+#include &lt;vtkPoints.h&gt;
+#include &lt;vtkCellArray.h&gt;
+#include &lt;vtkCellTypes.h&gt;
+#include &lt;iostream&gt;
+#include &lt;iomanip&gt;
+#include &lt;string&gt;
+
+// 将单元类型枚举值转换为可读的字符串
+std::string CellTypeToString(int cellType)
+{
+    switch (cellType)
+    {
+        case VTK_VERTEX:     return &quot;VTK_VERTEX&quot;;
+        case VTK_POLY_VERTEX:return &quot;VTK_POLY_VERTEX&quot;;
+        case VTK_LINE:       return &quot;VTK_LINE&quot;;
+        case VTK_POLY_LINE:  return &quot;VTK_POLY_LINE&quot;;
+        case VTK_TRIANGLE:   return &quot;VTK_TRIANGLE&quot;;
+        case VTK_TRIANGLE_STRIP: return &quot;VTK_TRIANGLE_STRIP&quot;;
+        case VTK_POLYGON:    return &quot;VTK_POLYGON&quot;;
+        case VTK_PIXEL:      return &quot;VTK_PIXEL&quot;;
+        case VTK_QUAD:       return &quot;VTK_QUAD&quot;;
+        case VTK_TETRA:      return &quot;VTK_TETRA&quot;;
+        case VTK_VOXEL:      return &quot;VTK_VOXEL&quot;;
+        case VTK_HEXAHEDRON: return &quot;VTK_HEXAHEDRON&quot;;
+        case VTK_WEDGE:      return &quot;VTK_WEDGE&quot;;
+        case VTK_PYRAMID:    return &quot;VTK_PYRAMID&quot;;
+        default:             return &quot;UNKNOWN&quot;;
+    }
+}
+
+// 打印数据集的基本信息
+void PrintDataSetInfo(vtkDataSet* data, const std::string&amp; name)
+{
+    std::cout &lt;&lt; &quot;\n========== &quot; &lt;&lt; name &lt;&lt; &quot; ==========\n&quot;;
+
+    vtkIdType numPoints = data-&gt;GetNumberOfPoints();
+    vtkIdType numCells  = data-&gt;GetNumberOfCells();
+
+    std::cout &lt;&lt; &quot;Number of Points: &quot; &lt;&lt; numPoints &lt;&lt; &quot;\n&quot;;
+    std::cout &lt;&lt; &quot;Number of Cells:  &quot; &lt;&lt; numCells  &lt;&lt; &quot;\n&quot;;
+
+    // 打印数据集的范围
+    double bounds[6];
+    data-&gt;GetBounds(bounds);
+    std::cout &lt;&lt; &quot;Bounds:\n&quot;;
+    std::cout &lt;&lt; &quot;  X: [&quot; &lt;&lt; bounds[0] &lt;&lt; &quot;, &quot; &lt;&lt; bounds[1] &lt;&lt; &quot;]\n&quot;;
+    std::cout &lt;&lt; &quot;  Y: [&quot; &lt;&lt; bounds[2] &lt;&lt; &quot;, &quot; &lt;&lt; bounds[3] &lt;&lt; &quot;]\n&quot;;
+    std::cout &lt;&lt; &quot;  Z: [&quot; &lt;&lt; bounds[4] &lt;&lt; &quot;, &quot; &lt;&lt; bounds[5] &lt;&lt; &quot;]\n&quot;;
+}
+
+// 打印点数据（属性数组）
+void PrintPointData(vtkDataSet* data)
+{
+    vtkPointData* pd = data-&gt;GetPointData();
+    if (!pd) return;
+
+    int numArrays = pd-&gt;GetNumberOfArrays();
+    std::cout &lt;&lt; &quot;\n--- Point Data (&quot; &lt;&lt; numArrays &lt;&lt; &quot; arrays) ---\n&quot;;
+
+    for (int i = 0; i &lt; numArrays; ++i)
+    {
+        vtkDataArray* arr = pd-&gt;GetArray(i);
+        if (!arr) continue;
+
+        std::cout &lt;&lt; &quot;  [&quot; &lt;&lt; i &lt;&lt; &quot;] Name: \&quot;&quot; &lt;&lt; arr-&gt;GetName() &lt;&lt; &quot;\&quot;&quot;
+                  &lt;&lt; &quot;, Components: &quot; &lt;&lt; arr-&gt;GetNumberOfComponents()
+                  &lt;&lt; &quot;, Tuples: &quot; &lt;&lt; arr-&gt;GetNumberOfTuples()
+                  &lt;&lt; &quot;, Type: &quot; &lt;&lt; arr-&gt;GetDataTypeAsString()
+                  &lt;&lt; &quot;\n&quot;;
+
+        // 打印前5个元组（如果存在）
+        vtkIdType numToPrint = std::min(arr-&gt;GetNumberOfTuples(),
+                                        static_cast&lt;vtkIdType&gt;(5));
+        if (arr-&gt;GetNumberOfComponents() == 1)
+        {
+            std::cout &lt;&lt; &quot;      First &quot; &lt;&lt; numToPrint &lt;&lt; &quot; values: &quot;;
+            for (vtkIdType j = 0; j &lt; numToPrint; ++j)
+            {
+                double val[1];
+                arr-&gt;GetTuple(j, val);
+                std::cout &lt;&lt; val[0] &lt;&lt; &quot; &quot;;
+            }
+            std::cout &lt;&lt; &quot;\n&quot;;
+        }
+        else if (arr-&gt;GetNumberOfComponents() == 3)
+        {
+            std::cout &lt;&lt; &quot;      First &quot; &lt;&lt; numToPrint &lt;&lt; &quot; tuples:\n&quot;;
+            for (vtkIdType j = 0; j &lt; numToPrint; ++j)
+            {
+                double val[3];
+                arr-&gt;GetTuple(j, val);
+                std::cout &lt;&lt; &quot;        (&quot; &lt;&lt; val[0] &lt;&lt; &quot;, &quot;
+                          &lt;&lt; val[1] &lt;&lt; &quot;, &quot; &lt;&lt; val[2] &lt;&lt; &quot;)\n&quot;;
+            }
+        }
+    }
+}
+
+// 打印单元数据（属性数组）
+void PrintCellData(vtkDataSet* data)
+{
+    vtkCellData* cd = data-&gt;GetCellData();
+    if (!cd) return;
+
+    int numArrays = cd-&gt;GetNumberOfArrays();
+    std::cout &lt;&lt; &quot;\n--- Cell Data (&quot; &lt;&lt; numArrays &lt;&lt; &quot; arrays) ---\n&quot;;
+
+    for (int i = 0; i &lt; numArrays; ++i)
+    {
+        vtkDataArray* arr = cd-&gt;GetArray(i);
+        if (!arr) continue;
+
+        std::cout &lt;&lt; &quot;  [&quot; &lt;&lt; i &lt;&lt; &quot;] Name: \&quot;&quot; &lt;&lt; arr-&gt;GetName() &lt;&lt; &quot;\&quot;&quot;
+                  &lt;&lt; &quot;, Components: &quot; &lt;&lt; arr-&gt;GetNumberOfComponents()
+                  &lt;&lt; &quot;, Tuples: &quot; &lt;&lt; arr-&gt;GetNumberOfTuples()
+                  &lt;&lt; &quot;, Type: &quot; &lt;&lt; arr-&gt;GetDataTypeAsString()
+                  &lt;&lt; &quot;\n&quot;;
+    }
+}
+
+// 打印前N个点的坐标
+void PrintFirstNPoints(vtkDataSet* data, vtkIdType n)
+{
+    vtkPoints* points = data-&gt;GetPoints();
+    if (!points) return;
+
+    vtkIdType numToPrint = std::min(data-&gt;GetNumberOfPoints(), n);
+
+    std::cout &lt;&lt; &quot;\n--- First &quot; &lt;&lt; numToPrint &lt;&lt; &quot; Point Coordinates ---\n&quot;;
+    for (vtkIdType i = 0; i &lt; numToPrint; ++i)
+    {
+        double pt[3];
+        points-&gt;GetPoint(i, pt);
+        std::cout &lt;&lt; &quot;  Point[&quot; &lt;&lt; i &lt;&lt; &quot;]: (&quot;
+                  &lt;&lt; std::fixed &lt;&lt; std::setprecision(4)
+                  &lt;&lt; pt[0] &lt;&lt; &quot;, &quot; &lt;&lt; pt[1] &lt;&lt; &quot;, &quot; &lt;&lt; pt[2] &lt;&lt; &quot;)\n&quot;;
+    }
+}
+
+// 统计并打印单元类型分布
+void PrintCellTypeStats(vtkDataSet* data)
+{
+    vtkIdType numCells = data-&gt;GetNumberOfCells();
+    std::cout &lt;&lt; &quot;\n--- Cell Type Distribution ---\n&quot;;
+
+    // 使用 std::map 统计每种单元类型的数量
+    std::map&lt;int, vtkIdType&gt; typeCount;
+
+    for (vtkIdType i = 0; i &lt; numCells; ++i)
+    {
+        int ctype = data-&gt;GetCellType(i);
+        typeCount[ctype]++;
+    }
+
+    for (const auto&amp; entry : typeCount)
+    {
+        double percentage = 100.0 * entry.second / numCells;
+        std::cout &lt;&lt; &quot;  &quot; &lt;&lt; CellTypeToString(entry.first)
+                  &lt;&lt; &quot;: &quot; &lt;&lt; entry.second
+                  &lt;&lt; &quot; (&quot; &lt;&lt; std::fixed &lt;&lt; std::setprecision(1)
+                  &lt;&lt; percentage &lt;&lt; &quot;%)\n&quot;;
+    }
+}
+
+// 打印前N个单元的详细信息
+void PrintFirstNCells(vtkDataSet* data, vtkIdType n)
+{
+    vtkIdType numToPrint = std::min(data-&gt;GetNumberOfCells(), n);
+
+    std::cout &lt;&lt; &quot;\n--- First &quot; &lt;&lt; numToPrint &lt;&lt; &quot; Cells ---\n&quot;;
+    for (vtkIdType i = 0; i &lt; numToPrint; ++i)
+    {
+        int ctype = data-&gt;GetCellType(i);
+        vtkIdType npts;
+        const vtkIdType* pts;
+
+        // 通过 legacy 接口获取单元的连接关系
+        vtkCell* cell = data-&gt;GetCell(i);
+        npts = cell-&gt;GetNumberOfPoints();
+        pts  = cell-&gt;GetPointIds()-&gt;GetPointer(0);
+
+        std::cout &lt;&lt; &quot;  Cell[&quot; &lt;&lt; i &lt;&lt; &quot;]: &quot;
+                  &lt;&lt; CellTypeToString(ctype)
+                  &lt;&lt; &quot;, &quot; &lt;&lt; npts &lt;&lt; &quot; points: {&quot;;
+        for (vtkIdType j = 0; j &lt; npts; ++j)
+        {
+            std::cout &lt;&lt; pts[j];
+            if (j &lt; npts - 1) std::cout &lt;&lt; &quot;, &quot;;
+        }
+        std::cout &lt;&lt; &quot;}\n&quot;;
+    }
+}
+
+int main()
+{
+    // 1. 创建 Cone Source
+    vtkSmartPointer&lt;vtkConeSource&gt; coneSource =
+        vtkSmartPointer&lt;vtkConeSource&gt;::New();
+    coneSource-&gt;SetResolution(6);          // 6个侧面分段
+    coneSource-&gt;SetHeight(3.0);
+    coneSource-&gt;SetRadius(1.0);
+    coneSource-&gt;Update();
+
+    // 2. 获取输出数据集
+    vtkPolyData* output = coneSource-&gt;GetOutput();
+
+    // 3. 打印基本信息
+    PrintDataSetInfo(output, &quot;vtkConeSource Output&quot;);
+
+    // 4. 打印前若干点的坐标
+    PrintFirstNPoints(output, 5);
+
+    // 5. 打印单元类型统计
+    PrintCellTypeStats(output);
+
+    // 6. 打印前若干个单元的详情
+    PrintFirstNCells(output, 5);
+
+    // 7. 打印点上的属性数据
+    PrintPointData(output);
+
+    // 8. 打印单元上的属性数据
+    PrintCellData(output);
+
+    std::cout &lt;&lt; &quot;\n========== End of Exploration ==========\n&quot;;
+    return 0;
+}
+</code></pre>
+<h3 id="352-cmakeliststxt">3.5.2 CMakeLists.txt</h3>
+<pre><code class="language-cmake">cmake_minimum_required(VERSION 3.12)
+project(ExploreDataSet)
+
+# 查找 VTK
+find_package(VTK REQUIRED COMPONENTS
+    CommonCore
+    CommonDataModel
+    FiltersSources
+)
+
+# 包含 VTK 目录
+include(${VTK_USE_FILE})
+
+# 创建可执行文件
+add_executable(explore_dataset explore_dataset.cxx)
+
+# 链接 VTK 库
+target_link_libraries(explore_dataset
+    VTK::CommonCore
+    VTK::CommonDataModel
+    VTK::FiltersSources
+)
+</code></pre>
+<h3 id="353">3.5.3 预期输出</h3>
+<p>运行该程序后，你将看到类似以下的输出（具体数值因版本略有差异）：</p>
+<pre><code>========== vtkConeSource Output ==========
+Number of Points: 7
+Number of Cells:  13
+Bounds:
+  X: [-1.0000, 1.0000]
+  Y: [-1.0000, 1.0000]
+  Z: [0.0000, 3.0000]
+
+--- First 5 Point Coordinates ---
+  Point[0]: ( 1.0000,  0.0000, 0.0000)
+  Point[1]: ( 0.5000,  0.8660, 0.0000)
+  Point[2]: (-0.5000,  0.8660, 0.0000)
+  Point[3]: (-1.0000,  0.0000, 0.0000)
+  Point[4]: (-0.5000, -0.8660, 0.0000)
+
+--- Cell Type Distribution ---
+  VTK_TRIANGLE: 6 (46.2%)
+  VTK_LINE: 6 (46.2%)
+  VTK_VERTEX: 1 (7.7%)
+
+--- First 5 Cells ---
+  Cell[0]: VTK_TRIANGLE, 3 points: {1, 0, 6}
+  Cell[1]: VTK_TRIANGLE, 3 points: {6, 0, 5}
+  ...
+
+--- Point Data (1 arrays) ---
+  [0] Name: &quot;Normals&quot;, Components: 3, Tuples: 7, Type: float
+      First 5 tuples:
+        (0.3446, 0.0000, -0.3446)
+        ...
+
+========== End of Exploration ==========
+</code></pre>
+<p>这个示例演示了如何以编程方式检查VTK数据集的完整内部结构——点、单元、类型和所有关联的属性数据。</p>
+<hr />
+<h2 id="36">3.6 代码示例：手动构建简单数据集</h2>
+<p>前面的示例展示了如何读取和检查已有数据集。本节演示如何从头开始<strong>手动构建</strong>一个 <code>vtkPolyData</code>，并将其渲染出来。这是理解VTK数据模型的最直接方式。</p>
+<h3 id="361">3.6.1 问题描述</h3>
+<p>我们将手动构建一个由三个三角形组成的简单"山峰"形状，并赋予每个顶点一个标量值（模拟高程值用于着色），然后渲染它。</p>
+<pre><code>       p1 (0.0, 1.0, 0.0)
+        /\
+       /  \
+      /    \
+     /  t0  \
+    /        \
+p0 *----------* p2
+(0.0,0.0,0.0)  (1.0,0.0,0.0)
+
+       p1
+        /\
+       /  \
+      /    \
+     /  t1  \
+    /        \
+p2 *----------* p3
+(1.0,0.0,0.0)  (2.0,0.0,0.0)
+
+       p1
+        /\
+       /  \
+      /    \
+     /  t2  \
+    /        \
+p3 *----------* p4
+(2.0,0.0,0.0)  (3.0,0.0,0.0)
+</code></pre>
+<h3 id="362">3.6.2 源代码</h3>
+<pre><code class="language-cpp">// manual_polydata.cxx
+// 手动构建 vtkPolyData：创建点、单元和属性数据，并渲染
+
+#include &lt;vtkSmartPointer.h&gt;
+#include &lt;vtkPoints.h&gt;
+#include &lt;vtkCellArray.h&gt;
+#include &lt;vtkPolyData.h&gt;
+#include &lt;vtkDoubleArray.h&gt;
+#include &lt;vtkPointData.h&gt;
+#include &lt;vtkPolyDataMapper.h&gt;
+#include &lt;vtkActor.h&gt;
+#include &lt;vtkRenderer.h&gt;
+#include &lt;vtkRenderWindow.h&gt;
+#include &lt;vtkRenderWindowInteractor.h&gt;
+#include &lt;vtkNamedColors.h&gt;
+#include &lt;vtkProperty.h&gt;
+#include &lt;vtkScalarBarActor.h&gt;
+#include &lt;vtkLookupTable.h&gt;
+
+int main()
+{
+    // ============================================================
+    // 第1步：创建点坐标
+    // ============================================================
+    vtkSmartPointer&lt;vtkPoints&gt; points =
+        vtkSmartPointer&lt;vtkPoints&gt;::New();
+
+    // 插入5个点。每个点的ID（从0开始）由插入顺序决定。
+    points-&gt;InsertNextPoint(0.0, 0.0, 0.0);   // Point 0
+    points-&gt;InsertNextPoint(0.0, 1.0, 0.0);   // Point 1 (山峰顶点)
+    points-&gt;InsertNextPoint(1.0, 0.0, 0.0);   // Point 2
+    points-&gt;InsertNextPoint(2.0, 0.0, 0.0);   // Point 3
+    points-&gt;InsertNextPoint(3.0, 0.0, 0.0);   // Point 4
+
+    std::cout &lt;&lt; &quot;Created &quot; &lt;&lt; points-&gt;GetNumberOfPoints()
+              &lt;&lt; &quot; points.\n&quot;;
+
+    // ============================================================
+    // 第2步：创建单元（三角形）
+    // ============================================================
+    vtkSmartPointer&lt;vtkCellArray&gt; triangles =
+        vtkSmartPointer&lt;vtkCellArray&gt;::New();
+
+    // 三角形0：顶点(p0, p1, p2)
+    vtkSmartPointer&lt;vtkTriangle&gt; triangle0 =
+        vtkSmartPointer&lt;vtkTriangle&gt;::New();
+    triangle0-&gt;GetPointIds()-&gt;SetId(0, 0);  // 第1个顶点用Point 0
+    triangle0-&gt;GetPointIds()-&gt;SetId(1, 1);  // 第2个顶点用Point 1
+    triangle0-&gt;GetPointIds()-&gt;SetId(2, 2);  // 第3个顶点用Point 2
+    triangles-&gt;InsertNextCell(triangle0);
+
+    // 三角形1：顶点(p1, p2, p3)
+    vtkSmartPointer&lt;vtkTriangle&gt; triangle1 =
+        vtkSmartPointer&lt;vtkTriangle&gt;::New();
+    triangle1-&gt;GetPointIds()-&gt;SetId(0, 1);  // Point 1
+    triangle1-&gt;GetPointIds()-&gt;SetId(1, 2);  // Point 2
+    triangle1-&gt;GetPointIds()-&gt;SetId(2, 3);  // Point 3
+    triangles-&gt;InsertNextCell(triangle1);
+
+    // 三角形2：顶点(p1, p3, p4)
+    vtkSmartPointer&lt;vtkTriangle&gt; triangle2 =
+        vtkSmartPointer&lt;vtkTriangle&gt;::New();
+    triangle2-&gt;GetPointIds()-&gt;SetId(0, 1);  // Point 1
+    triangle2-&gt;GetPointIds()-&gt;SetId(1, 3);  // Point 3
+    triangle2-&gt;GetPointIds()-&gt;SetId(2, 4);  // Point 4
+    triangles-&gt;InsertNextCell(triangle2);
+
+    std::cout &lt;&lt; &quot;Created &quot; &lt;&lt; triangles-&gt;GetNumberOfCells()
+              &lt;&lt; &quot; triangles.\n&quot;;
+
+    // ============================================================
+    // 第3步：组建 vtkPolyData
+    // ============================================================
+    vtkSmartPointer&lt;vtkPolyData&gt; polyData =
+        vtkSmartPointer&lt;vtkPolyData&gt;::New();
+
+    // 设置点
+    polyData-&gt;SetPoints(points);
+
+    // 设置多边形单元（三角形）
+    polyData-&gt;SetPolys(triangles);
+
+    // ============================================================
+    // 第4步：创建点属性数据（标量值）
+    // ============================================================
+    vtkSmartPointer&lt;vtkDoubleArray&gt; elevation =
+        vtkSmartPointer&lt;vtkDoubleArray&gt;::New();
+    elevation-&gt;SetName(&quot;Elevation&quot;);
+    elevation-&gt;SetNumberOfComponents(1);      // 标量 = 1个分量
+    elevation-&gt;SetNumberOfTuples(points-&gt;GetNumberOfPoints()); // 每个点一个值
+
+    // 给每个点赋值——模拟&quot;高度&quot;
+    // 山峰顶点(p1)最高，地面点(p0, p2, p3, p4) = 0
+    elevation-&gt;SetValue(0, 0.0);  // p0
+    elevation-&gt;SetValue(1, 1.0);  // p1 (山峰顶点)
+    elevation-&gt;SetValue(2, 0.0);  // p2
+    elevation-&gt;SetValue(3, 0.0);  // p3
+    elevation-&gt;SetValue(4, 0.0);  // p4
+
+    // 将标量数组附加到点数据
+    polyData-&gt;GetPointData()-&gt;SetScalars(elevation);
+
+    // ============================================================
+    // 第5步：验证数据并打印信息
+    // ============================================================
+    std::cout &lt;&lt; &quot;\n=== Dataset Summary ===\n&quot;;
+    std::cout &lt;&lt; &quot;Points:  &quot; &lt;&lt; polyData-&gt;GetNumberOfPoints()  &lt;&lt; &quot;\n&quot;;
+    std::cout &lt;&lt; &quot;Cells:   &quot; &lt;&lt; polyData-&gt;GetNumberOfCells()   &lt;&lt; &quot;\n&quot;;
+
+    double bounds[6];
+    polyData-&gt;GetBounds(bounds);
+    std::cout &lt;&lt; &quot;Bounds:  X[&quot; &lt;&lt; bounds[0] &lt;&lt; &quot;, &quot; &lt;&lt; bounds[1]
+              &lt;&lt; &quot;] Y[&quot; &lt;&lt; bounds[2] &lt;&lt; &quot;, &quot; &lt;&lt; bounds[3]
+              &lt;&lt; &quot;] Z[&quot; &lt;&lt; bounds[4] &lt;&lt; &quot;, &quot; &lt;&lt; bounds[5] &lt;&lt; &quot;]\n&quot;;
+
+    // 打印每个点的坐标和标量值
+    std::cout &lt;&lt; &quot;\n--- Points and Scalars ---\n&quot;;
+    for (vtkIdType i = 0; i &lt; polyData-&gt;GetNumberOfPoints(); ++i)
+    {
+        double pt[3];
+        polyData-&gt;GetPoint(i, pt);
+        double val = elevation-&gt;GetValue(i);
+        std::cout &lt;&lt; &quot;  Point[&quot; &lt;&lt; i &lt;&lt; &quot;]: (&quot;
+                  &lt;&lt; pt[0] &lt;&lt; &quot;, &quot; &lt;&lt; pt[1] &lt;&lt; &quot;, &quot; &lt;&lt; pt[2]
+                  &lt;&lt; &quot;)  Elevation = &quot; &lt;&lt; val &lt;&lt; &quot;\n&quot;;
+    }
+
+    // 打印每个单元
+    std::cout &lt;&lt; &quot;\n--- Cells ---\n&quot;;
+    for (vtkIdType i = 0; i &lt; polyData-&gt;GetNumberOfCells(); ++i)
+    {
+        vtkCell* cell = polyData-&gt;GetCell(i);
+        vtkIdType npts = cell-&gt;GetNumberOfPoints();
+        std::cout &lt;&lt; &quot;  Cell[&quot; &lt;&lt; i &lt;&lt; &quot;]: &quot;
+                  &lt;&lt; cell-&gt;GetCellType() &lt;&lt; &quot; (VTK_TRIANGLE), &quot;
+                  &lt;&lt; npts &lt;&lt; &quot; points: {&quot;;
+        for (vtkIdType j = 0; j &lt; npts; ++j)
+        {
+            std::cout &lt;&lt; cell-&gt;GetPointId(j);
+            if (j &lt; npts - 1) std::cout &lt;&lt; &quot;, &quot;;
+        }
+        std::cout &lt;&lt; &quot;}\n&quot;;
+    }
+
+    // ============================================================
+    // 第6步：创建渲染管线
+    // ============================================================
+    // Mapper
+    vtkSmartPointer&lt;vtkPolyDataMapper&gt; mapper =
+        vtkSmartPointer&lt;vtkPolyDataMapper&gt;::New();
+    mapper-&gt;SetInputData(polyData);
+    mapper-&gt;SetScalarRange(0.0, 1.0);  // 标量值的范围
+
+    // Actor
+    vtkSmartPointer&lt;vtkActor&gt; actor =
+        vtkSmartPointer&lt;vtkActor&gt;::New();
+    actor-&gt;SetMapper(mapper);
+    actor-&gt;GetProperty()-&gt;SetEdgeVisibility(true);  // 显示单元边线
+    actor-&gt;GetProperty()-&gt;SetEdgeColor(0.0, 0.0, 0.0);
+    actor-&gt;GetProperty()-&gt;SetLineWidth(2.0);
+
+    // 设置颜色映射
+    vtkSmartPointer&lt;vtkLookupTable&gt; lut =
+        vtkSmartPointer&lt;vtkLookupTable&gt;::New();
+    lut-&gt;SetNumberOfTableValues(256);
+    lut-&gt;SetRange(0.0, 1.0);
+    lut-&gt;SetHueRange(0.667, 0.0);  // 蓝色(低)到红色(高)
+    lut-&gt;Build();
+    mapper-&gt;SetLookupTable(lut);
+
+    // 标量条
+    vtkSmartPointer&lt;vtkScalarBarActor&gt; scalarBar =
+        vtkSmartPointer&lt;vtkScalarBarActor&gt;::New();
+    scalarBar-&gt;SetLookupTable(lut);
+    scalarBar-&gt;SetTitle(&quot;Elevation&quot;);
+    scalarBar-&gt;SetNumberOfLabels(5);
+
+    // Renderer
+    vtkSmartPointer&lt;vtkRenderer&gt; renderer =
+        vtkSmartPointer&lt;vtkRenderer&gt;::New();
+    renderer-&gt;AddActor(actor);
+    renderer-&gt;AddActor2D(scalarBar);
+    renderer-&gt;SetBackground(0.95, 0.95, 0.95);
+
+    // RenderWindow
+    vtkSmartPointer&lt;vtkRenderWindow&gt; renderWindow =
+        vtkSmartPointer&lt;vtkRenderWindow&gt;::New();
+    renderWindow-&gt;AddRenderer(renderer);
+    renderWindow-&gt;SetSize(800, 600);
+    renderWindow-&gt;SetWindowName(&quot;Manually Constructed vtkPolyData&quot;);
+
+    // Interactor
+    vtkSmartPointer&lt;vtkRenderWindowInteractor&gt; interactor =
+        vtkSmartPointer&lt;vtkRenderWindowInteractor&gt;::New();
+    interactor-&gt;SetRenderWindow(renderWindow);
+
+    // 渲染并开始交互
+    renderWindow-&gt;Render();
+    std::cout &lt;&lt; &quot;\n=== Rendering Started ===\n&quot;;
+    std::cout &lt;&lt; &quot;Interact with the window. Press 'q' or close the window to exit.\n&quot;;
+    interactor-&gt;Start();
+
+    return 0;
+}
+</code></pre>
+<h3 id="363-cmakeliststxt">3.6.3 CMakeLists.txt</h3>
+<pre><code class="language-cmake">cmake_minimum_required(VERSION 3.12)
+project(ManualPolyData)
+
+# 查找 VTK
+find_package(VTK REQUIRED COMPONENTS
+    CommonCore
+    CommonDataModel
+    CommonColor
+    InteractionStyle
+    RenderingCore
+    RenderingOpenGL2
+)
+
+# 包含 VTK 目录
+include(${VTK_USE_FILE})
+
+# 创建可执行文件
+add_executable(manual_polydata manual_polydata.cxx)
+
+# 链接 VTK 库
+target_link_libraries(manual_polydata
+    VTK::CommonCore
+    VTK::CommonDataModel
+    VTK::CommonColor
+    VTK::InteractionStyle
+    VTK::RenderingCore
+    VTK::RenderingOpenGL2
+)
+</code></pre>
+<h3 id="364">3.6.4 代码解析</h3>
+<p>这个示例演示了手动构造 <code>vtkPolyData</code> 的完整过程，分为六个关键步骤：</p>
+<p><strong>步骤1 — 创建点坐标：</strong>
+使用 <code>vtkPoints::InsertNextPoint(x, y, z)</code> 逐个添加点。每个点的索引由插入顺序自动分配（从0开始）。</p>
+<p><strong>步骤2 — 创建单元：</strong>
+每个 <code>vtkTriangle</code> 通过 <code>GetPointIds()-&gt;SetId(localIndex, globalPointId)</code> 来引用点列表中的点。<code>localIndex</code> 是三角形内部顶点编号（0, 1, 2），<code>globalPointId</code> 是 <code>vtkPoints</code> 中的索引。所有三角形插入到一个 <code>vtkCellArray</code> 中。</p>
+<p><strong>步骤3 — 组建 vtkPolyData：</strong>
+通过 <code>SetPoints()</code> 和 <code>SetPolys()</code> 将点和单元关联到数据集。</p>
+<p><strong>步骤4 — 创建属性数据：</strong>
+创建 <code>vtkDoubleArray</code>，为每个点设置标量值，然后通过 <code>GetPointData()-&gt;SetScalars()</code> 附加到点数据上。VTK Mapper 会自动使用这个活跃标量数组进行颜色映射。</p>
+<p><strong>步骤5 — 验证数据：</strong>
+遍历点和单元并打印信息，确保数据按预期构建。这是调试时的好习惯。</p>
+<p><strong>步骤6 — 可视化管线：</strong>
+建立标准的 Mapper → Actor → Renderer → RenderWindow → Interactor 管线。设置颜色映射表 (<code>vtkLookupTable</code>) 和标量条 (<code>vtkScalarBarActor</code>) 来增强可视化效果。</p>
+<h3 id="365">3.6.5 运行结果</h3>
+<p>运行后你将看到一个渲染窗口，显示三个三角形组成的"山峰"形状：</p>
+<ul>
+<li>山峰顶点（point 1，Y=1.0）显示为红色（标量值=1.0，高程最大）</li>
+<li>底面四个顶点显示为蓝色（标量值=0.0，地面高程）</li>
+<li>三角形内部颜色通过线性插值自动过渡</li>
+<li>所有单元的边线以黑色显示（启用了 EdgeVisibility）</li>
+<li>左侧显示高程标量条</li>
+</ul>
+<hr />
+<h2 id="37">3.7 本章小结</h2>
+<p>本章深入介绍了VTK的数据模型基础，这是后续学习和使用VTK的核心知识。让我们回顾关键要点：</p>
+<ol>
+<li>
+<p><strong>数据模型根基</strong>：<code>vtkDataObject</code> 是所有数据类型的基类。数据对象只存储数据，算法对象（<code>vtkAlgorithm</code> 的子类）执行处理。理解这种分离是掌握VTK架构的关键。</p>
+</li>
+<li>
+<p><strong>五种主要数据集类型</strong>：</p>
+</li>
+<li><code>vtkImageData</code>：均匀规则网格，最节省内存</li>
+<li><code>vtkRectilinearGrid</code>：轴对齐但间距可变的网格</li>
+<li><code>vtkStructuredGrid</code>：拓扑规则但几何任意的曲线网格</li>
+<li><code>vtkPolyData</code>：最灵活的表面数据类型（点/线/面/三角带）</li>
+<li>
+<p><code>vtkUnstructuredGrid</code>：支持任意单元类型的通用网格</p>
+</li>
+<li>
+<p><strong>Points 和 Cells</strong>：点是3D坐标，单元是由点索引（而非坐标）定义的几何体素。单元类型决定拓扑（连接方式），点坐标决定几何（空间形状）。这种拓扑-几何分离是VTK数据模型的一个核心设计。</p>
+</li>
+<li>
+<p><strong>属性数据</strong>：通过 <code>vtkPointData</code> 和 <code>vtkCellData</code> 附加到数据集。五种特殊属性（Scalars、Vectors、Normals、TCoords、Tensors）是VTK过滤器链和渲染系统的"通用语言"。<code>vtkDataArray</code> 及其子类提供了类型化的数组存储。</p>
+</li>
+<li>
+<p><strong>编程接口</strong>：VTK提供了丰富的API来检查和操作数据集。关键方法包括获取点和单元数量、遍历单元类型、访问属性数组等。两个代码示例分别演示了"读取已有数据集"和"从头构建数据集"的实践。</p>
+</li>
+</ol>
+<p>掌握了本章的数据模型知识后，你已经具备了理解VTK中几乎所有数据处理操作的基础。在第4章中，我们将学习如何使用各种过滤器（Filter）来处理和转换这些数据集。</p>
+<hr />
+<p><em>本章完成。建议读者动手运行3.5节和3.6节的代码示例，通过实践加深对数据模型的理解。</em></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

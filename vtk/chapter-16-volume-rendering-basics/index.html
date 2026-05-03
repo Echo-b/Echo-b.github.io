@@ -1,0 +1,3182 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../chapter-15-volume2-capstone/">
+      
+      
+        <link rel="next" href="../chapter-17-volume-rendering-advanced/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>第十六章 体渲染基础 - Echo-b's Tech Notes</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#16" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Echo-b&#39;s Tech Notes" class="md-header__button md-logo" aria-label="Echo-b's Tech Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Echo-b's Tech Notes
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              第十六章 体渲染基础
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Echo-b&#39;s Tech Notes" class="md-nav__button md-logo" aria-label="Echo-b's Tech Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Echo-b's Tech Notes
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VTK 教程
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    VTK 教程
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    入门篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    入门篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-01-vtk-overview-and-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第一章 VTK概述与环境搭建
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-02-visualization-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二章 可视化管线
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-03-data-model-basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第三章 数据模型基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-04-geometry-and-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第四章 基本几何体与数据源
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-05-rendering-and-interactor/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第五章 渲染与交互机
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-06-volume1-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第六章 入门篇综合实战——3D几何画廊
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    实战篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    实战篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-07-polydata/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第七章 PolyData详解
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-08-unstructured-grid/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第八章 非结构化网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-09-structured-data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第九章 结构化数据
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-10-data-io/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十章 数据I/O
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-11-common-filters/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十一章 常用过滤器
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-12-color-mapping/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十二章 颜色映射与标量可视化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-13-advanced-rendering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十三章 高级渲染技术
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-14-multi-dataset/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十四章 多个数据集处理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-15-volume2-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十五章 实战篇综合实战——CFD后处理可视化工具
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    进阶篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    进阶篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十六章 体渲染基础
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十六章 体渲染基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#161" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.1 什么是体渲染
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="16.1 什么是体渲染">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1611" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.1.1 表面渲染与体渲染的根本区别
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1612" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.1.2 体数据作为半透明点云
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1613" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.1.3 体渲染的应用场景
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#162" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.2 体渲染管线
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="16.2 体渲染管线">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1621" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.2.1 核心组件概览
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1622-vtkvolumeactor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.2.2 vtkVolume——体的Actor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1623-vtkabstractvolumemapper" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.2.3 vtkAbstractVolumeMapper 及其子类
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1624-vtkvolumeproperty" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.2.4 vtkVolumeProperty——传递函数的容器
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1625" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.2.5 完整管线对比
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1626" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.2.6 管线搭建的基本步骤
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#163-transfer-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.3 传递函数（Transfer Functions）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="16.3 传递函数（Transfer Functions）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1631-vtkpiecewisefunction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.3.1 vtkPiecewiseFunction——不透明度传递函数
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1632-vtkcolortransferfunction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.3.2 vtkColorTransferFunction——颜色传递函数
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1633" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.3.3 传递函数的协同工作
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1634" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.3.4 典型传递函数设计案例
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="16.3.4 典型传递函数设计案例">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ct" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        案例一：CT骨骼渲染
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ct_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        案例二：CT软组织渲染
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1635" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.3.5 交互式传递函数设计
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#164-vtksmartvolumemapper" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.4 vtkSmartVolumeMapper
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="16.4 vtkSmartVolumeMapper">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1641" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.4.1 智能后端选择
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1642" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.4.2 手动指定渲染模式
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1643-gpucpu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.4.3 GPU渲染与CPU渲染的对比
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1644" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.4.4 大体积数据的内存考量
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1645" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.4.5 其他重要设置
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#165" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.5 代码示例：体渲染入门
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="16.5 代码示例：体渲染入门">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1651-c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.5.1 完整C++源代码
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1652" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.5.2 代码说明
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1653-cmakeliststxt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.5.3 CMakeLists.txt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1654" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.5.4 编译和运行
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1655" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.5.5 预期的渲染结果
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#166" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.6 本章小结
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-17-volume-rendering-advanced/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十七章 体渲染高级技术
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-18-charts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十八章 2D图表系统
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-19-annotation-and-widgets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十九章 三维标注与交互组件
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-20-custom-interaction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十章 自定义交互与Widget
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-21-qt-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十一章 Qt集成
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-22-smp-parallel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十二章 SMP并行入门
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-23-volume3-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十三章 进阶篇综合实战
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#161" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.1 什么是体渲染
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="16.1 什么是体渲染">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1611" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.1.1 表面渲染与体渲染的根本区别
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1612" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.1.2 体数据作为半透明点云
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1613" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.1.3 体渲染的应用场景
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#162" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.2 体渲染管线
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="16.2 体渲染管线">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1621" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.2.1 核心组件概览
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1622-vtkvolumeactor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.2.2 vtkVolume——体的Actor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1623-vtkabstractvolumemapper" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.2.3 vtkAbstractVolumeMapper 及其子类
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1624-vtkvolumeproperty" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.2.4 vtkVolumeProperty——传递函数的容器
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1625" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.2.5 完整管线对比
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1626" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.2.6 管线搭建的基本步骤
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#163-transfer-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.3 传递函数（Transfer Functions）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="16.3 传递函数（Transfer Functions）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1631-vtkpiecewisefunction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.3.1 vtkPiecewiseFunction——不透明度传递函数
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1632-vtkcolortransferfunction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.3.2 vtkColorTransferFunction——颜色传递函数
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1633" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.3.3 传递函数的协同工作
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1634" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.3.4 典型传递函数设计案例
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="16.3.4 典型传递函数设计案例">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ct" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        案例一：CT骨骼渲染
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ct_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        案例二：CT软组织渲染
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1635" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.3.5 交互式传递函数设计
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#164-vtksmartvolumemapper" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.4 vtkSmartVolumeMapper
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="16.4 vtkSmartVolumeMapper">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1641" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.4.1 智能后端选择
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1642" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.4.2 手动指定渲染模式
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1643-gpucpu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.4.3 GPU渲染与CPU渲染的对比
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1644" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.4.4 大体积数据的内存考量
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1645" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.4.5 其他重要设置
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#165" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.5 代码示例：体渲染入门
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="16.5 代码示例：体渲染入门">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1651-c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.5.1 完整C++源代码
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1652" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.5.2 代码说明
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1653-cmakeliststxt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.5.3 CMakeLists.txt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1654" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.5.4 编译和运行
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1655" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.5.5 预期的渲染结果
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#166" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.6 本章小结
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="16">第16章 体渲染基础</h1>
+<p>体渲染（Volume Rendering）是科学可视化中最为强大的技术之一。与传统的表面渲染不同，体渲染直接处理三维标量场数据，通过沿视线方向采样、累积颜色和不透明度来生成最终图像。本章将从基本概念出发，逐步介绍VTK中体渲染的管线、传递函数设计以及完整的代码实现。</p>
+<hr />
+<h2 id="161">16.1 什么是体渲染</h2>
+<h3 id="1611">16.1.1 表面渲染与体渲染的根本区别</h3>
+<p>在计算机图形学中，有两种根本不同的渲染范式：表面渲染（Surface Rendering）和体渲染（Volume Rendering）。</p>
+<p><strong>表面渲染</strong>的工作流程是：</p>
+<ol>
+<li>三维物体由显式的几何图元（三角形、多边形）定义边界表面。</li>
+<li>图形管线将这些图元投影到屏幕空间，通过光栅化生成片段。</li>
+<li>每个片段的颜色由光照模型、纹理映射等计算得出。</li>
+<li>深度缓冲（Z-buffer）解决遮挡关系——只有最前面的表面可见。</li>
+</ol>
+<p>在VTK中，表面渲染的典型管线是：</p>
+<pre><code>vtkPolyData (几何数据) → vtkPolyDataMapper → vtkActor → vtkRenderer
+</code></pre>
+<p>表面渲染的核心假设是：物体是"实心"的，其光学属性完全由表面定义。光线击中表面后要么被反射、要么被吸收，不会"穿透"物体内部。</p>
+<p><strong>体渲染</strong>则采用了完全不同的思路：</p>
+<ol>
+<li>三维数据是一个标量场（Scalar Field）——空间中的每个点都有一个标量值。</li>
+<li>没有显式的几何表面。整个体积被视为一个"发光的半透明云团"。</li>
+<li>从每个像素发射一条视线（Ray），穿过整个体积。</li>
+<li>沿视线方向按照固定步长进行采样，每个采样点的标量值通过<strong>传递函数</strong>（Transfer Function）映射为颜色和不透明度。</li>
+<li>按照从后向前或从前向后的顺序，累积所有采样点的颜色和不透明度，得到该像素的最终颜色。</li>
+</ol>
+<p>这种渲染方式可以揭示数据内部的细微结构，而不需要预先提取等值面。</p>
+<h3 id="1612">16.1.2 体数据作为半透明点云</h3>
+<p>体渲染的核心思想可以用一个简单的物理类比来理解：</p>
+<blockquote>
+<p>将三维标量场想象成一个充满半透明"云雾"的空间。每个点的颜色和透明度由该点的标量值决定。当我们从某个方向观察这个云雾时，近处的云雾会部分遮挡远处的云雾。光线穿过云雾时，一部分被吸收，一部分被散射并传向观察者。</p>
+</blockquote>
+<p>数学上，这由体积渲染积分方程（Volume Rendering Integral）描述：</p>
+<p>[
+I(D) = \int_{s=0}^{D} C(s) \cdot \alpha(s) \cdot \exp\left(-\int_{t=0}^{s} \alpha(t) \, dt\right) \, ds
+]</p>
+<p>其中：
+- (s) 是沿光线的距离参数。
+- (C(s)) 是位置 (s) 处采样点的颜色。
+- (\alpha(s)) 是位置 (s) 处采样点的不透明度（0表示完全透明，1表示完全不透明）。
+- (\exp(-\int \alpha(t) dt)) 是从光线起点到 (s) 处的累积透明度（即尚未被吸收的光线比例）。</p>
+<p>这个公式的含义是：每个采样点对最终图像的贡献不仅取决于其自身的颜色和不透明度，还取决于光线在到达该点之前已经被前方材料吸收了多少。</p>
+<p>在实际计算中，VTK使用离散化的近似方法——沿光线以固定步长采样，然后使用<strong>alpha合成</strong>（Alpha Compositing）逐步累积颜色。</p>
+<p><strong>从前向后合成</strong>（Front-to-Back Compositing）：</p>
+<pre><code>累积颜色 = 累积颜色 + (1 - 累积不透明度) × 当前颜色 × 当前不透明度
+累积不透明度 = 累积不透明度 + (1 - 累积不透明度) × 当前不透明度
+</code></pre>
+<p>这种合成方式有一个重要优点：当累积不透明度接近1时，可以提前终止光线（Early Ray Termination），因为后面的采样点对最终图像已经没有贡献。这大大提高了渲染效率。</p>
+<h3 id="1613">16.1.3 体渲染的应用场景</h3>
+<p>体渲染在以下领域有广泛应用：</p>
+<ol>
+<li><strong>医学影像</strong>：CT（计算机断层扫描）和MRI（磁共振成像）产生三维标量场数据。体渲染可以让医生看到皮肤、骨骼、软组织和血管的三维空间关系，而无需在不同切片之间来回切换。典型的应用包括：</li>
+<li>骨骼重建（高不透明度分配给骨骼的CT值范围）</li>
+<li>血管造影（增强血管的CT值后做体渲染）</li>
+<li>
+<p>牙科种植规划（观察下颌神经管与骨组织的关系）</p>
+</li>
+<li>
+<p><strong>科学计算可视化</strong>：CFD（计算流体力学）模拟产生密度、压力、温度等标量场。体渲染可以直观展示：</p>
+</li>
+<li>超音速飞行器周围的激波结构</li>
+<li>燃烧室内的火焰温度和燃料浓度分布</li>
+<li>气象数据的云团和降水分布</li>
+<li>
+<p>天体物理模拟中的星云气体密度</p>
+</li>
+<li>
+<p><strong>工业无损检测（NDT）</strong>：工业CT扫描被用于检测零件内部的缺陷：</p>
+</li>
+<li>铸件内部的气孔和裂纹</li>
+<li>焊接接头的融合质量</li>
+<li>复合材料的分层和脱粘</li>
+<li>
+<p>电子元器件的内部结构验证（如BGA焊球）</p>
+</li>
+<li>
+<p><strong>石油地质</strong>：地震勘探产生的三维数据体可以揭示地下构造：</p>
+</li>
+<li>油气储层的空间形态</li>
+<li>断层和褶皱的几何关系</li>
+<li>盐丘和河道砂体等特殊地质体</li>
+</ol>
+<hr />
+<h2 id="162">16.2 体渲染管线</h2>
+<h3 id="1621">16.2.1 核心组件概览</h3>
+<p>VTK的体渲染管线由以下核心组件构成，每个组件承担特定的职责：</p>
+<table>
+<thead>
+<tr>
+<th>组件</th>
+<th>类型</th>
+<th>职责</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>vtkImageData</code></td>
+<td>数据</td>
+<td>存储三维体数据（规则的标量场）</td>
+</tr>
+<tr>
+<td><code>vtkVolumeMapper</code></td>
+<td>映射器</td>
+<td>将体数据转换为可渲染的图元（与<code>vtkPolyDataMapper</code>对应）</td>
+</tr>
+<tr>
+<td><code>vtkVolume</code></td>
+<td>道具</td>
+<td>场景中的体渲染对象（与<code>vtkActor</code>对应）</td>
+</tr>
+<tr>
+<td><code>vtkVolumeProperty</code></td>
+<td>属性</td>
+<td>定义传递函数、光照、插值等渲染属性（与<code>vtkProperty</code>对应）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="1622-vtkvolumeactor">16.2.2 vtkVolume——体的Actor</h3>
+<p><code>vtkVolume</code> 是体渲染中的"演员"，它在场景中代表一个可以被渲染的体对象。其角色完全平行于<code>vtkActor</code>：</p>
+<pre><code class="language-cpp">// 表面渲染
+vtkNew&lt;vtkActor&gt; actor;
+actor-&gt;SetMapper(polyDataMapper);
+actor-&gt;SetProperty(property);
+
+// 体渲染
+vtkNew&lt;vtkVolume&gt; volume;
+volume-&gt;SetMapper(volumeMapper);
+volume-&gt;SetProperty(volumeProperty);
+</code></pre>
+<p><code>vtkVolume</code>继承自<code>vtkProp3D</code>，因此支持所有标准的三维变换操作：平移（SetPosition）、旋转（SetOrientation）、缩放（SetScale），以及通过<code>vtkProp3D</code>的<code>GetMatrix</code>/<code>SetUserMatrix</code>进行任意变换。</p>
+<h3 id="1623-vtkabstractvolumemapper">16.2.3 vtkAbstractVolumeMapper 及其子类</h3>
+<p>体渲染映射器的继承体系如下：</p>
+<pre><code>vtkAbstractVolumeMapper (抽象基类)
+├── vtkVolumeMapper (已弃用，保留用于向后兼容)
+├── vtkFixedPointVolumeRayCastMapper (CPU光线投射，固定精度)
+├── vtkGPUVolumeRayCastMapper (GPU光线投射，需要OpenGL)
+├── vtkOpenGLGPUVolumeRayCastMapper (OpenGL GPU实现)
+├── vtkSmartVolumeMapper (智能映射器，自动选择最佳后端)
+└── vtkMultiVolume (多体渲染支持)
+</code></pre>
+<p>在现代VTK（9.x）中，推荐使用 <code>vtkSmartVolumeMapper</code>。它会自动检测硬件能力并选择最优的渲染后端：</p>
+<ul>
+<li>如果支持GPU光线投射（有可用的GPU且VTK编译时启用了相应模块），则使用GPU光线投射。</li>
+<li>否则回退到CPU光线投射。</li>
+</ul>
+<p><code>vtkSmartVolumeMapper</code> 还支持通过 <code>SetRequestedRenderMode()</code> 手动指定渲染模式：</p>
+<pre><code class="language-cpp">vtkNew&lt;vtkSmartVolumeMapper&gt; mapper;
+mapper-&gt;SetRequestedRenderModeToGPU();    // 强制GPU渲染
+mapper-&gt;SetRequestedRenderModeToRayCast(); // 强制CPU光线投射
+mapper-&gt;SetRequestedRenderModeToDefault(); // 自动选择（默认）
+</code></pre>
+<h3 id="1624-vtkvolumeproperty">16.2.4 vtkVolumeProperty——传递函数的容器</h3>
+<p><code>vtkVolumeProperty</code> 是体渲染中最为关键的类之一。它管理与外观相关的所有设置，包括：</p>
+<ul>
+<li><strong>不透明度传递函数</strong>：<code>SetScalarOpacity(vtkPiecewiseFunction*)</code></li>
+<li><strong>颜色传递函数</strong>：<code>SetColor(vtkColorTransferFunction*)</code></li>
+<li><strong>梯度不透明度传递函数</strong>：<code>SetGradientOpacity(vtkPiecewiseFunction*)</code>（可选，用于增强表面效果）</li>
+<li><strong>光照属性</strong>：<code>SetShade(bool)</code>、<code>SetAmbient()</code>, <code>SetDiffuse()</code>, <code>SetSpecular()</code></li>
+<li><strong>插值方式</strong>：<code>SetInterpolationTypeToLinear()</code> / <code>SetInterpolationTypeToNearest()</code></li>
+</ul>
+<pre><code class="language-cpp">vtkNew&lt;vtkVolumeProperty&gt; volumeProperty;
+volumeProperty-&gt;SetColor(colorTransferFunction);
+volumeProperty-&gt;SetScalarOpacity(scalarOpacityFunction);
+volumeProperty-&gt;ShadeOn();              // 启用光照，增强深度感
+volumeProperty-&gt;SetInterpolationTypeToLinear(); // 三线性插值
+</code></pre>
+<h3 id="1625">16.2.5 完整管线对比</h3>
+<p>将表面渲染管线和体渲染管线并列，可以清晰地看到设计上的对称性：</p>
+<p><strong>表面渲染管线</strong>：</p>
+<pre><code>vtkPolyData (source → filter) 
+    → vtkPolyDataMapper (mapToSurfacePrimitives)
+        → vtkActor (position, orientation, scale)
+            → vtkProperty (color, lighting, representation)
+                → vtkRenderer → vtkRenderWindow
+</code></pre>
+<p><strong>体渲染管线</strong>：</p>
+<pre><code>vtkImageData (source → filter)
+    → vtkSmartVolumeMapper (mapToVolumePrimitives)
+        → vtkVolume (position, orientation, scale)
+            → vtkVolumeProperty (color TF, opacity TF, shading)
+                → vtkRenderer → vtkRenderWindow
+</code></pre>
+<h3 id="1626">16.2.6 管线搭建的基本步骤</h3>
+<p>构建一个最小化的体渲染管线通常需要以下步骤：</p>
+<pre><code class="language-cpp">// 1. 创建或加载体数据
+vtkNew&lt;vtkImageData&gt; volumeData;
+// ... 填充数据 ...
+
+// 2. 创建映射器
+vtkNew&lt;vtkSmartVolumeMapper&gt; volumeMapper;
+volumeMapper-&gt;SetInputData(volumeData);
+
+// 3. 创建传递函数
+vtkNew&lt;vtkPiecewiseFunction&gt; opacityTF;
+opacityTF-&gt;AddPoint(minValue, 0.0);
+opacityTF-&gt;AddPoint(maxValue, 1.0);
+
+vtkNew&lt;vtkColorTransferFunction&gt; colorTF;
+colorTF-&gt;AddRGBPoint(minValue, 0.0, 0.0, 1.0);
+colorTF-&gt;AddRGBPoint(maxValue, 1.0, 0.0, 0.0);
+
+// 4. 创建体属性
+vtkNew&lt;vtkVolumeProperty&gt; volumeProperty;
+volumeProperty-&gt;SetColor(colorTF);
+volumeProperty-&gt;SetScalarOpacity(opacityTF);
+volumeProperty-&gt;ShadeOn();
+volumeProperty-&gt;SetInterpolationTypeToLinear();
+
+// 5. 创建体
+vtkNew&lt;vtkVolume&gt; volume;
+volume-&gt;SetMapper(volumeMapper);
+volume-&gt;SetProperty(volumeProperty);
+
+// 6. 添加到渲染器
+renderer-&gt;AddVolume(volume);
+</code></pre>
+<hr />
+<h2 id="163-transfer-functions">16.3 传递函数（Transfer Functions）</h2>
+<p>传递函数是体渲染的"灵魂"。它们决定了体数据中每个标量值被赋予什么颜色和不透明度，直接决定了最终图像的外观和可解读性。可以将传递函数理解为体数据的"材质编辑器"。</p>
+<h3 id="1631-vtkpiecewisefunction">16.3.1 vtkPiecewiseFunction——不透明度传递函数</h3>
+<p><code>vtkPiecewiseFunction</code> 定义了一个分段线性函数，将标量值映射到不透明度（opacity）。</p>
+<pre><code class="language-cpp">vtkNew&lt;vtkPiecewiseFunction&gt; opacityTransferFunction;
+</code></pre>
+<p><strong>关键方法</strong>：
+- <code>AddPoint(double scalarValue, double opacity)</code> —— 添加控制点
+- <code>RemovePoint(double scalarValue)</code> —— 删除控制点
+- <code>RemoveAllPoints()</code> —— 清除所有控制点
+- <code>GetValue(double scalarValue)</code> —— 查询函数值</p>
+<p>不透明度的取值范围为 <code>[0.0, 1.0]</code>：
+- <code>0.0</code> 表示完全透明（该标量值对应的区域不可见）
+- <code>1.0</code> 表示完全不透明（该标量值对应的区域完全遮挡后方内容）
+- 中间值表示半透明效果</p>
+<p><strong>设计原则</strong>：
+- 希望突出的结构应该分配较高的不透明度。
+- 希望忽略的背景或干扰结构应该分配较低的不透明度（或直接设为0）。
+- 不透明度函数的形状直接影响深度感知——变化剧烈的区域表面感强，变化平缓的区域云雾感强。
+- 可以使用"梯形"或"山峰"形状来突出特定标量值范围的结构。</p>
+<h3 id="1632-vtkcolortransferfunction">16.3.2 vtkColorTransferFunction——颜色传递函数</h3>
+<p><code>vtkColorTransferFunction</code> 定义了一个颜色映射，将标量值映射到RGB颜色。</p>
+<pre><code class="language-cpp">vtkNew&lt;vtkColorTransferFunction&gt; colorTransferFunction;
+</code></pre>
+<p><strong>关键方法</strong>：
+- <code>AddRGBPoint(double scalarValue, double r, double g, double b)</code> —— 添加RGB控制点
+- <code>AddHSVPoint(double scalarValue, double h, double s, double v)</code> —— 添加HSV控制点
+- <code>RemovePoint(double scalarValue)</code> —— 删除控制点
+- <code>RemoveAllPoints()</code> —— 清除所有控制点
+- <code>GetColor(double scalarValue, double rgb[3])</code> —— 查询颜色</p>
+<p>RGB分量的取值范围为 <code>[0.0, 1.0]</code>。颜色空间中的插值是分段线性的，与不透明度传递函数类似。</p>
+<p><strong>颜色设计原则</strong>：
+- 使用颜色对比来区分不同组织/结构。
+- 暖色（红、橙、黄）通常用于突出重要结构。
+- 冷色（蓝、绿）通常用于背景或次要结构。
+- 可以利用HSV空间更方便地设计基于色相变化的方案。</p>
+<h3 id="1633">16.3.3 传递函数的协同工作</h3>
+<p>当光线穿过体积时，在每一个采样点：</p>
+<ol>
+<li>通过三线性插值从体数据中获取该位置的标量值 (s)。</li>
+<li>调用 <code>opacityTF-&gt;GetValue(s)</code> 获取不透明度 (\alpha)。</li>
+<li>调用 <code>colorTF-&gt;GetColor(s, rgb)</code> 获取颜色 (C = (r, g, b))。</li>
+<li>使用前面介绍的从前向后或从后向前的alpha合成公式，将 ((C, \alpha)) 累积到该像素的最终颜色中。</li>
+</ol>
+<p>这个过程的伪代码可以表示为：</p>
+<pre><code>for each pixel (i, j) on screen:
+    ray = computeRayFromCamera(i, j)
+    accumulatedColor = (0, 0, 0)
+    accumulatedOpacity = 0.0
+
+    for t = entryPoint to exitPoint step stepSize:
+        scalar = sampleVolume(ray.at(t))
+        color = colorTF.getColor(scalar)
+        opacity = opacityTF.getValue(scalar)
+
+        // Front-to-back compositing
+        accumulatedColor += (1 - accumulatedOpacity) * color * opacity
+        accumulatedOpacity += (1 - accumulatedOpacity) * opacity
+
+        if accumulatedOpacity &gt; 0.99:
+            break  // Early ray termination
+
+    pixel(i, j) = accumulatedColor
+</code></pre>
+<h3 id="1634">16.3.4 典型传递函数设计案例</h3>
+<h4 id="ct">案例一：CT骨骼渲染</h4>
+<p>CT数据中，不同组织的HU值（Hounsfield Units）大致范围如下：</p>
+<table>
+<thead>
+<tr>
+<th>组织</th>
+<th>HU值范围</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>空气</td>
+<td>-1000 至 -800</td>
+</tr>
+<tr>
+<td>肺</td>
+<td>-800 至 -400</td>
+</tr>
+<tr>
+<td>脂肪</td>
+<td>-100 至 -50</td>
+</tr>
+<tr>
+<td>水</td>
+<td>0</td>
+</tr>
+<tr>
+<td>软组织</td>
+<td>20 至 60</td>
+</tr>
+<tr>
+<td>骨骼</td>
+<td>200 至 3000</td>
+</tr>
+<tr>
+<td>致密骨</td>
+<td>500 至 3000</td>
+</tr>
+</tbody>
+</table>
+<p><strong>骨骼可视化</strong>的传递函数设计策略：</p>
+<pre><code class="language-cpp">// 不透明度传递函数 —— 突出骨骼
+vtkNew&lt;vtkPiecewiseFunction&gt; boneOpacityTF;
+boneOpacityTF-&gt;AddPoint(-1000, 0.0);   // 空气完全透明
+boneOpacityTF-&gt;AddPoint(-500,  0.0);   // 肺也透明
+boneOpacityTF-&gt;AddPoint(0,     0.0);   // 水/软组织透明
+boneOpacityTF-&gt;AddPoint(60,    0.0);   // 软组织上界
+boneOpacityTF-&gt;AddPoint(200,   0.2);   // 松质骨开始出现
+boneOpacityTF-&gt;AddPoint(500,   0.6);   // 致密骨半透明
+boneOpacityTF-&gt;AddPoint(1000,  0.9);   // 致密骨基本不透明
+boneOpacityTF-&gt;AddPoint(3000,  1.0);   // 牙釉质/金属完全不透明
+
+// 颜色传递函数 —— 白色到暖黄色
+vtkNew&lt;vtkColorTransferFunction&gt; boneColorTF;
+boneColorTF-&gt;AddRGBPoint(-1000, 0.0, 0.0, 0.0);   // 黑色
+boneColorTF-&gt;AddRGBPoint(0,     0.3, 0.3, 0.3);   // 灰色
+boneColorTF-&gt;AddRGBPoint(200,   0.8, 0.7, 0.5);   // 米色
+boneColorTF-&gt;AddRGBPoint(500,   0.9, 0.8, 0.6);   // 暖白
+boneColorTF-&gt;AddRGBPoint(1000,  1.0, 0.95, 0.8);  // 骨白
+boneColorTF-&gt;AddRGBPoint(3000,  1.0, 1.0, 0.9);   // 亮白
+</code></pre>
+<h4 id="ct_1">案例二：CT软组织渲染</h4>
+<p><strong>软组织可视化</strong>的策略完全不同——需要让皮肤、肌肉和器官可见，同时抑制骨骼的遮挡：</p>
+<pre><code class="language-cpp">// 不透明度传递函数 —— 突出软组织
+vtkNew&lt;vtkPiecewiseFunction&gt; softTissueOpacityTF;
+softTissueOpacityTF-&gt;AddPoint(-1000, 0.0);   // 空气透明
+softTissueOpacityTF-&gt;AddPoint(-800,  0.0);
+softTissueOpacityTF-&gt;AddPoint(-100,  0.05);  // 脂肪轻微可见
+softTissueOpacityTF-&gt;AddPoint(0,     0.1);   // 水/体液
+softTissueOpacityTF-&gt;AddPoint(40,    0.3);   // 肌肉
+softTissueOpacityTF-&gt;AddPoint(80,    0.5);   // 肝脏等器官
+softTissueOpacityTF-&gt;AddPoint(200,   0.1);   // 降低骨骼不透明度
+softTissueOpacityTF-&gt;AddPoint(500,   0.05);  // 致密骨基本透明
+softTissueOpacityTF-&gt;AddPoint(3000,  0.0);   // 金属透明
+
+// 颜色传递函数 —— 暖色调
+vtkNew&lt;vtkColorTransferFunction&gt; softTissueColorTF;
+softTissueColorTF-&gt;AddRGBPoint(-1000, 0.0, 0.0, 0.0);
+softTissueColorTF-&gt;AddRGBPoint(-100,  0.9, 0.8, 0.3); // 脂肪：黄色
+softTissueColorTF-&gt;AddRGBPoint(0,     0.5, 0.5, 0.6); // 水：灰蓝
+softTissueColorTF-&gt;AddRGBPoint(20,    0.8, 0.4, 0.3); // 肌肉：红褐
+softTissueColorTF-&gt;AddRGBPoint(60,    0.9, 0.3, 0.3); // 器官：红色
+softTissueColorTF-&gt;AddRGBPoint(200,   0.8, 0.8, 0.7); // 骨骼：浅灰
+softTissueColorTF-&gt;AddRGBPoint(3000,  1.0, 1.0, 1.0);
+</code></pre>
+<h3 id="1635">16.3.5 交互式传递函数设计</h3>
+<p>在实际应用中，传递函数的设计通常是一个反复试验的过程。常见的交互式设计工具包括：</p>
+<ol>
+<li>
+<p><strong>直方图引导</strong>：在传递函数编辑器上叠加体数据的标量值直方图，帮助识别数据中的峰值（对应不同的组织/材料）。</p>
+</li>
+<li>
+<p><strong>多窗口联动</strong>：同时显示三维体渲染结果和二维切片（轴向、冠状、矢状面），帮助验证传递函数是否正确显示了目标结构。</p>
+</li>
+<li>
+<p><strong>预设库</strong>：为常见的扫描协议（如CT胸部、CT头部、CTA血管造影）准备预设的传递函数。</p>
+</li>
+<li>
+<p><strong>梯度不透明度</strong>：除了基于标量值的不透明度，还可以使用基于梯度幅值的不透明度来增强材料边界的显示效果：</p>
+</li>
+</ol>
+<pre><code class="language-cpp">vtkNew&lt;vtkPiecewiseFunction&gt; gradientOpacityTF;
+gradientOpacityTF-&gt;AddPoint(0,    0.0);   // 均匀区域透明
+gradientOpacityTF-&gt;AddPoint(50,   0.0);
+gradientOpacityTF-&gt;AddPoint(100,  0.3);   // 边界区域半透明
+gradientOpacityTF-&gt;AddPoint(200,  0.8);   // 强边界不透明
+gradientOpacityTF-&gt;AddPoint(500,  1.0);   // 非常强的边界
+
+volumeProperty-&gt;SetGradientOpacity(gradientOpacityTF);
+</code></pre>
+<p>梯度不透明度传递函数的原理是：梯度幅值大的地方通常对应材料边界，通过赋予这些区域更高的不透明度，可以增强表面效果，使体渲染看起来更像表面渲染。</p>
+<hr />
+<h2 id="164-vtksmartvolumemapper">16.4 vtkSmartVolumeMapper</h2>
+<h3 id="1641">16.4.1 智能后端选择</h3>
+<p><code>vtkSmartVolumeMapper</code> 是VTK 9.x中体渲染的推荐入口。它在内部维护了多个渲染后端，并在运行时自动选择最合适的一个。</p>
+<pre><code class="language-cpp">vtkNew&lt;vtkSmartVolumeMapper&gt; mapper;
+mapper-&gt;SetRequestedRenderModeToDefault(); // 自动选择
+</code></pre>
+<p>自动选择的优先级逻辑如下：</p>
+<ol>
+<li>检查 <code>VTK_MODULE_ENABLE_VTK_RenderingVolumeOpenGL2</code> 是否启用。</li>
+<li>检查GPU是否支持所需的OpenGL扩展（着色器、3D纹理、帧缓冲对象等）。</li>
+<li>如果GPU可用，使用 <code>vtkGPUVolumeRayCastMapper</code>（OpenGL GPU光线投射）。</li>
+<li>如果GPU不可用或不满足要求，回退到 <code>vtkFixedPointVolumeRayCastMapper</code>（CPU光线投射）。</li>
+</ol>
+<h3 id="1642">16.4.2 手动指定渲染模式</h3>
+<pre><code class="language-cpp">// 强制使用GPU光线投射
+mapper-&gt;SetRequestedRenderModeToGPU();
+
+// 强制使用CPU光线投射
+mapper-&gt;SetRequestedRenderModeToRayCast();
+
+// 使用默认的自动选择
+mapper-&gt;SetRequestedRenderModeToDefault();
+
+// 查询实际使用的渲染模式
+int actualMode = mapper-&gt;GetLastUsedRenderMode();
+// 返回值: vtkSmartVolumeMapper::GPURenderMode 或 
+//         vtkSmartVolumeMapper::RayCastRenderMode
+</code></pre>
+<h3 id="1643-gpucpu">16.4.3 GPU渲染与CPU渲染的对比</h3>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>GPU光线投射</th>
+<th>CPU光线投射</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>性能</strong></td>
+<td>非常高（实时交互）</td>
+<td>较慢（取决于CPU和数据大小）</td>
+</tr>
+<tr>
+<td><strong>图像质量</strong></td>
+<td>高（支持高级光照和着色）</td>
+<td>中等（简化光照模型）</td>
+</tr>
+<tr>
+<td><strong>内存要求</strong></td>
+<td>体数据必须完整加载到GPU显存</td>
+<td>使用系统内存，容量更大</td>
+</tr>
+<tr>
+<td><strong>硬件依赖</strong></td>
+<td>需要支持OpenGL 3.2+的GPU</td>
+<td>仅需要CPU</td>
+</tr>
+<tr>
+<td><strong>可扩展性</strong></td>
+<td>受限于GPU显存大小</td>
+<td>可处理超大体积</td>
+</tr>
+<tr>
+<td><strong>特性支持</strong></td>
+<td>完整（光照、梯度不透明度、裁剪平面等）</td>
+<td>完整（但性能较低）</td>
+</tr>
+<tr>
+<td><strong>并行处理</strong></td>
+<td>天然并行（成千上万个着色器核心）</td>
+<td>支持多线程（OpenMP/TBB）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="1644">16.4.4 大体积数据的内存考量</h3>
+<p>对于大型体数据（例如2048x2048x2048的uint16），需要仔细考虑内存使用：</p>
+<ul>
+<li><strong>GPU渲染</strong>：数据大小 = 2048 × 2048 × 2048 × 2 字节 = 16 GB。这超过了大多数消费级GPU的显存（通常8-12 GB）。对于这种情况，需要考虑：</li>
+<li>使用CPU光线投射模式。</li>
+<li>对数据进行降采样（使用<code>vtkImageResample</code>或<code>vtkImageShrink3D</code>）。</li>
+<li>
+<p>使用<code>vtkImageData</code>的流式处理扩展。</p>
+</li>
+<li>
+<p><strong>CPU渲染</strong>：16 GB + 渲染开销在具有64 GB或更多系统内存的工作站上通常是可行的。启用多线程可以显著提高CPU渲染的性能：</p>
+</li>
+</ul>
+<pre><code class="language-cpp">mapper-&gt;SetRequestedRenderModeToRayCast(); // CPU渲染
+// CPU渲染器默认使用系统内存，不需要将数据复制到GPU显存
+</code></pre>
+<ul>
+<li><strong>数据降采样策略</strong>：</li>
+</ul>
+<pre><code class="language-cpp">// 对大数据进行降采样
+vtkNew&lt;vtkImageResample&gt; resample;
+resample-&gt;SetInputData(largeVolumeData);
+resample-&gt;SetAxisOutputSpacing(0, 2, 2, 2); // 在每个维度上减少到原来的1/2
+resample-&gt;Update();
+
+mapper-&gt;SetInputData(resample-&gt;GetOutput());
+</code></pre>
+<h3 id="1645">16.4.5 其他重要设置</h3>
+<pre><code class="language-cpp">// 设置采样距离（光线步长）
+// 步长越小图像质量越高，但性能越低
+mapper-&gt;SetSampleDistance(0.5); // 默认值通常合适
+
+// 设置图像采样距离（用于屏幕空间自适应采样）
+mapper-&gt;SetImageSampleDistance(1.0); // 1.0 = 全分辨率
+
+// 启用/禁用自动调整采样距离
+mapper-&gt;SetAutoAdjustSampleDistances(true); // 根据交互状态自动调整
+
+// 设置全局不透明度乘数（可用于淡入淡出效果）
+// 通过 vtkVolumeProperty 设置：
+volumeProperty-&gt;SetScalarOpacityUnitDistance(0, 1.0);
+
+// 使用交互质量模式（旋转/缩放时降低采样率以保持流畅）
+mapper-&gt;SetInteractiveUpdateRate(1.0); // 降低交互时的采样距离
+</code></pre>
+<hr />
+<h2 id="165">16.5 代码示例：体渲染入门</h2>
+<p>本节提供一个完整的C++程序，演示如何在VTK中创建并渲染一个合成的三维体数据。该程序创建一个包含多个球体的体数据（模拟不同密度的结构），设置传递函数，并使用交互式窗口进行渲染。</p>
+<h3 id="1651-c">16.5.1 完整C++源代码</h3>
+<pre><code class="language-cpp">// ============================================================================
+// VolumeRenderingBasics.cxx
+// VTK 9.5.2 体渲染入门示例
+//
+// 描述:
+//   创建一个合成的三维体数据（包含多个不同标量值的球体），
+//   使用vtkSmartVolumeMapper进行体渲染。
+//   演示传递函数的设置和交互式体渲染。
+//
+// 编译 (需要CMake, 见随附的 CMakeLists.txt):
+//   mkdir build &amp;&amp; cd build
+//   cmake .. &amp;&amp; cmake --build .
+// ============================================================================
+
+#include &lt;vtkActor.h&gt;
+#include &lt;vtkCamera.h&gt;
+#include &lt;vtkColorTransferFunction.h&gt;
+#include &lt;vtkConeSource.h&gt;
+#include &lt;vtkImageData.h&gt;
+#include &lt;vtkInteractorStyleTrackballCamera.h&gt;
+#include &lt;vtkMath.h&gt;
+#include &lt;vtkMinimalStandardRandomSequence.h&gt;
+#include &lt;vtkNamedColors.h&gt;
+#include &lt;vtkNew.h&gt;
+#include &lt;vtkPiecewiseFunction.h&gt;
+#include &lt;vtkPointData.h&gt;
+#include &lt;vtkPolyData.h&gt;
+#include &lt;vtkPolyDataMapper.h&gt;
+#include &lt;vtkProperty.h&gt;
+#include &lt;vtkRenderWindow.h&gt;
+#include &lt;vtkRenderWindowInteractor.h&gt;
+#include &lt;vtkRenderer.h&gt;
+#include &lt;vtkSmartVolumeMapper.h&gt;
+#include &lt;vtkUnsignedShortArray.h&gt;
+#include &lt;vtkVolume.h&gt;
+#include &lt;vtkVolumeProperty.h&gt;
+
+#include &lt;cmath&gt;
+#include &lt;iostream&gt;
+#include &lt;vector&gt;
+
+// --------------------------------------------------------------------------
+// 函数: CreateSyntheticVolume
+//
+// 创建一个合成的三维体数据（vtkImageData）。
+// 数据中包含多个具有不同标量值的球体区域，模拟不同的&quot;组织&quot;或&quot;材料&quot;。
+//
+// 参数:
+//   dimensions - 体数据的尺寸（每个维度的体素数量）
+//   spacing    - 体素的物理间距（控制宽高比）
+//
+// 数据设计:
+//   - 背景值为 0 (表示&quot;空气&quot;)
+//   - 球体 1: 标量值 ~500 (代表&quot;骨骼&quot;), 半径较大，位于中心
+//   - 球体 2: 标量值 ~200 (代表&quot;软组织&quot;), 半径中等
+//   - 球体 3: 标量值 ~350 (代表&quot;软骨&quot;), 半径较小
+//   - 球体 4: 标量值 ~100 (代表&quot;脂肪&quot;), 半径较小
+//
+//  每个球体的边缘使用高斯平滑，使标量值从球体内部到外部平滑过渡。
+//  这模拟了真实CT数据中组织的逐渐过渡特性。
+// --------------------------------------------------------------------------
+vtkSmartPointer&lt;vtkImageData&gt; CreateSyntheticVolume(
+    int dimensions[3], double spacing[3])
+{
+  int dimX = dimensions[0];
+  int dimY = dimensions[1];
+  int dimZ = dimensions[2];
+
+  // 创建 vtkImageData 对象
+  vtkNew&lt;vtkImageData&gt; imageData;
+  imageData-&gt;SetDimensions(dimX, dimY, dimZ);
+  imageData-&gt;SetSpacing(spacing);
+  imageData-&gt;SetOrigin(0.0, 0.0, 0.0);
+
+  // 分配标量数组 (unsigned short 类型)
+  // unsigned short 的范围是 [0, 65535]，提供了足够的精度
+  vtkNew&lt;vtkUnsignedShortArray&gt; scalars;
+  scalars-&gt;SetNumberOfComponents(1);
+  scalars-&gt;SetNumberOfTuples(static_cast&lt;vtkIdType&gt;(dimX) * dimY * dimZ);
+  scalars-&gt;SetName(&quot;Scalars&quot;);
+  scalars-&gt;FillValue(0); // 全部初始化为 0
+
+  // 定义球体的中心位置（在世界坐标/体素索引空间中）
+  // 注意：这里使用的是体素索引，而非实际物理坐标
+  double cx = dimX / 2.0;
+  double cy = dimY / 2.0;
+  double cz = dimZ / 2.0;
+
+  // 球体参数: {centerX, centerY, centerZ, radius, peakValue, sigma}
+  // peakValue: 球体中心的标量值
+  // sigma: 高斯平滑参数（控制边缘的过渡宽度）
+  struct Sphere
+  {
+    double cx, cy, cz;
+    double radius;
+    double peakValue;
+    double sigma;
+  };
+
+  std::vector&lt;Sphere&gt; spheres = {
+      // 中心大球体 (模拟骨骼)
+      {cx, cy, cz, dimX * 0.3, 500.0, 5.0},
+      // 偏右上方 (模拟软组织)
+      {cx + dimX * 0.15, cy + dimY * 0.10, cz - dimZ * 0.05,
+       dimX * 0.18, 200.0, 4.0},
+      // 偏左方 (模拟软骨)
+      {cx - dimX * 0.2, cy - dimY * 0.05, cz + dimZ * 0.1,
+       dimX * 0.12, 350.0, 3.0},
+      // 偏下方 (模拟脂肪)
+      {cx + dimX * 0.05, cy - dimY * 0.2, cz - dimZ * 0.08,
+       dimX * 0.10, 100.0, 2.5},
+      // 小的高密度结节
+      {cx + dimX * 0.25, cy + dimY * 0.2, cz - dimZ * 0.15,
+       dimX * 0.06, 600.0, 2.0},
+  };
+
+  std::cout &lt;&lt; &quot;Creating synthetic volume data...&quot; &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;Volume dimensions: &quot; &lt;&lt; dimX &lt;&lt; &quot; x &quot; &lt;&lt; dimY &lt;&lt; &quot; x &quot; &lt;&lt; dimZ
+            &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;Total voxels: &quot;
+            &lt;&lt; (static_cast&lt;long long&gt;(dimX) * dimY * dimZ) &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;Number of spheres: &quot; &lt;&lt; spheres.size() &lt;&lt; std::endl;
+
+  // 对每个体素计算标量值
+  // 遍历顺序: z -&gt; y -&gt; x (以保持内存局部性)
+  for (int z = 0; z &lt; dimZ; ++z)
+  {
+    if (z % 20 == 0)
+    {
+      std::cout &lt;&lt; &quot;  Processing slice &quot; &lt;&lt; z &lt;&lt; &quot; / &quot; &lt;&lt; dimZ &lt;&lt; std::endl;
+    }
+
+    for (int y = 0; y &lt; dimY; ++y)
+    {
+      for (int x = 0; x &lt; dimX; ++x)
+      {
+        double value = 0.0;
+
+        // 对每个球体累加其贡献值
+        for (const auto&amp; sphere : spheres)
+        {
+          double dx = x - sphere.cx;
+          double dy = y - sphere.cy;
+          double dz = z - sphere.cz;
+          double dist = std::sqrt(dx * dx + dy * dy + dz * dz);
+
+          // 使用高斯函数使球体边缘平滑过渡
+          // f(dist) = peakValue * exp( -dist^2 / (2 * sigma^2) )
+          // 当 dist 远大于 radius 时，贡献趋于 0
+          double sigma2 = 2.0 * sphere.sigma * sphere.sigma;
+          double contribution =
+              sphere.peakValue * std::exp(-(dist * dist) / sigma2);
+
+          // 对距离远大于半径的点（dist &gt; radius + 3*sigma），跳过计算
+          // 但高斯函数已经自然衰减，这个优化不是必须的
+
+          value += contribution;
+        }
+
+        // 限制在 unsigned short 的有效范围内
+        if (value &gt; 65535.0)
+        {
+          value = 65535.0;
+        }
+        else if (value &lt; 0.0)
+        {
+          value = 0.0;
+        }
+
+        // 计算体素索引
+        vtkIdType index = static_cast&lt;vtkIdType&gt;(z) * dimY * dimX +
+                          static_cast&lt;vtkIdType&gt;(y) * dimX + x;
+
+        scalars-&gt;SetValue(index, static_cast&lt;unsigned short&gt;(value));
+      }
+    }
+  }
+
+  imageData-&gt;GetPointData()-&gt;SetScalars(scalars);
+
+  // 打印统计信息
+  double range[2];
+  scalars-&gt;GetRange(range);
+  std::cout &lt;&lt; &quot;Scalar range: [&quot; &lt;&lt; range[0] &lt;&lt; &quot;, &quot; &lt;&lt; range[1] &lt;&lt; &quot;]&quot;
+            &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;Volume data creation complete.&quot; &lt;&lt; std::endl;
+
+  return imageData;
+}
+
+// --------------------------------------------------------------------------
+// 函数: PrintUsage
+//
+// 打印程序使用说明和交互操作指南。
+// --------------------------------------------------------------------------
+void PrintUsage()
+{
+  std::cout &lt;&lt; &quot;\n&quot;
+            &lt;&lt; &quot;============================================\n&quot;
+            &lt;&lt; &quot;  VTK Volume Rendering Basics Demo\n&quot;
+            &lt;&lt; &quot;  Chapter 16 - Volume Rendering Basics\n&quot;
+            &lt;&lt; &quot;============================================\n&quot;
+            &lt;&lt; &quot;\n&quot;
+            &lt;&lt; &quot;Mouse Controls:\n&quot;
+            &lt;&lt; &quot;  Left button   - Rotate the volume\n&quot;
+            &lt;&lt; &quot;  Middle button - Pan (translate) the volume\n&quot;
+            &lt;&lt; &quot;  Right button  - Zoom in/out\n&quot;
+            &lt;&lt; &quot;  Mouse wheel   - Zoom in/out\n&quot;
+            &lt;&lt; &quot;\n&quot;
+            &lt;&lt; &quot;Keyboard Controls:\n&quot;
+            &lt;&lt; &quot;  r - Reset camera to default view\n&quot;
+            &lt;&lt; &quot;  w - Toggle wireframe/volume mode\n&quot;
+            &lt;&lt; &quot;  s - Save current view to screenshot (if supported)\n&quot;
+            &lt;&lt; &quot;  q / e / Esc - Quit the application\n&quot;
+            &lt;&lt; &quot;\n&quot;
+            &lt;&lt; &quot;Transfer Function Design:\n&quot;
+            &lt;&lt; &quot;  The volume contains 5 spherical regions with different\n&quot;
+            &lt;&lt; &quot;  scalar values:\n&quot;
+            &lt;&lt; &quot;    - ~500: Central large sphere (bone-like)\n&quot;
+            &lt;&lt; &quot;    - ~200: Upper-right sphere (soft-tissue-like)\n&quot;
+            &lt;&lt; &quot;    - ~350: Left sphere (cartilage-like)\n&quot;
+            &lt;&lt; &quot;    - ~100: Lower sphere (fat-like)\n&quot;
+            &lt;&lt; &quot;    - ~600: Small dense nodule\n&quot;
+            &lt;&lt; &quot;============================================\n&quot;
+            &lt;&lt; std::endl;
+}
+
+// --------------------------------------------------------------------------
+// 函数: main
+// --------------------------------------------------------------------------
+int main(int argc, char* argv[])
+{
+  PrintUsage();
+
+  // =========================================================================
+  // 第一步：创建合成的体数据
+  // =========================================================================
+
+  int dimensions[3] = {100, 100, 100}; // 100^3 = 1,000,000 体素
+  double spacing[3] = {0.05, 0.05, 0.05}; // 体素间距
+
+  vtkSmartPointer&lt;vtkImageData&gt; volumeData =
+      CreateSyntheticVolume(dimensions, spacing);
+
+  // =========================================================================
+  // 第二步：设置不透明度传递函数
+  // =========================================================================
+  //
+  // 设计思路:
+  //   - 背景值(0附近): 完全透明
+  //   - 脂肪(~100): 低不透明度 (半透明，可以看到内部结构)
+  //   - 软组织(~200): 中等不透明度
+  //   - 软骨(~350): 中等偏高不透明度
+  //   - 骨骼(~500): 高不透明度
+  //   - 致密结节(~600): 非常高不透明度
+  //
+
+  vtkNew&lt;vtkPiecewiseFunction&gt; opacityTransferFunction;
+
+  // 获取数据的标量值范围
+  double scalarRange[2];
+  volumeData-&gt;GetPointData()-&gt;GetScalars()-&gt;GetRange(scalarRange);
+
+  double minVal = scalarRange[0];
+  double maxVal = scalarRange[1];
+
+  std::cout &lt;&lt; &quot;\nConfiguring transfer functions...&quot; &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;Scalar range for transfer functions: [&quot; 
+            &lt;&lt; minVal &lt;&lt; &quot;, &quot; &lt;&lt; maxVal &lt;&lt; &quot;]&quot; &lt;&lt; std::endl;
+
+  // 不透明度传递函数 —— 越高的标量值越不透明
+  opacityTransferFunction-&gt;AddPoint(minVal,        0.0);   // 背景透明
+  opacityTransferFunction-&gt;AddPoint(minVal + 1.0,  0.0);   // 确保0附近透明
+  opacityTransferFunction-&gt;AddPoint(50.0,          0.02);  // 低值几乎透明
+  opacityTransferFunction-&gt;AddPoint(100.0,         0.08);  // 脂肪：稍微可见
+  opacityTransferFunction-&gt;AddPoint(150.0,         0.15);  // 
+  opacityTransferFunction-&gt;AddPoint(200.0,         0.25);  // 软组织：半透明
+  opacityTransferFunction-&gt;AddPoint(300.0,         0.40);  //
+  opacityTransferFunction-&gt;AddPoint(400.0,         0.60);  // 软骨：更不透明
+  opacityTransferFunction-&gt;AddPoint(500.0,         0.85);  // 骨骼：高度不透明
+  opacityTransferFunction-&gt;AddPoint(600.0,         0.95);  // 致密结节：近乎不透明
+  opacityTransferFunction-&gt;AddPoint(maxVal,        1.0);   // 最高值完全不透明
+
+  // =========================================================================
+  // 第三步：设置颜色传递函数
+  // =========================================================================
+  //
+  // 颜色方案:
+  //   - 低值(背景): 深蓝色/黑色
+  //   - 脂肪(~100): 黄色
+  //   - 软组织(~200): 红色/肉色
+  //   - 软骨(~350): 橙色
+  //   - 骨骼(~500): 白色/骨色
+  //   - 结节(~600): 亮白色
+  //
+
+  vtkNew&lt;vtkColorTransferFunction&gt; colorTransferFunction;
+
+  colorTransferFunction-&gt;AddRGBPoint(minVal,        0.0, 0.0, 0.1);  // 深蓝黑
+  colorTransferFunction-&gt;AddRGBPoint(50.0,          0.0, 0.0, 0.3);  // 
+  colorTransferFunction-&gt;AddRGBPoint(100.0,         0.9, 0.8, 0.2);  // 黄色(脂肪)
+  colorTransferFunction-&gt;AddRGBPoint(150.0,         0.8, 0.5, 0.2);  // 
+  colorTransferFunction-&gt;AddRGBPoint(200.0,         0.9, 0.3, 0.2);  // 肉红色(软组织)
+  colorTransferFunction-&gt;AddRGBPoint(300.0,         0.9, 0.5, 0.3);  // 
+  colorTransferFunction-&gt;AddRGBPoint(400.0,         1.0, 0.7, 0.4);  // 橙色(软骨)
+  colorTransferFunction-&gt;AddRGBPoint(500.0,         1.0, 0.9, 0.8);  // 白色(骨骼)
+  colorTransferFunction-&gt;AddRGBPoint(600.0,         1.0, 1.0, 0.95); // 亮白(结节)
+  colorTransferFunction-&gt;AddRGBPoint(maxVal,        1.0, 1.0, 1.0);  // 纯白
+
+  // =========================================================================
+  // 第四步：设置梯度不透明度传递函数（可选）
+  // =========================================================================
+  //
+  // 梯度不透明度使材料边界更加清晰可见。
+  // 梯度幅值高的位置（即材料边界）被赋予更高的不透明度，
+  // 这会产生类似表面渲染的增强边界效果。
+  //
+
+  vtkNew&lt;vtkPiecewiseFunction&gt; gradientOpacityTF;
+  gradientOpacityTF-&gt;AddPoint(0.0,   0.0);    // 均匀区域：透明
+  gradientOpacityTF-&gt;AddPoint(50.0,  0.0);    //
+  gradientOpacityTF-&gt;AddPoint(100.0, 0.15);   // 弱边界
+  gradientOpacityTF-&gt;AddPoint(200.0, 0.40);   // 中等边界
+  gradientOpacityTF-&gt;AddPoint(400.0, 0.70);   // 强边界
+  gradientOpacityTF-&gt;AddPoint(800.0, 1.0);    // 非常强的边界
+
+  // 注意：在这个示例中梯度不透明度是可选的。
+  // 如果希望看到更柔和的&quot;云雾&quot;效果，可以注释掉下面设置梯度不透明度的行。
+
+  // =========================================================================
+  // 第五步：创建 vtkVolumeProperty
+  // =========================================================================
+
+  vtkNew&lt;vtkVolumeProperty&gt; volumeProperty;
+  volumeProperty-&gt;SetColor(colorTransferFunction);
+  volumeProperty-&gt;SetScalarOpacity(opacityTransferFunction);
+
+  // 可选: 启用梯度不透明度以增强边界显示
+  // volumeProperty-&gt;SetGradientOpacity(gradientOpacityTF);
+
+  // 启用光照以增强深度感
+  volumeProperty-&gt;ShadeOn();
+  volumeProperty-&gt;SetAmbient(0.15);    // 环境光系数
+  volumeProperty-&gt;SetDiffuse(0.85);    // 漫反射系数
+  volumeProperty-&gt;SetSpecular(0.3);    // 镜面反射系数
+  volumeProperty-&gt;SetSpecularPower(20.0); // 高光指数
+
+  // 设置插值类型为线性（三线性插值），产生更平滑的结果
+  volumeProperty-&gt;SetInterpolationTypeToLinear();
+
+  // =========================================================================
+  // 第六步：创建 vtkSmartVolumeMapper
+  // =========================================================================
+
+  vtkNew&lt;vtkSmartVolumeMapper&gt; volumeMapper;
+  volumeMapper-&gt;SetInputData(volumeData);
+
+  // 请求使用默认渲染模式（自动选择）
+  volumeMapper-&gt;SetRequestedRenderModeToDefault();
+
+  // 如果需要强制使用特定渲染模式，请取消以下注释:
+  // volumeMapper-&gt;SetRequestedRenderModeToGPU();     // 强制GPU
+  // volumeMapper-&gt;SetRequestedRenderModeToRayCast(); // 强制CPU
+
+  // =========================================================================
+  // 第七步：创建 vtkVolume
+  // =========================================================================
+
+  vtkNew&lt;vtkVolume&gt; volume;
+  volume-&gt;SetMapper(volumeMapper);
+  volume-&gt;SetProperty(volumeProperty);
+
+  // 可选：设置体积在场景中的位置
+  // volume-&gt;SetPosition(0.0, 0.0, 0.0);
+  // volume-&gt;SetOrigin(dimX*spacing[0]/2, dimY*spacing[1]/2, dimZ*spacing[2]/2);
+
+  // =========================================================================
+  // 第八步：创建渲染器、渲染窗口和交互器
+  // =========================================================================
+
+  vtkNew&lt;vtkRenderer&gt; renderer;
+  renderer-&gt;AddVolume(volume);
+  renderer-&gt;SetBackground(0.15, 0.15, 0.2); // 深蓝灰色背景
+
+  vtkNew&lt;vtkRenderWindow&gt; renderWindow;
+  renderWindow-&gt;AddRenderer(renderer);
+  renderWindow-&gt;SetSize(1024, 768);
+  renderWindow-&gt;SetWindowName(&quot;VTK Volume Rendering Basics - Chapter 16&quot;);
+
+  vtkNew&lt;vtkRenderWindowInteractor&gt; interactor;
+  interactor-&gt;SetRenderWindow(renderWindow);
+
+  // 设置交互样式（相机控制）
+  vtkNew&lt;vtkInteractorStyleTrackballCamera&gt; style;
+  interactor-&gt;SetInteractorStyle(style);
+
+  // =========================================================================
+  // 第九步：设置初始相机视角
+  // =========================================================================
+  //
+  // 将相机定位在合适的位置，使体积在初始视图中可见。
+  //
+
+  vtkCamera* camera = renderer-&gt;GetActiveCamera();
+  double centerX = dimensions[0] * spacing[0] / 2.0;
+  double centerY = dimensions[1] * spacing[1] / 2.0;
+  double centerZ = dimensions[2] * spacing[2] / 2.0;
+
+  // 设置焦点（旋转中心）为体积的中心
+  camera-&gt;SetFocalPoint(centerX, centerY, centerZ);
+
+  // 设置相机位置：从右上角前方向体积中心观察
+  double dist = dimensions[0] * spacing[0] * 2.0;
+  camera-&gt;SetPosition(centerX + dist, centerY + dist * 0.6, centerZ + dist);
+
+  // 设置上方向
+  camera-&gt;SetViewUp(0.0, 0.0, 1.0);
+
+  // 重置裁剪范围，使整个体积可见
+  renderer-&gt;ResetCameraClippingRange();
+
+  // =========================================================================
+  // 第十步：打印诊断信息
+  // =========================================================================
+
+  int actualRenderMode = volumeMapper-&gt;GetLastUsedRenderMode();
+  std::cout &lt;&lt; &quot;\nRendering Configuration:&quot; &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;  Requested render mode: Default (auto-select)&quot; &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;  Actual render mode: &quot;
+            &lt;&lt; (actualRenderMode == vtkSmartVolumeMapper::GPURenderMode
+                    ? &quot;GPU Ray Casting&quot;
+                    : &quot;CPU Ray Casting&quot;)
+            &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;  Shading: &quot;
+            &lt;&lt; (volumeProperty-&gt;GetShade() ? &quot;Enabled&quot; : &quot;Disabled&quot;)
+            &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;  Interpolation: Linear (trilinear)&quot; &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;  Window size: 1024 x 768&quot; &lt;&lt; std::endl;
+
+  double* bgColor = renderer-&gt;GetBackground();
+  std::cout &lt;&lt; &quot;  Background: (&quot; &lt;&lt; bgColor[0] &lt;&lt; &quot;, &quot; &lt;&lt; bgColor[1] &lt;&lt; &quot;, &quot;
+            &lt;&lt; bgColor[2] &lt;&lt; &quot;)&quot; &lt;&lt; std::endl;
+
+  std::cout &lt;&lt; &quot;\nStarting interactive renderer...&quot; &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;Close the render window or press 'q' to exit.\n&quot; &lt;&lt; std::endl;
+
+  // =========================================================================
+  // 第十一步：开始交互渲染
+  // =========================================================================
+
+  renderWindow-&gt;Render();
+  interactor-&gt;Start();
+
+  // =========================================================================
+  // 第十二步：清理并退出
+  // =========================================================================
+
+  std::cout &lt;&lt; &quot;\nVolume rendering demo finished.&quot; &lt;&lt; std::endl;
+  return EXIT_SUCCESS;
+}
+</code></pre>
+<h3 id="1652">16.5.2 代码说明</h3>
+<p>上述程序演示了构建一个完整体渲染应用的十二个步骤：</p>
+<p><strong>第一步：创建合成体数据。</strong> 由于我们没有真实的CT或MRI数据文件，程序使用<code>CreateSyntheticVolume()</code>函数生成一个包含多个球体的三维标量场。每个球体有不同的中心位置、半径和峰值标量值，使用高斯函数实现平滑的边缘过渡。这种设计模拟了实际数据中不同组织之间的渐变特性。</p>
+<p><strong>第二步：设置不透明度传递函数。</strong> 使用<code>vtkPiecewiseFunction</code>定义了标量值到不透明度的映射。标量值越高（即材料越致密），不透明度越高。这使得内部的致密结构能够"穿透"外层较透明的结构显示出来。</p>
+<p><strong>第三步：设置颜色传递函数。</strong> 使用<code>vtkColorTransferFunction</code>定义了标量值到颜色的映射。不同的标量值范围被赋予不同的颜色：低值为深蓝黑色，中等值为肉红色，高值为白色。这模拟了医学影像中常见的"热"颜色映射方案。</p>
+<p><strong>第四步：设置梯度不透明度。</strong> 这是可选的增强功能。梯度不透明度传递函数根据数据中梯度（变化率）的大小来调整不透明度——在材料边界处梯度大，因此边界会比均匀区域显得更不透明，产生更清晰的表面效果。</p>
+<p><strong>第五步：创建vtkVolumeProperty。</strong> 将所有传递函数和渲染属性（光照、插值方式）打包到一个<code>vtkVolumeProperty</code>对象中。</p>
+<p><strong>第六步：创建vtkSmartVolumeMapper。</strong> 使用智能映射器自动选择GPU或CPU渲染后端。</p>
+<p><strong>第七步：创建vtkVolume。</strong> 将映射器和属性关联到体积对象。</p>
+<p><strong>第八步至第十步：</strong> 创建渲染器、窗口和交互器，设置初始相机位置。</p>
+<p><strong>第十一步：</strong> 调用<code>renderWindow-&gt;Render()</code>和<code>interactor-&gt;Start()</code>启动交互式渲染循环。</p>
+<p><strong>第十二步：</strong> 交互循环结束后正常退出。</p>
+<h3 id="1653-cmakeliststxt">16.5.3 CMakeLists.txt</h3>
+<pre><code class="language-cmake">cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
+
+# --------------------------------------------------------------------------
+# 项目设置
+# --------------------------------------------------------------------------
+project(VolumeRenderingBasics
+    VERSION 1.0
+    DESCRIPTION &quot;VTK Volume Rendering Basics - Chapter 16 Example&quot;
+    LANGUAGES CXX
+)
+
+# --------------------------------------------------------------------------
+# C++ 标准设置
+# --------------------------------------------------------------------------
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+# --------------------------------------------------------------------------
+# 查找 VTK 9.x
+# --------------------------------------------------------------------------
+# 选项 1: 如果 VTK 通过 CMake 配置安装，以下命令可以自动查找
+find_package(VTK
+    ${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}
+    REQUIRED
+    COMPONENTS
+        CommonCore
+        CommonDataModel
+        CommonExecutionModel
+        RenderingCore
+        RenderingVolume
+        RenderingVolumeOpenGL2   
+        RenderingOpenGL2        
+        InteractionStyle
+)
+
+# 选项 2: 如果使用 vcpkg 安装 VTK，请取消以下注释并注释上面的 find_package:
+# find_package(VTK REQUIRED)
+
+# --------------------------------------------------------------------------
+# 检查 VTK 版本
+# --------------------------------------------------------------------------
+if(VTK_VERSION VERSION_LESS &quot;9.0&quot;)
+    message(FATAL_ERROR &quot;This example requires VTK 9.0 or newer. &quot;
+                        &quot;Found VTK ${VTK_VERSION}&quot;)
+endif()
+
+message(STATUS &quot;VTK version: ${VTK_VERSION}&quot;)
+message(STATUS &quot;VTK include directories: ${VTK_INCLUDE_DIRS}&quot;)
+
+# --------------------------------------------------------------------------
+# 可执行文件
+# --------------------------------------------------------------------------
+add_executable(VolumeRenderingBasics
+    VolumeRenderingBasics.cxx
+)
+
+# --------------------------------------------------------------------------
+# 链接 VTK 库
+# --------------------------------------------------------------------------
+target_link_libraries(VolumeRenderingBasics
+    PRIVATE ${VTK_LIBRARIES}
+)
+
+# --------------------------------------------------------------------------
+# 包含目录
+# --------------------------------------------------------------------------
+target_include_directories(VolumeRenderingBasics
+    PRIVATE ${VTK_INCLUDE_DIRS}
+)
+
+# --------------------------------------------------------------------------
+# 编译器警告
+# --------------------------------------------------------------------------
+if(MSVC)
+    target_compile_options(VolumeRenderingBasics PRIVATE /W4)
+else()
+    target_compile_options(VolumeRenderingBasics PRIVATE -Wall -Wextra)
+endif()
+
+# --------------------------------------------------------------------------
+# 安装规则 (可选)
+# --------------------------------------------------------------------------
+install(TARGETS VolumeRenderingBasics
+    RUNTIME DESTINATION bin
+)
+</code></pre>
+<h3 id="1654">16.5.4 编译和运行</h3>
+<p>在Windows、Linux或macOS上编译和运行此示例的步骤：</p>
+<p><strong>Windows (Visual Studio)</strong>:</p>
+<pre><code class="language-powershell">mkdir build
+cd build
+cmake .. -G &quot;Visual Studio 17 2022&quot;
+cmake --build . --config Release
+.\Release\VolumeRenderingBasics.exe
+</code></pre>
+<p><strong>Linux / macOS</strong>:</p>
+<pre><code class="language-bash">mkdir build
+cd build
+cmake ..
+cmake --build .
+./VolumeRenderingBasics
+</code></pre>
+<h3 id="1655">16.5.5 预期的渲染结果</h3>
+<p>运行程序后，应该看到一个交互式窗口显示：</p>
+<ul>
+<li>一个暗蓝色背景下，由五个半透明球体组成的体积渲染图像。</li>
+<li>中央最大的球体呈白色/骨色（标量值约500），由于不透明度设置较高，它是可见度最高的结构。</li>
+<li>右下方的球体呈黄色（标量值约100，代表脂肪），不透明度较低，呈半透明状。</li>
+<li>上方的球体呈肉红色（标量值约200，代表软组织），中等不透明度。</li>
+<li>左侧的球体呈橙色（标量值约350，代表软骨）。</li>
+<li>右上方有一个小的亮白色结节（标量值约600），几乎完全不透明。</li>
+</ul>
+<p>使用鼠标可以旋转、平移和缩放体积，从不同角度观察这些结构的空间关系。</p>
+<hr />
+<h2 id="166">16.6 本章小结</h2>
+<p>本章介绍了VTK中体渲染的基本概念和实现方法。以下是本章的关键要点：</p>
+<p><strong>概念层面：</strong></p>
+<ol>
+<li>
+<p><strong>体渲染 vs 表面渲染</strong>：表面渲染处理显式几何表面，而体渲染直接处理三维标量场。体渲染通过沿视线方向采样并累积颜色和不透明度来生成图像，揭示了数据内部的结构特征。</p>
+</li>
+<li>
+<p><strong>体积渲染积分方程</strong>：这是体渲染的数学基础。它描述了每个采样点对最终图像的贡献如何不仅取决于该点的颜色和不透明度，还取决于光线在到达该点之前被遮挡的程度。</p>
+</li>
+<li>
+<p><strong>alpha合成</strong>：VTK使用离散化的alpha合成来近似连续的光线积分。从前向后的合成方式允许提前终止光线，这是体渲染性能优化的关键技术。</p>
+</li>
+</ol>
+<p><strong>管线层面：</strong></p>
+<ol>
+<li>
+<p><strong>体渲染管线</strong>：<code>vtkImageData</code> (数据) → <code>vtkSmartVolumeMapper</code> (映射器) → <code>vtkVolume</code> (道具) → <code>vtkVolumeProperty</code> (属性)。这与表面渲染管线 <code>vtkPolyData</code> → <code>vtkPolyDataMapper</code> → <code>vtkActor</code> → <code>vtkProperty</code> 在结构上完全对称。</p>
+</li>
+<li>
+<p><strong>vtkSmartVolumeMapper</strong>：推荐在VTK 9.x中使用。它自动检测硬件能力并选择最优渲染后端（GPU或CPU）。也可以通过<code>SetRequestedRenderMode()</code>手动指定。</p>
+</li>
+</ol>
+<p><strong>传递函数层面：</strong></p>
+<ol>
+<li>
+<p><strong>不透明度传递函数（vtkPiecewiseFunction）</strong>：将标量值映射到[0,1]范围的不透明度。设计不透明度传递函数是体渲染中最具创造性和最关键的步骤——它决定了哪些结构可见以及如何可见。</p>
+</li>
+<li>
+<p><strong>颜色传递函数（vtkColorTransferFunction）</strong>：将标量值映射到RGB颜色。颜色选择影响信息传达的清晰度和美学质量。</p>
+</li>
+<li>
+<p><strong>梯度不透明度传递函数</strong>：基于梯度幅值增强材料边界的不透明度，使体渲染产生类似表面渲染的清晰边界效果。</p>
+</li>
+<li>
+<p><strong>传递函数设计</strong>：没有"通用"的传递函数——它高度依赖于数据类型、应用目标和用户偏好。CT骨骼渲染和CT软组织渲染需要完全不同的传递函数设计。</p>
+</li>
+</ol>
+<p><strong>实践层面：</strong></p>
+<ol>
+<li>
+<p><strong>合成体数据</strong>：当没有真实数据时，可以使用数学函数（如多个高斯球体叠加）创建合成的三维标量场，用于学习和测试体渲染管线。</p>
+</li>
+<li>
+<p><strong>交互式体渲染</strong>：与表面渲染一样，VTK的体渲染支持完整的交互操作（旋转、平移、缩放），以及光照和着色设置。</p>
+</li>
+</ol>
+<p><strong>扩展方向：</strong></p>
+<p>掌握了本章的基础知识后，读者可以进一步学习：</p>
+<ul>
+<li><strong>体数据裁剪</strong>：使用<code>vtkPlane</code>裁剪体积以查看内部结构。</li>
+<li><strong>多体渲染</strong>：在同一个场景中渲染多个<code>vtkVolume</code>。</li>
+<li><strong>时间序列体渲染</strong>：渲染随时间变化的三维标量场（如4D CT）。</li>
+<li><strong>GPU着色器自定义</strong>：为<code>vtkGPUVolumeRayCastMapper</code>编写自定义GLSL着色器。</li>
+<li><strong>大规模体数据</strong>：使用多分辨率技术或流式处理渲染超大体积数据。</li>
+</ul>
+<p>体渲染是科学可视化工具箱中功能最强大的技术之一。虽然掌握传递函数设计需要大量实践，但一旦理解其原理，便能以前所未有的方式探索和理解三维数据的内部结构。</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

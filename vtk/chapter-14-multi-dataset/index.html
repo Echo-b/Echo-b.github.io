@@ -1,0 +1,3122 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../chapter-13-advanced-rendering/">
+      
+      
+        <link rel="next" href="../chapter-15-volume2-capstone/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>第十四章 多个数据集处理 - Echo-b's Tech Notes</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#multi-dataset-processing" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Echo-b&#39;s Tech Notes" class="md-header__button md-logo" aria-label="Echo-b's Tech Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Echo-b's Tech Notes
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              第十四章 多个数据集处理
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Echo-b&#39;s Tech Notes" class="md-nav__button md-logo" aria-label="Echo-b's Tech Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Echo-b's Tech Notes
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VTK 教程
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    VTK 教程
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    入门篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    入门篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-01-vtk-overview-and-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第一章 VTK概述与环境搭建
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-02-visualization-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二章 可视化管线
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-03-data-model-basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第三章 数据模型基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-04-geometry-and-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第四章 基本几何体与数据源
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-05-rendering-and-interactor/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第五章 渲染与交互机
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-06-volume1-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第六章 入门篇综合实战——3D几何画廊
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    实战篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    实战篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-07-polydata/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第七章 PolyData详解
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-08-unstructured-grid/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第八章 非结构化网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-09-structured-data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第九章 结构化数据
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-10-data-io/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十章 数据I/O
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-11-common-filters/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十一章 常用过滤器
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-12-color-mapping/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十二章 颜色映射与标量可视化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-13-advanced-rendering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十三章 高级渲染技术
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十四章 多个数据集处理
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十四章 多个数据集处理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        本章导读
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#141" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.1 合并数据集
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="14.1 合并数据集">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1411-vtkappendpolydata-polydata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.1.1 vtkAppendPolyData -- 合并多个PolyData
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1412-vtkappendfilter-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.1.2 vtkAppendFilter -- 合并相同类型的数据集
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1413-vtkappenddatasets-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.1.3 vtkAppendDatasets -- 合并不同类型的数据集
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1414" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.1.4 三种合并方式的对比
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1415" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.1.5 使用场景与代码示例：合并三个球体
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#142-composite-datasets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.2 复合数据集（Composite Datasets）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="14.2 复合数据集（Composite Datasets）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1421-vtkmultiblockdataset-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.2.1 vtkMultiBlockDataSet -- 层次化数据组织
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1422-vtkpartitioneddatasetcollection-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.2.2 vtkPartitionedDataSetCollection -- 分区+集合模型
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1423-vs-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.2.3 平铺合并 vs 层次化复合 -- 选择指南
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#143" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.3 复合数据渲染
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="14.3 复合数据渲染">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1431-vtkcompositepolydatamapper-mapper" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.3.1 vtkCompositePolyDataMapper -- 复合数据的专用Mapper
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1432" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.3.2 按块可见性控制
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1433" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.3.3 按块颜色和不透明度覆盖
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1434-vtkcompositedatageometryfilter-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.3.4 vtkCompositeDataGeometryFilter -- 展平复合数据
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#144" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.4 代码示例：多部件装配
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="14.4 代码示例：多部件装配">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1441" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.4.1 程序概述
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1442-c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.4.2 完整C++代码
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1443-cmakeliststxt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.4.3 CMakeLists.txt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1444" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.4.4 编译与运行
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1445" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.4.5 预期结果分析
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#145" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.5 本章小结
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="14.5 本章小结">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        核心概念
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        关键类与API
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        选择指南
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        与实践的联系
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        下一步
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-15-volume2-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十五章 实战篇综合实战——CFD后处理可视化工具
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    进阶篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    进阶篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-16-volume-rendering-basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十六章 体渲染基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-17-volume-rendering-advanced/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十七章 体渲染高级技术
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-18-charts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十八章 2D图表系统
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-19-annotation-and-widgets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十九章 三维标注与交互组件
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-20-custom-interaction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十章 自定义交互与Widget
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-21-qt-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十一章 Qt集成
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-22-smp-parallel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十二章 SMP并行入门
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-23-volume3-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十三章 进阶篇综合实战
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        本章导读
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#141" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.1 合并数据集
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="14.1 合并数据集">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1411-vtkappendpolydata-polydata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.1.1 vtkAppendPolyData -- 合并多个PolyData
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1412-vtkappendfilter-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.1.2 vtkAppendFilter -- 合并相同类型的数据集
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1413-vtkappenddatasets-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.1.3 vtkAppendDatasets -- 合并不同类型的数据集
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1414" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.1.4 三种合并方式的对比
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1415" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.1.5 使用场景与代码示例：合并三个球体
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#142-composite-datasets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.2 复合数据集（Composite Datasets）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="14.2 复合数据集（Composite Datasets）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1421-vtkmultiblockdataset-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.2.1 vtkMultiBlockDataSet -- 层次化数据组织
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1422-vtkpartitioneddatasetcollection-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.2.2 vtkPartitionedDataSetCollection -- 分区+集合模型
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1423-vs-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.2.3 平铺合并 vs 层次化复合 -- 选择指南
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#143" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.3 复合数据渲染
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="14.3 复合数据渲染">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1431-vtkcompositepolydatamapper-mapper" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.3.1 vtkCompositePolyDataMapper -- 复合数据的专用Mapper
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1432" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.3.2 按块可见性控制
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1433" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.3.3 按块颜色和不透明度覆盖
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1434-vtkcompositedatageometryfilter-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.3.4 vtkCompositeDataGeometryFilter -- 展平复合数据
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#144" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.4 代码示例：多部件装配
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="14.4 代码示例：多部件装配">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1441" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.4.1 程序概述
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1442-c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.4.2 完整C++代码
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1443-cmakeliststxt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.4.3 CMakeLists.txt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1444" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.4.4 编译与运行
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1445" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.4.5 预期结果分析
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#145" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.5 本章小结
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="14.5 本章小结">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        核心概念
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        关键类与API
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        选择指南
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        与实践的联系
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        下一步
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="multi-dataset-processing">第十四章 多个数据集处理 (Multi-Dataset Processing)</h1>
+<h2 id="_1">本章导读</h2>
+<p>在前面的章节中，我们一直是"一个Actor显示一个数据集"的模式——你创建一个球体、一个方块、或一个曲面，然后将其交给Mapper和Actor渲染到窗口中。这种模式对于简单的演示场景足够了，但现实世界的科学可视化往往涉及远比这更复杂的数据组织需求。</p>
+<p>考虑以下几个典型场景：</p>
+<ul>
+<li>你有一个CAD装配体，它由数十个独立的零件组成——每个零件是一个单独的几何文件。你希望将它们全部导入并显示在同一场景中，同时保留每个零件作为独立可操作单元的能力。</li>
+<li>你的仿真结果包含多种数据类型——例如一个结构分析同时产生表面网格（PolyData）、体网格（UnstructuredGrid）、以及采样点云（也是PolyData）。你需要将它们组织在一个层次化的数据结构中。</li>
+<li>你正在构建一个多部件可视化，希望能够独立地切换每个部件的可见性、改变每个部件的颜色和透明度，而不需要为每个部件创建和维护数十个独立的Actor。</li>
+</ul>
+<p>VTK为这些需求提供了两套互补的工具：</p>
+<ol>
+<li>
+<p><strong>合并数据集</strong>（Merging）：使用<code>vtkAppendPolyData</code>、<code>vtkAppendFilter</code>或<code>vtkAppendDatasets</code>将多个相同或不同类型的数据集合成为一个单一的数据集。这适合"焊接"多个几何部件或合并多个文件到同一渲染管线。</p>
+</li>
+<li>
+<p><strong>复合数据集</strong>（Composite Datasets）：使用<code>vtkMultiBlockDataSet</code>和<code>vtkPartitionedDataSetCollection</code>将多个数据集组织成层次化的、带命名的块结构。每个块保持独立——你可以按块控制颜色、可见性、不透明度。这适合多部件装配、多物理场结果显示等场景。</p>
+</li>
+</ol>
+<p>本章将系统性地讲解这两种数据组织方式，从最简单的合并操作开始，逐步深入到复合数据结构、复合渲染管线，最后以一个完整的多部件装配程序结束。</p>
+<hr />
+<h2 id="141">14.1 合并数据集</h2>
+<p>合并（Appending）是将多个数据集组合为一个单一数据集的机制。在VTK中，有三个主要的合并过滤器，它们分别适用于不同的场景。</p>
+<h3 id="1411-vtkappendpolydata-polydata">14.1.1 vtkAppendPolyData -- 合并多个PolyData</h3>
+<p><code>vtkAppendPolyData</code>是最常用的合并过滤器之一，专门用于将多个<code>vtkPolyData</code>对象合并为一个。这对于将从不同文件加载的几何体部件合并为单一模型特别有用。</p>
+<p><strong>工作原理</strong>：<code>vtkAppendPolyData</code>的工作方式是"追加"——它将所有输入PolyData中的点和单元依次复制到输出中。各个输入之间不进行连接或焊接操作（除非你显式地指定公差）。</p>
+<p>关键API：</p>
+<pre><code class="language-cpp">#include &lt;vtkAppendPolyData.h&gt;
+
+vtkNew&lt;vtkAppendPolyData&gt; appendFilter;
+
+// 方法1：使用AddInputData逐个添加
+appendFilter-&gt;AddInputData(polyData1);
+appendFilter-&gt;AddInputData(polyData2);
+appendFilter-&gt;AddInputData(polyData3);
+
+// 方法2（旧式接口，在VTK 9.x中仍可用但不推荐）：
+// appendFilter-&gt;AddInputConnection(source1-&gt;GetOutputPort());
+
+// 执行合并
+appendFilter-&gt;Update();
+
+// 获取合并结果
+vtkPolyData* merged = appendFilter-&gt;GetOutput();
+
+// 可选：控制点合并（焊接相邻点）
+// 当两个输入的点在指定容差内时，它们可能被合并为一个点
+appendFilter-&gt;SetTolerance(1e-6);  // 默认值
+// appendFilter-&gt;SetToleranceIsAbsolute(true);  // 是否使用绝对容差
+
+// 获取合并后的统计信息
+std::cout &lt;&lt; &quot;Total points: &quot; &lt;&lt; merged-&gt;GetNumberOfPoints() &lt;&lt; std::endl;
+std::cout &lt;&lt; &quot;Total cells:  &quot; &lt;&lt; merged-&gt;GetNumberOfCells() &lt;&lt; std::endl;
+</code></pre>
+<p><strong>关键点</strong>：
+- 点数据（Point Data）和单元数据（Cell Data）也会被合并。如果某个输入缺少某个标量数组，对应的点的该数据属性会被设为NaN或零值。
+- 如果你希望对合并后的整体进行统一着色（如按高度着色），可以在合并后使用<code>vtkElevationFilter</code>等过滤器来计算标量值。
+- <code>SetTolerance()</code>控制是否合并邻近的重复点——这在需要真正"焊接"部件边缘时很有用。</p>
+<h3 id="1412-vtkappendfilter-">14.1.2 vtkAppendFilter -- 合并相同类型的数据集</h3>
+<p><code>vtkAppendFilter</code>是<code>vtkAppendPolyData</code>的泛化版本。它可以合并任何类型的<code>vtkDataSet</code>，但<strong>所有输入必须是同一种具体类型</strong>——要么全是<code>vtkPolyData</code>，要么全是<code>vtkUnstructuredGrid</code>，不能混合。</p>
+<p>内部工作原理：<code>vtkAppendFilter</code>在收到第一个输入时，自动检测其类型；后续所有输入都会被检查是否为同一类型。如果类型不匹配，过滤器会报告错误。</p>
+<pre><code class="language-cpp">#include &lt;vtkAppendFilter.h&gt;
+
+vtkNew&lt;vtkAppendFilter&gt; appendFilter;
+
+// 可以合并PolyData
+appendFilter-&gt;AddInputData(polyDataA);
+appendFilter-&gt;AddInputData(polyDataB);
+
+// 也可以合并UnstructuredGrid（但不能和PolyData混合）
+appendFilter-&gt;AddInputData(unstructuredGridA);
+appendFilter-&gt;AddInputData(unstructuredGridB);
+
+appendFilter-&gt;Update();
+
+// 注意：输出与输入类型相同
+vtkDataSet* merged = appendFilter-&gt;GetOutput();
+// 如果输入全是PolyData，merged可以被安全地向下转型为vtkPolyData
+</code></pre>
+<p><strong>适用场景</strong>：
+- 合并同一个CFD仿真输出的多个分区块（partitions），每个块都是UnstructuredGrid。
+- 合并从文件读取的多个结构化网格块。
+- 将分散的PolyData片断组装为一个整体网格。</p>
+<p><strong>限制</strong>：
+- 不能合并不同类型的数据集。
+- 合并后的数据集失去了各原始数据块的独立性（无法再单独操控某个原始块的颜色或可见性）。</p>
+<h3 id="1413-vtkappenddatasets-">14.1.3 vtkAppendDatasets -- 合并不同类型的数据集</h3>
+<p><code>vtkAppendDatasets</code>（在VTK 9.x中引入）解决了<code>vtkAppendFilter</code>的类型限制问题。它可以接受不同类型的<code>vtkDataSet</code>输入——例如将PolyData和UnstructuredGrid合并到同一个输出中。</p>
+<pre><code class="language-cpp">#include &lt;vtkAppendDatasets.h&gt;
+
+vtkNew&lt;vtkAppendDatasets&gt; append;
+
+// 可以混合不同的数据类型
+append-&gt;AddInputData(polyDataBlock);        // vtkPolyData
+append-&gt;AddInputData(unstructuredBlock);    // vtkUnstructuredGrid
+
+append-&gt;Update();
+
+// 输出类型为vtkPartitionedDataSetCollection
+// 这是一种集合类型，内部的每个原始输入成为一个独立的&quot;分区&quot;
+auto* output = append-&gt;GetOutput();
+std::cout &lt;&lt; &quot;Number of partitions: &quot; &lt;&lt; output-&gt;GetNumberOfPartitionedDataSets()
+          &lt;&lt; std::endl;
+</code></pre>
+<p>注意：<code>vtkAppendDatasets</code>的输出类型是<code>vtkPartitionedDataSetCollection</code>，这是一个复合数据结构（将在14.2节详细讨论）。这与<code>vtkAppendFilter</code>直接将点数据合并到一个统一类型的数据集中不同。因此，当你的目标不是"焊接为一个整体网格"而是"保持各部件独立但组织在一起"时，<code>vtkAppendDatasets</code>是更合适的选择。</p>
+<h3 id="1414">14.1.4 三种合并方式的对比</h3>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>vtkAppendPolyData</th>
+<th>vtkAppendFilter</th>
+<th>vtkAppendDatasets</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>输入类型</strong></td>
+<td>仅vtkPolyData</td>
+<td>同一种vtkDataSet类型</td>
+<td>任意vtkDataSet类型</td>
+</tr>
+<tr>
+<td><strong>输出类型</strong></td>
+<td>vtkPolyData</td>
+<td>与输入相同</td>
+<td>vtkPartitionedDataSetCollection</td>
+</tr>
+<tr>
+<td><strong>点合并/焊接</strong></td>
+<td>支持（SetTolerance）</td>
+<td>不支持</td>
+<td>分开存储（不合并点）</td>
+</tr>
+<tr>
+<td><strong>保持部件独立性</strong></td>
+<td>否（完全合并）</td>
+<td>否（完全合并）</td>
+<td>是（保持分区）</td>
+</tr>
+<tr>
+<td><strong>VTK版本</strong></td>
+<td>经典（所有版本）</td>
+<td>经典（所有版本）</td>
+<td>VTK 9.x</td>
+</tr>
+<tr>
+<td><strong>适用场景</strong></td>
+<td>合并几何部件、多文件加载</td>
+<td>合并同类型的网格分区</td>
+<td>组织多类型的仿真结果</td>
+</tr>
+</tbody>
+</table>
+<h3 id="1415">14.1.5 使用场景与代码示例：合并三个球体</h3>
+<p>以下示例展示如何使用<code>vtkAppendPolyData</code>将三个位置不同、颜色不同的球体合并为一个PolyData：</p>
+<pre><code class="language-cpp">// ============================================================================
+// 示例 14.1: 使用 vtkAppendPolyData 合并三个球体
+// ============================================================================
+#include &lt;vtkActor.h&gt;
+#include &lt;vtkAppendPolyData.h&gt;
+#include &lt;vtkCamera.h&gt;
+#include &lt;vtkNamedColors.h&gt;
+#include &lt;vtkPolyDataMapper.h&gt;
+#include &lt;vtkProperty.h&gt;
+#include &lt;vtkRenderWindow.h&gt;
+#include &lt;vtkRenderWindowInteractor.h&gt;
+#include &lt;vtkRenderer.h&gt;
+#include &lt;vtkSmartPointer.h&gt;
+#include &lt;vtkSphereSource.h&gt;
+#include &lt;vtkPolyData.h&gt;
+#include &lt;vtkFloatArray.h&gt;
+#include &lt;vtkPointData.h&gt;
+#include &lt;vtkLookupTable.h&gt;
+
+int main()
+{
+    // 1. 创建三个球体源
+    vtkNew&lt;vtkSphereSource&gt; sphere1;
+    sphere1-&gt;SetCenter(0.0, 0.0, 0.0);
+    sphere1-&gt;SetRadius(1.0);
+    sphere1-&gt;SetThetaResolution(32);
+    sphere1-&gt;SetPhiResolution(32);
+    sphere1-&gt;Update();
+
+    vtkNew&lt;vtkSphereSource&gt; sphere2;
+    sphere2-&gt;SetCenter(2.5, 0.0, 0.0);
+    sphere2-&gt;SetRadius(0.8);
+    sphere2-&gt;SetThetaResolution(32);
+    sphere2-&gt;SetPhiResolution(32);
+    sphere2-&gt;Update();
+
+    vtkNew&lt;vtkSphereSource&gt; sphere3;
+    sphere3-&gt;SetCenter(1.25, 2.0, 0.0);
+    sphere3-&gt;SetRadius(0.6);
+    sphere3-&gt;SetThetaResolution(32);
+    sphere3-&gt;SetPhiResolution(32);
+    sphere3-&gt;Update();
+
+    // 2. 为每个球体添加标量数据（用于区分来源）
+    vtkNew&lt;vtkFloatArray&gt; scalars1;
+    scalars1-&gt;SetName(&quot;SourceID&quot;);
+    for (vtkIdType i = 0; i &lt; sphere1-&gt;GetOutput()-&gt;GetNumberOfPoints(); ++i)
+        scalars1-&gt;InsertNextValue(1.0);
+    sphere1-&gt;GetOutput()-&gt;GetPointData()-&gt;AddArray(scalars1);
+
+    vtkNew&lt;vtkFloatArray&gt; scalars2;
+    scalars2-&gt;SetName(&quot;SourceID&quot;);
+    for (vtkIdType i = 0; i &lt; sphere2-&gt;GetOutput()-&gt;GetNumberOfPoints(); ++i)
+        scalars2-&gt;InsertNextValue(2.0);
+    sphere2-&gt;GetOutput()-&gt;GetPointData()-&gt;AddArray(scalars2);
+
+    vtkNew&lt;vtkFloatArray&gt; scalars3;
+    scalars3-&gt;SetName(&quot;SourceID&quot;);
+    for (vtkIdType i = 0; i &lt; sphere3-&gt;GetOutput()-&gt;GetNumberOfPoints(); ++i)
+        scalars3-&gt;InsertNextValue(3.0);
+    sphere3-&gt;GetOutput()-&gt;GetPointData()-&gt;AddArray(scalars3);
+
+    // 3. 使用 vtkAppendPolyData 合并三个球体
+    vtkNew&lt;vtkAppendPolyData&gt; appendFilter;
+    appendFilter-&gt;AddInputData(sphere1-&gt;GetOutput());
+    appendFilter-&gt;AddInputData(sphere2-&gt;GetOutput());
+    appendFilter-&gt;AddInputData(sphere3-&gt;GetOutput());
+    appendFilter-&gt;Update();
+
+    // 4. 查找表：为每个来源分配不同颜色
+    vtkNew&lt;vtkLookupTable&gt; lut;
+    lut-&gt;SetNumberOfTableValues(3);
+    lut-&gt;SetTableRange(1.0, 3.0);
+    lut-&gt;SetTableValue(0, 1.0, 0.2, 0.2);  // 红色 -- 球体1
+    lut-&gt;SetTableValue(1, 0.2, 0.8, 0.2);  // 绿色 -- 球体2
+    lut-&gt;SetTableValue(2, 0.2, 0.2, 1.0);  // 蓝色 -- 球体3
+    lut-&gt;Build();
+
+    // 5. 渲染管线
+    vtkNew&lt;vtkPolyDataMapper&gt; mapper;
+    mapper-&gt;SetInputConnection(appendFilter-&gt;GetOutputPort());
+    mapper-&gt;SetScalarRange(1.0, 3.0);
+    mapper-&gt;SetLookupTable(lut);
+    mapper-&gt;SelectColorArray(&quot;SourceID&quot;);
+
+    vtkNew&lt;vtkActor&gt; actor;
+    actor-&gt;SetMapper(mapper);
+
+    vtkNew&lt;vtkRenderer&gt; renderer;
+    renderer-&gt;AddActor(actor);
+    renderer-&gt;SetBackground(0.1, 0.1, 0.12);
+
+    vtkNew&lt;vtkRenderWindow&gt; renderWindow;
+    renderWindow-&gt;SetSize(800, 600);
+    renderWindow-&gt;AddRenderer(renderer);
+    renderWindow-&gt;SetWindowName(&quot;vtkAppendPolyData -- Merge 3 Spheres&quot;);
+
+    vtkNew&lt;vtkRenderWindowInteractor&gt; interactor;
+    interactor-&gt;SetRenderWindow(renderWindow);
+
+    renderer-&gt;ResetCamera();
+    renderWindow-&gt;Render();
+    interactor-&gt;Start();
+
+    return 0;
+}
+</code></pre>
+<p>运行此程序后，你将看到三个不同大小和颜色的球体已经被合并为一个单一的<code>vtkPolyData</code>——它们在一个Actor中被渲染，<code>SourceID</code>标量数组记录了每个面片来自哪个原始球体。</p>
+<hr />
+<h2 id="142-composite-datasets">14.2 复合数据集（Composite Datasets）</h2>
+<p>上一节介绍的"合并"方法将所有输入数据融合为一个单一网格。当你需要<strong>保持各数据块的独立性</strong>、<strong>层次化地组织数据</strong>、或<strong>按块控制渲染属性</strong>时，你需要的是复合数据集（Composite Dataset）。</p>
+<h3 id="1421-vtkmultiblockdataset-">14.2.1 vtkMultiBlockDataSet -- 层次化数据组织</h3>
+<p><code>vtkMultiBlockDataSet</code>是VTK中最重要和最常用的复合数据集类型。它将多个数据集组织成块（Blocks），每个块可以是任何<code>vtkDataObject</code>类型（包括<code>vtkPolyData</code>、<code>vtkUnstructuredGrid</code>、<code>vtkStructuredGrid</code>、<code>vtkImageData</code>，甚至嵌套的另一个<code>vtkMultiBlockDataSet</code>）。</p>
+<p><strong>层次化结构</strong>：<code>vtkMultiBlockDataSet</code>支持嵌套——一个块的内部也可以是一个<code>vtkMultiBlockDataSet</code>，从而形成树状的数据层次。这与你电脑上的文件夹结构非常相似：</p>
+<pre><code>vtkMultiBlockDataSet (根)
+  ├── Block 0: vtkPolyData (引擎盖)
+  ├── Block 1: vtkMultiBlockDataSet (底盘组件)
+  │   ├── Block 0: vtkPolyData (左前轮)
+  │   ├── Block 1: vtkPolyData (右前轮)
+  │   ├── Block 2: vtkPolyData (左后轮)
+  │   └── Block 3: vtkPolyData (右后轮)
+  ├── Block 2: vtkPolyData (车身外壳)
+  └── Block 3: vtkUnstructuredGrid (发动机CFD网格)
+</code></pre>
+<p><strong>核心API</strong>：</p>
+<pre><code class="language-cpp">#include &lt;vtkMultiBlockDataSet.h&gt;
+
+vtkNew&lt;vtkMultiBlockDataSet&gt; mb;
+
+// 设置块的数量 -- 只在创建时需要用一次
+mb-&gt;SetNumberOfBlocks(4);
+
+// 设置第i个块的内容（块索引从0开始）
+mb-&gt;SetBlock(0, polyDataEngine);     // 块0: 引擎盖
+mb-&gt;SetBlock(1, chassisMB);          // 块1: 嵌套的MultiBlockDataSet（底盘）
+mb-&gt;SetBlock(2, polyDataBody);       // 块2: 车身外壳
+mb-&gt;SetBlock(3, unstructuredMesh);   // 块3: CFD体网格（注意：类型可以不同）
+
+// 获取块的数量
+unsigned int numBlocks = mb-&gt;GetNumberOfBlocks();
+
+// 获取第i个块
+vtkDataObject* block = mb-&gt;GetBlock(i);
+
+// 判断第i个块是否为指定类型
+if (mb-&gt;GetBlock(i)-&gt;IsA(&quot;vtkMultiBlockDataSet&quot;))
+{
+    // 这是一个嵌套的复合数据集
+    vtkMultiBlockDataSet* nested = vtkMultiBlockDataSet::SafeDownCast(block);
+    // ... 递归处理
+}
+
+// 复制整个块结构（包括所有数据和层次嵌套）
+vtkNew&lt;vtkMultiBlockDataSet&gt; copy;
+copy-&gt;DeepCopy(mb);
+
+// 将序号与块索引不同 -- 不必要，但可以设置
+mb-&gt;SetBlock(2, someData);
+// 注意：SetBlock(2, ...) 等价于 SetBlock(2, newData)，
+// 会在内部储存数据的浅拷贝（引用计数增加）。
+</code></pre>
+<p><strong>块名称（Meta-Data）</strong>：为了方便组织和查找，你可以为每个块设置名称。名称存储在块的field data中：</p>
+<pre><code class="language-cpp">// 方法1：通过vtkMultiBlockDataSet的便利方法
+mb-&gt;GetMetaData(0)-&gt;Set(vtkCompositeDataSet::NAME(), &quot;Engine Hood&quot;);
+mb-&gt;GetMetaData(1)-&gt;Set(vtkCompositeDataSet::NAME(), &quot;Chassis Assembly&quot;);
+mb-&gt;GetMetaData(2)-&gt;Set(vtkCompositeDataSet::NAME(), &quot;Body Shell&quot;);
+mb-&gt;GetMetaData(3)-&gt;Set(vtkCompositeDataSet::NAME(), &quot;CFD Volume Mesh&quot;);
+
+// 方法2：手动创建元数据对象
+vtkNew&lt;vtkInformation&gt; info;
+info-&gt;Set(vtkCompositeDataSet::NAME(), &quot;Engine Hood&quot;);
+mb-&gt;SetMetaData(0, info);
+
+// 读取块名称
+const char* name = mb-&gt;GetMetaData(0)-&gt;Get(vtkCompositeDataSet::NAME());
+if (name)
+    std::cout &lt;&lt; &quot;Block 0 name: &quot; &lt;&lt; name &lt;&lt; std::endl;
+</code></pre>
+<p>有了块名称之后，你可以遍历所有块并找到特定的块：</p>
+<pre><code class="language-cpp">// 通过名称查找块
+for (unsigned int i = 0; i &lt; mb-&gt;GetNumberOfBlocks(); ++i)
+{
+    const char* blockName = mb-&gt;GetMetaData(i)-&gt;Get(vtkCompositeDataSet::NAME());
+    if (blockName &amp;&amp; std::string(blockName) == &quot;Body Shell&quot;)
+    {
+        vtkPolyData* body = vtkPolyData::SafeDownCast(mb-&gt;GetBlock(i));
+        // 处理车身数据...
+        break;
+    }
+}
+</code></pre>
+<p><strong>嵌套遍历</strong>：当MultiBlockDataSet包含嵌套结构时，通常使用递归遍历：</p>
+<pre><code class="language-cpp">void TraverseMultiBlock(vtkMultiBlockDataSet* mb, int depth = 0)
+{
+    for (unsigned int i = 0; i &lt; mb-&gt;GetNumberOfBlocks(); ++i)
+    {
+        // 打印缩进
+        for (int d = 0; d &lt; depth; ++d) std::cout &lt;&lt; &quot;  &quot;;
+
+        // 获取块名称
+        const char* name = mb-&gt;GetMetaData(i)
+            ? mb-&gt;GetMetaData(i)-&gt;Get(vtkCompositeDataSet::NAME()) : nullptr;
+
+        vtkDataObject* block = mb-&gt;GetBlock(i);
+        if (block-&gt;IsA(&quot;vtkMultiBlockDataSet&quot;))
+        {
+            std::cout &lt;&lt; &quot;[&quot; &lt;&lt; i &lt;&lt; &quot;] &quot;
+                      &lt;&lt; (name ? name : &quot;(unnamed)&quot;)
+                      &lt;&lt; &quot; -&gt; MultiBlockDataSet&quot; &lt;&lt; std::endl;
+            TraverseMultiBlock(
+                vtkMultiBlockDataSet::SafeDownCast(block), depth + 1);
+        }
+        else
+        {
+            std::cout &lt;&lt; &quot;[&quot; &lt;&lt; i &lt;&lt; &quot;] &quot;
+                      &lt;&lt; (name ? name : &quot;(unnamed)&quot;)
+                      &lt;&lt; &quot; -&gt; &quot; &lt;&lt; block-&gt;GetClassName() &lt;&lt; std::endl;
+        }
+    }
+}
+</code></pre>
+<h3 id="1422-vtkpartitioneddatasetcollection-">14.2.2 vtkPartitionedDataSetCollection -- 分区+集合模型</h3>
+<p><code>vtkPartitionedDataSetCollection</code>是VTK 9.x中引入的另一种复合数据组织方式。它采用"分区集合"模型：</p>
+<ul>
+<li>一个Collection包含多个<strong>PartitionedDataSet</strong>。</li>
+<li>每个PartitionedDataSet包含多个<strong>Partition</strong>（分区）。</li>
+<li>每个Partition是一个<code>vtkDataSet</code>。</li>
+</ul>
+<p>这种模型的典型应用场景是<strong>多材料/多相仿真</strong>：每种材料对应一个PartitionedDataSet，该材料在不同处理器上的分区对应不同的Partition。</p>
+<pre><code class="language-cpp">#include &lt;vtkPartitionedDataSet.h&gt;
+#include &lt;vtkPartitionedDataSetCollection.h&gt;
+
+// 创建一个PartitionedDataSetCollection
+vtkNew&lt;vtkPartitionedDataSetCollection&gt; collection;
+
+// 第一种材料的分区数据
+vtkNew&lt;vtkPartitionedDataSet&gt; material1;
+material1-&gt;SetNumberOfPartitions(2);
+material1-&gt;SetPartition(0, polyData_steel_part1);
+material1-&gt;SetPartition(1, polyData_steel_part2);
+material1-&gt;GetMetaData()-&gt;Set(vtkCompositeDataSet::NAME(), &quot;Steel&quot;);
+
+// 第二种材料的分区数据
+vtkNew&lt;vtkPartitionedDataSet&gt; material2;
+material2-&gt;SetNumberOfPartitions(3);
+material2-&gt;SetPartition(0, polyData_aluminum_part1);
+material2-&gt;SetPartition(1, polyData_aluminum_part2);
+material2-&gt;SetPartition(2, polyData_aluminum_part3);
+material2-&gt;GetMetaData()-&gt;Set(vtkCompositeDataSet::NAME(), &quot;Aluminum&quot;);
+
+// 将分区数据加入集合
+collection-&gt;SetNumberOfPartitionedDataSets(2);
+collection-&gt;SetPartitionedDataSet(0, material1);
+collection-&gt;SetPartitionedDataSet(1, material2);
+
+// 访问数据
+vtkPartitionedDataSet* steel = collection-&gt;GetPartitionedDataSet(0);
+vtkDataSet* steelPart0 = steel-&gt;GetPartition(0);
+</code></pre>
+<h3 id="1423-vs-">14.2.3 平铺合并 vs 层次化复合 -- 选择指南</h3>
+<table>
+<thead>
+<tr>
+<th>需求</th>
+<th>推荐方案</th>
+<th>原因</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>将所有部件焊接到单一网格</td>
+<td><code>vtkAppendPolyData</code> / <code>vtkAppendFilter</code></td>
+<td>产生一个连续的几何体，点和面片统一存储</td>
+</tr>
+<tr>
+<td>保持部件独立但统一渲染</td>
+<td><code>vtkMultiBlockDataSet</code> + <code>vtkCompositePolyDataMapper</code></td>
+<td>每个块保持独立，可按块控制颜色/可见性</td>
+</tr>
+<tr>
+<td>组织不同类型的仿真结果</td>
+<td><code>vtkMultiBlockDataSet</code></td>
+<td>支持在同一个结构中混合PolyData、UnstructuredGrid等</td>
+</tr>
+<tr>
+<td>多材料多分区仿真</td>
+<td><code>vtkPartitionedDataSetCollection</code></td>
+<td>自然映射材料-分区的关系</td>
+</tr>
+<tr>
+<td>多阶段合并处理（先合并再处理）</td>
+<td><code>vtkAppendDatasets</code></td>
+<td>输出到PartitionedDataSetCollection，保留分区信息</td>
+</tr>
+</tbody>
+</table>
+<p>简单原则：<strong>需要"焊接"用Append，需要"保持独立"用MultiBlock。</strong></p>
+<hr />
+<h2 id="143">14.3 复合数据渲染</h2>
+<p>有了复合数据集，接下来的问题是：如何将它们渲染出来？VTK提供了一套专门的复合渲染管线来完成这个任务。</p>
+<h3 id="1431-vtkcompositepolydatamapper-mapper">14.3.1 vtkCompositePolyDataMapper -- 复合数据的专用Mapper</h3>
+<p>标准的<code>vtkPolyDataMapper</code>只能处理一个<code>vtkPolyData</code>作为输入。对于<code>vtkMultiBlockDataSet</code>，你需要使用<code>vtkCompositePolyDataMapper</code>。</p>
+<p><code>vtkCompositePolyDataMapper</code>能够：
+- 接受<code>vtkMultiBlockDataSet</code>作为输入（以及<code>vtkPartitionedDataSetCollection</code>等复合类型）。
+- 自动递归遍历所有块，提取出其中的<code>vtkPolyData</code>块进行渲染。
+- 支持<strong>按块控制</strong>——允许为每个块设置不同的颜色、可见性和不透明度。</p>
+<p><strong>基本用法</strong>：</p>
+<pre><code class="language-cpp">#include &lt;vtkCompositePolyDataMapper.h&gt;
+#include &lt;vtkMultiBlockDataSet.h&gt;
+
+// 创建一个MultiBlockDataSet（假设已经填充了各个块）
+vtkNew&lt;vtkMultiBlockDataSet&gt; mb;
+mb-&gt;SetNumberOfBlocks(2);
+mb-&gt;SetBlock(0, polyDataPart1);
+mb-&gt;SetBlock(1, polyDataPart2);
+
+// 使用CompositePolyDataMapper
+vtkNew&lt;vtkCompositePolyDataMapper&gt; mapper;
+mapper-&gt;SetInputData(mb);  // 直接接受复合数据集
+
+vtkNew&lt;vtkActor&gt; actor;
+actor-&gt;SetMapper(mapper);
+
+// 渲染照常进行
+vtkNew&lt;vtkRenderer&gt; renderer;
+renderer-&gt;AddActor(actor);
+</code></pre>
+<p><strong>重要提示</strong>：<code>vtkCompositePolyDataMapper</code>只能渲染复合数据集中的<code>vtkPolyData</code>类型的块。如果某个块是<code>vtkUnstructuredGrid</code>或其他类型，该块将被跳过（不会报错，只是不渲染）。如果你需要渲染非PolyData的块，需要先将它们通过<code>vtkCompositeDataGeometryFilter</code>（见14.3.4节）转换为PolyData。</p>
+<h3 id="1432">14.3.2 按块可见性控制</h3>
+<p><code>vtkCompositePolyDataMapper</code>的一个核心功能是<strong>按块可见性控制</strong>——你可以独立地显示或隐藏<code>vtkMultiBlockDataSet</code>中的特定块，而不需要为每个块创建独立的Actor。</p>
+<pre><code class="language-cpp">vtkNew&lt;vtkCompositePolyDataMapper&gt; mapper;
+mapper-&gt;SetInputData(mb);
+
+// 获取所有可见块ID的列表（默认所有块可见）
+// 使用SetBlockVisibility()设置特定块的可见性
+mapper-&gt;SetBlockVisibility(0, true);   // 块0可见
+mapper-&gt;SetBlockVisibility(1, false);  // 块1隐藏
+mapper-&gt;SetBlockVisibility(2, true);   // 块2可见
+
+// 查询块的可见性
+bool vis0 = mapper-&gt;GetBlockVisibility(0);  // true
+bool vis1 = mapper-&gt;GetBlockVisibility(1);  // false
+
+// 递归移除所有可见性覆盖设置（所有块恢复可见）
+mapper-&gt;RemoveBlockVisibilities();
+</code></pre>
+<p><strong>实现原理</strong>：当某个块被设为不可见时，CompositePolyDataMapper在渲染过程中跳过该块的图元（不生成对应的OpenGL绘制命令）。数据本身保持不变——如果你后来将块设为可见，它会重新出现。</p>
+<h3 id="1433">14.3.3 按块颜色和不透明度覆盖</h3>
+<p>除了可见性，<code>vtkCompositePolyDataMapper</code>还支持为每个块单独设置颜色和不透明度——即使这些块没有自己附带标量数据。</p>
+<pre><code class="language-cpp">vtkNew&lt;vtkCompositePolyDataMapper&gt; mapper;
+mapper-&gt;SetInputData(mb);
+
+// 设置按块颜色覆盖
+// 颜色值范围 [0.0, 1.0]，不透明度范围 [0.0, 1.0]
+mapper-&gt;SetBlockColor(0, 1.0, 0.2, 0.2);  // 块0: 红色
+mapper-&gt;SetBlockColor(1, 0.2, 0.8, 0.2);  // 块1: 绿色
+mapper-&gt;SetBlockColor(2, 0.2, 0.2, 1.0);  // 块2: 蓝色
+mapper-&gt;SetBlockColor(3, 0.8, 0.8, 0.2);  // 块3: 黄色
+
+// 设置按块不透明度覆盖
+mapper-&gt;SetBlockOpacity(0, 1.0);   // 块0: 完全不透明
+mapper-&gt;SetBlockOpacity(1, 0.5);   // 块1: 半透明
+mapper-&gt;SetBlockOpacity(2, 0.8);   // 块2: 80%不透明
+mapper-&gt;SetBlockOpacity(3, 0.3);   // 块3: 30%不透明（较为透明）
+
+// 清除所有颜色覆盖
+mapper-&gt;RemoveBlockColors();
+
+// 清除所有不透明度覆盖
+mapper-&gt;RemoveBlockOpacities();
+</code></pre>
+<p><strong>优先级规则</strong>：
+1. 如果为某块设置了块颜色覆盖，该块将使用覆盖颜色——忽略该块数据自带的标量数据（如果有）。
+2. 如果没有设置块颜色覆盖，Mapper会检查块的标量数据，如果存在，就使用标量通过查找表映射颜色。
+3. 如果没有标量数据也没有块颜色覆盖，则使用Actor的通用<code>GetProperty()-&gt;SetColor()</code>设置的颜色。
+4. 块不透明度覆盖优先于Actor属性中的不透明度。</p>
+<h3 id="1434-vtkcompositedatageometryfilter-">14.3.4 vtkCompositeDataGeometryFilter -- 展平复合数据</h3>
+<p>有时候你需要将复合数据集中所有的PolyData块"展平"（flatten）为一个单一的PolyData——例如为了保存为文件、传递给不支持复合数据集的过滤器，或者进行统一的后处理。<code>vtkCompositeDataGeometryFilter</code>正是为这个目的设计的。</p>
+<pre><code class="language-cpp">#include &lt;vtkCompositeDataGeometryFilter.h&gt;
+
+vtkNew&lt;vtkCompositeDataGeometryFilter&gt; flatten;
+flatten-&gt;SetInputData(mb);  // 输入可以是vtkMultiBlockDataSet等
+flatten-&gt;Update();
+
+vtkPolyData* allInOne = flatten-&gt;GetOutput();
+std::cout &lt;&lt; &quot;Flattened points: &quot; &lt;&lt; allInOne-&gt;GetNumberOfPoints()
+          &lt;&lt; std::endl;
+std::cout &lt;&lt; &quot;Flattened cells:  &quot; &lt;&lt; allInOne-&gt;GetNumberOfCells()
+          &lt;&lt; std::endl;
+</code></pre>
+<p>该过滤器会：
+- 递归遍历所有块。
+- 提取每个块中的PolyData几何。
+- 将所有几何合并（append）到一个输出PolyData中。</p>
+<p>与直接使用<code>vtkAppendPolyData</code>的区别在于：<code>vtkCompositeDataGeometryFilter</code>是专门为复合数据集设计的，它自动处理嵌套的层次结构和混合类型（跳过非PolyData的块），而不需要你手动展开每个块。</p>
+<p><strong>一个典型的用例</strong>：将渲染结果保存为STL文件：</p>
+<pre><code class="language-cpp">vtkNew&lt;vtkCompositeDataGeometryFilter&gt; flatten;
+flatten-&gt;SetInputData(mb);
+flatten-&gt;Update();
+
+vtkNew&lt;vtkSTLWriter&gt; writer;
+writer-&gt;SetFileName(&quot;assembly.stl&quot;);
+writer-&gt;SetInputConnection(flatten-&gt;GetOutputPort());
+writer-&gt;Write();
+</code></pre>
+<hr />
+<h2 id="144">14.4 代码示例：多部件装配</h2>
+<p>本节提供一个完整的C++程序，演示本章涵盖的所有核心概念。程序构建一个"桌子"的多部件装配模型，使用<code>vtkMultiBlockDataSet</code>组织部件，通过<code>vtkCompositePolyDataMapper</code>渲染，并支持键盘交互切换各部件可见性。</p>
+<h3 id="1441">14.4.1 程序概述</h3>
+<p><strong>模型结构</strong>：一个"桌面+四条桌腿"的桌子模型。</p>
+<pre><code>vtkMultiBlockDataSet (根)
+  ├── Block 0: &quot;Table Top&quot;    -- 桌面（立方体，缩放为扁平板状）
+  ├── Block 1: &quot;Leg FL&quot;       -- 前左桌腿（圆柱体）
+  ├── Block 2: &quot;Leg FR&quot;       -- 前右桌腿（圆柱体）
+  ├── Block 3: &quot;Leg BL&quot;       -- 后左桌腿（圆柱体）
+  └── Block 4: &quot;Leg BR&quot;       -- 后右桌腿（圆柱体）
+</code></pre>
+<p><strong>交互功能</strong>：
+- 按数字键 <code>1</code>-<code>5</code>：切换对应块的可见性（桌面和四条腿）。
+- 按 <code>a</code> 键：切换所有块可见/隐藏。
+- 按 <code>r</code> 键：将所有块重置为可见。
+- 按 <code>c</code> 键：随机改变各块颜色。
+- 按 <code>w</code> / <code>s</code> 键：旋转视角。</p>
+<p><strong>渲染配置</strong>：
+- 使用<code>vtkCompositePolyDataMapper</code>进行复合渲染。
+- 为每个块设置不同的固定颜色（通过按块颜色覆盖）。
+- 显示块名称提示信息。</p>
+<h3 id="1442-c">14.4.2 完整C++代码</h3>
+<pre><code class="language-cpp">// ============================================================================
+// Chapter 14: Multi-Dataset Processing
+// File: TableAssemblyDemo.cxx
+// Description: Comprehensive demonstration of VTK multi-dataset processing.
+//              Builds a &quot;table&quot; assembly model with 5 named parts organized
+//              in a vtkMultiBlockDataSet, renders with
+//              vtkCompositePolyDataMapper, supports per-block visibility
+//              toggle and color control via keyboard callbacks.
+// VTK Version: 9.5.2
+// ============================================================================
+
+#include &lt;vtkActor.h&gt;
+#include &lt;vtkCamera.h&gt;
+#include &lt;vtkCommand.h&gt;
+#include &lt;vtkCompositePolyDataMapper.h&gt;
+#include &lt;vtkCubeSource.h&gt;
+#include &lt;vtkCylinderSource.h&gt;
+#include &lt;vtkInteractorStyleTrackballCamera.h&gt;
+#include &lt;vtkMinimalStandardRandomSequence.h&gt;
+#include &lt;vtkMultiBlockDataSet.h&gt;
+#include &lt;vtkNamedColors.h&gt;
+#include &lt;vtkPolyData.h&gt;
+#include &lt;vtkProperty.h&gt;
+#include &lt;vtkRenderWindow.h&gt;
+#include &lt;vtkRenderWindowInteractor.h&gt;
+#include &lt;vtkRenderer.h&gt;
+#include &lt;vtkSmartPointer.h&gt;
+#include &lt;vtkTextActor.h&gt;
+#include &lt;vtkTextProperty.h&gt;
+#include &lt;vtkTransform.h&gt;
+#include &lt;vtkTransformPolyDataFilter.h&gt;
+#include &lt;vtkVersion.h&gt;
+
+#include &lt;array&gt;
+#include &lt;iostream&gt;
+#include &lt;sstream&gt;
+#include &lt;string&gt;
+#include &lt;vector&gt;
+
+// ============================================================================
+// Global data shared between main() and the keyboard callback
+// ============================================================================
+struct AppContext
+{
+    vtkSmartPointer&lt;vtkCompositePolyDataMapper&gt; mapper;
+    vtkSmartPointer&lt;vtkRenderer&gt;                renderer;
+    vtkSmartPointer&lt;vtkRenderWindow&gt;            renderWindow;
+    vtkSmartPointer&lt;vtkMultiBlockDataSet&gt;       multiBlock;
+    vtkSmartPointer&lt;vtkTextActor&gt;               hudText;
+    unsigned int                                numBlocks = 0;
+    std::vector&lt;double[3]&gt;                      blockColors; // per-block colors
+};
+
+// ============================================================================
+// Helper: Create a table-top slab from a cube source
+// ============================================================================
+vtkSmartPointer&lt;vtkPolyData&gt; CreateTableTop(
+    double width, double depth, double height, double zPos)
+{
+    vtkNew&lt;vtkCubeSource&gt; cube;
+    cube-&gt;SetXLength(width);
+    cube-&gt;SetYLength(depth);
+    cube-&gt;SetZLength(height);
+    cube-&gt;SetCenter(0.0, 0.0, zPos);
+    cube-&gt;Update();
+    return cube-&gt;GetOutput();
+}
+
+// ============================================================================
+// Helper: Create a cylindrical table leg
+// ============================================================================
+vtkSmartPointer&lt;vtkPolyData&gt; CreateLeg(
+    double radius, double legHeight, double xPos, double yPos, double zPos)
+{
+    vtkNew&lt;vtkCylinderSource&gt; cyl;
+    cyl-&gt;SetRadius(radius);
+    cyl-&gt;SetHeight(legHeight);
+    cyl-&gt;SetResolution(24);
+    cyl-&gt;SetCenter(xPos, yPos, zPos);
+    cyl-&gt;Update();
+    return cyl-&gt;GetOutput();
+}
+
+// ============================================================================
+// Helper: Update the HUD text showing block visibility status
+// ============================================================================
+void UpdateHUD(AppContext* ctx)
+{
+    std::ostringstream oss;
+    oss &lt;&lt; &quot;Table Assembly -- MultiBlock Demo\n&quot;;
+    oss &lt;&lt; &quot;================================\n&quot;;
+
+    const char* blockNames[] = {
+        &quot;Table Top&quot;, &quot;Leg FL&quot;, &quot;Leg FR&quot;, &quot;Leg BL&quot;, &quot;Leg BR&quot;
+    };
+
+    for (unsigned int i = 0; i &lt; ctx-&gt;numBlocks; ++i)
+    {
+        bool visible = ctx-&gt;mapper-&gt;GetBlockVisibility(i);
+        oss &lt;&lt; &quot;[&quot; &lt;&lt; (i + 1) &lt;&lt; &quot;] &quot; &lt;&lt; blockNames[i]
+            &lt;&lt; &quot;: &quot; &lt;&lt; (visible ? &quot;ON &quot; : &quot;OFF&quot;) &lt;&lt; &quot;\n&quot;;
+    }
+
+    oss &lt;&lt; &quot;--------------------------------\n&quot;;
+    oss &lt;&lt; &quot;Keys: 1-5=toggle block | a=all | r=reset | c=colors&quot;;
+
+    ctx-&gt;hudText-&gt;SetInput(oss.str().c_str());
+}
+
+// ============================================================================
+// Keyboard callback: handles per-block visibility and color control
+// ============================================================================
+class AssemblyKeyboardCallback : public vtkCommand
+{
+public:
+    static AssemblyKeyboardCallback* New()
+    {
+        return new AssemblyKeyboardCallback;
+    }
+
+    void SetContext(AppContext* ctx) { m_Context = ctx; }
+
+    void Execute(vtkObject* caller, unsigned long eventId,
+                 void* vtkNotUsed(callData)) override
+    {
+        vtkRenderWindowInteractor* interactor =
+            static_cast&lt;vtkRenderWindowInteractor*&gt;(caller);
+
+        std::string key = interactor-&gt;GetKeySym();
+
+        bool toggleAll   = false;
+        bool setAllOn    = false;
+        bool randomColor = false;
+
+        // ------------------------------------------------------------------
+        // Process key input
+        // ------------------------------------------------------------------
+        if (key == &quot;1&quot; || key == &quot;2&quot; || key == &quot;3&quot; ||
+            key == &quot;4&quot; || key == &quot;5&quot;)
+        {
+            int idx = std::stoi(key) - 1; // zero-based block index
+            if (static_cast&lt;unsigned int&gt;(idx) &lt; m_Context-&gt;numBlocks)
+            {
+                bool cur = m_Context-&gt;mapper-&gt;GetBlockVisibility(idx);
+                m_Context-&gt;mapper-&gt;SetBlockVisibility(idx, !cur);
+            }
+        }
+        else if (key == &quot;a&quot; || key == &quot;A&quot;)
+        {
+            // Toggle all: if any block is visible, hide all; else show all
+            bool anyVisible = false;
+            for (unsigned int i = 0; i &lt; m_Context-&gt;numBlocks; ++i)
+            {
+                if (m_Context-&gt;mapper-&gt;GetBlockVisibility(i))
+                {
+                    anyVisible = true;
+                    break;
+                }
+            }
+            for (unsigned int i = 0; i &lt; m_Context-&gt;numBlocks; ++i)
+                m_Context-&gt;mapper-&gt;SetBlockVisibility(i, !anyVisible);
+        }
+        else if (key == &quot;r&quot; || key == &quot;R&quot;)
+        {
+            // Reset: show all blocks
+            for (unsigned int i = 0; i &lt; m_Context-&gt;numBlocks; ++i)
+                m_Context-&gt;mapper-&gt;SetBlockVisibility(i, true);
+        }
+        else if (key == &quot;c&quot; || key == &quot;C&quot;)
+        {
+            // Randomize per-block colors
+            vtkNew&lt;vtkMinimalStandardRandomSequence&gt; rng;
+            rng-&gt;SetSeed(static_cast&lt;int&gt;(m_Context-&gt;renderWindow-&gt;GetNumberOfLayers() + 42));
+
+            for (unsigned int i = 0; i &lt; m_Context-&gt;numBlocks; ++i)
+            {
+                double r, g, b;
+                rng-&gt;Next(); r = rng-&gt;GetValue();
+                rng-&gt;Next(); g = rng-&gt;GetValue();
+                rng-&gt;Next(); b = rng-&gt;GetValue();
+
+                m_Context-&gt;blockColors[i][0] = r;
+                m_Context-&gt;blockColors[i][1] = g;
+                m_Context-&gt;blockColors[i][2] = b;
+
+                m_Context-&gt;mapper-&gt;SetBlockColor(i, r, g, b);
+            }
+        }
+
+        // ------------------------------------------------------------------
+        // Update HUD and re-render
+        // ------------------------------------------------------------------
+        UpdateHUD(m_Context);
+        m_Context-&gt;renderWindow-&gt;Render();
+
+        // Print status to console
+        const char* blk[] = {&quot;Top&quot;, &quot;FL&quot;, &quot;FR&quot;, &quot;BL&quot;, &quot;BR&quot;};
+        std::cout &lt;&lt; &quot;[Assembly] Visibility: &quot;;
+        for (unsigned int i = 0; i &lt; m_Context-&gt;numBlocks; ++i)
+        {
+            std::cout &lt;&lt; blk[i] &lt;&lt; &quot;:&quot;
+                      &lt;&lt; (m_Context-&gt;mapper-&gt;GetBlockVisibility(i) ? &quot;+&quot; : &quot;-&quot;)
+                      &lt;&lt; &quot; &quot;;
+        }
+        std::cout &lt;&lt; std::endl;
+    }
+
+private:
+    AppContext* m_Context = nullptr;
+};
+
+// ============================================================================
+// Main
+// ============================================================================
+int main()
+{
+    std::cout &lt;&lt; &quot;VTK Version: &quot; &lt;&lt; VTK_VERSION &lt;&lt; std::endl;
+    std::cout &lt;&lt; &quot;=== Chapter 14: Table Assembly Demo ===&quot; &lt;&lt; std::endl;
+    std::cout &lt;&lt; &quot;Multi-Block DataSet + CompositePolyDataMapper&quot;
+              &lt;&lt; std::endl;
+    std::cout &lt;&lt; std::endl;
+
+    // ========================================================================
+    // 1. Build the table model: 1 top + 4 legs
+    // ========================================================================
+
+    // --- Table Top ---
+    // A flat slab: width 4.0, depth 2.5, thickness 0.3
+    vtkSmartPointer&lt;vtkPolyData&gt; top =
+        CreateTableTop(4.0, 2.5, 0.3, 2.0);
+
+    // --- Table Legs ---
+    // Four cylindrical legs positioned at corners of the table
+    // Table center is at (0,0,2.0), top thickness is 0.3, half=0.15
+    // Leg top is at z = 2.0 - 0.15 = 1.85
+    // Leg height = 1.7, so leg center z = 1.85 - 0.85 = 1.0
+    double legRadius  = 0.15;
+    double legHeight  = 1.7;
+    double topHalfX   = 1.7;  // half of width minus leg radius margin
+    double topHalfY   = 1.0;  // half of depth minus leg radius margin
+    double legCenterZ = 1.0;
+
+    vtkSmartPointer&lt;vtkPolyData&gt; legFL = CreateLeg(
+        legRadius, legHeight, -topHalfX, -topHalfY, legCenterZ);
+    vtkSmartPointer&lt;vtkPolyData&gt; legFR = CreateLeg(
+        legRadius, legHeight,  topHalfX, -topHalfY, legCenterZ);
+    vtkSmartPointer&lt;vtkPolyData&gt; legBL = CreateLeg(
+        legRadius, legHeight, -topHalfX,  topHalfY, legCenterZ);
+    vtkSmartPointer&lt;vtkPolyData&gt; legBR = CreateLeg(
+        legRadius, legHeight,  topHalfX,  topHalfY, legCenterZ);
+
+    // ========================================================================
+    // 2. Assemble into vtkMultiBlockDataSet with named blocks
+    // ========================================================================
+    vtkNew&lt;vtkMultiBlockDataSet&gt; multiBlock;
+    multiBlock-&gt;SetNumberOfBlocks(5);
+
+    multiBlock-&gt;SetBlock(0, top);
+    multiBlock-&gt;SetBlock(1, legFL);
+    multiBlock-&gt;SetBlock(2, legFR);
+    multiBlock-&gt;SetBlock(3, legBL);
+    multiBlock-&gt;SetBlock(4, legBR);
+
+    // Name all blocks for reference
+    multiBlock-&gt;GetMetaData(0)-&gt;Set(vtkCompositeDataSet::NAME(), &quot;Table Top&quot;);
+    multiBlock-&gt;GetMetaData(1)-&gt;Set(vtkCompositeDataSet::NAME(), &quot;Leg FL&quot;);
+    multiBlock-&gt;GetMetaData(2)-&gt;Set(vtkCompositeDataSet::NAME(), &quot;Leg FR&quot;);
+    multiBlock-&gt;GetMetaData(3)-&gt;Set(vtkCompositeDataSet::NAME(), &quot;Leg BL&quot;);
+    multiBlock-&gt;GetMetaData(4)-&gt;Set(vtkCompositeDataSet::NAME(), &quot;Leg BR&quot;);
+
+    // Print the hierarchy
+    std::cout &lt;&lt; &quot;MultiBlock structure:&quot; &lt;&lt; std::endl;
+    for (unsigned int i = 0; i &lt; multiBlock-&gt;GetNumberOfBlocks(); ++i)
+    {
+        const char* name =
+            multiBlock-&gt;GetMetaData(i)-&gt;Get(vtkCompositeDataSet::NAME());
+        vtkPolyData* pd =
+            vtkPolyData::SafeDownCast(multiBlock-&gt;GetBlock(i));
+        std::cout &lt;&lt; &quot;  Block &quot; &lt;&lt; i &lt;&lt; &quot; (&quot; &lt;&lt; (name ? name : &quot;?&quot;) &lt;&lt; &quot;): &quot;
+                  &lt;&lt; pd-&gt;GetNumberOfPoints() &lt;&lt; &quot; points, &quot;
+                  &lt;&lt; pd-&gt;GetNumberOfCells()  &lt;&lt; &quot; cells&quot; &lt;&lt; std::endl;
+    }
+
+    // ========================================================================
+    // 3. Set up per-block colors
+    // ========================================================================
+    // We use fixed colors for the table parts:
+    //   Top:  warm wood brown
+    //   Legs: slightly varied browns for realism
+    std::array&lt;std::array&lt;double, 3&gt;, 5&gt; colors = {{
+        {{0.545, 0.271, 0.075}},  // Table Top: saddle brown
+        {{0.627, 0.322, 0.176}},  // Leg FL
+        {{0.627, 0.322, 0.176}},  // Leg FR
+        {{0.627, 0.322, 0.176}},  // Leg BL
+        {{0.627, 0.322, 0.176}}   // Leg BR
+    }};
+
+    // ========================================================================
+    // 4. Render with vtkCompositePolyDataMapper
+    // ========================================================================
+    vtkNew&lt;vtkCompositePolyDataMapper&gt; mapper;
+    mapper-&gt;SetInputData(multiBlock);
+
+    // Apply per-block colors
+    for (unsigned int i = 0; i &lt; 5; ++i)
+    {
+        mapper-&gt;SetBlockColor(i,
+            colors[i][0], colors[i][1], colors[i][2]);
+    }
+
+    vtkNew&lt;vtkActor&gt; actor;
+    actor-&gt;SetMapper(mapper);
+    actor-&gt;GetProperty()-&gt;SetSpecular(0.3);
+    actor-&gt;GetProperty()-&gt;SetSpecularPower(30.0);
+
+    // ========================================================================
+    // 5. Set up renderer and render window
+    // ========================================================================
+    vtkNew&lt;vtkRenderer&gt; renderer;
+    renderer-&gt;AddActor(actor);
+    renderer-&gt;SetBackground(0.85, 0.85, 0.88); // light gray-blue background
+
+    // Add a subtle gradient background
+    renderer-&gt;SetBackground2(0.35, 0.35, 0.45);
+    renderer-&gt;SetGradientBackground(true);
+
+    // Set up camera
+    renderer-&gt;GetActiveCamera()-&gt;SetPosition(6.0, 5.0, 4.5);
+    renderer-&gt;GetActiveCamera()-&gt;SetFocalPoint(0.0, 0.0, 1.0);
+    renderer-&gt;GetActiveCamera()-&gt;SetViewUp(0.0, 0.0, 1.0);
+    renderer-&gt;ResetCamera();
+
+    vtkNew&lt;vtkRenderWindow&gt; renderWindow;
+    renderWindow-&gt;SetSize(1024, 768);
+    renderWindow-&gt;AddRenderer(renderer);
+    renderWindow-&gt;SetWindowName(&quot;Chapter 14: Table Assembly -- &quot;
+                                &quot;MultiBlock + CompositePolyDataMapper&quot;);
+
+    vtkNew&lt;vtkRenderWindowInteractor&gt; interactor;
+    interactor-&gt;SetRenderWindow(renderWindow);
+
+    // Use trackball camera style for easy rotation
+    vtkNew&lt;vtkInteractorStyleTrackballCamera&gt; style;
+    interactor-&gt;SetInteractorStyle(style);
+
+    // ========================================================================
+    // 6. Set up HUD text overlay
+    // ========================================================================
+    vtkNew&lt;vtkTextActor&gt; hudText;
+    hudText-&gt;SetDisplayPosition(20, 20);
+    hudText-&gt;GetTextProperty()-&gt;SetFontSize(14);
+    hudText-&gt;GetTextProperty()-&gt;SetFontFamilyToCourier();
+    hudText-&gt;GetTextProperty()-&gt;SetColor(0.1, 0.1, 0.15);
+    hudText-&gt;GetTextProperty()-&gt;SetOpacity(0.8);
+    renderer-&gt;AddActor2D(hudText);
+
+    // ========================================================================
+    // 7. Set up keyboard callbacks
+    // ========================================================================
+    AppContext ctx;
+    ctx.mapper       = mapper;
+    ctx.renderer     = renderer;
+    ctx.renderWindow = renderWindow;
+    ctx.multiBlock   = multiBlock;
+    ctx.hudText      = hudText;
+    ctx.numBlocks    = 5;
+
+    // Store initial colors
+    for (int i = 0; i &lt; 5; ++i)
+    {
+        ctx.blockColors.push_back({colors[i][0],
+                                   colors[i][1],
+                                   colors[i][2]});
+    }
+
+    vtkNew&lt;AssemblyKeyboardCallback&gt; keyCallback;
+    keyCallback-&gt;SetContext(&amp;ctx);
+    interactor-&gt;AddObserver(vtkCommand::KeyPressEvent, keyCallback);
+
+    // Initialize HUD
+    UpdateHUD(&amp;ctx);
+
+    // ========================================================================
+    // 8. Display usage guide
+    // ========================================================================
+    std::cout &lt;&lt; std::endl;
+    std::cout &lt;&lt; &quot;Interactive Controls:&quot; &lt;&lt; std::endl;
+    std::cout &lt;&lt; &quot;  1-5 : Toggle visibility of block 1-5&quot; &lt;&lt; std::endl;
+    std::cout &lt;&lt; &quot;  a   : Toggle all blocks on/off&quot; &lt;&lt; std::endl;
+    std::cout &lt;&lt; &quot;  r   : Reset all blocks to visible&quot; &lt;&lt; std::endl;
+    std::cout &lt;&lt; &quot;  c   : Randomize per-block colors&quot; &lt;&lt; std::endl;
+    std::cout &lt;&lt; &quot;  Mouse drag : Rotate view&quot; &lt;&lt; std::endl;
+    std::cout &lt;&lt; &quot;  Mouse wheel: Zoom in/out&quot; &lt;&lt; std::endl;
+    std::cout &lt;&lt; std::endl;
+
+    // ========================================================================
+    // 9. Start the render loop
+    // ========================================================================
+    renderWindow-&gt;Render();
+    interactor-&gt;Initialize();
+    interactor-&gt;Start();
+
+    return 0;
+}
+</code></pre>
+<h3 id="1443-cmakeliststxt">14.4.3 CMakeLists.txt</h3>
+<pre><code class="language-cmake">cmake_minimum_required(VERSION 3.12)
+project(Chapter14_TableAssemblyDemo)
+
+# Find VTK (required components for this chapter)
+find_package(VTK REQUIRED COMPONENTS
+    CommonCore
+    CommonDataModel
+    CommonExecutionModel
+    CommonMath
+    CommonTransforms
+    FiltersCore
+    FiltersSources
+    InteractionStyle
+    RenderingAnnotation
+    RenderingContextOpenGL2
+    RenderingCore
+    RenderingFreeType
+    RenderingOpenGL2
+)
+
+# Print VTK information
+message(STATUS &quot;VTK_VERSION: ${VTK_VERSION}&quot;)
+message(STATUS &quot;VTK_DIR: ${VTK_DIR}&quot;)
+
+# Create executable
+add_executable(TableAssemblyDemo TableAssemblyDemo.cxx)
+
+# Link VTK libraries
+target_link_libraries(TableAssemblyDemo
+    VTK::CommonCore
+    VTK::CommonDataModel
+    VTK::CommonExecutionModel
+    VTK::CommonMath
+    VTK::CommonTransforms
+    VTK::FiltersCore
+    VTK::FiltersSources
+    VTK::InteractionStyle
+    VTK::RenderingAnnotation
+    VTK::RenderingContextOpenGL2
+    VTK::RenderingCore
+    VTK::RenderingFreeType
+    VTK::RenderingOpenGL2
+)
+
+# Set C++ standard
+set_target_properties(TableAssemblyDemo PROPERTIES
+    CXX_STANDARD 17
+    CXX_STANDARD_REQUIRED ON
+)
+</code></pre>
+<h3 id="1444">14.4.4 编译与运行</h3>
+<p><strong>Windows (Visual Studio):</strong></p>
+<pre><code class="language-powershell"># 在源代码目录下
+mkdir build
+cd build
+cmake .. -G &quot;Visual Studio 17 2022&quot;
+cmake --build . --config Release
+
+# 运行
+.\Release\TableAssemblyDemo.exe
+</code></pre>
+<p><strong>Linux / macOS:</strong></p>
+<pre><code class="language-bash">mkdir build &amp;&amp; cd build
+cmake ..
+cmake --build .
+./TableAssemblyDemo
+</code></pre>
+<h3 id="1445">14.4.5 预期结果分析</h3>
+<p>运行程序后，你将看到一个木色桌子模型位于渲染窗口中央，左上角有黑色的HUD文本显示各块的可见性状态：</p>
+<p><strong>视觉呈现</strong>：
+- 一块扁平的矩形桌面（由<code>vtkCubeSource</code>缩放而成），呈现温暖的马鞍棕色。
+- 四条圆柱形桌腿（由<code>vtkCylinderSource</code>生成）均匀分布在桌面四角下方。
+- 所有部件合并渲染在一个Actor中，但每个部件保持独立的可见性和颜色控制。</p>
+<p><strong>交互体验</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>预期效果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>按 <code>1</code></td>
+<td>桌面消失/重新出现。桌腿仍然可见。</td>
+</tr>
+<tr>
+<td>按 <code>2</code>-<code>5</code></td>
+<td>对应桌腿独立地消失/重新出现。</td>
+</tr>
+<tr>
+<td>按 <code>a</code></td>
+<td>如果所有块可见，全部隐藏；如果任意块隐藏，全部显示。</td>
+</tr>
+<tr>
+<td>按 <code>r</code></td>
+<td>所有5个块恢复为可见状态，无论之前的状态如何。</td>
+</tr>
+<tr>
+<td>按 <code>c</code></td>
+<td>每个块获得一个随机的RGB颜色，颜色覆盖立即生效。</td>
+</tr>
+<tr>
+<td>鼠标拖拽</td>
+<td>围绕模型旋转视角（Trackball Camera）。</td>
+</tr>
+<tr>
+<td>鼠标滚轮</td>
+<td>放大/缩小视图。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>关键观察</strong>：</p>
+<ol>
+<li><strong>CompositePolyDataMapper的透明切换</strong>——隐藏和显示一个块不需要重新构建渲染数据，切换瞬时完成。</li>
+<li><strong>按块颜色覆盖优先于标量着色</strong>——虽然各数据块没有附带标量数据，但块颜色覆盖使其正常运行。</li>
+<li><strong>一个Actor管理多个部件</strong>——所有5个部件共享同一个Actor，这意味着共享同一个变换（如果要移动桌子，只需操作一个Actor）。</li>
+<li><strong>嵌套能力</strong>——虽然本示例的MultiBlockDataSet是扁平的（只有一层），但<code>vtkCompositePolyDataMapper</code>完全支持递归嵌套的MultiBlockDataset。</li>
+</ol>
+<hr />
+<h2 id="145">14.5 本章小结</h2>
+<p>本章系统性地介绍了VTK中多数据集处理的两大机制：合并（Append）和复合（Composite）。以下是本章的核心要点回顾：</p>
+<h3 id="_2">核心概念</h3>
+<ol>
+<li>
+<p><strong>合并（Append）</strong>是将多个数据集的内容拼接为一个连续网格的操作。适用于将所有部件"焊接"成单一几何体的场景，或需要统一后处理的场景。<code>vtkAppendPolyData</code>是最常用的PolyData合并工具，<code>vtkAppendFilter</code>适用于同类型数据集，<code>vtkAppendDatasets</code>可混合不同类型但输出为分区集合。</p>
+</li>
+<li>
+<p><strong>复合数据集（Composite Dataset）</strong>是保持各数据块独立性的层次化数据组织形式。<code>vtkMultiBlockDataSet</code>是最核心的复合数据集类，支持嵌套、混合类型，并为每个块提供元数据（名称等）。</p>
+</li>
+<li>
+<p><strong>复合渲染管线</strong>通过<code>vtkCompositePolyDataMapper</code>实现。该Mapper能够遍历复合数据集中的所有PolyData块进行渲染，并支持按块控制可见性、颜色和不透明度。</p>
+</li>
+<li>
+<p><strong>按块控制</strong>是复合数据渲染的核心优势——你可以在单个Actor中独立地控制每个部件的视觉属性，而不需要创建和维护多个Actor。</p>
+</li>
+</ol>
+<h3 id="api">关键类与API</h3>
+<table>
+<thead>
+<tr>
+<th>类</th>
+<th>主要用途</th>
+<th>关键方法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>vtkAppendPolyData</code></td>
+<td>合并多个PolyData</td>
+<td><code>AddInputData()</code>, <code>SetTolerance()</code>, <code>Update()</code>, <code>GetOutput()</code></td>
+</tr>
+<tr>
+<td><code>vtkAppendFilter</code></td>
+<td>合并同类型DataSet</td>
+<td><code>AddInputData()</code>, <code>Update()</code>, <code>GetOutput()</code></td>
+</tr>
+<tr>
+<td><code>vtkAppendDatasets</code></td>
+<td>合并不同类型DataSet</td>
+<td><code>AddInputData()</code>, <code>Update()</code>, <code>GetOutput()</code></td>
+</tr>
+<tr>
+<td><code>vtkMultiBlockDataSet</code></td>
+<td>层次化数据组织</td>
+<td><code>SetNumberOfBlocks()</code>, <code>SetBlock()</code>, <code>GetBlock()</code>, <code>GetNumberOfBlocks()</code>, <code>GetMetaData()</code></td>
+</tr>
+<tr>
+<td><code>vtkPartitionedDataSetCollection</code></td>
+<td>分区集合模型</td>
+<td><code>SetNumberOfPartitionedDataSets()</code>, <code>SetPartitionedDataSet()</code>, <code>GetPartitionedDataSet()</code></td>
+</tr>
+<tr>
+<td><code>vtkCompositePolyDataMapper</code></td>
+<td>复合数据渲染</td>
+<td><code>SetInputData()</code>, <code>SetBlockVisibility()</code>, <code>SetBlockColor()</code>, <code>SetBlockOpacity()</code>, <code>RemoveBlockVisibilities()</code>, <code>RemoveBlockColors()</code></td>
+</tr>
+<tr>
+<td><code>vtkCompositeDataGeometryFilter</code></td>
+<td>展平复合数据</td>
+<td><code>SetInputData()</code>, <code>Update()</code>, <code>GetOutput()</code></td>
+</tr>
+<tr>
+<td><code>vtkCompositeDataSet</code> (基类)</td>
+<td>复合数据基类</td>
+<td><code>NAME()</code> (元数据键), <code>GetNumberOfChildren()</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="_3">选择指南</h3>
+<ul>
+<li>
+<p><strong>何时使用Append（合并）</strong>：当所有部件构成一个单一连续的几何体，且你不需要在渲染后独立操控单个部件时。例如：将多个扫描文件合并为一个点云、合并CFD域分解的各块为一个网格、合并拆分保存的CAD模型。</p>
+</li>
+<li>
+<p><strong>何时使用MultiBlockDataSet（复合）</strong>：当各部件需要保持独立性时。例如：多部件装配体（各零件独立操控）、多物理场结果（各物理场使用不同类型的数据集）、多时间步数据（每个时间步作为一个块）、嵌套的多级装配结构。</p>
+</li>
+<li>
+<p><strong>按块控制 vs 多Actor方案</strong>：</p>
+</li>
+<li>按块控制（CompositePolyDataMapper）：所有部件共享同一个Actor和变换。适合部件之间有固定空间关系的装配体。</li>
+<li>多Actor方案：每个部件独立的Actor。适合部件需要独立移动/旋转/缩放，或需要不同的渲染属性（如不同的光照参数）的场景。</li>
+</ul>
+<h3 id="_4">与实践的联系</h3>
+<p>你现在掌握的技能可以用于：</p>
+<ul>
+<li>构建CAD装配体的交互式可视化工具，支持独立切换零件可见性</li>
+<li>组织仿真结果——流场（UnstructuredGrid）和几何表面（PolyData）共存于同一层次结构</li>
+<li>处理分块保存的大型数据集——先独立加载每个块，再组织为MultiBlock</li>
+<li>创建"分解视图"（爆炸视图）——先按块组织，再通过块变换实现分解</li>
+<li>实现层次化的场景图管理，支持嵌套的子装配体</li>
+</ul>
+<h3 id="_5">下一步</h3>
+<p>在掌握了多数据集处理后，你已经具备了组织复杂可视化场景的能力。下一章将介绍更高级的数据处理技术——包括自定义过滤器、流线可视化、以及高级交互技术，帮助你构建更专业的科学可视化应用程序。</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
