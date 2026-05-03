@@ -1,0 +1,3719 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../ch21/">
+      
+      
+        <link rel="next" href="../ch23/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>第22章 遍历模型与网格数据——前处理查询API - Echo-b's Tech Notes</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#22-api" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Echo-b&#39;s Tech Notes" class="md-header__button md-logo" aria-label="Echo-b's Tech Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Echo-b's Tech Notes
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              第22章 遍历模型与网格数据——前处理查询API
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Echo-b&#39;s Tech Notes" class="md-nav__button md-logo" aria-label="Echo-b's Tech Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Echo-b's Tech Notes
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VTK 教程
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    VTK 教程
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    入门篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    入门篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-01-vtk-overview-and-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第一章 VTK概述与环境搭建
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-02-visualization-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二章 可视化管线
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-03-data-model-basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第三章 数据模型基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-04-geometry-and-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第四章 基本几何体与数据源
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-05-rendering-and-interactor/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第五章 渲染与交互机
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-06-volume1-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第六章 入门篇综合实战——3D几何画廊
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    实战篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    实战篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-07-polydata/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第七章 PolyData详解
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-08-unstructured-grid/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第八章 非结构化网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-09-structured-data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第九章 结构化数据
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-10-data-io/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十章 数据I/O
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-11-common-filters/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十一章 常用过滤器
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-12-color-mapping/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十二章 颜色映射与标量可视化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-13-advanced-rendering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十三章 高级渲染技术
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-14-multi-dataset/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十四章 多个数据集处理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-15-volume2-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十五章 实战篇综合实战——CFD后处理可视化工具
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    进阶篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    进阶篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-16-volume-rendering-basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十六章 体渲染基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-17-volume-rendering-advanced/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十七章 体渲染高级技术
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-18-charts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十八章 2D图表系统
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-19-annotation-and-widgets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十九章 三维标注与交互组件
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-20-custom-interaction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十章 自定义交互与Widget
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-21-qt-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十一章 Qt集成
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-22-smp-parallel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十二章 SMP并行入门
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-23-volume3-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十三章 进阶篇综合实战
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GMSH 教程
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    GMSH 教程
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1" id="__nav_3_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    基础篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    基础篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第1章 Gmsh概述与C++ SDK配置
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第2章 几何基础——点线面曲线环与物理组
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第3章 变换与拉伸几何
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第4章 高级几何构建——内置函数孔洞注释与颜色
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第5章 三维网格控制——尺寸场体孔洞与网格算法
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch06/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第6章 网格控制进阶——Transfinite分布与结构化网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch07/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第7章 背景网格——用已有网格指导网格尺寸
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch08/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第8章 网格尺寸场
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    进阶篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    进阶篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch09/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第9章 四边形网格重组
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch10/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第10章 复合实体——跨面一致网格划分
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch11/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第11章 STL重网格——无CAD模型的表面重构
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch12/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第12章 同调与上同调计算
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch13/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第13章 嵌入实体——在网格中强制生成共形节点
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch14/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第14章 各向异性网格——方向感知的网格生成
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch15/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第15章 周期性网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch16/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第16章 OpenCASCADE内核与构造实体几何
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch17/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第17章 高级实体建模——断面扫掠圆角管道与曲率自适应网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch18/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第18章 STEP导入与几何分割
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    应用篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    应用篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch19/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第19章 后处理视图与动画
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch20/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第20章 后处理插件——视图数据运算与变换
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch21/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第21章 网格分区与区域分解
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第22章 遍历模型与网格数据——前处理查询API
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第22章 遍历模型与网格数据——前处理查询API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#221" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.1 学习目标
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#222" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.2 核心概念说明
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="22.2 核心概念说明">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2221-model-entity-dim-tag" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.2.1 模型实体（Model Entity）与 (dim, tag) 标识
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2222" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.2.2 网格数据结构概览
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2223" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.2.3 单元类型编号与命名规则
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2224-adjacencies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.2.4 邻接关系（Adjacencies）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2225" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.2.5 分区实体与父子关系
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2226-physical-group" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.2.6 物理组（Physical Group）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#223-c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.3 C++ 代码逐段讲解
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="22.3 C++ 代码逐段讲解">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2231" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.3.1 初始化与模型准备
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2232-getentities" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.3.2 遍历所有实体：getEntities()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2233-meshgetnodes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.3.3 遍历节点：mesh::getNodes()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2234-meshgetelements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.3.4 遍历单元：mesh::getElements()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2235-meshgetelementproperties" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.3.5 单元属性查询：mesh::getElementProperties()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2236-getadjacencies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.3.6 邻接关系查询：getAdjacencies()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2237" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.3.7 物理组查询
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2238" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.3.8 分区信息与父实体
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2239" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.3.9 实体类型与名称
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22310-getelementsbytype" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.3.10 按类型获取单元：getElementsByType()（补充）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22311" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.3.11 全局节点获取与求解器数据导出
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22312" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.3.12 完整遍历循环骨架
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22313" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.3.13 清理与结束
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#224" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.4 完整可运行代码
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#225-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.5 关键 API 速查表
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="22.5 关键 API 速查表">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2251" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.5.1 模型查询
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2252" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.5.2 网格查询
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2253" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.5.3 拓扑与分组查询
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2254" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.5.4 数据结构速记
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2255" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.5.5 典型前处理工作流
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第23章 离散实体与混合模型——地形网格实战
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch24/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第24章 后处理视图——List-based与Model-based数据导入
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch25/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第25章 几何求值——参数化法向量与曲率
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第26章 积分点雅可比矩阵基函数与内部边面
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#221" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.1 学习目标
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#222" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.2 核心概念说明
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="22.2 核心概念说明">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2221-model-entity-dim-tag" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.2.1 模型实体（Model Entity）与 (dim, tag) 标识
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2222" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.2.2 网格数据结构概览
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2223" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.2.3 单元类型编号与命名规则
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2224-adjacencies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.2.4 邻接关系（Adjacencies）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2225" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.2.5 分区实体与父子关系
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2226-physical-group" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.2.6 物理组（Physical Group）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#223-c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.3 C++ 代码逐段讲解
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="22.3 C++ 代码逐段讲解">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2231" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.3.1 初始化与模型准备
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2232-getentities" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.3.2 遍历所有实体：getEntities()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2233-meshgetnodes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.3.3 遍历节点：mesh::getNodes()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2234-meshgetelements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.3.4 遍历单元：mesh::getElements()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2235-meshgetelementproperties" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.3.5 单元属性查询：mesh::getElementProperties()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2236-getadjacencies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.3.6 邻接关系查询：getAdjacencies()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2237" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.3.7 物理组查询
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2238" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.3.8 分区信息与父实体
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2239" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.3.9 实体类型与名称
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22310-getelementsbytype" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.3.10 按类型获取单元：getElementsByType()（补充）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22311" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.3.11 全局节点获取与求解器数据导出
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22312" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.3.12 完整遍历循环骨架
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22313" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.3.13 清理与结束
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#224" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.4 完整可运行代码
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#225-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.5 关键 API 速查表
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="22.5 关键 API 速查表">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2251" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.5.1 模型查询
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2252" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.5.2 网格查询
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2253" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.5.3 拓扑与分组查询
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2254" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.5.4 数据结构速记
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2255" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22.5.5 典型前处理工作流
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="22-api">第22章 遍历模型与网格数据：前处理查询 API 全解</h1>
+<hr />
+<h2 id="221">22.1 学习目标</h2>
+<ul>
+<li>理解 Gmsh 模型实体（Model Entity）的 <code>(dim, tag)</code> 标识体系，掌握 <code>getEntities()</code> 遍历全部几何实体</li>
+<li>掌握 <code>mesh::getNodes()</code> 按实体或全局获取节点坐标，理解交错（interleaved）坐标存储格式</li>
+<li>掌握 <code>mesh::getElements()</code> 获取单元类型、单元标签和节点连接列表（element connectivity），以及 <code>getElementsByType()</code> 按类型筛选</li>
+<li>学会使用 <code>getType()</code> 和 <code>getEntityName()</code> 查询实体类型与名称</li>
+<li>掌握 <code>getAdjacencies()</code> 查询上邻接（upward）和下邻接（downward）关系</li>
+<li>理解物理组（Physical Group）与 <code>getPhysicalGroupsForEntity()</code> / <code>getPhysicalName()</code> 的查询</li>
+<li>掌握分区信息查询：<code>getPartitions()</code> 与 <code>getParent()</code> 追溯分区实体的原始父实体</li>
+<li>掌握 <code>mesh::getElementProperties()</code> 查询单元类型的名称、维度、阶次、节点数和参数坐标</li>
+<li>能够编写完整的前处理数据提取程序，为有限元求解器输入准备网格数据</li>
+</ul>
+<hr />
+<h2 id="222">22.2 核心概念说明</h2>
+<h3 id="2221-model-entity-dim-tag">22.2.1 模型实体（Model Entity）与 <code>(dim, tag)</code> 标识</h3>
+<p>Gmsh 中所有几何信息由<strong>模型实体（Model Entity）</strong>组成，按维度分为四类：</p>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>实体类型</th>
+<th>英文名称</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>点</td>
+<td>Point</td>
+<td>几何点</td>
+</tr>
+<tr>
+<td>1</td>
+<td>曲线</td>
+<td>Curve</td>
+<td>几何边</td>
+</tr>
+<tr>
+<td>2</td>
+<td>曲面</td>
+<td>Surface</td>
+<td>几何面</td>
+</tr>
+<tr>
+<td>3</td>
+<td>体</td>
+<td>Volume</td>
+<td>几何体</td>
+</tr>
+</tbody>
+</table>
+<p>每个实体由一个 <code>(dim, tag)</code> 对唯一标识，其中 <code>dim</code> 为维度（0-3），<code>tag</code> 为严格正整数的标签。模型实体可以来自内置 <code>geo</code> 内核、OpenCASCADE <code>occ</code> 内核，也可以是<strong>离散实体（Discrete Entity）</strong>——由网格本身定义，没有底层 CAD 几何。</p>
+<p>网格数据（Nodes 和 Elements）被<strong>分类（classified）</strong>到相应的模型实体上。例如：一个面实体包含其内部的三角形/四边形单元以及内部节点，而边界节点和边界边上的单元则存储在其边界实体上。这种分类关系使得前处理程序可以按实体精准提取网格子集。</p>
+<h3 id="2222">22.2.2 网格数据结构概览</h3>
+<pre><code>模型（Model）
+ ├── 实体列表 (dim, tag) pairs
+ │    ├── Point (0, n)        ← 含点单元 + 孤立节点
+ │    ├── Curve (1, n)        ← 含线单元 + 内部节点
+ │    ├── Surface (2, n)      ← 含三角形/四边形 + 内部节点
+ │    └── Volume (3, n)       ← 含四面体/六面体等 + 内部节点
+ │
+ ├── 节点 (Nodes)
+ │    ├── nodeTag: 全局唯一正整数
+ │    ├── coords: x1,y1,z1, x2,y2,z2, ...  (交错存储)
+ │    └── parametricCoords: 参数坐标（可选）
+ │
+ ├── 单元 (Elements)
+ │    ├── elemType: Gmsh 单元类型编号 (1=2节点线, 2=3节点三角形, 4=4节点四面体, ...)
+ │    ├── elemTags: 每种类型的单元标签列表
+ │    └── nodeTags: 每种类型的节点连接列表 (CCW 或 Gmsh 规定顺序)
+ │
+ └── 物理组 (Physical Groups)
+      └── (dim, physicalTag) 引用一组模型实体
+</code></pre>
+<h3 id="2223">22.2.3 单元类型编号与命名规则</h3>
+<p>Gmsh 预定义了数百种单元类型。常用的包括：</p>
+<table>
+<thead>
+<tr>
+<th>类型编号</th>
+<th>名称</th>
+<th>说明</th>
+<th>节点数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Line 2</td>
+<td>2 节点线单元</td>
+<td>2</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Triangle 3</td>
+<td>3 节点三角形</td>
+<td>3</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Quadrangle 4</td>
+<td>4 节点四边形</td>
+<td>4</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Tetrahedron 4</td>
+<td>4 节点四面体</td>
+<td>4</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Hexahedron 8</td>
+<td>8 节点六面体</td>
+<td>8</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Prism 6</td>
+<td>6 节点三棱柱</td>
+<td>6</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Pyramid 5</td>
+<td>5 节点金字塔</td>
+<td>5</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Line 3</td>
+<td>3 节点二阶线单元</td>
+<td>3</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Triangle 6</td>
+<td>6 节点二阶三角形</td>
+<td>6</td>
+</tr>
+<tr>
+<td>15</td>
+<td>Point 1</td>
+<td>1 节点点单元</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<p>通过 <code>getElementProperties()</code> 可以查询任意类型编号对应的完整属性。</p>
+<h3 id="2224-adjacencies">22.2.4 邻接关系（Adjacencies）</h3>
+<p>Gmsh 为每个实体维护拓扑邻接关系：</p>
+<ul>
+<li><strong>上邻接（Upward Adjacencies）</strong>：当前实体是哪些更高维实体的边界。例如一个面（dim=2）的上邻接是包含该面的体（dim=3）；一条线（dim=1）的上邻接是包含该线的面。</li>
+<li><strong>下邻接（Downward Adjacencies）</strong>：当前实体的边界由哪些更低维实体构成。例如一个面的下邻接是其边界线和边界点；一个体的下邻接是其边界面。</li>
+</ul>
+<h3 id="2225">22.2.5 分区实体与父子关系</h3>
+<p>当网格被分区（见第21章）后，Gmsh 创建<strong>分区实体（Partition Entity）</strong>。通过 <code>getPartitions(dim, tag)</code> 可获取分区索引列表，通过 <code>getParent(dim, tag)</code> 可追溯该分区实体的原始父实体（parentDim, parentTag）。非分区实体的这两个查询返回空结果。</p>
+<h3 id="2226-physical-group">22.2.6 物理组（Physical Group）</h3>
+<p>物理组是模型实体的命名集合，仍按 <code>(dim, physicalTag)</code> 标识。它用于在网格导出时标记边界条件区域（如 inlet、outlet、wall 等）。通过 <code>getPhysicalGroupsForEntity()</code> 可反查某个实体属于哪些物理组。</p>
+<hr />
+<h2 id="223-c">22.3 C++ 代码逐段讲解</h2>
+<h3 id="2231">22.3.1 初始化与模型准备</h3>
+<pre><code class="language-cpp">#include &lt;gmsh.h&gt;
+#include &lt;iostream&gt;
+#include &lt;vector&gt;
+
+int main(int argc, char **argv)
+{
+    gmsh::initialize();
+
+    // 支持从命令行加载已有MSH文件，或自动创建示例几何
+    if(argc &gt; 1 &amp;&amp; argv[1][0] != '-') {
+        gmsh::open(argv[1]);
+    } else {
+        // 创建一个简单的锥体作为示例几何体
+        gmsh::model::occ::addCone(1, 0, 0, 1, 0, 0, 0.5, 0.1);
+        gmsh::model::occ::synchronize();
+        gmsh::model::mesh::generate();
+    }
+
+    // 获取模型名称和维度
+    std::string modelName;
+    gmsh::model::getCurrent(modelName);
+    int modelDim = gmsh::model::getDimension();
+    std::cout &lt;&lt; &quot;Model: &quot; &lt;&lt; modelName &lt;&lt; &quot; (&quot; &lt;&lt; modelDim &lt;&lt; &quot;D)\n&quot;;
+</code></pre>
+<p>这段代码初始化 Gmsh，可选择从 MSH 文件读取已有网格（<code>gmsh::open()</code>）或自动创建一个锥体并生成网格。<code>getCurrent()</code> 返回当前模型名称，<code>getDimension()</code> 返回模型最高维度。</p>
+<h3 id="2232-getentities">22.3.2 遍历所有实体：<code>getEntities()</code></h3>
+<pre><code class="language-cpp">    // 获取模型中所有实体的 (dim, tag) 对
+    std::vector&lt;std::pair&lt;int, int&gt;&gt; entities;
+    gmsh::model::getEntities(entities);
+
+    std::cout &lt;&lt; &quot;Total entities: &quot; &lt;&lt; entities.size() &lt;&lt; &quot;\n\n&quot;;
+
+    // 也可按维度过滤
+    // gmsh::model::getEntities(entities, 2);  // 仅获取面实体 (dim=2)
+</code></pre>
+<p><code>getEntities()</code> 返回一个 <code>vector&lt;pair&lt;int,int&gt;&gt;</code>，每个元素是一个 <code>(dim, tag)</code> 对。可选第二个参数 <code>dim</code> 按维度过滤（-1 表示全部维度）。这是遍历模型几何结构的入口 API。</p>
+<p><strong>常见使用模式：</strong> 在前处理程序中，首先调用 <code>getEntities()</code> 获取全部实体列表，然后遍历每个实体提取其网格数据。</p>
+<h3 id="2233-meshgetnodes">22.3.3 遍历节点：<code>mesh::getNodes()</code></h3>
+<pre><code class="language-cpp">    for(auto e : entities) {
+        int dim = e.first, tag = e.second;
+
+        // ---- 获取该实体上的网格节点 ----
+        std::vector&lt;std::size_t&gt; nodeTags;
+        std::vector&lt;double&gt; nodeCoords, parametricCoords;
+        gmsh::model::mesh::getNodes(nodeTags, nodeCoords,
+                                     parametricCoords, dim, tag);
+
+        std::cout &lt;&lt; &quot;Entity (&quot; &lt;&lt; dim &lt;&lt; &quot;,&quot; &lt;&lt; tag &lt;&lt; &quot;): &quot;
+                  &lt;&lt; nodeTags.size() &lt;&lt; &quot; nodes\n&quot;;
+
+        // 坐标按 x1,y1,z1, x2,y2,z2, ... 交错存储
+        for(std::size_t i = 0; i &lt; nodeTags.size(); i++) {
+            double x = nodeCoords[i * 3 + 0];
+            double y = nodeCoords[i * 3 + 1];
+            double z = nodeCoords[i * 3 + 2];
+            // 在此构建求解器节点数据结构
+        }
+</code></pre>
+<p><code>mesh::getNodes()</code> 的完整签名：</p>
+<pre><code class="language-cpp">void getNodes(vector&lt;size_t&gt; &amp;nodeTags,
+              vector&lt;double&gt; &amp;coord,
+              vector&lt;double&gt; &amp;parametricCoord,
+              int dim = -1, int tag = -1,
+              bool includeBoundary = false,
+              bool returnParametricCoord = true);
+</code></pre>
+<p>关键参数说明：
+- <strong><code>dim</code> / <code>tag</code></strong>：指定实体，只获取该实体上的节点。两者都设为 -1 则获取全部网格节点。
+- <strong><code>includeBoundary</code></strong>：设为 <code>true</code> 时也会包含该实体边界上的节点（默认 <code>false</code>，只返回内部节点）。
+- <strong><code>coord</code></strong>：坐标数组，按 <code>x0, y0, z0, x1, y1, z1, ...</code> 顺序交错存储。数组长度为 <code>nodeTags.size() * 3</code>。
+- <strong><code>parametricCoords</code></strong>：节点的参数坐标（用于高阶单元），可用 <code>returnParametricCoord=false</code> 跳过。</p>
+<p><strong>前处理要点：</strong> 通常需要按实体提取节点（指定 dim/tag），然后在求解器中将它们映射为局部编号。三维坐标用 <code>coords[i*3 + 0/1/2]</code> 模式索引。</p>
+<h3 id="2234-meshgetelements">22.3.4 遍历单元：<code>mesh::getElements()</code></h3>
+<pre><code class="language-cpp">        // ---- 获取该实体上的网格单元 ----
+        std::vector&lt;int&gt; elemTypes;
+        std::vector&lt;std::vector&lt;std::size_t&gt;&gt; elemTags, elemNodeTags;
+        gmsh::model::mesh::getElements(elemTypes, elemTags,
+                                        elemNodeTags, dim, tag);
+
+        int totalElems = 0;
+        for(auto &amp;tags : elemTags) totalElems += tags.size();
+        std::cout &lt;&lt; &quot;  Elements: &quot; &lt;&lt; totalElems &lt;&lt; &quot; (&quot;
+                  &lt;&lt; elemTypes.size() &lt;&lt; &quot; types)\n&quot;;
+</code></pre>
+<p><code>mesh::getElements()</code> 的签名：</p>
+<pre><code class="language-cpp">void getElements(vector&lt;int&gt; &amp;elementTypes,
+                 vector&lt;vector&lt;size_t&gt;&gt; &amp;elementTags,
+                 vector&lt;vector&lt;size_t&gt;&gt; &amp;nodeTags,
+                 int dim = -1, int tag = -1);
+</code></pre>
+<p>关键数据结构：
+- <strong><code>elementTypes</code></strong>：<code>[type1, type2, ...]</code>，该实体上出现的单元类型编号列表。
+- <strong><code>elementTags</code></strong>：<code>[[tagsForType1], [tagsForType2], ...]</code>，与 <code>elementTypes</code> 一一对应，每项是单元标签的向量。
+- <strong><code>nodeTags</code></strong>：<code>[[nodesForType1], [nodesForType2], ...]</code>，与 <code>elementTypes</code> 一一对应。对于第 k 种类型，<code>nodeTags[k]</code> 包含所有该类单元的节点编号按序拼接——即连接性数组（connectivity）。</p>
+<p><strong>遍历每个单元的具体实现：</strong></p>
+<pre><code class="language-cpp">        // 遍历每种单元类型
+        for(std::size_t iType = 0; iType &lt; elemTypes.size(); iType++) {
+            int eType = elemTypes[iType];
+            auto &amp;eTags = elemTags[iType];
+            auto &amp;nTags = elemNodeTags[iType];
+
+            // 查询该类型每个单元有几个节点
+            std::string eName;
+            int eDim, eOrder, numNodes, numPrimaryNodes;
+            std::vector&lt;double&gt; localCoords;
+            gmsh::model::mesh::getElementProperties(
+                eType, eName, eDim, eOrder, numNodes,
+                localCoords, numPrimaryNodes);
+
+            std::cout &lt;&lt; &quot;  Type &quot; &lt;&lt; eType &lt;&lt; &quot; (&quot; &lt;&lt; eName
+                      &lt;&lt; &quot;), order=&quot; &lt;&lt; eOrder
+                      &lt;&lt; &quot;, nodes/elem=&quot; &lt;&lt; numNodes
+                      &lt;&lt; &quot;, count=&quot; &lt;&lt; eTags.size() &lt;&lt; &quot;\n&quot;;
+
+            // 遍历该类型的每个单元
+            for(std::size_t j = 0; j &lt; eTags.size(); j++) {
+                std::size_t elemTag = eTags[j];
+                // 该单元的节点连接从 nTags 中提取
+                // nTags[j*numNodes] 到 nTags[j*numNodes + numNodes - 1]
+            }
+        }
+</code></pre>
+<p><strong>前处理要点：</strong> <code>nodeTags[iType]</code> 是展平的一维数组，第 <code>j</code> 个单元的 <code>numNodes</code> 个节点起始于索引 <code>j * numNodes</code>。构建求解器单元结构时，先通过 <code>getElementProperties()</code> 获取 <code>numNodes</code>，再逐单元切片提取。</p>
+<h3 id="2235-meshgetelementproperties">22.3.5 单元属性查询：<code>mesh::getElementProperties()</code></h3>
+<pre><code class="language-cpp">        // 演示每一个单元类型的详细属性
+        for(auto eType : elemTypes) {
+            std::string eName;
+            int eDim, eOrder, numNodes, numPrimaryNodes;
+            std::vector&lt;double&gt; localCoord;
+            gmsh::model::mesh::getElementProperties(
+                eType, eName, eDim, eOrder, numNodes,
+                localCoord, numPrimaryNodes);
+
+            std::cout &lt;&lt; &quot;  [&quot; &lt;&lt; eType &lt;&lt; &quot;] &quot; &lt;&lt; eName
+                      &lt;&lt; &quot;: dim=&quot; &lt;&lt; eDim &lt;&lt; &quot;, order=&quot; &lt;&lt; eOrder
+                      &lt;&lt; &quot;, nodes=&quot; &lt;&lt; numNodes
+                      &lt;&lt; &quot;, primaryNodes=&quot; &lt;&lt; numPrimaryNodes
+                      &lt;&lt; &quot;\n&quot;;
+        }
+</code></pre>
+<p>输出参数说明：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>eName</code></td>
+<td>string</td>
+<td>单元名称，如 "Triangle 3"、"Tetrahedron 4"</td>
+</tr>
+<tr>
+<td><code>eDim</code></td>
+<td>int</td>
+<td>单元维度</td>
+</tr>
+<tr>
+<td><code>eOrder</code></td>
+<td>int</td>
+<td>单元阶次（1=线性, 2=二次, ...）</td>
+</tr>
+<tr>
+<td><code>numNodes</code></td>
+<td>int</td>
+<td>单元总节点数</td>
+</tr>
+<tr>
+<td><code>localCoord</code></td>
+<td>vector<double></td>
+<td>参数空间中的节点局部坐标，交错存储</td>
+</tr>
+<tr>
+<td><code>numPrimaryNodes</code></td>
+<td>int</td>
+<td>主节点数（不含边中点和内部高阶节点）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2236-getadjacencies">22.3.6 邻接关系查询：<code>getAdjacencies()</code></h3>
+<pre><code class="language-cpp">        // ---- 查询上邻接和下邻接 ----
+        std::vector&lt;int&gt; upward, downward;
+        gmsh::model::getAdjacencies(dim, tag, upward, downward);
+
+        if(!upward.empty()) {
+            std::cout &lt;&lt; &quot;  Upward: &quot;;
+            for(auto adjTag : upward)
+                std::cout &lt;&lt; &quot;(&quot; &lt;&lt; dim+1 &lt;&lt; &quot;,&quot; &lt;&lt; adjTag &lt;&lt; &quot;) &quot;;
+            std::cout &lt;&lt; &quot;\n&quot;;
+        }
+        if(!downward.empty()) {
+            std::cout &lt;&lt; &quot;  Downward: &quot;;
+            for(auto adjTag : downward)
+                std::cout &lt;&lt; &quot;(&quot; &lt;&lt; dim-1 &lt;&lt; &quot;,&quot; &lt;&lt; adjTag &lt;&lt; &quot;) &quot;;
+            std::cout &lt;&lt; &quot;\n&quot;;
+        }
+</code></pre>
+<p><code>upward</code> 返回更高维邻接实体的 tag（维度为 <code>dim+1</code>），<code>downward</code> 返回更低维邻接实体的 tag（维度为 <code>dim-1</code>）。实际用法：需记录维度偏移，<code>upward</code> 中的 tag 需要配合 <code>dim+1</code> 才能构成完整 <code>(dim, tag)</code> 标识。</p>
+<p><strong>典型场景：</strong> 已知一个面实体，查 <code>upward</code> 得到它属于哪个体（用于材料属性传播）；已知一个体实体，查 <code>downward</code> 得到它的边界面（用于边界条件施加）。</p>
+<h3 id="2237">22.3.7 物理组查询</h3>
+<pre><code class="language-cpp">        // ---- 该实体属于哪些物理组 ----
+        std::vector&lt;int&gt; physicalTags;
+        gmsh::model::getPhysicalGroupsForEntity(dim, tag, physicalTags);
+
+        if(!physicalTags.empty()) {
+            std::cout &lt;&lt; &quot;  Physical groups: &quot;;
+            for(auto pt : physicalTags) {
+                std::string physName;
+                gmsh::model::getPhysicalName(dim, pt, physName);
+                std::cout &lt;&lt; &quot;\&quot;&quot; &lt;&lt; physName &lt;&lt; &quot;\&quot; (&quot;
+                          &lt;&lt; dim &lt;&lt; &quot;,&quot; &lt;&lt; pt &lt;&lt; &quot;) &quot;;
+            }
+            std::cout &lt;&lt; &quot;\n&quot;;
+        }
+</code></pre>
+<p><code>getPhysicalGroupsForEntity()</code> 返回该实体所属的物理组标签列表。然后通过 <code>getPhysicalName()</code> 获取物理组的可读名称（如 "inlet"、"wall"）。这是 CAE 前处理中识别边界条件区域的常用方法。</p>
+<h3 id="2238">22.3.8 分区信息与父实体</h3>
+<pre><code class="language-cpp">        // ---- 是否分区实体？父实体是谁？ ----
+        std::vector&lt;int&gt; partitions;
+        gmsh::model::getPartitions(dim, tag, partitions);
+        if(!partitions.empty()) {
+            std::cout &lt;&lt; &quot;  Partitions: &quot;;
+            for(auto p : partitions) std::cout &lt;&lt; p &lt;&lt; &quot; &quot;;
+            int parentDim, parentTag;
+            gmsh::model::getParent(dim, tag, parentDim, parentTag);
+            std::cout &lt;&lt; &quot; &lt;- parent (&quot; &lt;&lt; parentDim &lt;&lt; &quot;,&quot;
+                      &lt;&lt; parentTag &lt;&lt; &quot;)\n&quot;;
+        }
+</code></pre>
+<p>分区后，<code>getPartitions()</code> 返回该实体所属分区的索引（从 0 起）。<code>getParent()</code> 追溯该分区实体来自哪个原始父实体。非分区实体两个查询均返回空结果。</p>
+<h3 id="2239">22.3.9 实体类型与名称</h3>
+<pre><code class="language-cpp">        // ---- 实体类型和名称 ----
+        std::string entityType;
+        gmsh::model::getType(dim, tag, entityType);
+        std::string entityName;
+        gmsh::model::getEntityName(dim, tag, entityName);
+
+        std::cout &lt;&lt; &quot;Entity &quot; &lt;&lt; entityName
+                  &lt;&lt; &quot; of type &quot; &lt;&lt; entityType
+                  &lt;&lt; &quot; (&quot; &lt;&lt; dim &lt;&lt; &quot;,&quot; &lt;&lt; tag &lt;&lt; &quot;)\n&quot;;
+</code></pre>
+<p><code>getType()</code> 返回实体类型字符串：
+- dim=0: <code>"Point"</code>
+- dim=1: <code>"Curve"</code>
+- dim=2: <code>"Surface"</code>
+- dim=3: <code>"Volume"</code>
+- 离散实体: <code>"Discrete Point"</code>, <code>"Discrete Curve"</code>, <code>"Discrete Surface"</code>, <code>"Discrete Volume"</code></p>
+<p><code>getEntityName()</code> 返回在 GEO 脚本中或 OCC 建模时赋予的实体名称（可能为空）。</p>
+<h3 id="22310-getelementsbytype">22.3.10 按类型获取单元：<code>getElementsByType()</code>（补充）</h3>
+<p>除 <code>getElements()</code> 一次性获取某实体上所有类型单元外，Gmsh 还提供按类型获取的 API：</p>
+<pre><code class="language-cpp">    // 获取2D三角单元（type=2）的所有单元
+    std::vector&lt;std::size_t&gt; triTags, triNodes;
+    gmsh::model::mesh::getElementsByType(2, triTags, triNodes);
+
+    std::cout &lt;&lt; &quot;Triangle 3 count: &quot; &lt;&lt; triTags.size() &lt;&lt; &quot;\n&quot;;
+    // triNodes 展平存储: [n0,n1,n2, n0,n1,n2, ...]
+</code></pre>
+<p><code>getElementsByType()</code> 的签名：</p>
+<pre><code class="language-cpp">void getElementsByType(int elementType,
+                        vector&lt;size_t&gt; &amp;elementTags,
+                        vector&lt;size_t&gt; &amp;nodeTags,
+                        int tag = -1,
+                        size_t task = 0,
+                        size_t numTasks = 1);
+</code></pre>
+<p>参数 <code>task</code> 和 <code>numTasks</code> 支持并行分区读取：<code>numTasks=N</code> 时将数据分成 N 份，<code>task=k</code> 读取第 k 份。单线程使用时保持默认值 <code>task=0, numTasks=1</code>。</p>
+<h3 id="22311">22.3.11 全局节点获取与求解器数据导出</h3>
+<p>当不关心实体划分，需要一次性导出全部网格时，可调用全局模式：</p>
+<pre><code class="language-cpp">    // 全局获取所有节点（dim=-1, tag=-1）
+    std::vector&lt;std::size_t&gt; allNodeTags;
+    std::vector&lt;double&gt; allCoords, allParamCoords;
+    gmsh::model::mesh::getNodes(allNodeTags, allCoords,
+                                 allParamCoords, -1, -1);
+
+    // 全局获取所有单元类型
+    std::vector&lt;int&gt; allElemTypes;
+    gmsh::model::mesh::getElementTypes(allElemTypes);
+
+    std::cout &lt;&lt; &quot;Global: &quot; &lt;&lt; allNodeTags.size() &lt;&lt; &quot; nodes, &quot;
+              &lt;&lt; allElemTypes.size() &lt;&lt; &quot; element types\n&quot;;
+</code></pre>
+<p><code>getElementTypes()</code> 可选 <code>dim</code> 和 <code>tag</code> 参数按实体过滤。全局模式下，这是导出完整求解器输入的最快方式。</p>
+<h3 id="22312">22.3.12 完整遍历循环骨架</h3>
+<p>将所有查询整合到外层循环中，形成标准的前处理查询骨架：</p>
+<pre><code class="language-cpp">    std::vector&lt;std::pair&lt;int, int&gt;&gt; entities;
+    gmsh::model::getEntities(entities);
+
+    for(auto &amp;e : entities) {
+        int dim = e.first, tag = e.second;
+
+        // 1. 基础信息
+        std::string eType, eName;
+        gmsh::model::getType(dim, tag, eType);
+        gmsh::model::getEntityName(dim, tag, eName);
+
+        // 2. 物理组
+        std::vector&lt;int&gt; physTags;
+        gmsh::model::getPhysicalGroupsForEntity(dim, tag, physTags);
+
+        // 3. 邻接关系
+        std::vector&lt;int&gt; up, down;
+        gmsh::model::getAdjacencies(dim, tag, up, down);
+
+        // 4. 分区信息
+        std::vector&lt;int&gt; parts;
+        gmsh::model::getPartitions(dim, tag, parts);
+
+        // 5. 节点
+        std::vector&lt;std::size_t&gt; nodeTags;
+        std::vector&lt;double&gt; coords, paramCoord;
+        gmsh::model::mesh::getNodes(nodeTags, coords, paramCoord, dim, tag);
+
+        // 6. 单元
+        std::vector&lt;int&gt; elemTypes;
+        std::vector&lt;std::vector&lt;std::size_t&gt;&gt; elemTags, elemNodeTags;
+        gmsh::model::mesh::getElements(elemTypes, elemTags, elemNodeTags,
+                                        dim, tag);
+
+        // 7. 按求解器需求重组数据...
+    }
+</code></pre>
+<h3 id="22313">22.3.13 清理与结束</h3>
+<pre><code class="language-cpp">    gmsh::clear();
+    gmsh::finalize();
+    return 0;
+}
+</code></pre>
+<p><code>gmsh::clear()</code> 清除所有模型数据，<code>gmsh::finalize()</code> 释放 Gmsh 内部资源。注意如果之前使用了 <code>gmsh::fltk::run()</code> 启动 GUI，应在关闭窗口后再调用 <code>clear()</code>。</p>
+<hr />
+<h2 id="224">22.4 完整可运行代码</h2>
+<pre><code class="language-cpp">// ch22_full.cpp — 遍历模型所有实体并打印完整网格信息
+#include &lt;gmsh.h&gt;
+#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;set&gt;
+
+int main(int argc, char **argv)
+{
+    gmsh::initialize();
+
+    // 步骤1：准备模型（加载文件或创建示例几何）
+    if(argc &gt; 1 &amp;&amp; argv[1][0] != '-') {
+        gmsh::open(argv[1]);
+    } else {
+        // 创建一个复杂一点的几何：圆柱体方便展示所有实体类型
+        gmsh::model::occ::addCylinder(0, 0, 0, 0, 0, 1, 0.5);
+        gmsh::model::occ::synchronize();
+        // 设置网格尺寸并生成
+        gmsh::option::setNumber(&quot;Mesh.MeshSizeMin&quot;, 0.2);
+        gmsh::model::mesh::generate(3);
+    }
+
+    // 步骤2：打印模型基本信息
+    std::string modelName;
+    gmsh::model::getCurrent(modelName);
+    std::cout &lt;&lt; &quot;============================================\n&quot;;
+    std::cout &lt;&lt; &quot;Model: &quot; &lt;&lt; modelName
+              &lt;&lt; &quot; (dim=&quot; &lt;&lt; gmsh::model::getDimension() &lt;&lt; &quot;)\n&quot;;
+    std::cout &lt;&lt; &quot;============================================\n\n&quot;;
+
+    // 步骤3：获取全部实体列表
+    std::vector&lt;std::pair&lt;int, int&gt;&gt; entities;
+    gmsh::model::getEntities(entities);
+
+    std::cout &lt;&lt; &quot;Total entities: &quot; &lt;&lt; entities.size() &lt;&lt; &quot;\n\n&quot;;
+
+    // 全局统计
+    std::size_t totalNodes = 0, totalElements = 0;
+
+    // 步骤4：遍历每个实体
+    for(auto &amp;e : entities) {
+        int dim = e.first, tag = e.second;
+
+        // --- 4a. 实体类型与名称 ---
+        std::string entityType, entityName;
+        gmsh::model::getType(dim, tag, entityType);
+        gmsh::model::getEntityName(dim, tag, entityName);
+
+        std::cout &lt;&lt; &quot;---- Entity (&quot; &lt;&lt; dim &lt;&lt; &quot;,&quot; &lt;&lt; tag &lt;&lt; &quot;) ----\n&quot;;
+        if(!entityName.empty())
+            std::cout &lt;&lt; &quot;  Name: \&quot;&quot; &lt;&lt; entityName &lt;&lt; &quot;\&quot;\n&quot;;
+        std::cout &lt;&lt; &quot;  Type: &quot; &lt;&lt; entityType &lt;&lt; &quot;\n&quot;;
+
+        // --- 4b. 节点 ---
+        std::vector&lt;std::size_t&gt; nodeTags;
+        std::vector&lt;double&gt; coords, paramCoord;
+        gmsh::model::mesh::getNodes(nodeTags, coords, paramCoord, dim, tag);
+        std::cout &lt;&lt; &quot;  Nodes: &quot; &lt;&lt; nodeTags.size() &lt;&lt; &quot;\n&quot;;
+        totalNodes += nodeTags.size();
+
+        if(!nodeTags.empty()) {
+            // 打印前3个节点坐标示例
+            int showN = std::min(3, (int)nodeTags.size());
+            std::cout &lt;&lt; &quot;  Sample coords: &quot;;
+            for(int i = 0; i &lt; showN; i++) {
+                std::cout &lt;&lt; &quot;n&quot; &lt;&lt; nodeTags[i] &lt;&lt; &quot;(&quot;
+                          &lt;&lt; coords[i*3+0] &lt;&lt; &quot;,&quot;
+                          &lt;&lt; coords[i*3+1] &lt;&lt; &quot;,&quot;
+                          &lt;&lt; coords[i*3+2] &lt;&lt; &quot;) &quot;;
+            }
+            std::cout &lt;&lt; &quot;\n&quot;;
+        }
+
+        // --- 4c. 单元 ---
+        std::vector&lt;int&gt; elemTypes;
+        std::vector&lt;std::vector&lt;std::size_t&gt;&gt; elemTags, elemNodeTags;
+        gmsh::model::mesh::getElements(elemTypes, elemTags, elemNodeTags,
+                                        dim, tag);
+
+        int entityElemCount = 0;
+        for(auto &amp;tags : elemTags) entityElemCount += tags.size();
+        totalElements += entityElemCount;
+        std::cout &lt;&lt; &quot;  Elements: &quot; &lt;&lt; entityElemCount &lt;&lt; &quot;\n&quot;;
+
+        // 打印每种单元类型的详细信息
+        for(std::size_t t = 0; t &lt; elemTypes.size(); t++) {
+            std::string eName;
+            int eDim, eOrder, numNodes, numPrimaryNodes;
+            std::vector&lt;double&gt; localCoords;
+            gmsh::model::mesh::getElementProperties(
+                elemTypes[t], eName, eDim, eOrder, numNodes,
+                localCoords, numPrimaryNodes);
+
+            std::cout &lt;&lt; &quot;    [&quot; &lt;&lt; elemTypes[t] &lt;&lt; &quot;] &quot; &lt;&lt; eName
+                      &lt;&lt; &quot;: &quot; &lt;&lt; elemTags[t].size()
+                      &lt;&lt; &quot; elems, order=&quot; &lt;&lt; eOrder
+                      &lt;&lt; &quot;, nodes/elem=&quot; &lt;&lt; numNodes;
+
+            // 展示第一个单元的连接性
+            if(!elemTags[t].empty()) {
+                std::cout &lt;&lt; &quot;\n      elem#&quot; &lt;&lt; elemTags[t][0]
+                          &lt;&lt; &quot; nodes=[&quot;;
+                for(int n = 0; n &lt; numNodes; n++) {
+                    std::cout &lt;&lt; elemNodeTags[t][n] &lt;&lt; &quot; &quot;;
+                }
+                std::cout &lt;&lt; &quot;]&quot;;
+            }
+            std::cout &lt;&lt; &quot;\n&quot;;
+        }
+
+        // --- 4d. 邻接关系 ---
+        std::vector&lt;int&gt; up, down;
+        gmsh::model::getAdjacencies(dim, tag, up, down);
+        if(!up.empty()) {
+            std::cout &lt;&lt; &quot;  Upward (&quot; &lt;&lt; dim+1 &lt;&lt; &quot;D): &quot;;
+            for(auto u : up) std::cout &lt;&lt; u &lt;&lt; &quot; &quot;;
+            std::cout &lt;&lt; &quot;\n&quot;;
+        }
+        if(!down.empty()) {
+            std::cout &lt;&lt; &quot;  Downward (&quot; &lt;&lt; dim-1 &lt;&lt; &quot;D): &quot;;
+            for(auto d : down) std::cout &lt;&lt; d &lt;&lt; &quot; &quot;;
+            std::cout &lt;&lt; &quot;\n&quot;;
+        }
+
+        // --- 4e. 物理组 ---
+        std::vector&lt;int&gt; physTags;
+        gmsh::model::getPhysicalGroupsForEntity(dim, tag, physTags);
+        if(!physTags.empty()) {
+            std::cout &lt;&lt; &quot;  Physical groups: &quot;;
+            for(auto pt : physTags) {
+                std::string pn;
+                gmsh::model::getPhysicalName(dim, pt, pn);
+                std::cout &lt;&lt; &quot;\&quot;&quot; &lt;&lt; pn &lt;&lt; &quot;\&quot;(&quot; &lt;&lt; dim &lt;&lt; &quot;,&quot; &lt;&lt; pt &lt;&lt; &quot;) &quot;;
+            }
+            std::cout &lt;&lt; &quot;\n&quot;;
+        }
+
+        // --- 4f. 分区信息 ---
+        std::vector&lt;int&gt; parts;
+        gmsh::model::getPartitions(dim, tag, parts);
+        if(!parts.empty()) {
+            std::cout &lt;&lt; &quot;  Partitions: &quot;;
+            for(auto p : parts) std::cout &lt;&lt; p &lt;&lt; &quot; &quot;;
+            int pDim, pTag;
+            gmsh::model::getParent(dim, tag, pDim, pTag);
+            std::cout &lt;&lt; &quot;-&gt; parent(&quot; &lt;&lt; pDim &lt;&lt; &quot;,&quot; &lt;&lt; pTag &lt;&lt; &quot;)\n&quot;;
+        }
+
+        std::cout &lt;&lt; &quot;\n&quot;;
+    }
+
+    // 步骤5：输出全局统计
+    std::cout &lt;&lt; &quot;============================================\n&quot;;
+    std::cout &lt;&lt; &quot;Summary:\n&quot;;
+    std::cout &lt;&lt; &quot;  Total entities: &quot; &lt;&lt; entities.size() &lt;&lt; &quot;\n&quot;;
+    std::cout &lt;&lt; &quot;  Total nodes:    &quot; &lt;&lt; totalNodes &lt;&lt; &quot;\n&quot;;
+    std::cout &lt;&lt; &quot;  Total elements: &quot; &lt;&lt; totalElements &lt;&lt; &quot;\n&quot;;
+
+    // 全局单元类型统计
+    std::vector&lt;int&gt; allElemTypes;
+    gmsh::model::mesh::getElementTypes(allElemTypes);
+    std::cout &lt;&lt; &quot;  Element types used: &quot; &lt;&lt; allElemTypes.size() &lt;&lt; &quot; (&quot;;
+    for(auto t : allElemTypes) std::cout &lt;&lt; t &lt;&lt; &quot; &quot;;
+    std::cout &lt;&lt; &quot;)\n&quot;;
+    std::cout &lt;&lt; &quot;============================================\n&quot;;
+
+    // 步骤6：可选GUI显示
+    std::set&lt;std::string&gt; args(argv, argv + argc);
+    if(!args.count(&quot;-nopopup&quot;)) gmsh::fltk::run();
+
+    gmsh::clear();
+    gmsh::finalize();
+    return 0;
+}
+</code></pre>
+<p><strong>编译与运行：</strong></p>
+<pre><code class="language-bash">g++ -o ch22_full ch22_full.cpp -lgmsh
+./ch22_full                          # 使用自动创建的圆柱体
+./ch22_full input.msh                # 加载已有的MSH网格文件
+./ch22_full input.msh -nopopup       # 不弹GUI，批处理模式
+</code></pre>
+<hr />
+<h2 id="225-api">22.5 关键 API 速查表</h2>
+<h3 id="2251">22.5.1 模型查询</h3>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>签名</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>model::getEntities</code></td>
+<td><code>(vectorpair &amp;dimTags, int dim=-1)</code></td>
+<td>获取全部或指定维度实体 <code>(dim,tag)</code> 列表</td>
+</tr>
+<tr>
+<td><code>model::getCurrent</code></td>
+<td><code>(string &amp;name)</code></td>
+<td>获取当前模型名称</td>
+</tr>
+<tr>
+<td><code>model::getDimension</code></td>
+<td><code>() -&gt; int</code></td>
+<td>获取模型最高维度（0-3）</td>
+</tr>
+<tr>
+<td><code>model::getType</code></td>
+<td><code>(int dim, int tag, string &amp;type)</code></td>
+<td>获取实体类型字符串</td>
+</tr>
+<tr>
+<td><code>model::getEntityName</code></td>
+<td><code>(int dim, int tag, string &amp;name)</code></td>
+<td>获取实体名称（可为空）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2252">22.5.2 网格查询</h3>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>签名</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mesh::getNodes</code></td>
+<td><code>(vec&lt;size_t&gt; &amp;nodeTags, vec&lt;double&gt; &amp;coord, vec&lt;double&gt; &amp;paramCoord, int dim=-1, int tag=-1, bool includeBoundary=false, bool returnParamCoord=true)</code></td>
+<td>获取节点标签和坐标（交错存储）</td>
+</tr>
+<tr>
+<td><code>mesh::getElements</code></td>
+<td><code>(vec&lt;int&gt; &amp;elemTypes, vec&lt;vec&lt;size_t&gt;&gt; &amp;elemTags, vec&lt;vec&lt;size_t&gt;&gt; &amp;nodeTags, int dim=-1, int tag=-1)</code></td>
+<td>按实体获取所有单元类型、标签和连接性</td>
+</tr>
+<tr>
+<td><code>mesh::getElementTypes</code></td>
+<td><code>(vec&lt;int&gt; &amp;elemTypes, int dim=-1, int tag=-1)</code></td>
+<td>获取某实体上的单元类型列表（不含数据和标签）</td>
+</tr>
+<tr>
+<td><code>mesh::getElementsByType</code></td>
+<td><code>(int elemType, vec&lt;size_t&gt; &amp;elemTags, vec&lt;size_t&gt; &amp;nodeTags, int tag=-1, size_t task=0, size_t numTasks=1)</code></td>
+<td>按类型获取单元标签和展平连接性</td>
+</tr>
+<tr>
+<td><code>mesh::getElementProperties</code></td>
+<td><code>(int elemType, string &amp;name, int &amp;dim, int &amp;order, int &amp;numNodes, vec&lt;double&gt; &amp;localCoord, int &amp;numPrimaryNodes)</code></td>
+<td>查询单元类型属性</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2253">22.5.3 拓扑与分组查询</h3>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>签名</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>model::getAdjacencies</code></td>
+<td><code>(int dim, int tag, vec&lt;int&gt; &amp;upward, vec&lt;int&gt; &amp;downward)</code></td>
+<td>获取上下邻接实体 tag 列表</td>
+</tr>
+<tr>
+<td><code>model::getPhysicalGroupsForEntity</code></td>
+<td><code>(int dim, int tag, vec&lt;int&gt; &amp;physTags)</code></td>
+<td>获取实体所属物理组标签列表</td>
+</tr>
+<tr>
+<td><code>model::getPhysicalName</code></td>
+<td><code>(int dim, int tag, string &amp;name)</code></td>
+<td>获取物理组名称</td>
+</tr>
+<tr>
+<td><code>model::getPartitions</code></td>
+<td><code>(int dim, int tag, vec&lt;int&gt; &amp;partitions)</code></td>
+<td>获取实体所属分区索引列表</td>
+</tr>
+<tr>
+<td><code>model::getParent</code></td>
+<td><code>(int dim, int tag, int &amp;parentDim, int &amp;parentTag)</code></td>
+<td>获取分区实体的原始父实体</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2254">22.5.4 数据结构速记</h3>
+<table>
+<thead>
+<tr>
+<th>概念</th>
+<th>存储方式</th>
+<th>索引公式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>节点坐标</td>
+<td><code>coords[x0,y0,z0, x1,y1,z1, ...]</code></td>
+<td><code>x_i = coords[3*i]</code>, <code>y_i = coords[3*i+1]</code>, <code>z_i = coords[3*i+2]</code></td>
+</tr>
+<tr>
+<td>单元连接性（getElements）</td>
+<td><code>nodeTags[typeIdx]</code> 为展平一维数组</td>
+<td>第 j 个单元节点起始于 <code>j * numNodesPerElem</code></td>
+</tr>
+<tr>
+<td>单元连接性（getElementsByType）</td>
+<td><code>nodeTags</code> 为展平一维数组</td>
+<td>同上，起始于 <code>j * numNodesPerElem</code></td>
+</tr>
+<tr>
+<td>实体标识</td>
+<td><code>pair&lt;int,int&gt;</code> 或两个独立 int</td>
+<td><code>(dim, tag)</code></td>
+</tr>
+<tr>
+<td>参数坐标</td>
+<td><code>paramCoord[u0,v0,w0, u1,v1,w1, ...]</code></td>
+<td>按 <code>numNodes * 3</code> 交错（仅曲面/体有参数坐标）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2255">22.5.5 典型前处理工作流</h3>
+<pre><code>1. gmsh::initialize()                    // 启动 Gmsh
+2. gmsh::open(file) 或 手动建立几何       // 加载/创建模型
+3. model::getEntities(entities)           // 获取实体列表
+4. 遍历 entities：
+    4a. mesh::getNodes(..., dim, tag)     // 提取节点
+    4b. mesh::getElements(..., dim, tag)  // 提取单元
+    4c. getAdjacencies(dim, tag, ...)     // 查询拓扑
+    4d. getPhysicalGroupsForEntity(...)   // 识别边界条件
+    4e. getElementProperties(...)         // 理解单元结构
+5. 重组为求解器数据格式                    // 构建 CSR/COO 等
+6. gmsh::clear(); gmsh::finalize()        // 清理
+</code></pre>
+<hr />
+<p>本章覆盖了 Gmsh C++ API 中最核心的前处理查询接口。通过 <code>getEntities()</code> + <code>getNodes()</code> + <code>getElements()</code> 的三步模式，可以完整提取模型中的所有网格数据。配合 <code>getAdjacencies()</code> 的拓扑查询和 <code>getPhysicalGroupsForEntity()</code> 的物理组识别，能够胜任绝大多数有限元前处理软件的数据准备需求。下一章将介绍如何使用 API 直接修改和操作网格。</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

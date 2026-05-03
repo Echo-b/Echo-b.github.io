@@ -1,0 +1,2886 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../../vtk/chapter-23-volume3-capstone/">
+      
+      
+        <link rel="next" href="../ch02/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>第1章 Gmsh概述与C++ SDK配置 - Echo-b's Tech Notes</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#1-gmshc-sdk" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Echo-b&#39;s Tech Notes" class="md-header__button md-logo" aria-label="Echo-b's Tech Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Echo-b's Tech Notes
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              第1章 Gmsh概述与C++ SDK配置
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Echo-b&#39;s Tech Notes" class="md-nav__button md-logo" aria-label="Echo-b's Tech Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Echo-b's Tech Notes
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VTK 教程
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    VTK 教程
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    入门篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    入门篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-01-vtk-overview-and-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第一章 VTK概述与环境搭建
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-02-visualization-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二章 可视化管线
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-03-data-model-basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第三章 数据模型基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-04-geometry-and-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第四章 基本几何体与数据源
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-05-rendering-and-interactor/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第五章 渲染与交互机
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-06-volume1-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第六章 入门篇综合实战——3D几何画廊
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    实战篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    实战篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-07-polydata/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第七章 PolyData详解
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-08-unstructured-grid/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第八章 非结构化网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-09-structured-data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第九章 结构化数据
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-10-data-io/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十章 数据I/O
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-11-common-filters/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十一章 常用过滤器
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-12-color-mapping/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十二章 颜色映射与标量可视化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-13-advanced-rendering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十三章 高级渲染技术
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-14-multi-dataset/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十四章 多个数据集处理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-15-volume2-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十五章 实战篇综合实战——CFD后处理可视化工具
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    进阶篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    进阶篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-16-volume-rendering-basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十六章 体渲染基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-17-volume-rendering-advanced/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十七章 体渲染高级技术
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-18-charts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十八章 2D图表系统
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-19-annotation-and-widgets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十九章 三维标注与交互组件
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-20-custom-interaction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十章 自定义交互与Widget
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-21-qt-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十一章 Qt集成
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-22-smp-parallel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十二章 SMP并行入门
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-23-volume3-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十三章 进阶篇综合实战
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GMSH 教程
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    GMSH 教程
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3_1" id="__nav_3_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    基础篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    基础篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第1章 Gmsh概述与C++ SDK配置
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第1章 Gmsh概述与C++ SDK配置
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 学习目标
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-gmsh" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 什么是 Gmsh
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 四模块架构
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1.3 四模块架构">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#131-geometry" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3.1 Geometry（几何建模）模块
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#132-mesh" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3.2 Mesh（网格划分）模块
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#133-solver" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3.3 Solver（求解器接口）模块
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#134-post-processing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3.4 Post-Processing（后处理）模块
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#14-gmsh-cae" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.4 Gmsh 在 CAE 前处理中的定位
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#15-c-sdk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.5 C++ SDK 配置
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1.5 C++ SDK 配置">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#151-sdk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.5.1 获取 SDK
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#152-windows" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.5.2 Windows 配置
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#153-linux" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.5.3 Linux 配置
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#154-abi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.5.4 ABI 兼容性说明
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#16" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.6 最小的可运行程序
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#17-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.7 关键 API 速查表
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#18" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.8 本章小结
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第2章 几何基础——点线面曲线环与物理组
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第3章 变换与拉伸几何
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第4章 高级几何构建——内置函数孔洞注释与颜色
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第5章 三维网格控制——尺寸场体孔洞与网格算法
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch06/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第6章 网格控制进阶——Transfinite分布与结构化网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch07/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第7章 背景网格——用已有网格指导网格尺寸
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch08/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第8章 网格尺寸场
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    进阶篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    进阶篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch09/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第9章 四边形网格重组
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch10/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第10章 复合实体——跨面一致网格划分
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch11/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第11章 STL重网格——无CAD模型的表面重构
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch12/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第12章 同调与上同调计算
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch13/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第13章 嵌入实体——在网格中强制生成共形节点
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch14/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第14章 各向异性网格——方向感知的网格生成
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch15/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第15章 周期性网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch16/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第16章 OpenCASCADE内核与构造实体几何
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch17/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第17章 高级实体建模——断面扫掠圆角管道与曲率自适应网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch18/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第18章 STEP导入与几何分割
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    应用篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    应用篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch19/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第19章 后处理视图与动画
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch20/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第20章 后处理插件——视图数据运算与变换
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch21/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第21章 网格分区与区域分解
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch22/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第22章 遍历模型与网格数据——前处理查询API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第23章 离散实体与混合模型——地形网格实战
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch24/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第24章 后处理视图——List-based与Model-based数据导入
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch25/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第25章 几何求值——参数化法向量与曲率
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第26章 积分点雅可比矩阵基函数与内部边面
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 学习目标
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-gmsh" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 什么是 Gmsh
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 四模块架构
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1.3 四模块架构">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#131-geometry" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3.1 Geometry（几何建模）模块
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#132-mesh" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3.2 Mesh（网格划分）模块
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#133-solver" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3.3 Solver（求解器接口）模块
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#134-post-processing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3.4 Post-Processing（后处理）模块
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#14-gmsh-cae" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.4 Gmsh 在 CAE 前处理中的定位
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#15-c-sdk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.5 C++ SDK 配置
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1.5 C++ SDK 配置">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#151-sdk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.5.1 获取 SDK
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#152-windows" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.5.2 Windows 配置
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#153-linux" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.5.3 Linux 配置
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#154-abi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.5.4 ABI 兼容性说明
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#16" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.6 最小的可运行程序
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#17-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.7 关键 API 速查表
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#18" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.8 本章小结
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="1-gmshc-sdk">第1章: Gmsh概述与C++ SDK配置</h1>
+<h2 id="11">1.1 学习目标</h2>
+<ul>
+<li>理解 Gmsh 的定位：它是一个怎样的工具，在 CAE 前处理流程中扮演什么角色</li>
+<li>掌握 Gmsh 的四模块架构（Geometry / Mesh / Solver / Post），理解各模块职责</li>
+<li>能够在 Windows 和 Linux 上配置 Gmsh C++ SDK，正确编译和链接项目</li>
+<li>能写出一个 <code>initialize</code> / <code>finalize</code> 骨架程序并成功运行</li>
+<li>熟悉本章涉及的 Gmsh C++ API 核心函数</li>
+</ul>
+<h2 id="12-gmsh">1.2 什么是 Gmsh</h2>
+<p>Gmsh 是一个<strong>开源的三维有限元网格生成器（open source 3D finite element mesh generator）</strong>，内置 CAD 引擎和后处理器（post-processor）。它由 Christophe Geuzaine 和 Jean-Francois Remacle 开发，使用 GNU General Public License (GPL) 发布，当前稳定版本为 4.15.2（2026 年 3 月）。</p>
+<p>Gmsh 的设计目标是提供一个<strong>快速、轻量且用户友好</strong>的网格划分工具，支持参数化输入和灵活的可视化能力。它围绕四个核心模块构建，并且提供了多种接口：</p>
+<ul>
+<li><strong>图形用户界面 (GUI)</strong>：交互式建模、网格划分和结果查看</li>
+<li><strong>命令行接口 (CLI)</strong>：批处理和脚本化工作流</li>
+<li><strong>脚本语言</strong>：<code>.geo</code> 文件格式，Gmsh 自有的领域特定语言</li>
+<li><strong>多语言 API</strong>：C++、C、Python、Julia 和 Fortran</li>
+</ul>
+<p>对于 CAE 前处理软件开发人员来说，C++ API 是最强大的接口方式——它可以<strong>将 Gmsh 作为网格生成引擎直接嵌入到自己的 CAE 软件中</strong>，实现几何建模、网格划分、后处理功能的深度集成。</p>
+<h2 id="13">1.3 四模块架构</h2>
+<p>Gmsh 的功能由四个相对独立但紧密协作的模块组成：</p>
+<pre><code>+---------------------------------------------------------------+
+|                        Gmsh 架构                              |
+|                                                               |
+|  +----------+  +----------+  +----------+  +--------------+   |
+|  | Geometry |  |   Mesh   |  |  Solver  |  | Post-        |   |
+|  |  Module  |  |  Module  |  |  Module  |  | Processing   |   |
+|  |          |  |          |  |          |  | Module       |   |
+|  +----+-----+  +----+-----+  +----+-----+  +------+-------+   |
+|       |              |              |               |          |
+|       +--------------+--------------+---------------+          |
+|                      |                                        |
+|              Gmsh C++ API (gmsh.h)                            |
+|              动态链接库 (libgmsh.dll / libgmsh.so)            |
++---------------------------------------------------------------+
+</code></pre>
+<h3 id="131-geometry">1.3.1 Geometry（几何建模）模块</h3>
+<p>负责创建和编辑几何模型。Gmsh 支持两种几何内核：</p>
+<ul>
+<li><strong>内置内核 (built-in kernel)</strong>：通过 <code>gmsh::model::geo</code> 命名空间访问，适合程序化构造简单到中等复杂度的几何。操作原语包括点 (Point)、线 (Line / Spline / BSpline)、面 (Plane Surface / Ruled Surface) 和体 (Volume)。</li>
+<li><strong>OpenCASCADE 内核</strong>：通过 <code>gmsh::model::occ</code> 命名空间访问，基于开源 CAD 内核 OpenCASCADE Technology (OCCT)，支持完整的边界表示法 (B-rep)，可以导入和操作 STEP、IGES 等标准 CAD 格式。</li>
+</ul>
+<h3 id="132-mesh">1.3.2 Mesh（网格划分）模块</h3>
+<p>负责在几何模型上生成有限元网格。核心功能包括：</p>
+<ul>
+<li>控制网格尺寸的多种方式：全局参数、逐点指定、尺寸场 (Size Field)、背景网格 (Background Mesh)</li>
+<li>支持一维、二维和三维网格的增量生成</li>
+<li>结构网格 (Transfinite / Recombined) 和非结构网格</li>
+<li>单元类型支持三角形/四边形（2D）、四面体/六面体/棱柱/金字塔（3D）</li>
+<li>网格导出格式：MSH（原生）、UNV、STL、VTK 等</li>
+</ul>
+<h3 id="133-solver">1.3.3 Solver（求解器接口）模块</h3>
+<p>提供与外部有限元求解器的交互接口。Gmsh 自身不完全实现一个通用求解器，而是提供了参数化描述物理问题、定义边界条件、关联解数据的能力。通过 <code>gmsh::model::mesh::getIntegrationData()</code> 等函数可以访问积分点信息，供外部求解器使用。</p>
+<h3 id="134-post-processing">1.3.4 Post-Processing（后处理）模块</h3>
+<p>负责计算结果的可视化和分析。支持：</p>
+<ul>
+<li>标量场、矢量场和张量场的渲染</li>
+<li>剖切面显示、等值面、流线图</li>
+<li>支持 ONELAB 框架下的多模型交互式分析</li>
+<li>通过 <code>gmsh::view</code> 和 <code>gmsh::plugin</code> 命名空间控制后处理</li>
+</ul>
+<h2 id="14-gmsh-cae">1.4 Gmsh 在 CAE 前处理中的定位</h2>
+<p>在典型的 CAE 仿真流程中：</p>
+<pre><code>[CAD模型] --&gt; [几何清理/修复] --&gt; [网格划分] --&gt; [求解器] --&gt; [后处理]
+   |--------------- 前处理 (Pre-processing) ------------|
+              |--------------- Gmsh 核心覆盖 ---------------|
+</code></pre>
+<p>Gmsh 覆盖了从几何建模到后处理的完整链路。作为<strong>前处理引擎嵌入 CAE 软件时</strong>，其主要用法是：</p>
+<ol>
+<li>应用程序通过 C++ API 调用 Gmsh 的几何模块构建模型</li>
+<li>调用网格模块生成网格</li>
+<li>从 Gmsh 数据结构中提取节点坐标、单元拓扑信息</li>
+<li>将提取的数据转换为目标求解器的输入格式</li>
+<li>（可选）求解完毕后，调用后处理模块可视化结果</li>
+</ol>
+<p>这种方式免去了开发人员自行实现网格生成算法的巨大工作量，同时又保持了程序对前处理流程的完全控制。</p>
+<h2 id="15-c-sdk">1.5 C++ SDK 配置</h2>
+<p>Gmsh C++ API 的核心文件：</p>
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gmsh.h</code></td>
+<td>C++ API 头文件，包含所有 API 函数的声明和文档</td>
+</tr>
+<tr>
+<td><code>gmsh.h_cwrap</code></td>
+<td>C++ 对 C API 的包装层，用于 ABI 不兼容时的替代方案</td>
+</tr>
+<tr>
+<td><code>libgmsh.dll/.so/.dylib</code></td>
+<td>动态链接库 (dynamic library)，包含核心实现</td>
+</tr>
+</tbody>
+</table>
+<h3 id="151-sdk">1.5.1 获取 SDK</h3>
+<p><strong>方式一：下载预编译二进制 SDK</strong></p>
+<p>从 <a href="https://gmsh.info/bin/">https://gmsh.info/bin/</a> 下载对应平台的 SDK 压缩包（名称形如 <code>gmsh-*-sdk.*</code>），解压后目录结构如下：</p>
+<pre><code>gmsh-*-sdk/
+  include/
+    gmsh.h           # C++ API 头文件
+    gmsh.h_cwrap     # C API 包装（ABI 兼容备选）
+  lib/
+    gmsh.lib         # Windows 导入库
+    gmsh.dll         # Windows 动态库
+    libgmsh.so       # Linux 共享库
+    libgmsh.dylib    # macOS 动态库
+  share/doc/gmsh/tutorials/c++/   # C++ 教程源码
+</code></pre>
+<p><strong>方式二：从源码编译</strong></p>
+<pre><code class="language-bash">cd gmsh-4.15.2-source
+mkdir build &amp;&amp; cd build
+cmake -DENABLE_BUILD_DYNAMIC=1 ..
+make
+make install
+</code></pre>
+<p>编译完成后，<code>gmsh.h</code> 位于源码顶层目录的 <code>api/</code> 子目录下，动态库在构建目录中。</p>
+<h3 id="152-windows">1.5.2 Windows 配置</h3>
+<p><strong>MSVC + Visual Studio (命令行)</strong></p>
+<p>在 Visual Studio Developer Command Prompt 中：</p>
+<pre><code class="language-cmd">:: 如果编译器 ABI 与 SDK 不兼容，使用 gmsh.h_cwrap 代替 gmsh.h
+:: 先将 gmsh.h_cwrap 重命名为 gmsh.h（备份原 gmsh.h）
+
+cl /EHsc /I&lt;SDK根目录&gt;\include t1.cpp &lt;SDK根目录&gt;\lib\gmsh.lib /Fe:t1.exe
+</code></pre>
+<p>将 <code>&lt;SDK根目录&gt;</code> 替换为 SDK 的实际解压路径。运行时需确保 <code>gmsh.dll</code> 在 PATH 中或与可执行文件同目录。</p>
+<p><strong>CMakeLists.txt (Windows)</strong></p>
+<pre><code class="language-cmake">cmake_minimum_required(VERSION 3.14)
+project(MyGmshApp LANGUAGES CXX)
+
+# 设置 Gmsh SDK 路径
+set(GMSH_SDK_DIR &quot;C:/gmsh-4.15.2-Windows64-sdk&quot; CACHE PATH &quot;Gmsh SDK root&quot;)
+
+# 头文件路径
+include_directories(${GMSH_SDK_DIR}/include)
+
+# 链接目录和库
+link_directories(${GMSH_SDK_DIR}/lib)
+
+add_executable(my_app main.cpp)
+target_link_libraries(my_app gmsh)
+
+# 将 DLL 复制到可执行文件目录
+add_custom_command(TARGET my_app POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+    &quot;${GMSH_SDK_DIR}/lib/gmsh.dll&quot;
+    $&lt;TARGET_FILE_DIR:my_app&gt;)
+</code></pre>
+<h3 id="153-linux">1.5.3 Linux 配置</h3>
+<p><strong>直接使用 g++ 编译</strong></p>
+<pre><code class="language-bash"># 使用预编译 SDK
+g++ -o my_app main.cpp -I&lt;SDK根目录&gt;/include -L&lt;SDK根目录&gt;/lib -lgmsh
+
+# 使用源码编译后安装的库
+g++ -o my_app main.cpp -lgmsh
+</code></pre>
+<p>运行时需要确保动态库可被找到：</p>
+<pre><code class="language-bash">export LD_LIBRARY_PATH=&lt;SDK根目录&gt;/lib:$LD_LIBRARY_PATH
+./my_app
+</code></pre>
+<p><strong>CMakeLists.txt (Linux)</strong></p>
+<pre><code class="language-cmake">cmake_minimum_required(VERSION 3.14)
+project(MyGmshApp LANGUAGES CXX)
+
+# 如果 SDK 不在系统路径中
+set(GMSH_SDK_DIR &quot;/path/to/gmsh-sdk&quot; CACHE PATH &quot;Gmsh SDK root&quot;)
+
+find_path(GMSH_INCLUDE_DIR gmsh.h
+    HINTS ${GMSH_SDK_DIR}/include /usr/local/include)
+find_library(GMSH_LIBRARY gmsh
+    HINTS ${GMSH_SDK_DIR}/lib /usr/local/lib)
+
+add_executable(my_app main.cpp)
+target_include_directories(my_app PRIVATE ${GMSH_INCLUDE_DIR})
+target_link_libraries(my_app ${GMSH_LIBRARY})
+</code></pre>
+<h3 id="154-abi">1.5.4 ABI 兼容性说明</h3>
+<p>如果编译器的 C++ ABI 与 SDK 构建时使用的编译器不兼容（最常见于 Windows 上 MSVC 与 MinGW 之间），应使用 <code>gmsh.h_cwrap</code> 代替 <code>gmsh.h</code>。</p>
+<p><code>gmsh.h_cwrap</code> 通过 C API 间接调用 Gmsh，会有轻微的性能开销（额外的数据拷贝），但功能完全一致。使用方法：</p>
+<pre><code class="language-cmd">:: Windows
+ren include\gmsh.h gmsh.h_original
+ren include\gmsh.h_cwrap gmsh.h
+</code></pre>
+<pre><code class="language-bash"># Linux / macOS
+cp include/gmsh.h include/gmsh.h_original
+cp include/gmsh.h_cwrap include/gmsh.h
+</code></pre>
+<h2 id="16">1.6 最小的可运行程序</h2>
+<p>下面是一个最基本的 Gmsh C++ 程序骨架，它演示了 API 使用的完整生命周期：</p>
+<pre><code class="language-cpp">// min_gmsh.cpp — Gmsh C++ API 最小骨架程序
+#include &lt;gmsh.h&gt;
+
+int main(int argc, char **argv)
+{
+    // 第1步：初始化 Gmsh（必须在调用任何 API 函数之前执行）
+    gmsh::initialize();
+
+    // 第2步：创建一个新模型（可选；如果不调用，Gmsh 会自动创建一个无名默认模型）
+    gmsh::model::add(&quot;my_first_model&quot;);
+
+    // 第3步：在此处进行几何建模、网格划分等操作
+    // （本章暂不涉及具体操作，后续章节逐步展开）
+
+    // 第4步：结束 Gmsh 会话（释放所有资源）
+    gmsh::finalize();
+
+    return 0;
+}
+</code></pre>
+<p><strong>代码解释：</strong></p>
+<ul>
+<li><code>gmsh::initialize()</code> —— 初始化 Gmsh 内部状态。这是<strong>强制性调用</strong>，必须在所有其他 API 调用之前执行。它负责初始化图形后端（FLTK）、命令行参数解析等底层基础设施。</li>
+<li><code>gmsh::model::add("my_first_model")</code> —— 创建一个名为 <code>"my_first_model"</code> 的模型。Gmsh 支持同时管理多个模型，每个模型拥有独立的几何和网格数据。tag 会从 0 开始自动递增分配，也可以通过返回值获取。</li>
+<li><code>gmsh::finalize()</code> —— 释放 Gmsh 分配的所有资源，关闭 GUI 子系统。这是<strong>强制性调用</strong>，应在程序结束前执行。不调用的后果包括内存泄漏和未刷新的文件缓冲区。</li>
+</ul>
+<p>运行验证：</p>
+<pre><code class="language-bash"># Linux
+g++ -o min_gmsh min_gmsh.cpp -lgmsh
+./min_gmsh
+
+# Windows (MSVC)
+cl /EHsc /I&lt;SDK&gt;\include min_gmsh.cpp &lt;SDK&gt;\lib\gmsh.lib /Fe:min_gmsh.exe
+min_gmsh.exe
+</code></pre>
+<p>如果程序静默退出（无输出、无崩溃），说明 Gmsh SDK 配置正确。</p>
+<h2 id="17-api">1.7 关键 API 速查表</h2>
+<p>本章介绍的所有 API 函数汇总如下。这些函数都定义在 <code>gmsh.h</code> 头文件中。</p>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>命名空间</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>initialize()</code></td>
+<td><code>gmsh</code></td>
+<td>初始化 Gmsh，必须在所有 API 调用前执行</td>
+</tr>
+<tr>
+<td><code>finalize()</code></td>
+<td><code>gmsh</code></td>
+<td>释放 Gmsh 资源，程序结束前必须执行</td>
+</tr>
+<tr>
+<td><code>add(name)</code></td>
+<td><code>gmsh::model</code></td>
+<td>创建新模型，参数为模型名称字符串。返回模型 tag</td>
+</tr>
+<tr>
+<td><code>setCurrent(tag)</code></td>
+<td><code>gmsh::model</code></td>
+<td>切换到指定 tag 的模型（多模型管理场景）</td>
+</tr>
+<tr>
+<td><code>list(models)</code></td>
+<td><code>gmsh::model</code></td>
+<td>获取当前所有已创建模型的名称和 tag 列表</td>
+</tr>
+<tr>
+<td><code>isInitialized()</code></td>
+<td><code>gmsh</code></td>
+<td>查询 Gmsh 是否已完成初始化</td>
+</tr>
+<tr>
+<td><code>open(file)</code></td>
+<td><code>gmsh</code></td>
+<td>打开并载入一个 <code>.geo</code> 脚本文件或 <code>.msh</code> 网格文件</td>
+</tr>
+<tr>
+<td><code>write(file)</code></td>
+<td><code>gmsh</code></td>
+<td>将当前模型（网格）保存到文件，格式由扩展名确定</td>
+</tr>
+<tr>
+<td><code>option::setNumber(name, val)</code></td>
+<td><code>gmsh</code></td>
+<td>设置数值型全局选项（如 <code>"Mesh.SaveAll"</code>）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>命名空间体系简图：</strong></p>
+<pre><code>gmsh                               # 顶层：初始化、文件 I/O、全局选项
+├── model                          # 模型管理：增删模型、物理组、域属性
+│   ├── geo                        # 内置几何内核：点、线、面、体操作
+│   ├── occ                        # OpenCASCADE 几何内核
+│   └── mesh                       # 网格生成与数据访问
+├── view                           # 后处理视图管理
+│   └── option                     # 视图级选项
+├── plugin                        # 后处理插件（切片、等值面、统计等）
+├── fltk                          # GUI 控制（仅当 FLTK 编译进库中时可用）
+└── logger                        # 日志输出控制
+</code></pre>
+<h2 id="18">1.8 本章小结</h2>
+<ul>
+<li>Gmsh 是一个完整的网格生成平台，四模块架构使其职责分明：几何建模 (Geometry)、网格划分 (Mesh)、求解器接口 (Solver)、后处理 (Post-Processing)。</li>
+<li>C++ API 通过 <code>gmsh.h</code> 头文件和动态链接库提供服务，可将 Gmsh 作为前处理引擎直接嵌入 CAE 软件。</li>
+<li>SDK 获取方式包含预编译二进制下载和源码编译两种途径，配置要点是头文件路径和链接库路径的正确设置。</li>
+<li>每个 Gmsh C++ 程序必须以 <code>gmsh::initialize()</code> 开头、以 <code>gmsh::finalize()</code> 结尾。</li>
+<li>ABI 不兼容时可用 <code>gmsh.h_cwrap</code> 替代 <code>gmsh.h</code>，功能等价但略增拷贝开销。</li>
+</ul>
+<p>下一章将基于内置几何内核，从点、线、面等基本几何实体（elementary entity）入手，逐步构建完整的几何模型。</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

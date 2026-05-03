@@ -1,0 +1,3101 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../ch16/">
+      
+      
+        <link rel="next" href="../ch18/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>第17章 高级实体建模——断面扫掠圆角管道与曲率自适应网格 - Echo-b's Tech Notes</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#17" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Echo-b&#39;s Tech Notes" class="md-header__button md-logo" aria-label="Echo-b's Tech Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Echo-b's Tech Notes
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              第17章 高级实体建模——断面扫掠圆角管道与曲率自适应网格
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Echo-b&#39;s Tech Notes" class="md-nav__button md-logo" aria-label="Echo-b's Tech Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Echo-b's Tech Notes
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VTK 教程
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    VTK 教程
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    入门篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    入门篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-01-vtk-overview-and-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第一章 VTK概述与环境搭建
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-02-visualization-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二章 可视化管线
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-03-data-model-basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第三章 数据模型基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-04-geometry-and-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第四章 基本几何体与数据源
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-05-rendering-and-interactor/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第五章 渲染与交互机
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-06-volume1-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第六章 入门篇综合实战——3D几何画廊
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    实战篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    实战篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-07-polydata/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第七章 PolyData详解
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-08-unstructured-grid/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第八章 非结构化网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-09-structured-data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第九章 结构化数据
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-10-data-io/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十章 数据I/O
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-11-common-filters/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十一章 常用过滤器
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-12-color-mapping/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十二章 颜色映射与标量可视化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-13-advanced-rendering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十三章 高级渲染技术
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-14-multi-dataset/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十四章 多个数据集处理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-15-volume2-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十五章 实战篇综合实战——CFD后处理可视化工具
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    进阶篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    进阶篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-16-volume-rendering-basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十六章 体渲染基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-17-volume-rendering-advanced/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十七章 体渲染高级技术
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-18-charts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十八章 2D图表系统
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-19-annotation-and-widgets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十九章 三维标注与交互组件
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-20-custom-interaction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十章 自定义交互与Widget
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-21-qt-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十一章 Qt集成
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-22-smp-parallel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十二章 SMP并行入门
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-23-volume3-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十三章 进阶篇综合实战
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GMSH 教程
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    GMSH 教程
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1" id="__nav_3_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    基础篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    基础篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第1章 Gmsh概述与C++ SDK配置
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第2章 几何基础——点线面曲线环与物理组
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第3章 变换与拉伸几何
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第4章 高级几何构建——内置函数孔洞注释与颜色
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第5章 三维网格控制——尺寸场体孔洞与网格算法
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch06/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第6章 网格控制进阶——Transfinite分布与结构化网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch07/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第7章 背景网格——用已有网格指导网格尺寸
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch08/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第8章 网格尺寸场
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    进阶篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    进阶篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch09/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第9章 四边形网格重组
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch10/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第10章 复合实体——跨面一致网格划分
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch11/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第11章 STL重网格——无CAD模型的表面重构
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch12/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第12章 同调与上同调计算
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch13/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第13章 嵌入实体——在网格中强制生成共形节点
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch14/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第14章 各向异性网格——方向感知的网格生成
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch15/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第15章 周期性网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch16/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第16章 OpenCASCADE内核与构造实体几何
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第17章 高级实体建模——断面扫掠圆角管道与曲率自适应网格
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第17章 高级实体建模——断面扫掠圆角管道与曲率自适应网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#171" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17.1 学习目标
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#172" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17.2 核心概念说明
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="17.2 核心概念说明">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1721-thrusection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17.2.1 断面扫掠（Thrusection）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1722-fillet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17.2.2 圆角（Fillet）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1723-pipe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17.2.3 管道（Pipe）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1724" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17.2.4 曲率自适应网格
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#173-c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17.3 C++ 代码逐段讲解
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="17.3 C++ 代码逐段讲解">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1731" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17.3.1 头文件与初始化
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1732" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17.3.2 断面扫掠 — 光滑过渡模式
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1733" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17.3.3 断面扫掠 — 直纹面模式
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1734" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17.3.4 实体圆角
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1735" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17.3.5 管道 — 沿样条曲线扫掠
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1736" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17.3.6 曲率自适应网格与网格生成
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1737-gui" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17.3.7 GUI 启动与清理
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#174" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17.4 完整可运行代码
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#175-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17.5 关键 API 速查表
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#176" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17.6 注意事项
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch18/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第18章 STEP导入与几何分割
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    应用篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    应用篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch19/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第19章 后处理视图与动画
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch20/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第20章 后处理插件——视图数据运算与变换
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch21/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第21章 网格分区与区域分解
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch22/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第22章 遍历模型与网格数据——前处理查询API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第23章 离散实体与混合模型——地形网格实战
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch24/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第24章 后处理视图——List-based与Model-based数据导入
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch25/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第25章 几何求值——参数化法向量与曲率
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第26章 积分点雅可比矩阵基函数与内部边面
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#171" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17.1 学习目标
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#172" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17.2 核心概念说明
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="17.2 核心概念说明">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1721-thrusection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17.2.1 断面扫掠（Thrusection）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1722-fillet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17.2.2 圆角（Fillet）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1723-pipe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17.2.3 管道（Pipe）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1724" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17.2.4 曲率自适应网格
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#173-c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17.3 C++ 代码逐段讲解
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="17.3 C++ 代码逐段讲解">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1731" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17.3.1 头文件与初始化
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1732" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17.3.2 断面扫掠 — 光滑过渡模式
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1733" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17.3.3 断面扫掠 — 直纹面模式
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1734" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17.3.4 实体圆角
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1735" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17.3.5 管道 — 沿样条曲线扫掠
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1736" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17.3.6 曲率自适应网格与网格生成
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1737-gui" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17.3.7 GUI 启动与清理
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#174" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17.4 完整可运行代码
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#175-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17.5 关键 API 速查表
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#176" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17.6 注意事项
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="17">第17章 高级实体建模：断面扫掠、圆角、管道与曲率自适应网格</h1>
+<hr />
+<h2 id="171">17.1 学习目标</h2>
+<ul>
+<li>掌握通过多个截面曲线创建过渡实体/面（断面扫掠，Thrusection / Loft / Skin）的方法，理解直纹面（ruled surface）与光滑过渡（smooth）两种插值方式的区别</li>
+<li>学会对体的棱边施加圆角（Fillet），包括提取实体边界边、为每条边设定独立半径</li>
+<li>掌握沿任意空间曲线路径扫掠截面生成管道（Pipe）的技术，理解不同标架（trihedron）类型对扫掠扭转行为的影响</li>
+<li>理解曲率自适应网格（Curvature-adaptive mesh）的原理：根据几何曲率自动决定网格尺寸，曲率大的区域单元更密</li>
+<li>熟悉本章涉及的 OCC（OpenCASCADE）辅助操作：<code>addWire</code>（开放线框）、<code>addSpline</code>（样条曲线）、<code>getBoundary</code>（边界提取）、<code>copy</code>/<code>translate</code> 等</li>
+</ul>
+<hr />
+<h2 id="172">17.2 核心概念说明</h2>
+<h3 id="1721-thrusection">17.2.1 断面扫掠（Thrusection）</h3>
+<p>断面扫掠（Thrusection）是一种通过<strong>多个平行或非平行截面曲线</strong>来创建过渡实体或曲面的建模技术，在 CAD 领域也被称为 <strong>Loft</strong> 或 <strong>Skin</strong>。Gmsh 通过 OCC 内核提供 <code>addThruSections()</code> 函数实现这一功能。</p>
+<pre><code>截面1 (wire1) ──┐
+截面2 (wire2) ──┼── 插值/放样 ──→ 过渡体/面
+截面3 (wire3) ──┘
+</code></pre>
+<p><strong>工作原理</strong>：给定一组由闭合或开放的线框（wire）构成的截面，OCC 在这些截面之间插值生成过渡曲面，再将曲面缝合为实体（如果 <code>makeSolid=true</code>）。</p>
+<p><strong>直纹面（Ruled）vs 光滑过渡（Smooth）</strong>：
+- <code>makeRuled=true</code>：在相邻截面之间用<strong>直纹面</strong>（ruled surface）连接，即用直线段直接连接对应点列。外观呈棱角分明的多边形过渡，适合规则几何体。
+- <code>makeRuled=false</code>（默认）：在相邻截面之间用<strong>光滑曲面</strong>连接，即通过 B样条/Bézier 插值生成连续过渡。外观平滑，适合有机形状。</p>
+<p><strong>高次曲面与连续性控制</strong>：<code>addThruSections()</code> 还提供了 <code>maxDegree</code>（最大曲面次数）和 <code>continuity</code>（连续性级别，如 "C0", "G1", "C1", "G2", "C2", "C3", "CN"）等高级参数，用于控制曲面精度。</p>
+<h3 id="1722-fillet">17.2.2 圆角（Fillet）</h3>
+<p>圆角（Fillet）是指将实体上的<strong>尖锐棱边</strong>替换为<strong>圆弧过渡面</strong>的操作。它对提升零件的疲劳寿命、消除应力集中、改善铸造/注塑工艺性至关重要。</p>
+<p>在 Gmsh OCC 中，<code>fillet()</code> 函数接受：
+1. <strong>体标签列表</strong>：对哪些体施加圆角
+2. <strong>边标签列表</strong>：对哪些棱边倒圆角
+3. <strong>半径列表</strong>：每条边的圆角半径。可以是单个半径（适用于所有边）、每条边一个半径，或每条边两个半径（起点半径和终点半径不同，变半径圆角）</p>
+<p><strong>自动获取所有边界边</strong>：通过 <code>getBoundary()</code> 串联调用可以自动提取体的所有边界边，避免手动指定：</p>
+<pre><code>体(3D) → getBoundary → 面(2D) → getBoundary → 边(1D) → 收集边的标签
+</code></pre>
+<h3 id="1723-pipe">17.2.3 管道（Pipe）</h3>
+<p>管道（Pipe）是将一个截面（如圆盘）沿一条空间曲线路径扫掠生成实体的操作。它是通用扫掠（sweep）的一种特例。</p>
+<p><strong>Gmsh OCC 实现</strong>：<code>addPipe()</code> 接收一个截面实体（dimTags）和一条引导路径线框（wireTag），沿路径扫掠生成管道。</p>
+<p><strong>标架（Trihedron）类型</strong>控制截面在扫掠过程中如何相对于路径扭转：</p>
+<table>
+<thead>
+<tr>
+<th>标架类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>DiscreteTrihedron</code></td>
+<td>离散标架（默认），最小扭转，数值稳定</td>
+</tr>
+<tr>
+<td><code>Frenet</code></td>
+<td>Frenet 标架（Frenet Frame），基于曲线的切向、法向、副法向定义局部坐标系</td>
+</tr>
+<tr>
+<td><code>CorrectedFrenet</code></td>
+<td>修正 Frenet 标架，减少 Frenet 在拐点处的翻转问题</td>
+</tr>
+<tr>
+<td><code>Fixed</code></td>
+<td>固定方向，截面不随路径旋转</td>
+</tr>
+<tr>
+<td><code>ConstantNormal</code></td>
+<td>常法向，保持截面法向恒定</td>
+</tr>
+<tr>
+<td><code>Darboux</code></td>
+<td>Darboux 标架，结合曲面信息</td>
+</tr>
+</tbody>
+</table>
+<h3 id="1724">17.2.4 曲率自适应网格</h3>
+<p>在 CAE 前处理中，一个常见需求是：<strong>几何曲率大的地方网格更密</strong>，以保证有限元分析精度。Gmsh 提供了一个全局选项来实现这一目标：</p>
+<pre><code>gmsh::option::setNumber(&quot;Mesh.MeshSizeFromCurvature&quot;, N);
+</code></pre>
+<p>其中 <code>N</code> 的含义是：曲线每经过 $2\pi$ 弧度的弯曲时，该段弧上最少要布置 <code>N</code> 个单元。举例：
+- $N=20$：一个完整圆（$2\pi$ 弧度）上至少 20 个单元
+- $N=50$：一个完整圆上至少 50 个单元（网格更密，弧面几何分辨率更高）
+- $N=5$：一个完整圆上至少 5 个单元（近似多边形，适用于曲率平缓的区域）</p>
+<p><strong>配合使用</strong>：通常将 <code>Mesh.MeshSizeFromCurvature</code> 与 <code>Mesh.MeshSizeMin</code>（最小尺寸限制）、<code>Mesh.MeshSizeMax</code>（最大尺寸限制）配合使用，避免曲率驱动产生过小或过大的单元。</p>
+<p><strong>与 API 关系</strong>：曲率自适应网格是通过<strong>全局选项</strong>控制的，而非通过 <code>mesh::field</code> API。设置该选项后，Gmsh 在网格划分时自动查询各几何实体的曲率并计算相应的局部网格尺寸。</p>
+<hr />
+<h2 id="173-c">17.3 C++ 代码逐段讲解</h2>
+<h3 id="1731">17.3.1 头文件与初始化</h3>
+<pre><code class="language-cpp">#include &lt;set&gt;
+#include &lt;cmath&gt;
+#include &lt;gmsh.h&gt;
+
+int main(int argc, char **argv)
+{
+    gmsh::initialize(argc, argv);
+    gmsh::model::add(&quot;ch17_advanced_solids&quot;);
+</code></pre>
+<p>引入 <code>&lt;set&gt;</code> 用于存储命令行参数集合（判断 GUI 模式），<code>&lt;cmath&gt;</code> 提供 <code>M_PI</code>、<code>cos</code>、<code>sin</code> 等数学常量与函数。<code>&lt;gmsh.h&gt;</code> 是 Gmsh C++ API 的唯一入口头文件。<code>gmsh::model::add()</code> 为当前模型命名，该名称会出现在 GUI 标题栏和导出的文件中。</p>
+<h3 id="1732">17.3.2 断面扫掠 — 光滑过渡模式</h3>
+<pre><code class="language-cpp">    gmsh::vectorpair out;
+
+    // 创建第一个截面：大圆 (中心原点，半径0.5)
+    gmsh::model::occ::addCircle(0, 0, 0, 0.5, 1);
+    gmsh::model::occ::addCurveLoop({1}, 1);
+
+    // 创建第二个截面：偏置小圆 (z=1处，半径0.1)
+    gmsh::model::occ::addCircle(0.1, 0.05, 1, 0.1, 2);
+    gmsh::model::occ::addCurveLoop({2}, 2);
+
+    // 创建第三个截面：偏置中圆 (z=2处，半径0.3)
+    gmsh::model::occ::addCircle(-0.1, -0.1, 2, 0.3, 3);
+    gmsh::model::occ::addCurveLoop({3}, 3);
+
+    // 断面扫掠：光滑插值，生成实体
+    gmsh::model::occ::addThruSections({1, 2, 3}, out, 1,
+                                       true,   // makeSolid: 生成实体
+                                       false); // makeRuled: 光滑过渡
+    gmsh::model::occ::synchronize();
+</code></pre>
+<p><code>gmsh::model::occ::addCircle(x, y, z, r, tag)</code> 在指定位置以给定半径创建一个圆（闭合曲线）。圆心在 <code>(x, y)</code>，圆所在平面与 XY 平面平行（z 为法向高度）。标签 <code>tag</code> 正数时显式指定，OCC 内部使用与 geo 不同的编号空间。</p>
+<p><code>gmsh::model::occ::addCurveLoop({curveTag}, tag)</code> 将闭合曲线转换为<strong>曲线环</strong>。曲线环是面的边界定义单元。即使只有一条曲线，也需要显式创建 curve loop。</p>
+<p><code>gmsh::model::occ::addThruSections({wireTags}, out, tag, makeSolid, makeRuled)</code>:
+- <code>{1, 2, 3}</code>：三个截面 wire 的标签列表，按空间顺序排列
+- <code>out</code>：输出参数，接收生成实体（dim, tag 对）的列表
+- <code>tag=1</code>：显式指定新实体的标签
+- <code>makeSolid=true</code>：生成体（3D）；false 则生成面（2D）
+- <code>makeRuled=false</code>：使用光滑插值过渡</p>
+<p>此段代码生成的形状类似一个<strong>花瓶</strong>：底部大圆（截面1）、腰部小圆（截面2）、顶部中圆（截面3），它们之间通过光滑曲面连接。</p>
+<h3 id="1733">17.3.3 断面扫掠 — 直纹面模式</h3>
+<pre><code class="language-cpp">    // 第二组截面：使用直纹面 (ruled) 插值
+    gmsh::model::occ::addCircle(2 + 0, 0, 0, 0.5, 11);
+    gmsh::model::occ::addCurveLoop({11}, 11);
+    gmsh::model::occ::addCircle(2 + 0.1, 0.05, 1, 0.1, 12);
+    gmsh::model::occ::addCurveLoop({12}, 12);
+    gmsh::model::occ::addCircle(2 - 0.1, -0.1, 2, 0.3, 13);
+    gmsh::model::occ::addCurveLoop({13}, 13);
+
+    gmsh::model::occ::addThruSections({11, 12, 13}, out, 11,
+                                       true,  // makeSolid: 生成实体
+                                       true); // makeRuled: 直纹面
+    gmsh::model::occ::synchronize();
+</code></pre>
+<p>第二组截面放在 x=2 偏移位置（<code>2 + 0</code>），与第一组形成对比。截面的几何参数与第一组相同，唯一区别是 <code>makeRuled=true</code>。</p>
+<p>当 <code>makeRuled=true</code> 时，相邻截面之间的连接曲面由<strong>直线段直接连接对应点</strong>生成，外观呈棱角分明的锥形/棱柱形过渡。这对于机械零件（如锥齿轮坯、多边形过渡接头）非常有用。</p>
+<p>在 GUI 中同时观察两组结果，可以直观对比光滑与直纹两种模式的差异。</p>
+<h3 id="1734">17.3.4 实体圆角</h3>
+<pre><code class="language-cpp">    // 复制第一个体，平移到 x=4 处
+    gmsh::vectorpair vol1 = {{3, 1}};
+    gmsh::model::occ::copy(vol1, out);
+    gmsh::model::occ::translate(out, 4, 0, 0);
+    gmsh::model::occ::synchronize();
+
+    // 提取体的所有边界边
+    gmsh::vectorpair faces;
+    gmsh::model::getBoundary(out, faces, false);  // 体→面 边界
+    gmsh::vectorpair edges;
+    gmsh::model::getBoundary(faces, edges, false); // 面→边 边界
+
+    // 收集边的绝对标签（getBoundary 默认返回带符号标签）
+    std::vector&lt;int&gt; edgeTags;
+    for (auto &amp;e : edges)
+        edgeTags.push_back(std::abs(e.second));
+
+    // 用半径 0.1 对所有边倒圆角
+    gmsh::model::occ::fillet({out[0].second},  // 体标签
+                              edgeTags,         // 边标签
+                              {0.1},            // 半径（统一半径）
+                              out);             // 输出实体
+    gmsh::model::occ::synchronize();
+</code></pre>
+<p>本段展示了在实体上施加圆角的完整工作流程。</p>
+<ol>
+<li>
+<p><strong>复制并平移</strong>：<code>occ::copy()</code> + <code>occ::translate()</code> 将原始体复制一份并平移到 x=4。使用复制体做圆角操作，避免影响原始实体。</p>
+</li>
+<li>
+<p><strong>提取边界边</strong>：<code>gmsh::model::getBoundary(inDimTags, outDimTags, combined, oriented, recursive)</code> 返回实体的边界实体。</p>
+</li>
+<li>第一层：体 → 面（<code>faces</code>）</li>
+<li>第二层：面 → 边（<code>edges</code>）</li>
+<li><code>combined=false</code> 表示不合并重复边界（当输入多个实体时）</li>
+<li>
+<p>返回的标签可能带符号（表示方向），因此用 <code>std::abs()</code> 取绝对值</p>
+</li>
+<li>
+<p><strong>调用 fillet</strong>：<code>occ::fillet(volumeTags, curveTags, radii, outDimTags, removeVolume)</code></p>
+</li>
+<li><code>{out[0].second}</code> 是体的标签（单元素列表，表示只对一个体操作）</li>
+<li><code>edgeTags</code> 是从边界提取获得的所有边</li>
+<li><code>{0.1}</code> 是单个半径值，表示对所有边使用统一半径 0.1</li>
+<li><code>removeVolume=true</code>（默认）：删除原体，只保留圆角后的新体</li>
+</ol>
+<p><strong>变半径圆角</strong>：如果 <code>radii</code> 的长度是 <code>curveTags</code> 的两倍，则每条边可以指定起点和终点两个半径，实现渐变半径圆角。</p>
+<h3 id="1735">17.3.5 管道 — 沿样条曲线扫掠</h3>
+<pre><code class="language-cpp">    // 定义螺旋样条路径
+    double nturns = 1;      // 螺旋圈数
+    int npts = 20;          // 控制点数量
+    double r = 1;           // 螺旋半径
+    double h = 1;           // 总高度
+    std::vector&lt;int&gt; splinePts;
+
+    for (int i = 0; i &lt; npts; i++) {
+        double theta = i * 2 * M_PI * nturns / npts;
+        gmsh::model::occ::addPoint(
+            r * cos(theta), r * sin(theta), i * h / npts,
+            1,        // 网格尺寸（此处不关键）
+            1000 + i  // 点标签
+        );
+        splinePts.push_back(1000 + i);
+    }
+    gmsh::model::occ::addSpline(splinePts, 1000);
+</code></pre>
+<p>首先创建一条<strong>螺旋样条曲线</strong>作为扫掠路径。<code>nturns</code> 控制螺旋的圈数，<code>npts</code> 控制离散精度，<code>r</code> 和 <code>h</code> 控制螺旋半径和高度。<code>occ::addSpline(pointTags, splineTag)</code> 通过这些控制点插值生成一条三次 B样条曲线。</p>
+<pre><code class="language-cpp">    // 将样条曲线包装为开放的线框（wire）
+    gmsh::model::occ::addWire({1000}, 1000);
+</code></pre>
+<p><code>occ::addWire({curveTags}, wireTag)</code> 将一组曲线包装为线框（wire）。<strong>Wire 与 CurveLoop 的区别</strong>：
+- <strong>CurveLoop</strong>：闭合的曲线环，用于定义面的边界
+- <strong>Wire</strong>：开放的曲线链，用于作为扫掠路径等</p>
+<p>管道扫掠要求引导路径为 wire 类型。</p>
+<pre><code class="language-cpp">    // 定义截面：圆盘（disk），半径 0.2
+    gmsh::model::occ::addDisk(1, 0, 0, 0.2, 0.2, 1000);
+    // 旋转圆盘使其法向与螺旋起点切线方向对齐
+    gmsh::model::occ::rotate({{2, 1000}}, 0, 0, 0, 1, 0, 0, M_PI / 2);
+
+    // 沿螺旋线扫掠圆盘生成管道
+    gmsh::vectorpair pipeOut;
+    gmsh::model::occ::addPipe({{2, 1000}}, 1000, pipeOut, &quot;DiscreteTrihedron&quot;);
+</code></pre>
+<p><code>occ::addDisk(xc, yc, zc, rx, ry, tag)</code> 创建一个椭圆/圆盘面。<code>rx=ry=0.2</code> 表示圆盘，半径为 0.2。<code>occ::rotate(dimTags, x, y, z, ax, ay, az, angle)</code> 绕通过点 <code>(x,y,z)</code>、方向 <code>(ax,ay,az)</code> 的轴旋转指定角度。此处绕 X 轴旋转 $\pi/2$ 使圆盘法向从 Z 轴转为 Y 轴方向（与螺旋起点切线匹配）。</p>
+<p><code>occ::addPipe(dimTags, wireTag, out, trihedron)</code> 是核心扫掠 API：
+- <code>{{2, 1000}}</code>：截面实体（维度2 = 面，标签1000 = 圆盘）
+- <code>1000</code>：引导路径 wire 的标签
+- <code>pipeOut</code>：输出，接收生成的管道实体
+- <code>"DiscreteTrihedron"</code>：标架类型（可替换为 "Frenet"、"Fixed" 等）</p>
+<pre><code class="language-cpp">    // 删除源截面，增加子边显示数量以获得更平滑的几何渲染
+    gmsh::model::occ::remove({{2, 1000}});
+    gmsh::option::setNumber(&quot;Geometry.NumSubEdges&quot;, 1000);
+    gmsh::model::occ::synchronize();
+</code></pre>
+<p><code>occ::remove()</code> 删除不再需要的源截面。<code>Geometry.NumSubEdges=1000</code> 提高曲面在 GUI 中的渲染精度（增加每条边的分割段数），这只是视觉效果，不影响网格质量。对螺旋管道这类高曲率几何，提高该值可避免渲染成多边形。</p>
+<h3 id="1736">17.3.6 曲率自适应网格与网格生成</h3>
+<pre><code class="language-cpp">    // 激活曲率自适应网格尺寸计算
+    // 参数 20：每 2*PI 弧度至少 20 个单元
+    gmsh::option::setNumber(&quot;Mesh.MeshSizeFromCurvature&quot;, 20);
+
+    // 设置网格尺寸的上下限
+    gmsh::option::setNumber(&quot;Mesh.MeshSizeMin&quot;, 0.001);
+    gmsh::option::setNumber(&quot;Mesh.MeshSizeMax&quot;, 0.3);
+
+    gmsh::model::mesh::generate(3);
+    gmsh::write(&quot;ch17_advanced.msh&quot;);
+</code></pre>
+<p>曲率自适应网格通过三个全局选项控制：</p>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>含义</th>
+<th>本示例设置</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Mesh.MeshSizeFromCurvature</code></td>
+<td>每 $2\pi$ 弧度最少单元数</td>
+<td>20</td>
+</tr>
+<tr>
+<td><code>Mesh.MeshSizeMin</code></td>
+<td>网格尺寸下限（防止曲率极大处单元过小）</td>
+<td>0.001</td>
+</tr>
+<tr>
+<td><code>Mesh.MeshSizeMax</code></td>
+<td>网格尺寸上限（防止曲率极小处单元过大）</td>
+<td>0.3</td>
+</tr>
+</tbody>
+</table>
+<p>设置后，Gmsh 在网格划分时自动遍历所有几何实体，用其曲率半径和角度参数计算局部目标单元尺寸。例如，圆角半径 0.1 处，由于曲率大，网格会自动加密；而在平直区域，网格可以较粗。</p>
+<p><strong>注意</strong>：曲率自适应是在<strong>网格划分阶段</strong>生效的，而非在几何建模阶段。它不影响 OCC 几何实体本身，只影响最终生成的网格节点分布。</p>
+<h3 id="1737-gui">17.3.7 GUI 启动与清理</h3>
+<pre><code class="language-cpp">    std::set&lt;std::string&gt; args(argv, argv + argc);
+    if (!args.count(&quot;-nopopup&quot;))
+        gmsh::fltk::run();
+
+    gmsh::finalize();
+    return 0;
+}
+</code></pre>
+<p>标准结尾：检查命令行是否包含 <code>-nopopup</code>，若无则启动 FLTK 图形界面供交互查看。<code>gmsh::finalize()</code> 释放 Gmsh 资源。</p>
+<hr />
+<h2 id="174">17.4 完整可运行代码</h2>
+<pre><code class="language-cpp">// =============================================================================
+// Gmsh C++ 教程 第17章 — 高级实体建模
+// 断面扫掠(ThruSection) / 圆角(Fillet) / 管道(Pipe) / 曲率自适应网格
+// =============================================================================
+#include &lt;set&gt;
+#include &lt;cmath&gt;
+#include &lt;gmsh.h&gt;
+
+int main(int argc, char **argv)
+{
+    gmsh::initialize(argc, argv);
+    gmsh::model::add(&quot;ch17_advanced_solids&quot;);
+    gmsh::vectorpair out;
+
+    // ===== 17.4.1 断面扫掠：光滑过渡 (makeRuled=false) =====
+    gmsh::model::occ::addCircle(0, 0, 0, 0.5, 1);
+    gmsh::model::occ::addCurveLoop({1}, 1);
+    gmsh::model::occ::addCircle(0.1, 0.05, 1, 0.1, 2);
+    gmsh::model::occ::addCurveLoop({2}, 2);
+    gmsh::model::occ::addCircle(-0.1, -0.1, 2, 0.3, 3);
+    gmsh::model::occ::addCurveLoop({3}, 3);
+    gmsh::model::occ::addThruSections({1, 2, 3}, out, 1, true, false);
+
+    // ===== 17.4.2 断面扫掠：直纹面模式 (makeRuled=true) =====
+    gmsh::model::occ::addCircle(2 + 0, 0, 0, 0.5, 11);
+    gmsh::model::occ::addCurveLoop({11}, 11);
+    gmsh::model::occ::addCircle(2 + 0.1, 0.05, 1, 0.1, 12);
+    gmsh::model::occ::addCurveLoop({12}, 12);
+    gmsh::model::occ::addCircle(2 - 0.1, -0.1, 2, 0.3, 13);
+    gmsh::model::occ::addCurveLoop({13}, 13);
+    gmsh::model::occ::addThruSections({11, 12, 13}, out, 11, true, true);
+
+    // ===== 17.4.3 实体圆角 =====
+    // 复制第一个体，平移到 x=4
+    gmsh::model::occ::copy({{3, 1}}, out);
+    gmsh::model::occ::translate(out, 4, 0, 0);
+    gmsh::model::occ::synchronize();
+
+    // 提取体的所有边界边
+    gmsh::vectorpair faces, edges;
+    gmsh::model::getBoundary(out, faces, false);
+    gmsh::model::getBoundary(faces, edges, false);
+    std::vector&lt;int&gt; edgeTags;
+    for (auto &amp;e : edges) edgeTags.push_back(std::abs(e.second));
+
+    // 对所有边施加统一半径 0.1 的圆角
+    gmsh::model::occ::fillet({out[0].second}, edgeTags, {0.1}, out);
+    gmsh::model::occ::synchronize();
+
+    // ===== 17.4.4 管道：沿螺旋样条扫掠圆盘 =====
+    double nturns = 1, r = 1, h = 1;
+    int npts = 20;
+    std::vector&lt;int&gt; pts;
+    for (int i = 0; i &lt; npts; i++) {
+        double theta = i * 2 * M_PI * nturns / npts;
+        gmsh::model::occ::addPoint(
+            r * cos(theta), r * sin(theta), i * h / npts, 1, 1000 + i);
+        pts.push_back(1000 + i);
+    }
+    gmsh::model::occ::addSpline(pts, 1000);
+    gmsh::model::occ::addWire({1000}, 1000);
+
+    gmsh::model::occ::addDisk(1, 0, 0, 0.2, 0.2, 1000);
+    gmsh::model::occ::rotate({{2, 1000}}, 0, 0, 0, 1, 0, 0, M_PI / 2);
+
+    gmsh::vectorpair pipeOut;
+    gmsh::model::occ::addPipe({{2, 1000}}, 1000, pipeOut, &quot;DiscreteTrihedron&quot;);
+    gmsh::model::occ::remove({{2, 1000}});
+
+    // 提高曲面渲染精度（仅视觉效果）
+    gmsh::option::setNumber(&quot;Geometry.NumSubEdges&quot;, 1000);
+    gmsh::model::occ::synchronize();
+
+    // ===== 17.4.5 曲率自适应网格 =====
+    gmsh::option::setNumber(&quot;Mesh.MeshSizeFromCurvature&quot;, 20);
+    gmsh::option::setNumber(&quot;Mesh.MeshSizeMin&quot;, 0.001);
+    gmsh::option::setNumber(&quot;Mesh.MeshSizeMax&quot;, 0.3);
+
+    gmsh::model::mesh::generate(3);
+    gmsh::write(&quot;ch17_advanced.msh&quot;);
+
+    // ===== 17.4.6 GUI 与清理 =====
+    std::set&lt;std::string&gt; args(argv, argv + argc);
+    if (!args.count(&quot;-nopopup&quot;))
+        gmsh::fltk::run();
+    gmsh::finalize();
+    return 0;
+}
+</code></pre>
+<hr />
+<h2 id="175-api">17.5 关键 API 速查表</h2>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>函数签名关键部分</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>occ::addThruSections</code></td>
+<td><code>(wireTags, outDimTags, tag, makeSolid, makeRuled, maxDegree, continuity, parametrization, smoothing)</code></td>
+<td>通过多个截面 wire 创建过渡体/面。<code>makeRuled=true</code> 直纹面，<code>false</code> 光滑过渡。<code>maxDegree</code> 控制曲面最大次数，<code>continuity</code> 控制连续性级别</td>
+</tr>
+<tr>
+<td><code>occ::fillet</code></td>
+<td><code>(volumeTags, curveTags, radii, outDimTags, removeVolume)</code></td>
+<td>对体的棱边倒圆角。<code>radii</code> 可为单一值、每边一值或每边两值（变半径）</td>
+</tr>
+<tr>
+<td><code>occ::fillet2D</code></td>
+<td><code>(edgeTag1, edgeTag2, radius, tag, pointTag, reverse)</code></td>
+<td>二维圆角：在两条边之间创建指定半径的圆角边</td>
+</tr>
+<tr>
+<td><code>occ::addPipe</code></td>
+<td><code>(dimTags, wireTag, outDimTags, trihedron)</code></td>
+<td>沿 wire 扫掠实体。<code>trihedron</code> 控制扭转行为（"DiscreteTrihedron"/"Frenet"/"Fixed"等）</td>
+</tr>
+<tr>
+<td><code>occ::addSpline</code></td>
+<td><code>(pointTags, tag)</code></td>
+<td>通过控制点创建 B样条曲线</td>
+</tr>
+<tr>
+<td><code>occ::addWire</code></td>
+<td><code>({curveTags}, tag)</code></td>
+<td>将开放曲线包装为线框（wire），用于扫掠路径等</td>
+</tr>
+<tr>
+<td><code>occ::addDisk</code></td>
+<td><code>(xc, yc, zc, rx, ry, tag)</code></td>
+<td>创建椭圆盘面（<code>rx=ry</code> 时为圆盘）</td>
+</tr>
+<tr>
+<td><code>occ::addCircle</code></td>
+<td><code>(x, y, z, r, tag, angle, zAxis)</code></td>
+<td>创建圆（闭合曲线），圆心 <code>(x,y)</code>，平面法向为 Z 轴</td>
+</tr>
+<tr>
+<td><code>occ::addCurveLoop</code></td>
+<td><code>({curveTags}, tag)</code></td>
+<td>将闭合曲线包装为曲线环（curve loop），作为面的边界</td>
+</tr>
+<tr>
+<td><code>occ::copy</code></td>
+<td><code>(dimTags, outDimTags)</code></td>
+<td>复制实体</td>
+</tr>
+<tr>
+<td><code>occ::translate</code></td>
+<td><code>(dimTags, dx, dy, dz)</code></td>
+<td>平移实体</td>
+</tr>
+<tr>
+<td><code>occ::rotate</code></td>
+<td><code>(dimTags, x, y, z, ax, ay, az, angle)</code></td>
+<td>绕轴旋转实体</td>
+</tr>
+<tr>
+<td><code>occ::remove</code></td>
+<td><code>(dimTags)</code></td>
+<td>删除 OCC 实体</td>
+</tr>
+<tr>
+<td><code>model::getBoundary</code></td>
+<td><code>(dimTags, outDimTags, combined, oriented, recursive)</code></td>
+<td>获取实体的边界实体。<code>recursive=true</code> 递归至维度 0（点）</td>
+</tr>
+<tr>
+<td><code>option::setNumber</code></td>
+<td><code>(name, value)</code></td>
+<td>设置全局数值选项（如 <code>Mesh.MeshSizeFromCurvature</code>）</td>
+</tr>
+<tr>
+<td><code>occ::chamfer</code></td>
+<td><code>(volumeTags, curveTags, surfaceTags, distances, outDimTags, removeVolume)</code></td>
+<td>倒角（Chamfer），与 fillet 类似但用直线面代替圆弧面</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="176">17.6 注意事项</h2>
+<ol>
+<li>
+<p><strong>OCC 标签隔离</strong>：<code>occ::</code> 命名空间下的函数使用独立的标签编号空间。一个标签可同时存在于 OCC 和 geo（内置内核）中，两者互不影响。使用 <code>occ::synchronize()</code> 会将 OCC 实体同步到 Gmsh 模型中。</p>
+</li>
+<li>
+<p><strong>synchronize 时机</strong>：OCC 建模操作（addCircle, addWire, fillet, addPipe 等）在调用 <code>occ::synchronize()</code> 后才会真正写入模型数据库。在对几何进行网格相关操作前务必先同步。</p>
+</li>
+<li>
+<p><strong>getBoundary 标签符号</strong>：<code>getBoundary()</code> 默认返回<strong>不带方向</strong>的标签（<code>oriented=false</code>），但可能因内部逻辑返回负值。在需要标签向量（如传给 fillet）时务必使用 <code>std::abs()</code> 取绝对值。</p>
+</li>
+<li>
+<p><strong>addThruSections 的 wire 顺序</strong>：wireTags 列表的顺序决定插值路径。倒序会改变过渡方向。</p>
+</li>
+<li>
+<p><strong>曲率自适应与尺寸场的配合</strong>：<code>Mesh.MeshSizeFromCurvature</code> 与第7章、第8章介绍的 <code>mesh::field</code>（尺寸场）可以同时使用。当两者都激活时，Gmsh 取两者中更小的尺寸（取 min），以确保不违反任一约束。</p>
+</li>
+<li>
+<p><strong>addPipe 的截面要求</strong>：截面必须为面实体（dim=2），引导路径必须为 wire 实体（dim=1）。截面在扫掠前需通过 <code>rotate</code> 或 <code>translate</code> 调整到路径起点处的正确朝向。</p>
+</li>
+<li>
+<p><strong>fillet 半径限制</strong>：圆角半径不能超过相邻面的几何尺寸，否则 OCC 会报错。如果某条边的两侧面宽度不足以容纳指定半径的圆角，需要减小半径或重新设计几何。</p>
+</li>
+<li>
+<p><strong>编译与运行</strong>：本章代码需链接 Gmsh 库。编译命令示例（Linux/macOS）：
+   <code>bash
+   g++ -o ch17 ch17.cpp -lgmsh -std=c++11</code>
+   运行时可加 <code>-nopopup</code> 跳过 GUI 直接生成 <code>.msh</code> 文件。</p>
+</li>
+</ol>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

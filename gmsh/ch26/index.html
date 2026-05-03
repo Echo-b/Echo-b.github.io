@@ -1,0 +1,3761 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../ch25/">
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>第26章 积分点雅可比矩阵基函数与内部边面 - Echo-b's Tech Notes</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#26" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Echo-b&#39;s Tech Notes" class="md-header__button md-logo" aria-label="Echo-b's Tech Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Echo-b's Tech Notes
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              第26章 积分点雅可比矩阵基函数与内部边面
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Echo-b&#39;s Tech Notes" class="md-nav__button md-logo" aria-label="Echo-b's Tech Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Echo-b's Tech Notes
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VTK 教程
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    VTK 教程
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    入门篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    入门篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-01-vtk-overview-and-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第一章 VTK概述与环境搭建
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-02-visualization-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二章 可视化管线
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-03-data-model-basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第三章 数据模型基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-04-geometry-and-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第四章 基本几何体与数据源
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-05-rendering-and-interactor/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第五章 渲染与交互机
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-06-volume1-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第六章 入门篇综合实战——3D几何画廊
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    实战篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    实战篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-07-polydata/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第七章 PolyData详解
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-08-unstructured-grid/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第八章 非结构化网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-09-structured-data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第九章 结构化数据
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-10-data-io/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十章 数据I/O
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-11-common-filters/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十一章 常用过滤器
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-12-color-mapping/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十二章 颜色映射与标量可视化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-13-advanced-rendering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十三章 高级渲染技术
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-14-multi-dataset/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十四章 多个数据集处理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-15-volume2-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十五章 实战篇综合实战——CFD后处理可视化工具
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    进阶篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    进阶篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-16-volume-rendering-basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十六章 体渲染基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-17-volume-rendering-advanced/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十七章 体渲染高级技术
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-18-charts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十八章 2D图表系统
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-19-annotation-and-widgets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十九章 三维标注与交互组件
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-20-custom-interaction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十章 自定义交互与Widget
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-21-qt-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十一章 Qt集成
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-22-smp-parallel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十二章 SMP并行入门
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-23-volume3-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十三章 进阶篇综合实战
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GMSH 教程
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    GMSH 教程
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1" id="__nav_3_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    基础篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    基础篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第1章 Gmsh概述与C++ SDK配置
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第2章 几何基础——点线面曲线环与物理组
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第3章 变换与拉伸几何
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第4章 高级几何构建——内置函数孔洞注释与颜色
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第5章 三维网格控制——尺寸场体孔洞与网格算法
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch06/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第6章 网格控制进阶——Transfinite分布与结构化网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch07/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第7章 背景网格——用已有网格指导网格尺寸
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch08/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第8章 网格尺寸场
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    进阶篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    进阶篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch09/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第9章 四边形网格重组
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch10/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第10章 复合实体——跨面一致网格划分
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch11/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第11章 STL重网格——无CAD模型的表面重构
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch12/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第12章 同调与上同调计算
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch13/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第13章 嵌入实体——在网格中强制生成共形节点
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch14/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第14章 各向异性网格——方向感知的网格生成
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch15/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第15章 周期性网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch16/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第16章 OpenCASCADE内核与构造实体几何
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch17/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第17章 高级实体建模——断面扫掠圆角管道与曲率自适应网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch18/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第18章 STEP导入与几何分割
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    应用篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    应用篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch19/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第19章 后处理视图与动画
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch20/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第20章 后处理插件——视图数据运算与变换
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch21/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第21章 网格分区与区域分解
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch22/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第22章 遍历模型与网格数据——前处理查询API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第23章 离散实体与混合模型——地形网格实战
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch24/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第24章 后处理视图——List-based与Model-based数据导入
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch25/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第25章 几何求值——参数化法向量与曲率
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第26章 积分点雅可比矩阵基函数与内部边面
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第26章 积分点雅可比矩阵基函数与内部边面
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#261" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26.1 学习目标
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#262" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26.2 核心概念说明
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="26.2 核心概念说明">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2621" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26.2.1 从参考单元到物理单元的映射
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2622-integration-rule-families" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26.2.2 积分规则家族（Integration Rule Families）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2623-function-space-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26.2.3 基函数空间类型（Function Space Types）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2624-dg" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26.2.4 内部边/面与 DG 方法
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#263-c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26.3 C++ 代码逐段讲解
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="26.3 C++ 代码逐段讲解">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2631" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26.3.1 头文件、初始化与辅助函数
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2632" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26.3.2 创建几何与网格
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2633" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26.3.3 遍历单元类型并获取单元属性
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2634-integration-points" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26.3.4 获取积分点（Integration Points）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2635" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26.3.5 获取基函数值及其梯度
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2636" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26.3.6 获取雅可比矩阵
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2637-x7cpp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26.3.7 第二部分：创建体网格并获取边/面数据（来自 x7.cpp）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2638" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26.3.8 获取每个单元的边节点和面节点
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2639" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26.3.9 创建全局唯一边/面并建立单元关联
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#26310" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26.3.10 建立边/面到单元的映射
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#26311" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26.3.11 在离散实体上创建基于内部面的新单元
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#26312-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26.3.12 邻接信息输出与一次性 API
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#26313-gui" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26.3.13 GUI 与清理
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#264" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26.4 完整可运行代码
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#265-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26.5 关键 API 速查表
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="26.5 关键 API 速查表">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2651" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26.5.1 单元信息查询
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2652" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26.5.2 积分点
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2653" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26.5.3 雅可比矩阵
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2654" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26.5.4 基函数
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2655" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26.5.5 网格边/面
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2656" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26.5.6 离散实体与单元添加
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2657" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26.5.7 通用选项
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#266" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26.6 注意事项与最佳实践
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#267" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26.7 本章小结
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#261" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26.1 学习目标
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#262" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26.2 核心概念说明
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="26.2 核心概念说明">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2621" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26.2.1 从参考单元到物理单元的映射
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2622-integration-rule-families" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26.2.2 积分规则家族（Integration Rule Families）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2623-function-space-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26.2.3 基函数空间类型（Function Space Types）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2624-dg" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26.2.4 内部边/面与 DG 方法
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#263-c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26.3 C++ 代码逐段讲解
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="26.3 C++ 代码逐段讲解">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2631" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26.3.1 头文件、初始化与辅助函数
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2632" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26.3.2 创建几何与网格
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2633" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26.3.3 遍历单元类型并获取单元属性
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2634-integration-points" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26.3.4 获取积分点（Integration Points）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2635" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26.3.5 获取基函数值及其梯度
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2636" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26.3.6 获取雅可比矩阵
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2637-x7cpp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26.3.7 第二部分：创建体网格并获取边/面数据（来自 x7.cpp）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2638" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26.3.8 获取每个单元的边节点和面节点
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2639" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26.3.9 创建全局唯一边/面并建立单元关联
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#26310" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26.3.10 建立边/面到单元的映射
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#26311" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26.3.11 在离散实体上创建基于内部面的新单元
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#26312-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26.3.12 邻接信息输出与一次性 API
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#26313-gui" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26.3.13 GUI 与清理
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#264" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26.4 完整可运行代码
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#265-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26.5 关键 API 速查表
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="26.5 关键 API 速查表">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2651" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26.5.1 单元信息查询
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2652" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26.5.2 积分点
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2653" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26.5.3 雅可比矩阵
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2654" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26.5.4 基函数
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2655" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26.5.5 网格边/面
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2656" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26.5.6 离散实体与单元添加
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2657" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26.5.7 通用选项
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#266" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26.6 注意事项与最佳实践
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#267" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26.7 本章小结
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="26">第26章 积分点、雅可比矩阵、基函数与内部边/面</h1>
+<hr />
+<h2 id="261">26.1 学习目标</h2>
+<ul>
+<li>理解有限元核心计算数据流：从参考单元积分点（Integration Points）到物理空间雅可比矩阵（Jacobian Matrix）再到基函数（Basis Functions）求值</li>
+<li>掌握 <code>mesh::getIntegrationPoints()</code> 获取高斯积分规则（Gauss-Legendre）的局部坐标与权重</li>
+<li>掌握 <code>mesh::getJacobians()</code> 批量计算所有单元的雅可比矩阵、行列式及物理坐标——理解按列返回的内存布局</li>
+<li>掌握 <code>mesh::getBasisFunctions()</code> 获取 Lagrange 基函数值及其梯度（GradLagrange），以及高阶分层基函数（H1Legendre / HcurlLegendre）</li>
+<li>掌握 <code>mesh::getElementEdgeNodes()</code> / <code>getElementFaceNodes()</code> — 提取每个单元边/面的节点列表</li>
+<li>掌握 <code>mesh::createEdges()</code> / <code>createFaces()</code> 创建全局唯一边/面，及 <code>getAllEdges()</code> / <code>getAllFaces()</code> 一次性获取</li>
+<li>学会在离散实体上创建基于内部面的新单元——DG（Discontinuous Galerkin）方法前处理的关键步骤</li>
+<li>了解 <code>mesh::getElementProperties()</code> 与 <code>mesh::getIntegrationData()</code> 等辅助 API 获取单元元信息与综合积分数据</li>
+</ul>
+<hr />
+<h2 id="262">26.2 核心概念说明</h2>
+<h3 id="2621">26.2.1 从参考单元到物理单元的映射</h3>
+<p>在标准有限元方法中，刚度矩阵和质量矩阵的组装遵循以下流程：</p>
+<pre><code>参考单元 (Reference Element)                      物理单元 (Physical Element)
+┌─────────────────────────┐                       ┌──────────────────────┐
+│  积分点: (u, v, w)       │                       │  积分点: (x, y, z)    │
+│  权重:   w_i            │                       │                       │
+│  基函数: N_j(u, v, w)   │  ── 雅可比映射 ──&gt;    │  基函数: N_j(x, y, z) │
+│  梯度: ∂N_j/∂(u,v,w)    │                       │  梯度:  ∂N_j/∂(x,y,z) │
+└─────────────────────────┘                       └──────────────────────┘
+</code></pre>
+<p><strong>雅可比矩阵 J</strong> 是从参考坐标 (u, v, w) 到物理坐标 (x, y, z) 的偏导数矩阵：</p>
+<pre><code>        [ ∂x/∂u  ∂x/∂v  ∂x/∂w ]
+    J = [ ∂y/∂u  ∂y/∂v  ∂y/∂w ]          (3x3 矩阵，按列存储)
+        [ ∂z/∂u  ∂z/∂v  ∂z/∂w ]
+</code></pre>
+<p>物理空间梯度通过链式法则计算：<code>∂N/∂x = J^{-T} * ∂N/∂u</code>，其中 <code>det(J)</code> 用于积分变量变换 <code>dx dy dz = |det(J)| du dv dw</code>。</p>
+<p>Gmsh 通过三个核心 API 提供这些数据：
+1. <code>getIntegrationPoints()</code> — 参考单元中的积分点位置和权重
+2. <code>getJacobians()</code> — 各积分点处的雅可比矩阵、行列式和物理坐标
+3. <code>getBasisFunctions()</code> — 各积分点处的基函数值和梯度</p>
+<h3 id="2622-integration-rule-families">26.2.2 积分规则家族（Integration Rule Families）</h3>
+<p>Gmsh 支持多种积分规则，通过 <code>integrationType</code> 字符串参数指定：</p>
+<table>
+<thead>
+<tr>
+<th>规则家族</th>
+<th><code>integrationType</code> 示例</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Gauss</strong></td>
+<td><code>"Gauss2"</code>, <code>"Gauss4"</code></td>
+<td>经济型高斯积分（点数最少），不可用时回退到 CompositeGauss</td>
+</tr>
+<tr>
+<td><strong>CompositeGauss</strong></td>
+<td><code>"CompositeGauss4"</code></td>
+<td>张量积规则（基于一维 Gauss-Legendre），始终可用</td>
+</tr>
+<tr>
+<td><strong>GaussLegendre</strong></td>
+<td><code>"GaussLegendre4"</code></td>
+<td>标准 Gauss-Legendre 积分（一维）</td>
+</tr>
+</tbody>
+</table>
+<p>选择依据：
+- 对四边形/六面体，<code>"Gauss"</code> 使用点最少的高斯规则
+- 对三角形/四面体，<code>"Gauss"</code> 使用对称经济型规则
+- 如需确定积分点都在参考单元内部，推荐 <code>"CompositeGauss"</code>（<code>"Gauss"</code> 高阶时个别点可能落在参考单元外）</p>
+<h3 id="2623-function-space-types">26.2.3 基函数空间类型（Function Space Types）</h3>
+<p><code>getBasisFunctions()</code> 支持多种函数空间，通过 <code>functionSpaceType</code> 参数指定：</p>
+<table>
+<thead>
+<tr>
+<th>函数空间</th>
+<th>示例参数</th>
+<th>含义</th>
+<th>每个积分点返回的分量数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Lagrange</strong></td>
+<td><code>"Lagrange"</code></td>
+<td>等参 Lagrange 基函数值</td>
+<td>1（标量值）</td>
+</tr>
+<tr>
+<td><strong>LagrangeN</strong></td>
+<td><code>"Lagrange2"</code></td>
+<td>N 阶 Lagrange 基函数值</td>
+<td>1</td>
+</tr>
+<tr>
+<td><strong>GradLagrange</strong></td>
+<td><code>"GradLagrange"</code></td>
+<td>等参 Lagrange 基函数梯度</td>
+<td>3（∂/∂u, ∂/∂v, ∂/∂w）</td>
+</tr>
+<tr>
+<td><strong>GradLagrangeN</strong></td>
+<td><code>"GradLagrange2"</code></td>
+<td>N 阶 Lagrange 基函数梯度</td>
+<td>3</td>
+</tr>
+<tr>
+<td><strong>H1LegendreN</strong></td>
+<td><code>"H1Legendre3"</code></td>
+<td>N 阶分层 H1 Legendre 基函数</td>
+<td>1</td>
+</tr>
+<tr>
+<td><strong>GradH1LegendreN</strong></td>
+<td><code>"GradH1Legendre3"</code></td>
+<td>N 阶分层 H1 Legendre 梯度</td>
+<td>3</td>
+</tr>
+<tr>
+<td><strong>HcurlLegendreN</strong></td>
+<td><code>"HcurlLegendre3"</code></td>
+<td>N 阶分层 H(curl) Legendre 基函数</td>
+<td>3（矢量）</td>
+</tr>
+<tr>
+<td><strong>CurlHcurlLegendreN</strong></td>
+<td><code>"CurlHcurlLegendre3"</code></td>
+<td>N 阶分层 H(curl) Legendre 旋度</td>
+<td>3</td>
+</tr>
+</tbody>
+</table>
+<p>分层基函数（Hierarchical Basis Functions）允许 p-细化（p-refinement）而不改变低阶基函数，对 hp-自适应方法特别有利。</p>
+<h3 id="2624-dg">26.2.4 内部边/面与 DG 方法</h3>
+<p>在 DG（Discontinuous Galerkin）方法中，单元间通过内部面（Internal Face）的数值通量（Numerical Flux）进行耦合。Gmsh 的网格边/面体系专门为此类需求设计：</p>
+<ul>
+<li><strong>网格边（Mesh Edge）</strong>：一阶线单元的两个节点唯一确定一条边，Gmsh 可为其分配全局唯一边标签，并记录方向（Orientation）</li>
+<li><strong>网格面（Mesh Face）</strong>：三角形面（3 个节点）或四边形面（4 个节点），同样可分配全局唯一标签</li>
+<li><strong>内部边/面</strong>：指被两个或多个单元共享的边/面——区别于位于模型边界上的边界边/面</li>
+</ul>
+<p>Gmsh 工作流：
+1. <code>createEdges()</code> / <code>createFaces()</code> — 创建全局唯一边/面
+2. <code>getElementEdgeNodes()</code> / <code>getElementFaceNodes()</code> — 获取每个单元的边/面节点
+3. <code>getEdges()</code> / <code>getFaces()</code> — 通过节点查询边/面标签
+4. 在离散实体上新建单元——将内部面绑定到新的低维单元上，便于积分和插值</p>
+<hr />
+<h2 id="263-c">26.3 C++ 代码逐段讲解</h2>
+<h3 id="2631">26.3.1 头文件、初始化与辅助函数</h3>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;set&gt;
+#include &lt;map&gt;
+#include &lt;gmsh.h&gt;
+
+int main(int argc, char **argv)
+{
+  gmsh::initialize(argc, argv);
+  gmsh::model::add(&quot;ch26&quot;);
+
+  // 辅助打印函数：输出向量内容，mult 控制每几个数一组的标签
+  auto pp = [](const std::string &amp;label,
+              const std::vector&lt;double&gt; &amp;v, int mult)
+  {
+    std::cout &lt;&lt; &quot; * &quot; &lt;&lt; v.size() / mult &lt;&lt; &quot; &quot; &lt;&lt; label &lt;&lt; &quot;: &quot;;
+    for(auto c : v) std::cout &lt;&lt; c &lt;&lt; &quot; &quot;;
+    std::cout &lt;&lt; &quot;\n&quot;;
+  };
+</code></pre>
+<p><strong>解释</strong>：<code>pp</code> 是一个 lambda 辅助函数，用于格式化输出向量内容。<code>mult</code> 参数指示每组有几个分量——例如 <code>localCoords</code> 每组 3 个分量 (u, v, w)，则 <code>mult = 3</code>；<code>Jacobian determinants</code> 每组 1 个值，则 <code>mult = 1</code>。</p>
+<hr />
+<h3 id="2632">26.3.2 创建几何与网格</h3>
+<pre><code class="language-cpp">  // 创建 2D 矩形域：宽 1.0，高 0.1
+  gmsh::model::occ::addRectangle(0, 0, 0, 1, 0.1);
+  gmsh::model::occ::synchronize();
+
+  // 使用 transfinite 算法生成结构化四边形网格
+  gmsh::model::mesh::setTransfiniteAutomatic();
+
+  // 设置一阶单元 (elementOrder = 1) 并生成 2D 网格
+  int elementOrder = 1, interpolationOrder = 2;
+  gmsh::model::mesh::setOrder(elementOrder);
+  gmsh::model::mesh::generate(2);
+</code></pre>
+<p><strong>解释</strong>：创建一个 1.0 x 0.1 的矩形，用 transfinite 自动算法生成结构化四边形网格。<code>elementOrder = 1</code> 表示一阶单元（4 节点四边形）；<code>interpolationOrder = 2</code> 将用于选择能精确积分二次多项式的积分规则。</p>
+<hr />
+<h3 id="2633">26.3.3 遍历单元类型并获取单元属性</h3>
+<pre><code class="language-cpp">  // 遍历网格中所有单元类型
+  std::vector&lt;int&gt; elementTypes;
+  gmsh::model::mesh::getElementTypes(elementTypes);
+
+  for(auto t : elementTypes) {
+    // 获取该单元类型的属性
+    std::string elementName;
+    int dim, order, numNodes, numPrimNodes;
+    std::vector&lt;double&gt; localNodeCoord;
+    gmsh::model::mesh::getElementProperties(
+        t, elementName, dim, order, numNodes,
+        localNodeCoord, numPrimNodes);
+    std::cout &lt;&lt; &quot;\n** &quot; &lt;&lt; elementName &lt;&lt; &quot; **\n\n&quot;;
+</code></pre>
+<p><strong>解释</strong>：<code>getElementTypes()</code> 返回当前网格中所有 MSH 单元类型的整数标识（如 3 = 4 节点四边形 Quadrangle 4）。<code>getElementProperties()</code> 返回该类型的：
+- <code>elementName</code>：名称字符串（如 "Quadrangle 4"）
+- <code>dim</code>：几何维度
+- <code>order</code>：几何阶数（对一阶单元 order = 1）
+- <code>numNodes</code>：单元总节点数
+- <code>localNodeCoord</code>：参考单元中所有节点的局部坐标，长度 = dim * numNodes
+- <code>numPrimNodes</code>：（primary nodes）一阶顶点节点数</p>
+<hr />
+<h3 id="2634-integration-points">26.3.4 获取积分点（Integration Points）</h3>
+<pre><code class="language-cpp">    // -- A. 积分点 --
+    // 获取能精确积分 &quot;interpolationOrder&quot; 阶多项式的 Gauss 积分规则
+    std::vector&lt;double&gt; localCoords, weights;
+    gmsh::model::mesh::getIntegrationPoints(
+        t, &quot;Gauss&quot; + std::to_string(interpolationOrder),
+        localCoords, weights);
+    pp(&quot;integration points to integrate order &quot; +
+       std::to_string(interpolationOrder) +
+       &quot; polynomials&quot;, localCoords, 3);
+</code></pre>
+<p><strong>解释</strong>：<code>getIntegrationPoints(elementType, integrationType, localCoord, weights)</code> 返回：</p>
+<ul>
+<li><code>localCoord</code>：所有积分点在参考单元中的局部坐标，按 <code>[g1u, g1v, g1w, g2u, g2v, g2w, ...]</code> 顺序拼接。二维单元中 w 坐标恒为 0。</li>
+<li><code>weights</code>：对应的积分权重 <code>[w1, w2, ..., wG]</code>。</li>
+</ul>
+<p>这里使用 <code>"Gauss2"</code> 规则，对于一阶四边形单元（4 节点，bilinear 插值），Gauss 积分需要 2 x 2 = 4 个积分点来精确积分二次多项式（由于张量积规则）。每条坐标轴上 2 个 Gauss 点，局部坐标为 <code>±1/√3 ≈ ±0.57735</code>。</p>
+<p>典型输出示例（Quadrangle 4, "Gauss2"）：</p>
+<pre><code> * 4 integration points to integrate order 2 polynomials:
+   -0.57735 -0.57735 0  0.57735 -0.57735 0
+   0.57735  0.57735 0 -0.57735  0.57735 0
+</code></pre>
+<hr />
+<h3 id="2635">26.3.5 获取基函数值及其梯度</h3>
+<pre><code class="language-cpp">    // -- C. 基函数 --
+    // 获取 Lagrange 基函数在积分点上的值
+    int numComponents, numOrientations;
+    std::vector&lt;double&gt; basisFunctions;
+
+    gmsh::model::mesh::getBasisFunctions(
+        t, localCoords, &quot;Lagrange&quot;,
+        numComponents, basisFunctions, numOrientations);
+    pp(&quot;basis functions at integration points&quot;,
+       basisFunctions, 1);
+
+    // 获取 Lagrange 基函数的梯度 (∂N/∂u, ∂N/∂v, ∂N/∂w) 在积分点上的值
+    gmsh::model::mesh::getBasisFunctions(
+        t, localCoords, &quot;GradLagrange&quot;,
+        numComponents, basisFunctions, numOrientations);
+    pp(&quot;basis function gradients at integration points&quot;,
+       basisFunctions, 3);
+</code></pre>
+<p><strong>解释</strong>：<code>getBasisFunctions(elementType, localCoord, functionSpaceType, numComponents, basisFunctions, numOrientations)</code>：</p>
+<ul>
+<li><code>"Lagrange"</code>：返回每个积分点上每个基函数的标量值。对于具有 N 个节点的单元，每个积分点返回 N 个值。数据按 <code>[g1N1, g1N2, ..., g1NN, g2N1, g2N2, ...]</code> 排列。</li>
+<li><code>"GradLagrange"</code>：返回每个积分点上每个基函数的梯度向量 <code>(∂N/∂u, ∂N/∂v, ∂N/∂w)</code>。每个基函数每个积分点贡献 3 个值。数据按 <code>[g1N1_du, g1N1_dv, g1N1_dw, g1N2_du, ..., gGN_NN_dw]</code> 排列。</li>
+<li><code>numComponents</code>：每个基函数在每个积分点返回的分量数（标量=1，梯度=3）</li>
+<li><code>numOrientations</code>：基函数方向总数（Lagrange 基函数为 1——各向同性）</li>
+</ul>
+<p>对于一阶四边形单元在 4 个 Gauss 积分点上：
+- <code>"Lagrange"</code> 返回 4x4 = 16 个值
+- <code>"GradLagrange"</code> 返回 4x4x3 = 48 个值</p>
+<p><strong>高阶基函数示例</strong>：若调用 <code>"Lagrange2"</code> 则返回二阶 Lagrange 基函数值，适用于 p=2 的有限元空间；<code>"H1Legendre3"</code> 则返回三阶分层 H1 Legendre 基函数，适用于 hp-自适应方法。</p>
+<hr />
+<h3 id="2636">26.3.6 获取雅可比矩阵</h3>
+<pre><code class="language-cpp">    // -- B. 雅可比矩阵 --
+    // 计算所有该类型单元的雅可比矩阵、行列式及物理坐标
+    std::vector&lt;double&gt; jacobians, determinants, coords;
+    gmsh::model::mesh::getJacobians(
+        t, localCoords, jacobians, determinants, coords);
+    pp(&quot;Jacobian determinants at integration points&quot;,
+       determinants, 1);
+</code></pre>
+<p><strong>解释</strong>：<code>getJacobians(elementType, localCoord, jacobians, determinants, coord, tag, task, numTasks)</code> 批量计算所有属于该类型的单元在各个积分点处的雅可比数据：</p>
+<ul>
+<li><code>jacobians</code>：3x3 雅可比矩阵<strong>按列存储</strong>。每个单元每个积分点存储 9 个值：<code>[Jxu, Jyu, Jzu, Jxv, Jyv, Jzv, Jxw, Jyw, Jzw]</code>，其中 <code>Jxu = ∂x/∂u</code>, <code>Jyu = ∂y/∂u</code> 等。数据排列方式为：
+  <code>[e1_g1_col1, e1_g1_col2, e1_g1_col3, e1_g2_col1, ..., e1_gG_col3, e2_g1_col1, ...]</code></li>
+<li><code>determinants</code>：每个单元每个积分点的 det(J) 值，<code>[e1g1, e1g2, ..., e1gG, e2g1, ...]</code></li>
+<li><code>coord</code>：每个积分点在物理空间中的 (x, y, z) 坐标，<code>[e1g1_x, e1g1_y, e1g1_z, e1g2_x, ...]</code></li>
+</ul>
+<p><strong>按列存储说明</strong>：<code>jacobians</code> 中存储的 9 个值对应矩阵的各列（而非各行）：</p>
+<pre><code>  offset 0: J(0,0)=∂x/∂u    offset 3: J(0,1)=∂x/∂v    offset 6: J(0,2)=∂x/∂w
+  offset 1: J(1,0)=∂y/∂u    offset 4: J(1,1)=∂y/∂v    offset 7: J(1,2)=∂y/∂w
+  offset 2: J(2,0)=∂z/∂u    offset 5: J(2,1)=∂z/∂v    offset 8: J(2,2)=∂z/∂w
+</code></pre>
+<p>这是 Gmsh 的内部存储惯例，与许多有限元库的按行存储不同，在组装刚度矩阵时需注意索引换算。</p>
+<p><strong>并行计算支持</strong>：<code>task</code> 和 <code>numTasks</code> 参数用于多线程并行计算（如 OpenMP），将总工作量拆分为 <code>numTasks</code> 份，每次调用仅计算 <code>task</code> 编号对应的那一份。使用前需通过 <code>preallocateJacobians()</code> 预分配输出向量。</p>
+<p><strong>单元素版本</strong>：<code>mesh::getJacobian(elementTag, localCoord, jacobians, determinants, coord)</code> 获取单个单元（通过标签指定）的雅可比数据。</p>
+<hr />
+<h3 id="2637-x7cpp">26.3.7 第二部分：创建体网格并获取边/面数据（来自 x7.cpp）</h3>
+<pre><code class="language-cpp">  // ===== 第二部分：内部边/面 =====
+  // 创建 3D 模型并生成四面体网格
+  gmsh::model::add(&quot;ch26_3d&quot;);
+  gmsh::model::occ::addBox(0, 0, 0, 1, 1, 1);
+  gmsh::model::occ::synchronize();
+  gmsh::option::setNumber(&quot;Mesh.MeshSizeMin&quot;, 0.2);
+  gmsh::model::mesh::generate(3);
+</code></pre>
+<p><strong>解释</strong>：创建一个单位立方体，设置最小网格尺寸为 0.2（粗网格便于观察），生成三维四面体网格。这是演示内部边/面操作的标准场景——体网格内部面是两个相邻四面体的共享三角形面。</p>
+<hr />
+<h3 id="2638">26.3.8 获取每个单元的边节点和面节点</h3>
+<pre><code class="language-cpp">  // 获取一阶四面体的 MSH 类型标识
+  int tetType = gmsh::model::mesh::getElementType(&quot;tetrahedron&quot;, 1);
+
+  // 获取所有四面体单元的边节点列表
+  std::vector&lt;std::size_t&gt; edgeNodes, faceNodes;
+  gmsh::model::mesh::getElementEdgeNodes(tetType, edgeNodes);
+
+  // 获取所有四面体单元的面节点列表（三角形面，faceType = 3）
+  gmsh::model::mesh::getElementFaceNodes(tetType, 3, faceNodes);
+</code></pre>
+<p><strong>解释</strong>：
+- <code>getElementType(familyName, order)</code>：根据单元系列名称和阶数返回 MSH 类型整数标识。<code>"tetrahedron"</code> 对应 4 节点四面体（MSH 类型 4）。
+- <code>getElementEdgeNodes(elementType, nodeTags)</code>：返回所有该类型单元的边节点。每个四面体有 6 条边，每条边由 2 个节点（对于一阶单元）或更多（对于高阶单元）定义。数据按单元顺序排列：<code>[e1_edge1_n1, e1_edge1_n2, e1_edge2_n1, ...]</code>。若设置 <code>primary = true</code>，则仅返回边的起点和终点节点（忽略高阶中间节点）。
+- <code>getElementFaceNodes(elementType, faceType, nodeTags)</code>：类似地获取面节点。<code>faceType=3</code> 对应三角形面，<code>faceType=4</code> 对应四边形面。每个四面体有 4 个三角形面。</p>
+<p><strong>关键点</strong>：边节点和面节点的返回顺序与 <code>getElements()</code> / <code>getElementsByType()</code> 中的单元顺序完全一致，因此可以通过位置索引直接将边/面关联到所属单元。</p>
+<hr />
+<h3 id="2639">26.3.9 创建全局唯一边/面并建立单元关联</h3>
+<pre><code class="language-cpp">  // 创建全局唯一的网格边和面（内部识别，分配标签）
+  gmsh::model::mesh::createEdges();
+  gmsh::model::mesh::createFaces();
+
+  // 通过节点列表查询边和面的全局标签及方向
+  std::vector&lt;std::size_t&gt; edgeTags, faceTags;
+  std::vector&lt;int&gt; edgeOrientations, faceOrientations;
+  gmsh::model::mesh::getEdges(edgeNodes, edgeTags, edgeOrientations);
+  gmsh::model::mesh::getFaces(3, faceNodes, faceTags, faceOrientations);
+</code></pre>
+<p><strong>解释</strong>：
+- <code>createEdges()</code> / <code>createFaces()</code>：扫描网格，为每条唯一边和每个唯一面分配一个全局标签。一条边被多个单元共享时，只分配一个标签，从而可以识别内部边/面（标签被多个单元引用即内部，被单个单元引用即边界）。
+- <code>getEdges(nodeTags, edgeTags, edgeOrientations)</code>：输入边节点列表（2N 个节点标识，N = 边数），返回每条边的全局标签和方向。方向 <code>1</code> 表示节点顺序与参考正方向一致，<code>-1</code> 表示相反。
+- <code>getFaces(faceType, nodeTags, faceTags, faceOrientations)</code>：同上，作用于面。faceType 必须与面节点数匹配（3 = 三角形，4 = 四边形）。</p>
+<hr />
+<h3 id="26310">26.3.10 建立边/面到单元的映射</h3>
+<pre><code class="language-cpp">  // 获取所有四面体单元标签和节点，建立边/面到单元的映射
+  std::vector&lt;std::size_t&gt; elementTags, elementNodeTags;
+  gmsh::model::mesh::getElementsByType(
+      tetType, elementTags, elementNodeTags);
+
+  // 边到单元的映射（每个四面体 6 条边）
+  std::map&lt;std::size_t, std::vector&lt;std::size_t&gt;&gt; edges2elems;
+  for(std::size_t i = 0; i &lt; edgeTags.size(); i++)
+    edges2elems[edgeTags[i]].push_back(elementTags[i / 6]);
+
+  // 面到单元的映射（每个四面体 4 个面）
+  std::map&lt;std::size_t, std::vector&lt;std::size_t&gt;&gt; faces2elems;
+  for(std::size_t i = 0; i &lt; faceTags.size(); i++)
+    faces2elems[faceTags[i]].push_back(elementTags[i / 4]);
+
+  // 打印内部面信息
+  std::cout &lt;&lt; &quot;\n** Internal faces (shared by 2 tetrahedra) **\n&quot;;
+  for(auto &amp;kv : faces2elems) {
+    if(kv.second.size() == 2) {
+      std::cout &lt;&lt; &quot;Face &quot; &lt;&lt; kv.first
+                &lt;&lt; &quot; connects tet &quot; &lt;&lt; kv.second[0]
+                &lt;&lt; &quot; and tet &quot; &lt;&lt; kv.second[1] &lt;&lt; &quot;\n&quot;;
+    }
+  }
+</code></pre>
+<p><strong>解释</strong>：这是 DG 方法中构建单元邻接关系的关键步骤：
+1. <code>getElementsByType()</code> 按单元类型获取单元标签和节点，返回顺序与边/面节点相同
+2. 整数除法 <code>i / 6</code>（或 <code>i / 4</code>）将边/面索引映射回单元索引——因为每个四面体贡献固定数量的边和面
+3. <code>edges2elems</code> 和 <code>faces2elems</code> 映射记录了每条边/面被哪些单元共享
+4. 共享计数为 2 的边/面是<strong>内部边/面</strong>（Internal Edges/Faces），为 1 的是<strong>边界边/面</strong></p>
+<hr />
+<h3 id="26311">26.3.11 在离散实体上创建基于内部面的新单元</h3>
+<pre><code class="language-cpp">  // 创建离散面实体，将共享面绑定到新单元（DG 方法关键步骤）
+  int s = gmsh::model::addDiscreteEntity(2);
+
+  // 收集唯一面标签，为每个唯一内部面创建二维三角形单元
+  std::set&lt;std::size_t&gt; uniqueFaceTags;
+  std::vector&lt;std::size_t&gt; triTags, triNodes;
+  std::size_t maxTag;
+  gmsh::model::mesh::getMaxElementTag(maxTag);
+
+  for(std::size_t i = 0; i &lt; faceTags.size(); i++) {
+    if(uniqueFaceTags.find(faceTags[i]) == uniqueFaceTags.end()) {
+      uniqueFaceTags.insert(faceTags[i]);
+      // 基于面标签创建新的单元标签（避免与已有标签冲突）
+      triTags.push_back(faceTags[i] + maxTag);
+      // 提取该面的三个节点
+      triNodes.push_back(faceNodes[3 * i]);
+      triNodes.push_back(faceNodes[3 * i + 1]);
+      triNodes.push_back(faceNodes[3 * i + 2]);
+    }
+  }
+
+  int triType = gmsh::model::mesh::getElementType(&quot;triangle&quot;, 1);
+  gmsh::model::mesh::addElementsByType(
+      s, triType, triTags, triNodes);
+</code></pre>
+<p><strong>解释</strong>：这段代码是 DG 前处理的核心操作：
+1. <code>addDiscreteEntity(2)</code> 在模型中添加一个二维离散实体——它没有参数化几何，仅由网格数据定义
+2. <code>getMaxElementTag()</code> 获取当前最大单元标签，用于为新单元分配不冲突的标签
+3. 遍历所有面，跳过重复的标签（<code>uniqueFaceTags</code> 集合去重），为每个唯一面创建一个二维三角形单元
+4. <code>addElementsByType(entityTag, elementType, elementTags, nodeTags)</code> 将新单元添加到离散实体上</p>
+<p><strong>为什么这样做</strong>：在 DG 方法中，内部面上的数值积分（计算数值通量）是核心操作。将内部面创建为独立的低维单元后，便可以利用 26.3.4-26.3.6 节的 API（<code>getIntegrationPoints()</code>、<code>getJacobians()</code>、<code>getBasisFunctions()</code>）直接在面上进行积分，如同处理普通单元一样。</p>
+<hr />
+<h3 id="26312-api">26.3.12 邻接信息输出与一次性 API</h3>
+<pre><code class="language-cpp">  // 打印三角形单元与其相邻四面体的关系
+  for(auto tTag : triTags) {
+    std::cout &lt;&lt; &quot;triangle &quot; &lt;&lt; tTag
+              &lt;&lt; &quot; connected to tetrahedra:&quot;;
+    for(auto tt : faces2elems[tTag - maxTag])
+      std::cout &lt;&lt; &quot; &quot; &lt;&lt; tt;
+    std::cout &lt;&lt; &quot;\n&quot;;
+  }
+
+  // 一次性获取所有边/面的便捷 API
+  std::vector&lt;std::size_t&gt; allEdgeTags, allEdgeNodes;
+  gmsh::model::mesh::getAllEdges(allEdgeTags, allEdgeNodes);
+
+  std::vector&lt;std::size_t&gt; allFaceTags, allFaceNodes;
+  gmsh::model::mesh::getAllFaces(3, allFaceTags, allFaceNodes);
+
+  std::cout &lt;&lt; &quot;Total unique edges: &quot; &lt;&lt; allEdgeTags.size() &lt;&lt; &quot;\n&quot;;
+  std::cout &lt;&lt; &quot;Total unique faces: &quot; &lt;&lt; allFaceTags.size() &lt;&lt; &quot;\n&quot;;
+</code></pre>
+<p><strong>解释</strong>：
+- 通过 <code>tTag - maxTag</code> 反查原始面标签，即可从 <code>faces2elems</code> 映射中获得该面所属的四面体单元——这在 DG 中用于确定通量计算的左/右单元
+- <code>getAllEdges(edgeTags, edgeNodes)</code> 和 <code>getAllFaces(faceType, faceTags, faceNodes)</code> 是一步到位的便捷 API，直接返回网格中所有唯一边/面的标签和节点，无需事先调用 <code>getElementEdgeNodes()</code> 或手动收集。适用于仅需要边/面拓扑信息而不关心单元关联的场景</p>
+<hr />
+<h3 id="26313-gui">26.3.13 GUI 与清理</h3>
+<pre><code class="language-cpp">  // 启动 GUI（可通过 -nopopup 跳过）
+  std::set&lt;std::string&gt; args(argv, argv + argc);
+  if(!args.count(&quot;-nopopup&quot;)) gmsh::fltk::run();
+
+  gmsh::finalize();
+  return 0;
+}
+</code></pre>
+<p><strong>解释</strong>：<code>gmsh::fltk::run()</code> 启动交互式 GUI 以可视化结果。支持 <code>-nopopup</code> 命令行参数跳过 GUI（适用于批处理/自动化脚本）。</p>
+<hr />
+<h2 id="264">26.4 完整可运行代码</h2>
+<pre><code class="language-cpp">// =============================================================================
+//  Chapter 26: 积分点、雅可比矩阵、基函数与内部边/面
+//
+//  功能: 演示 Gmsh 有限元核心数据 API：
+//        (1) 积分点坐标与权重
+//        (2) 雅可比矩阵、行列式及物理坐标
+//        (3) Lagrange 基函数值及梯度
+//        (4) 网格内部边/面的创建、查询与 DG 前处理
+//
+//  编译 (需链接 Gmsh SDK):
+//    g++ -o ch26_fe_data ch26_fe_data.cpp -lgmsh -std=c++11
+//
+//  运行:
+//    ./ch26_fe_data              (带 GUI 查看)
+//    ./ch26_fe_data -nopopup     (仅文本输出)
+// =============================================================================
+
+#include &lt;iostream&gt;
+#include &lt;set&gt;
+#include &lt;map&gt;
+#include &lt;gmsh.h&gt;
+
+int main(int argc, char **argv)
+{
+  gmsh::initialize(argc, argv);
+
+  // 辅助函数：格式化打印向量内容
+  auto pp = [](const std::string &amp;label,
+              const std::vector&lt;double&gt; &amp;v, int mult)
+  {
+    std::cout &lt;&lt; &quot; * &quot; &lt;&lt; v.size() / mult &lt;&lt; &quot; &quot; &lt;&lt; label &lt;&lt; &quot;: &quot;;
+    for(auto c : v) std::cout &lt;&lt; c &lt;&lt; &quot; &quot;;
+    std::cout &lt;&lt; &quot;\n\n&quot;;
+  };
+
+  // ===== Part 1: 2D 积分点、雅可比、基函数 =====
+  {
+    gmsh::model::add(&quot;ch26_2d&quot;);
+    gmsh::model::occ::addRectangle(0, 0, 0, 1, 0.1);
+    gmsh::model::occ::synchronize();
+    gmsh::model::mesh::setTransfiniteAutomatic();
+
+    int elementOrder = 1, interpolationOrder = 2;
+    gmsh::model::mesh::setOrder(elementOrder);
+    gmsh::model::mesh::generate(2);
+
+    std::vector&lt;int&gt; elementTypes;
+    gmsh::model::mesh::getElementTypes(elementTypes);
+
+    for(auto t : elementTypes) {
+      std::string elemName;
+      int dim, order, numNodes, numPrimNodes;
+      std::vector&lt;double&gt; localNodeCoord;
+      gmsh::model::mesh::getElementProperties(
+          t, elemName, dim, order, numNodes,
+          localNodeCoord, numPrimNodes);
+      std::cout &lt;&lt; &quot;\n========== &quot; &lt;&lt; elemName
+                &lt;&lt; &quot; (type &quot; &lt;&lt; t &lt;&lt; &quot;) ==========\n\n&quot;;
+
+      // ---- A. 积分点 ----
+      std::vector&lt;double&gt; localCoords, weights;
+      gmsh::model::mesh::getIntegrationPoints(
+          t, &quot;Gauss&quot; + std::to_string(interpolationOrder),
+          localCoords, weights);
+      pp(&quot;integration points (u,v,w per point)&quot;,
+         localCoords, 3);
+      std::cout &lt;&lt; &quot;     weights: &quot;;
+      for(auto w : weights) std::cout &lt;&lt; w &lt;&lt; &quot; &quot;;
+      std::cout &lt;&lt; &quot;\n\n&quot;;
+
+      // ---- C. 基函数值 ----
+      int numComp, numOri;
+      std::vector&lt;double&gt; basisFunc;
+      gmsh::model::mesh::getBasisFunctions(
+          t, localCoords, &quot;Lagrange&quot;,
+          numComp, basisFunc, numOri);
+      pp(&quot;Lagrange basis function values at integration points&quot;,
+         basisFunc, 1);
+
+      // ---- C. 基函数梯度 ----
+      gmsh::model::mesh::getBasisFunctions(
+          t, localCoords, &quot;GradLagrange&quot;,
+          numComp, basisFunc, numOri);
+      pp(&quot;GradLagrange (dN/du, dN/dv, dN/dw) at integration points&quot;,
+         basisFunc, 3);
+
+      // ---- B. 雅可比矩阵 ----
+      std::vector&lt;double&gt; jacobians, determinants, coords;
+      gmsh::model::mesh::getJacobians(
+          t, localCoords, jacobians, determinants, coords);
+      pp(&quot;Jacobian determinants at integration points&quot;,
+         determinants, 1);
+    }
+  }
+
+  // ===== Part 2: 3D 内部边/面 =====
+  {
+    gmsh::model::add(&quot;ch26_3d&quot;);
+    gmsh::model::occ::addBox(0, 0, 0, 1, 1, 1);
+    gmsh::model::occ::synchronize();
+    gmsh::option::setNumber(&quot;Mesh.MeshSizeMin&quot;, 0.2);
+    gmsh::model::mesh::generate(3);
+
+    int tetType = gmsh::model::mesh::getElementType(&quot;tetrahedron&quot;, 1);
+
+    // 获取每个单元的边节点和面节点
+    std::vector&lt;std::size_t&gt; edgeNodes, faceNodes;
+    gmsh::model::mesh::getElementEdgeNodes(tetType, edgeNodes);
+    gmsh::model::mesh::getElementFaceNodes(tetType, 3, faceNodes);
+
+    // 创建全局唯一边/面
+    gmsh::model::mesh::createEdges();
+    gmsh::model::mesh::createFaces();
+
+    // 查询边/面标签
+    std::vector&lt;std::size_t&gt; edgeTags, faceTags;
+    std::vector&lt;int&gt; edgeOrient, faceOrient;
+    gmsh::model::mesh::getEdges(edgeNodes, edgeTags, edgeOrient);
+    gmsh::model::mesh::getFaces(3, faceNodes, faceTags, faceOrient);
+
+    // 获取单元数据，建立映射
+    std::vector&lt;std::size_t&gt; elemTags, elemNodeTags;
+    gmsh::model::mesh::getElementsByType(
+        tetType, elemTags, elemNodeTags);
+
+    std::map&lt;std::size_t, std::vector&lt;std::size_t&gt;&gt; faces2elems;
+    for(std::size_t i = 0; i &lt; faceTags.size(); i++)
+      faces2elems[faceTags[i]].push_back(elemTags[i / 4]);
+
+    // 打印内部面
+    std::cout &lt;&lt; &quot;===== Internal Faces =====\n&quot;;
+    for(auto &amp;kv : faces2elems) {
+      if(kv.second.size() == 2) {
+        std::cout &lt;&lt; &quot;  Face &quot; &lt;&lt; kv.first
+                  &lt;&lt; &quot; : tet &quot; &lt;&lt; kv.second[0]
+                  &lt;&lt; &quot; &lt;-&gt; tet &quot; &lt;&lt; kv.second[1] &lt;&lt; &quot;\n&quot;;
+      }
+    }
+
+    // 在离散实体上创建基于内部面的新单元
+    int s = gmsh::model::addDiscreteEntity(2);
+    std::set&lt;std::size_t&gt; uniqueFaceTags;
+    std::vector&lt;std::size_t&gt; triTags, triNodes;
+    std::size_t maxTag;
+    gmsh::model::mesh::getMaxElementTag(maxTag);
+
+    for(std::size_t i = 0; i &lt; faceTags.size(); i++) {
+      if(uniqueFaceTags.find(faceTags[i]) == uniqueFaceTags.end()) {
+        uniqueFaceTags.insert(faceTags[i]);
+        triTags.push_back(faceTags[i] + maxTag);
+        triNodes.push_back(faceNodes[3 * i]);
+        triNodes.push_back(faceNodes[3 * i + 1]);
+        triNodes.push_back(faceNodes[3 * i + 2]);
+      }
+    }
+
+    int triType = gmsh::model::mesh::getElementType(&quot;triangle&quot;, 1);
+    gmsh::model::mesh::addElementsByType(s, triType, triTags, triNodes);
+
+    // 一次性获取所有边/面
+    std::vector&lt;std::size_t&gt; allE, allEN, allF, allFN;
+    gmsh::model::mesh::getAllEdges(allE, allEN);
+    gmsh::model::mesh::getAllFaces(3, allF, allFN);
+    std::cout &lt;&lt; &quot;\nUnique edges: &quot; &lt;&lt; allE.size()
+              &lt;&lt; &quot;, Unique faces: &quot; &lt;&lt; allF.size() &lt;&lt; &quot;\n&quot;;
+  }
+
+  // GUI
+  std::set&lt;std::string&gt; args(argv, argv + argc);
+  if(!args.count(&quot;-nopopup&quot;)) gmsh::fltk::run();
+
+  gmsh::finalize();
+  return 0;
+}
+</code></pre>
+<hr />
+<h2 id="265-api">26.5 关键 API 速查表</h2>
+<h3 id="2651">26.5.1 单元信息查询</h3>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>函数签名</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mesh::getElementTypes</code></td>
+<td><code>(elementTypes)</code></td>
+<td>获取网格中所有 MSH 单元类型标识列表</td>
+</tr>
+<tr>
+<td><code>mesh::getElementProperties</code></td>
+<td><code>(elementType, elemName, dim, order, numNodes, localNodeCoord, numPrimNodes)</code></td>
+<td>获取单元类型的名称、维度、阶数、节点数和参考单元节点局部坐标</td>
+</tr>
+<tr>
+<td><code>mesh::getElementType</code></td>
+<td><code>(familyName, order)</code> -&gt; <code>int</code></td>
+<td>根据单元系列名（如 <code>"tetrahedron"</code>）和阶数返回 MSH 类型标识</td>
+</tr>
+<tr>
+<td><code>mesh::getElementsByType</code></td>
+<td><code>(elementType, elementTags, nodeTags, tag)</code></td>
+<td>按类型获取单元标签和节点（tag&lt;0 获取所有实体）</td>
+</tr>
+<tr>
+<td><code>mesh::getMaxElementTag</code></td>
+<td><code>(maxTag)</code></td>
+<td>获取当前网格中最大单元标签值</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2652">26.5.2 积分点</h3>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>函数签名</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mesh::getIntegrationPoints</code></td>
+<td><code>(elementType, integrationType, localCoord, weights)</code></td>
+<td>获取参考单元中积分点的局部坐标和权重。<code>integrationType</code> 格式为 <code>"家族名+阶数"</code>（如 <code>"Gauss4"</code>, <code>"CompositeGauss3"</code>）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2653">26.5.3 雅可比矩阵</h3>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>函数签名</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mesh::getJacobians</code></td>
+<td><code>(elementType, localCoord, jacobians, determinants, coord, tag, task, numTasks)</code></td>
+<td>批量计算所有单元的雅可比矩阵（按列存储）、行列式及积分点物理坐标。支持并行分片</td>
+</tr>
+<tr>
+<td><code>mesh::getJacobian</code></td>
+<td><code>(elementTag, localCoord, jacobians, determinants, coord)</code></td>
+<td>计算指定单个单元（通过标签）的雅可比数据</td>
+</tr>
+<tr>
+<td><code>mesh::preallocateJacobians</code></td>
+<td><code>(elementType, numEvalPoints, allocJ, allocDet, allocCoord, jac, det, coord, tag)</code></td>
+<td>预分配雅可比数据缓冲区（多线程并行前必须调用）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2654">26.5.4 基函数</h3>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>函数签名</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mesh::getBasisFunctions</code></td>
+<td><code>(elementType, localCoord, functionSpaceType, numComponents, basisFunctions, numOrientations, wantedOrientations)</code></td>
+<td>获取指定函数空间在积分点处的基函数值或梯度。支持 Lagrange / GradLagrange / H1Legendre / HcurlLegendre 等系列</td>
+</tr>
+<tr>
+<td><code>mesh::getBasisFunctionsOrientation</code></td>
+<td><code>(elementType, functionSpaceType, basisFunctionsOrientation, tag, task, numTasks)</code></td>
+<td>获取每个单元基函数的方向索引（Lagrange 恒为 0）</td>
+</tr>
+<tr>
+<td><code>mesh::getNumberOfOrientations</code></td>
+<td><code>(elementType, functionSpaceType)</code> -&gt; <code>int</code></td>
+<td>获取指定单元类型和函数空间的可能方向总数</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2655">26.5.5 网格边/面</h3>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>函数签名</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mesh::getElementEdgeNodes</code></td>
+<td><code>(elementType, nodeTags, tag, primary, task, numTasks)</code></td>
+<td>获取单元类型对应所有单元的边节点列表（按单元顺序排列）</td>
+</tr>
+<tr>
+<td><code>mesh::getElementFaceNodes</code></td>
+<td><code>(elementType, faceType, nodeTags, tag, primary, task, numTasks)</code></td>
+<td>获取单元类型对应所有单元的面节点列表。faceType: 3=三角形, 4=四边形</td>
+</tr>
+<tr>
+<td><code>mesh::createEdges</code></td>
+<td><code>(dimTags)</code></td>
+<td>为指定实体（空=全部）创建全局唯一边并分配标签</td>
+</tr>
+<tr>
+<td><code>mesh::createFaces</code></td>
+<td><code>(dimTags)</code></td>
+<td>为指定实体创建全局唯一面并分配标签</td>
+</tr>
+<tr>
+<td><code>mesh::getEdges</code></td>
+<td><code>(nodeTags, edgeTags, edgeOrientations)</code></td>
+<td>通过节点对列表查询边的全局标签和方向</td>
+</tr>
+<tr>
+<td><code>mesh::getFaces</code></td>
+<td><code>(faceType, nodeTags, faceTags, faceOrientations)</code></td>
+<td>通过节点列表查询面的全局标签和方向</td>
+</tr>
+<tr>
+<td><code>mesh::getAllEdges</code></td>
+<td><code>(edgeTags, edgeNodes)</code></td>
+<td>一次性获取网格中所有唯一边的标签和节点</td>
+</tr>
+<tr>
+<td><code>mesh::getAllFaces</code></td>
+<td><code>(faceType, faceTags, faceNodes)</code></td>
+<td>一次性获取网格中所有唯一面的标签和节点</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2656">26.5.6 离散实体与单元添加</h3>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>函数签名</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>model::addDiscreteEntity</code></td>
+<td><code>(dim, tag, boundary)</code> -&gt; <code>int</code></td>
+<td>添加一个离散实体（无参数化几何，仅由网格定义），返回实体标签</td>
+</tr>
+<tr>
+<td><code>mesh::addElementsByType</code></td>
+<td><code>(entityTag, elementType, elementTags, nodeTags)</code></td>
+<td>向指定实体添加一批指定类型的单元</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2657">26.5.7 通用选项</h3>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mesh::setOrder(N)</code></td>
+<td>设置单元阶数（1=线性, 2=二次,...），影响节点数但不影响几何精度</td>
+</tr>
+<tr>
+<td><code>mesh::setTransfiniteAutomatic()</code></td>
+<td>对所有可结构化剖分的面/体自动应用 transfinite 算法</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="266">26.6 注意事项与最佳实践</h2>
+<ol>
+<li>
+<p><strong>雅可比按列存储</strong>：<code>jacobians</code> 向量按列排列 <code>[Jxu, Jyu, Jzu, Jxv, Jyv, Jzv, Jxw, Jyw, Jzw]</code>，而非按行。在构造物理空间梯度 <code>∂N/∂x = J^{-T} * ∂N/∂u</code> 时务必注意索引的正确转换。</p>
+</li>
+<li>
+<p><strong>多线程并行</strong>：<code>getJacobians()</code> 和 <code>getBasisFunctionsOrientation()</code> 支持 <code>task/numTasks</code> 分片并行。使用前必须调用对应的 <code>preallocate</code> 函数预分配输出缓冲区。</p>
+</li>
+<li>
+<p><strong>积分规则选择</strong>：对三角形/四面体单元，<code>"Gauss"</code> 系列的积分点可能落在参考单元外部（尤其高阶时）。如需保证所有积分点均在单元内部，使用 <code>"CompositeGauss"</code> 张量积规则。</p>
+</li>
+<li>
+<p><strong>边/面节点顺序</strong>：<code>getElementEdgeNodes()</code> 和 <code>getElementFaceNodes()</code> 的返回顺序与 <code>getElements()</code> / <code>getElementsByType()</code> 的单元顺序严格一致。利用这一性质可直接通过整数除法 <code>i / (每单元边数或面数)</code> 建立边/面到单元的索引映射。</p>
+</li>
+<li>
+<p><strong>全局标签与唯一性</strong>：<code>createEdges()</code> / <code>createFaces()</code> 必须在查询边/面标签前调用，否则 <code>getEdges()</code> / <code>getFaces()</code> 无法返回有效标签。<code>getAllEdges()</code> / <code>getAllFaces()</code> 同样依赖此前提。</p>
+</li>
+<li>
+<p><strong>DG 邻接关系</strong>：<code>faces2elems</code> 映射中共享计数 = 2 的面是内部面，= 1 的是边界面。在 DG 方法中内部面需计算双侧数值通量，边界面仅需单侧通量（结合边界条件）。</p>
+</li>
+<li>
+<p><strong>离散实体单元标签</strong>：在离散实体上创建面单元时，为避免标签冲突，建议基于 <code>getMaxElementTag()</code> 偏移生成新标签。Gmsh 不允许单元标签重复。</p>
+</li>
+<li>
+<p><strong>方向与基函数</strong>：对于基于边的有限元（如 Nedelec 单元），<code>getEdges()</code> 返回的 <code>edgeOrientations</code> 和 <code>getBasisFunctionsOrientation()</code> 返回的方向索引共同决定基函数在物理单元中的实际朝向，这对 Maxwell 方程的数值求解至关重要。</p>
+</li>
+</ol>
+<hr />
+<h2 id="267">26.7 本章小结</h2>
+<ul>
+<li>本章覆盖了 CAE 前处理中有限元核心数据的获取：<strong>积分点</strong>（参考单元中的数值积分位置和权重）、<strong>雅可比矩阵</strong>（参考空间到物理空间的映射和体积变形）、<strong>基函数</strong>（在积分点处的值和梯度），以及<strong>内部边/面</strong>（用于 DG 方法、内聚力单元等）。</li>
+<li><code>getIntegrationPoints()</code> + <code>getJacobians()</code> + <code>getBasisFunctions()</code> 三个 API 组合即可完成标准有限元刚度矩阵组装的全部数据准备。</li>
+<li><code>getBasisFunctions()</code> 支持 Lagrange、H1Legendre、HcurlLegendre 等多种函数空间，覆盖从标准连续 Galerkin（CG）到 DG 再到 Maxwell 方程求解器的需求。</li>
+<li><code>createEdges()</code> / <code>createFaces()</code> + <code>getElementEdgeNodes()</code> / <code>getElementFaceNodes()</code> + <code>addElementsByType()</code> 构成了 DG 方法内部面积分的完整前处理流水线。</li>
+<li>雅可比矩阵的按列存储、边/面的方向标识、多线程预分配等细节在实际工程代码中需要特别关注，避免因为数据布局误解导致刚度矩阵计算错误。</li>
+</ul>
+<hr />
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

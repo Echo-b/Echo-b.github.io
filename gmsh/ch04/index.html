@@ -1,0 +1,3364 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../ch03/">
+      
+      
+        <link rel="next" href="../ch05/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>第4章 高级几何构建——内置函数孔洞注释与颜色 - Echo-b's Tech Notes</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#4" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Echo-b&#39;s Tech Notes" class="md-header__button md-logo" aria-label="Echo-b's Tech Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Echo-b's Tech Notes
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              第4章 高级几何构建——内置函数孔洞注释与颜色
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Echo-b&#39;s Tech Notes" class="md-nav__button md-logo" aria-label="Echo-b's Tech Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Echo-b's Tech Notes
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VTK 教程
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    VTK 教程
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    入门篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    入门篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-01-vtk-overview-and-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第一章 VTK概述与环境搭建
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-02-visualization-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二章 可视化管线
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-03-data-model-basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第三章 数据模型基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-04-geometry-and-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第四章 基本几何体与数据源
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-05-rendering-and-interactor/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第五章 渲染与交互机
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-06-volume1-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第六章 入门篇综合实战——3D几何画廊
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    实战篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    实战篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-07-polydata/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第七章 PolyData详解
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-08-unstructured-grid/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第八章 非结构化网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-09-structured-data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第九章 结构化数据
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-10-data-io/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十章 数据I/O
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-11-common-filters/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十一章 常用过滤器
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-12-color-mapping/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十二章 颜色映射与标量可视化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-13-advanced-rendering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十三章 高级渲染技术
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-14-multi-dataset/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十四章 多个数据集处理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-15-volume2-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十五章 实战篇综合实战——CFD后处理可视化工具
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    进阶篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    进阶篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-16-volume-rendering-basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十六章 体渲染基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-17-volume-rendering-advanced/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十七章 体渲染高级技术
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-18-charts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十八章 2D图表系统
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-19-annotation-and-widgets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十九章 三维标注与交互组件
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-20-custom-interaction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十章 自定义交互与Widget
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-21-qt-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十一章 Qt集成
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-22-smp-parallel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十二章 SMP并行入门
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-23-volume3-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十三章 进阶篇综合实战
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GMSH 教程
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    GMSH 教程
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3_1" id="__nav_3_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    基础篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    基础篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第1章 Gmsh概述与C++ SDK配置
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第2章 几何基础——点线面曲线环与物理组
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第3章 变换与拉伸几何
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第4章 高级几何构建——内置函数孔洞注释与颜色
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第4章 高级几何构建——内置函数孔洞注释与颜色
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#41" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 学习目标
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#42" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 核心概念说明
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.2 核心概念说明">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#421" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2.1 内置曲线函数概览
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#422-surface-with-holes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2.2 带孔洞的面（Surface with Holes）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#423" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2.3 实体属性与注释
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#43-c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 C++ 代码逐段讲解
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.3 C++ 代码逐段讲解">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        示例一：带圆孔的方板
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="示例一：带圆孔的方板">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#431" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3.1 初始化与参数定义
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#432" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3.2 创建方板外边界
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#433-circle-arc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3.3 使用 Circle Arc 定义圆孔
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#434" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3.4 定义带孔面
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#435" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3.5 设置颜色与命名
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#436" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3.6 同步、网格生成与运行
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#t4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        示例二：使用多种曲线的复杂面（基于官方 t4）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="示例二：使用多种曲线的复杂面（基于官方 t4）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#441-annotation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4.1 添加注释（Annotation）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#442" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4.2 设置实体颜色
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#443" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4.3 双点击事件响应
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#45" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.5 完整可运行代码
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.5 完整可运行代码">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        完整示例一：带圆孔的方板
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        完整示例二：使用多种曲线的复杂面
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#46-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.6 关键 API 速查表
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.6 关键 API 速查表">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#gmshmodelgeo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        曲线创建（gmsh::model::geo）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        曲线环与面
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        实体属性
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        注释与视图
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        注意事项
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第5章 三维网格控制——尺寸场体孔洞与网格算法
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch06/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第6章 网格控制进阶——Transfinite分布与结构化网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch07/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第7章 背景网格——用已有网格指导网格尺寸
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch08/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第8章 网格尺寸场
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    进阶篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    进阶篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch09/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第9章 四边形网格重组
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch10/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第10章 复合实体——跨面一致网格划分
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch11/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第11章 STL重网格——无CAD模型的表面重构
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch12/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第12章 同调与上同调计算
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch13/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第13章 嵌入实体——在网格中强制生成共形节点
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch14/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第14章 各向异性网格——方向感知的网格生成
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch15/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第15章 周期性网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch16/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第16章 OpenCASCADE内核与构造实体几何
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch17/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第17章 高级实体建模——断面扫掠圆角管道与曲率自适应网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch18/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第18章 STEP导入与几何分割
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    应用篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    应用篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch19/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第19章 后处理视图与动画
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch20/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第20章 后处理插件——视图数据运算与变换
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch21/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第21章 网格分区与区域分解
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch22/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第22章 遍历模型与网格数据——前处理查询API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第23章 离散实体与混合模型——地形网格实战
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch24/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第24章 后处理视图——List-based与Model-based数据导入
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch25/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第25章 几何求值——参数化法向量与曲率
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第26章 积分点雅可比矩阵基函数与内部边面
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#41" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 学习目标
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#42" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 核心概念说明
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.2 核心概念说明">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#421" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2.1 内置曲线函数概览
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#422-surface-with-holes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2.2 带孔洞的面（Surface with Holes）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#423" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2.3 实体属性与注释
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#43-c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 C++ 代码逐段讲解
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.3 C++ 代码逐段讲解">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        示例一：带圆孔的方板
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="示例一：带圆孔的方板">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#431" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3.1 初始化与参数定义
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#432" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3.2 创建方板外边界
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#433-circle-arc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3.3 使用 Circle Arc 定义圆孔
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#434" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3.4 定义带孔面
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#435" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3.5 设置颜色与命名
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#436" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3.6 同步、网格生成与运行
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#t4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        示例二：使用多种曲线的复杂面（基于官方 t4）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="示例二：使用多种曲线的复杂面（基于官方 t4）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#441-annotation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4.1 添加注释（Annotation）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#442" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4.2 设置实体颜色
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#443" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4.3 双点击事件响应
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#45" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.5 完整可运行代码
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.5 完整可运行代码">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        完整示例一：带圆孔的方板
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        完整示例二：使用多种曲线的复杂面
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#46-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.6 关键 API 速查表
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.6 关键 API 速查表">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#gmshmodelgeo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        曲线创建（gmsh::model::geo）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        曲线环与面
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        实体属性
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        注释与视图
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        注意事项
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="4">第4章 高级几何构建：内置函数、孔洞、注释与颜色</h1>
+<hr />
+<h2 id="41">4.1 学习目标</h2>
+<ul>
+<li>掌握 Gmsh 内置曲线函数（Circle Arc、Spline、B-Spline、Bezier、Ellipse）的 C++ API 用法</li>
+<li>理解 <code>addPlaneSurface</code> 中多曲线环（Curve Loop）的机制，正确构建带孔洞的面</li>
+<li>学会设置实体颜色、名称与可见性，增强几何模型的可读性</li>
+<li>掌握注释（Annotation）与视图（View）的基本使用方法，用于前处理中标记边界条件位置</li>
+</ul>
+<hr />
+<h2 id="42">4.2 核心概念说明</h2>
+<h3 id="421">4.2.1 内置曲线函数概览</h3>
+<p>在前两章中我们只使用了 <code>addLine</code> 来创建直线段。Gmsh 提供了丰富的内置曲线函数，使得复杂轮廓的定义无需依赖外部 CAD 内核即可完成：</p>
+<table>
+<thead>
+<tr>
+<th>曲线类型</th>
+<th>C++ API</th>
+<th>参数说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>圆弧</td>
+<td><code>addCircleArc(start, center, end, tag)</code></td>
+<td>三点定义，弧度必须 &lt; Pi（OpenCASCADE 内核无此限制）</td>
+</tr>
+<tr>
+<td>椭圆弧</td>
+<td><code>addEllipseArc(start, center, majorAxisPoint, end, tag)</code></td>
+<td>通过起点、中心、长轴点和终点定义</td>
+</tr>
+<tr>
+<td>完整椭圆</td>
+<td><code>addEllipse(start, center, majorAxisPoint, end, tag)</code></td>
+<td>与椭圆弧参数类似，生成闭合椭圆曲线</td>
+</tr>
+<tr>
+<td>Catmull-Rom 样条</td>
+<td><code>addSpline({pointTags}, tag)</code></td>
+<td>通过所有给定点，自动计算切线</td>
+</tr>
+<tr>
+<td>B 样条</td>
+<td><code>addBSpline({pointTags}, tag)</code></td>
+<td>控制点不一定在曲线上，提供更平滑的曲线</td>
+</tr>
+<tr>
+<td>贝塞尔曲线</td>
+<td><code>addBezier({pointTags}, tag)</code></td>
+<td>首尾点为端点，中间点为控制点</td>
+</tr>
+<tr>
+<td>复合 Catmull-Rom 样条</td>
+<td><code>addCompoundSpline({pointTags}, ...)</code></td>
+<td>分段样条，每段使用各自的控制点集</td>
+</tr>
+<tr>
+<td>复合 B 样条</td>
+<td><code>addCompoundBSpline({pointTags}, ...)</code></td>
+<td>分段 B 样条</td>
+</tr>
+</tbody>
+</table>
+<p>这些函数均位于 <code>gmsh::model::geo</code> 命名空间下。为简化代码，通常使用命名空间别名：</p>
+<pre><code class="language-cpp">namespace factory = gmsh::model::geo;
+</code></pre>
+<p>之后即可通过 <code>factory::addCircleArc(...)</code> 等形式调用。</p>
+<h3 id="422-surface-with-holes">4.2.2 带孔洞的面（Surface with Holes）</h3>
+<p>在 Gmsh 中，一个平面面（Plane Surface）由一个或多个曲线环（Curve Loop）定义：</p>
+<ul>
+<li><strong>第一条</strong>曲线环是该面的<strong>外边界</strong>（exterior boundary）</li>
+<li><strong>后续</strong>曲线环是该面的<strong>内孔</strong>（hole boundaries）</li>
+</ul>
+<p>一般规律：如果一个面有 N 个孔，就需要 N+1 条曲线环。</p>
+<pre><code class="language-cpp">// 外边界曲线环 tag=1
+factory::addCurveLoop({...}, 1);
+// 内孔曲线环 tag=2
+factory::addCurveLoop({...}, 2);
+// 定义带孔面：第一个参数是外环，后续是内孔环
+factory::addPlaneSurface({1, 2}, 100);
+</code></pre>
+<p>在定义内孔曲线环时，曲线的方向符号约定同样适用：正值表示沿曲线定义方向，负值表示反向。</p>
+<h3 id="423">4.2.3 实体属性与注释</h3>
+<p>Gmsh 允许为几何实体设置颜色、名称等属性，这对前处理中标记边界条件位置极为有用：</p>
+<ul>
+<li><strong>实体颜色</strong>：<code>gmsh::model::setColor({{dim, tag}}, r, g, b)</code>，其中 <code>r, g, b</code> 取值范围 0-255</li>
+<li><strong>实体命名</strong>：<code>gmsh::model::setEntityName(dim, tag, "name")</code>，在 GUI 中显示可读标签</li>
+<li><strong>实体可见性</strong>：<code>gmsh::model::setVisibility({{dim, tag}}, visible)</code>，控制实体显示/隐藏</li>
+</ul>
+<p>注释（Annotation）通过后处理视图（View）实现。视图可以包含文本字符串、图片等，支持模型坐标和窗口坐标两种定位方式。</p>
+<hr />
+<h2 id="43-c">4.3 C++ 代码逐段讲解</h2>
+<h3 id="_1">示例一：带圆孔的方板</h3>
+<p>这是一个入门级示例，展示如何使用 <code>addCircleArc</code> 构建圆孔，并定义带孔的面。</p>
+<h4 id="431">4.3.1 初始化与参数定义</h4>
+<pre><code class="language-cpp">#include &lt;gmsh.h&gt;
+
+int main(int argc, char **argv) {
+  gmsh::initialize(argc, argv);
+  gmsh::model::add(&quot;plate_with_hole&quot;);
+
+  namespace factory = gmsh::model::geo;
+
+  double L  = 1.0;   // 方板边长
+  double R  = 0.2;   // 圆孔半径
+  double lc = 0.05;  // 网格特征长度
+</code></pre>
+<ul>
+<li><code>namespace factory = gmsh::model::geo;</code> 创建命名空间别名，显著缩短后续 API 调用长度</li>
+<li>定义几何参数时尽量使用变量，方便后续修改</li>
+</ul>
+<h4 id="432">4.3.2 创建方板外边界</h4>
+<pre><code class="language-cpp">  // 方板四个角点
+  factory::addPoint(0,  0,  0, lc, 1);   // 左下
+  factory::addPoint(L,  0,  0, lc, 2);   // 右下
+  factory::addPoint(L,  L,  0, lc, 3);   // 右上
+  factory::addPoint(0,  L,  0, lc, 4);   // 左上
+
+  // 四条直线边界
+  factory::addLine(1, 2, 1);
+  factory::addLine(2, 3, 2);
+  factory::addLine(3, 4, 3);
+  factory::addLine(4, 1, 4);
+</code></pre>
+<h4 id="433-circle-arc">4.3.3 使用 Circle Arc 定义圆孔</h4>
+<p>三点圆弧由 <code>addCircleArc(startPoint, centerPoint, endPoint, tag)</code> 定义。这里我们用一个完整的圆作为孔，需要 4 段圆弧（每段 90 度）。</p>
+<pre><code class="language-cpp">  double cx = L / 2, cy = L / 2;  // 圆心在方板中心
+
+  // 孔周边 4 个等分点
+  factory::addPoint(cx + R, cy,     0, lc, 5);   // 0 deg
+  factory::addPoint(cx,     cy + R, 0, lc, 6);   // 90 deg
+  factory::addPoint(cx - R, cy,     0, lc, 7);   // 180 deg
+  factory::addPoint(cx,     cy - R, 0, lc, 8);   // 270 deg
+
+  // 圆心点（用作圆弧中心）
+  factory::addPoint(cx, cy, 0, lc, 9);
+
+  // 4 段圆弧构成完整圆
+  factory::addCircleArc(5, 9, 6, 5);   // 0 -&gt; 90 deg
+  factory::addCircleArc(6, 9, 7, 6);   // 90 -&gt; 180 deg
+  factory::addCircleArc(7, 9, 8, 7);   // 180 -&gt; 270 deg
+  factory::addCircleArc(8, 9, 5, 8);   // 270 -&gt; 360 deg
+</code></pre>
+<p>每条圆弧的角度为 90 度，小于 Pi（180 度），符合 Gmsh 内置几何内核的限制。圆心点（tag=9）是 4 段圆弧的共同中心。</p>
+<h4 id="434">4.3.4 定义带孔面</h4>
+<pre><code class="language-cpp">  // 外边界曲线环（4 条直线，全部正向）
+  factory::addCurveLoop({1, 2, 3, 4}, 1);
+
+  // 内孔曲线环（4 段圆弧）
+  factory::addCurveLoop({5, 6, 7, 8}, 2);
+
+  // 定义带孔面：外环=1，内孔环=2
+  factory::addPlaneSurface({1, 2}, 1);
+</code></pre>
+<p><code>addPlaneSurface</code> 的参数 <code>{1, 2}</code> 中，1 是外边界，2 是内孔。如果方向错误导致法向量翻转，可以加负号纠正。</p>
+<h4 id="435">4.3.5 设置颜色与命名</h4>
+<pre><code class="language-cpp">  // 为内外边界设置不同颜色
+  gmsh::model::setColor({{1, 1}, {1, 2}, {1, 3}, {1, 4}}, 0, 0, 255);   // 外边界：蓝色
+  gmsh::model::setColor({{1, 5}, {1, 6}, {1, 7}, {1, 8}}, 255, 0, 0);   // 孔边界：红色
+  gmsh::model::setColor({{2, 1}}, 200, 200, 200);  // 面：浅灰
+
+  // 为实体设置可读名称
+  gmsh::model::setEntityName(2, 1, &quot;Plate&quot;);
+  gmsh::model::setEntityName(1, 5, &quot;Hole_Edge_1&quot;);
+</code></pre>
+<p><code>setColor</code> 的第一个参数是 <code>vector&lt;pair&lt;int,int&gt;&gt;</code>，每对 <code>{dim, tag}</code> 标识一个实体。这里尺寸 dim: 0=点, 1=曲线, 2=面。</p>
+<h4 id="436">4.3.6 同步、网格生成与运行</h4>
+<pre><code class="language-cpp">  factory::synchronize();
+  gmsh::model::mesh::generate(2);
+  gmsh::write(&quot;plate_with_hole.msh&quot;);
+
+  // 启动 GUI
+  std::set&lt;std::string&gt; args(argv, argv + argc);
+  if (!args.count(&quot;-nopopup&quot;)) gmsh::fltk::run();
+
+  gmsh::finalize();
+  return 0;
+}
+</code></pre>
+<hr />
+<h3 id="t4">示例二：使用多种曲线的复杂面（基于官方 t4）</h3>
+<p>本示例示范如何使用 B 样条、贝塞尔曲线、椭圆弧以及注释功能，构建一个复杂轮廓。此处提取官方 t4.cpp 中的关键知识点进行讲解。</p>
+<h4 id="441-annotation">4.4.1 添加注释（Annotation）</h4>
+<p>注释通过视图系统实现，适用于标记边界条件位置、材料区域或载荷点：</p>
+<pre><code class="language-cpp">  // 创建一个视图用于存放注释
+  int v = gmsh::view::add(&quot;comments&quot;);
+
+  // 窗口坐标注释：距左边界 10px，距下边界 -10px（从底部向上）
+  gmsh::view::addListDataString(v, {10, -10}, {&quot;Created with Gmsh&quot;});
+
+  // 模型坐标注释：在 (0, 0.11, 0) 处显示文字&quot;Hole&quot;
+  gmsh::view::addListDataString(v, {0, 0.11, 0}, {&quot;Hole&quot;},
+      {&quot;Align&quot;, &quot;Center&quot;, &quot;Font&quot;, &quot;Helvetica&quot;});
+
+  // 嵌入图片（以 file:// 前缀开头）
+  // @ 符号后指定宽x高，自然缩放设 0，像素尺寸用两个 0
+  gmsh::view::addListDataString(v, {0, 0.09, 0},
+      {&quot;file://../image.png@0.01x0&quot;}, {&quot;Align&quot;, &quot;Center&quot;});
+
+  // Billboard 模式（# 符号）：图片始终朝向相机
+  gmsh::view::addListDataString(v, {0, 0.12, 0},
+      {&quot;file://../image.png@0.01x0#&quot;}, {&quot;Align&quot;, &quot;Center&quot;});
+</code></pre>
+<p><code>addListDataString</code> 的关键参数：
+- 第一个参数：视图句柄
+- 第二个参数：位置坐标 <code>{x, y, z}</code> 或窗口坐标 <code>{pixelX, pixelY}</code> —— z 坐标由参数个数自动判定
+- 第三个参数：字符串内容数组
+- 后续参数：可选样式属性（键值对）</p>
+<h4 id="442">4.4.2 设置实体颜色</h4>
+<p>颜色设置支持批量操作——将同一颜色的实体放入一个 <code>vector&lt;pair&lt;int,int&gt;&gt;</code> 中：</p>
+<pre><code class="language-cpp">  // 面颜色
+  gmsh::model::setColor({{2, 22}}, 127, 127, 127);  // Gray50
+  gmsh::model::setColor({{2, 24}}, 160, 32, 240);    // Purple
+
+  // 曲线颜色（范围设置）
+  for (int i = 1; i &lt;= 14; i++)
+      gmsh::model::setColor({{1, i}}, 255, 0, 0);    // 曲线 1~14：红色
+  for (int i = 15; i &lt;= 20; i++)
+      gmsh::model::setColor({{1, i}}, 255, 255, 0);  // 曲线 15~20：黄色
+</code></pre>
+<p><code>setColor</code> 的 <code>r/g/b</code> 参数为 0-255 的整数值。</p>
+<h4 id="443">4.4.3 双点击事件响应</h4>
+<p>为视图和几何实体设置双击回调，便于交互式调试：</p>
+<pre><code class="language-cpp">  gmsh::view::option::setString(v, &quot;DoubleClickedCommand&quot;,
+      &quot;Printf('View[0] has been double-clicked!');&quot;);
+  gmsh::option::setString(&quot;Geometry.DoubleClickedLineCommand&quot;,
+      &quot;Printf('Curve %g has been double-clicked!', &quot;
+      &quot;Geometry.DoubleClickedEntityTag);&quot;);
+</code></pre>
+<p><code>DoubleClickedEntityTag</code> 是 Gmsh 在双击事件中自动注入的特殊变量。</p>
+<hr />
+<h2 id="45">4.5 完整可运行代码</h2>
+<h3 id="_2">完整示例一：带圆孔的方板</h3>
+<pre><code class="language-cpp">#include &lt;set&gt;
+#include &lt;gmsh.h&gt;
+
+int main(int argc, char **argv) {
+  gmsh::initialize(argc, argv);
+  gmsh::model::add(&quot;plate_with_hole&quot;);
+
+  namespace factory = gmsh::model::geo;
+
+  double L  = 1.0;
+  double R  = 0.2;
+  double cx = L / 2, cy = L / 2;
+  double lc = 0.05;
+
+  // ===== 外边界（方板） =====
+  factory::addPoint(0,  0,  0, lc, 1);
+  factory::addPoint(L,  0,  0, lc, 2);
+  factory::addPoint(L,  L,  0, lc, 3);
+  factory::addPoint(0,  L,  0, lc, 4);
+
+  factory::addLine(1, 2, 1);
+  factory::addLine(2, 3, 2);
+  factory::addLine(3, 4, 3);
+  factory::addLine(4, 1, 4);
+
+  // ===== 内孔（圆） =====
+  factory::addPoint(cx + R, cy,     0, lc, 5);
+  factory::addPoint(cx,     cy + R, 0, lc, 6);
+  factory::addPoint(cx - R, cy,     0, lc, 7);
+  factory::addPoint(cx,     cy - R, 0, lc, 8);
+  factory::addPoint(cx,     cy,     0, lc, 9);   // 圆心
+
+  factory::addCircleArc(5, 9, 6, 5);
+  factory::addCircleArc(6, 9, 7, 6);
+  factory::addCircleArc(7, 9, 8, 7);
+  factory::addCircleArc(8, 9, 5, 8);
+
+  // ===== 定义带孔面 =====
+  factory::addCurveLoop({1, 2, 3, 4}, 1);   // 外环
+  factory::addCurveLoop({5, 6, 7, 8}, 2);   // 内孔环
+  factory::addPlaneSurface({1, 2}, 1);       // 面 = 外环 + 内孔
+
+  // ===== 颜色与命名 =====
+  gmsh::model::setColor({{1, 1}, {1, 2}, {1, 3}, {1, 4}}, 0, 0, 255);
+  gmsh::model::setColor({{1, 5}, {1, 6}, {1, 7}, {1, 8}}, 255, 0, 0);
+  gmsh::model::setColor({{2, 1}}, 200, 200, 200);
+  gmsh::model::setEntityName(2, 1, &quot;Plate&quot;);
+  gmsh::model::setEntityName(1, 5, &quot;Hole_Edge&quot;);
+
+  // ===== 注释 =====
+  int v = gmsh::view::add(&quot;annotations&quot;);
+  gmsh::view::addListDataString(v, {cx, cy, 0}, {&quot;Hole Center&quot;},
+      {&quot;Align&quot;, &quot;Center&quot;, &quot;Font&quot;, &quot;Helvetica&quot;});
+
+  // ===== 网格 =====
+  factory::synchronize();
+  gmsh::model::mesh::generate(2);
+  gmsh::write(&quot;plate_with_hole.msh&quot;);
+
+  std::set&lt;std::string&gt; args(argv, argv + argc);
+  if (!args.count(&quot;-nopopup&quot;)) gmsh::fltk::run();
+
+  gmsh::finalize();
+  return 0;
+}
+</code></pre>
+<h3 id="_3">完整示例二：使用多种曲线的复杂面</h3>
+<p>本示例构造一个由直线、圆弧、Spline 和 B-Spline 共同围成的多边形面，并在其中间开一个椭圆孔（使用 <code>addEllipse</code>），同时演示实体颜色设置。</p>
+<pre><code class="language-cpp">#include &lt;set&gt;
+#include &lt;gmsh.h&gt;
+
+int main(int argc, char **argv) {
+  gmsh::initialize(argc, argv);
+  gmsh::model::add(&quot;complex_surface&quot;);
+
+  namespace factory = gmsh::model::geo;
+
+  double lc = 0.1;
+
+  // ===== 外边界：直线 + 圆弧 + Spline + B-Spline =====
+  factory::addPoint( 0,  0, 0, lc,  1);
+  factory::addPoint( 1,  0, 0, lc,  2);
+  factory::addPoint( 2,  1, 0, lc,  3);
+  factory::addPoint( 2,  2, 0, lc,  4);
+  factory::addPoint( 1,  3, 0, lc,  5);
+  factory::addPoint( 0,  3, 0, lc,  6);
+  factory::addPoint(-1,  2, 0, lc,  7);
+  factory::addPoint(-1,  1, 0, lc,  8);
+
+  // 直线
+  factory::addLine(1, 2, 1);
+  // 圆弧 (start=2, center=3, end=4) — 用点 3 作中心
+  factory::addPoint(1.5, 0.5, 0, lc, 31);  // 圆弧辅助中心
+  factory::addCircleArc(2, 31, 4, 2);
+  // Spline 通过点 4, 5, 6
+  factory::addSpline({4, 5, 6}, 3);
+  // B-Spline 通过点 6, 7, 8
+  factory::addSpline({6, 7, 8}, 4);
+  // 直线闭合
+  factory::addLine(8, 1, 5);
+
+  // ===== 内孔：完整椭圆 =====
+  double cx = 0.5, cy = 1.5;
+  factory::addPoint(cx,       cy,       0, lc, 10);  // 中心
+  factory::addPoint(cx + 0.3, cy,       0, lc, 11);  // 长轴端点
+  factory::addPoint(cx,       cy + 0.15, 0, lc, 12);  // 椭圆上一点（定义短轴）
+
+  // addEllipse(start, center, majorAxisPoint, tag)
+  factory::addEllipse(11, 10, 12, 6);
+
+  // ===== 曲线环与面 =====
+  factory::addCurveLoop({1, 2, 3, 4, 5}, 1);   // 外环
+  factory::addCurveLoop({6}, 2);                // 内孔环（椭圆）
+  factory::addPlaneSurface({1, 2}, 1);
+
+  // ===== 实体命名与颜色 =====
+  gmsh::model::setEntityName(2, 1, &quot;ComplexPlate&quot;);
+  gmsh::model::setEntityName(1, 1, &quot;BottomEdge&quot;);
+  gmsh::model::setEntityName(1, 2, &quot;CircleArc&quot;);
+  gmsh::model::setEntityName(1, 3, &quot;Spline&quot;);
+  gmsh::model::setEntityName(1, 4, &quot;BSpline&quot;);
+  gmsh::model::setEntityName(1, 6, &quot;EllipseHole&quot;);
+
+  gmsh::model::setColor({{1, 1}}, 0, 0, 255);      // 直线：蓝
+  gmsh::model::setColor({{1, 2}}, 0, 200, 200);     // 圆弧：青
+  gmsh::model::setColor({{1, 3}}, 200, 100, 0);     // Spline：橙
+  gmsh::model::setColor({{1, 4}}, 150, 0, 200);     // B-Spline：紫
+  gmsh::model::setColor({{1, 6}}, 255, 0, 0);       // 椭圆孔：红
+  gmsh::model::setColor({{2, 1}}, 220, 220, 220);   // 面：浅灰
+
+  // ===== 注释：标记边界名称 =====
+  int v = gmsh::view::add(&quot;bcs&quot;);
+  gmsh::view::addListDataString(v, {0.25, -0.1, 0}, {&quot;BottomEdge (fixed)&quot;},
+      {&quot;Align&quot;, &quot;Center&quot;});
+  gmsh::view::addListDataString(v, {1.5, 1.5, 0}, {&quot;EllipseHole (free)&quot;},
+      {&quot;Align&quot;, &quot;Center&quot;});
+
+  // ===== 网格 =====
+  factory::synchronize();
+  gmsh::model::mesh::generate(2);
+  gmsh::write(&quot;complex_surface.msh&quot;);
+
+  std::set&lt;std::string&gt; args(argv, argv + argc);
+  if (!args.count(&quot;-nopopup&quot;)) gmsh::fltk::run();
+
+  gmsh::finalize();
+  return 0;
+}
+</code></pre>
+<hr />
+<h2 id="46-api">4.6 关键 API 速查表</h2>
+<h3 id="gmshmodelgeo">曲线创建（gmsh::model::geo）</h3>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>签名</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>addLine</code></td>
+<td><code>addLine(startPoint, endPoint, tag)</code></td>
+<td>创建直线</td>
+</tr>
+<tr>
+<td><code>addCircleArc</code></td>
+<td><code>addCircleArc(start, center, end, tag)</code></td>
+<td>三点圆弧（弧度 &lt; Pi）</td>
+</tr>
+<tr>
+<td><code>addEllipseArc</code></td>
+<td><code>addEllipseArc(start, center, majorPt, end, tag)</code></td>
+<td>椭圆弧</td>
+</tr>
+<tr>
+<td><code>addEllipse</code></td>
+<td><code>addEllipse(start, center, majorPt, tag)</code></td>
+<td>完整闭合椭圆</td>
+</tr>
+<tr>
+<td><code>addSpline</code></td>
+<td><code>addSpline({ptTags}, tag)</code></td>
+<td>Catmull-Rom 样条（通过所有点）</td>
+</tr>
+<tr>
+<td><code>addBSpline</code></td>
+<td><code>addBSpline({ptTags}, tag)</code></td>
+<td>B 样条（控制点不在曲线上）</td>
+</tr>
+<tr>
+<td><code>addBezier</code></td>
+<td><code>addBezier({ptTags}, tag)</code></td>
+<td>贝塞尔曲线</td>
+</tr>
+<tr>
+<td><code>addCompoundSpline</code></td>
+<td><code>addCompoundSpline({ptTagsVec}, ...)</code></td>
+<td>分段复合样条</td>
+</tr>
+<tr>
+<td><code>addCompoundBSpline</code></td>
+<td><code>addCompoundBSpline({ptTagsVec}, ...)</code></td>
+<td>分段复合 B 样条</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_4">曲线环与面</h3>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>addCurveLoop({curveTags}, tag)</code></td>
+<td>由曲线列表构成闭合环，负号表示反向</td>
+</tr>
+<tr>
+<td><code>addPlaneSurface({loopTags}, tag)</code></td>
+<td>第一个环 = 外边界，后续 = 内孔</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_5">实体属性</h3>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gmsh::model::setColor({{dim,tag},...}, r, g, b)</code></td>
+<td>设置实体颜色（RGB 0-255）</td>
+</tr>
+<tr>
+<td><code>gmsh::model::setEntityName(dim, tag, "name")</code></td>
+<td>为实体设置可读名称</td>
+</tr>
+<tr>
+<td><code>gmsh::model::setVisibility({{dim,tag},...}, visible)</code></td>
+<td>控制实体可见性（true/false）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_6">注释与视图</h3>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gmsh::view::add("name")</code></td>
+<td>创建新视图，返回视图句柄</td>
+</tr>
+<tr>
+<td><code>gmsh::view::addListDataString(v, coords, {strings}, ...)</code></td>
+<td>添加文本/图片注释</td>
+</tr>
+<tr>
+<td><code>gmsh::view::option::setString(v, key, val)</code></td>
+<td>设置视图选项（如双击回调）</td>
+</tr>
+<tr>
+<td><code>gmsh::option::setString(key, val)</code></td>
+<td>设置全局选项</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_7">注意事项</h3>
+<ol>
+<li><strong>圆弧限制</strong>：<code>addCircleArc</code> 要求弧角小于 Pi（180 度）。完整圆需要 3 段以上圆弧。使用 OpenCASCADE 内核时无此限制。</li>
+<li><strong>曲线方向</strong>：在 <code>addCurveLoop</code> 的曲线标签列表中，正值表示沿定义方向，负值表示反向。内部算法会确保所有曲线沿同一方向（顺时针或逆时针）构成闭合环。</li>
+<li><strong>孔洞定义顺序</strong>：<code>addPlaneSurface</code> 的曲线环列表中，<strong>第一个必须是外边界</strong>，其余为内孔。外边界与内孔的方向可以互相独立。</li>
+<li><strong>同步</strong>：在调用 <code>gmsh::model::mesh::generate()</code> 之前，务必调用 <code>factory::synchronize()</code> 将几何数据从 <code>geo</code> 模块同步到 Gmsh 核心模型。</li>
+<li><strong>命名空间</strong>：推荐使用 <code>namespace factory = gmsh::model::geo;</code> 简化代码，但对 <code>gmsh::model::setColor</code> 等顶层 API 仍需使用全限定名。</li>
+</ol>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

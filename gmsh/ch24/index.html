@@ -1,0 +1,3479 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../ch23/">
+      
+      
+        <link rel="next" href="../ch25/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>第24章 后处理视图——List-based与Model-based数据导入 - Echo-b's Tech Notes</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#24-viewlist-based-model-based" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Echo-b&#39;s Tech Notes" class="md-header__button md-logo" aria-label="Echo-b's Tech Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Echo-b's Tech Notes
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              第24章 后处理视图——List-based与Model-based数据导入
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Echo-b&#39;s Tech Notes" class="md-nav__button md-logo" aria-label="Echo-b's Tech Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Echo-b's Tech Notes
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VTK 教程
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    VTK 教程
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    入门篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    入门篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-01-vtk-overview-and-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第一章 VTK概述与环境搭建
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-02-visualization-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二章 可视化管线
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-03-data-model-basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第三章 数据模型基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-04-geometry-and-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第四章 基本几何体与数据源
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-05-rendering-and-interactor/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第五章 渲染与交互机
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-06-volume1-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第六章 入门篇综合实战——3D几何画廊
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    实战篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    实战篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-07-polydata/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第七章 PolyData详解
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-08-unstructured-grid/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第八章 非结构化网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-09-structured-data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第九章 结构化数据
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-10-data-io/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十章 数据I/O
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-11-common-filters/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十一章 常用过滤器
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-12-color-mapping/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十二章 颜色映射与标量可视化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-13-advanced-rendering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十三章 高级渲染技术
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-14-multi-dataset/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十四章 多个数据集处理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-15-volume2-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十五章 实战篇综合实战——CFD后处理可视化工具
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    进阶篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    进阶篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-16-volume-rendering-basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十六章 体渲染基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-17-volume-rendering-advanced/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十七章 体渲染高级技术
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-18-charts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十八章 2D图表系统
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-19-annotation-and-widgets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十九章 三维标注与交互组件
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-20-custom-interaction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十章 自定义交互与Widget
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-21-qt-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十一章 Qt集成
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-22-smp-parallel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十二章 SMP并行入门
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-23-volume3-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十三章 进阶篇综合实战
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GMSH 教程
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    GMSH 教程
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1" id="__nav_3_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    基础篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    基础篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第1章 Gmsh概述与C++ SDK配置
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第2章 几何基础——点线面曲线环与物理组
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第3章 变换与拉伸几何
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第4章 高级几何构建——内置函数孔洞注释与颜色
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第5章 三维网格控制——尺寸场体孔洞与网格算法
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch06/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第6章 网格控制进阶——Transfinite分布与结构化网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch07/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第7章 背景网格——用已有网格指导网格尺寸
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch08/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第8章 网格尺寸场
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    进阶篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    进阶篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch09/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第9章 四边形网格重组
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch10/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第10章 复合实体——跨面一致网格划分
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch11/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第11章 STL重网格——无CAD模型的表面重构
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch12/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第12章 同调与上同调计算
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch13/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第13章 嵌入实体——在网格中强制生成共形节点
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch14/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第14章 各向异性网格——方向感知的网格生成
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch15/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第15章 周期性网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch16/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第16章 OpenCASCADE内核与构造实体几何
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch17/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第17章 高级实体建模——断面扫掠圆角管道与曲率自适应网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch18/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第18章 STEP导入与几何分割
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    应用篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    应用篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch19/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第19章 后处理视图与动画
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch20/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第20章 后处理插件——视图数据运算与变换
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch21/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第21章 网格分区与区域分解
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch22/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第22章 遍历模型与网格数据——前处理查询API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第23章 离散实体与混合模型——地形网格实战
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第24章 后处理视图——List-based与Model-based数据导入
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第24章 后处理视图——List-based与Model-based数据导入
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#241" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        24.1 学习目标
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#242" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        24.2 核心概念说明
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="24.2 核心概念说明">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2421-view-plugin" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        24.2.1 View 与 Plugin 的分工
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2422" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        24.2.2 两种视图对比
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2423" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        24.2.3 元素形状字符串速查
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2424-model-based" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        24.2.4 Model-based 的三种数据类型
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#243-list-based-x3cpp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        24.3 List-based 视图编程（基于 x3.cpp）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="24.3 List-based 视图编程（基于 x3.cpp）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2431" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        24.3.1 创建视图并导入三角形标量场
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2432" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        24.3.2 导入线段矢量场
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2433" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        24.3.3 添加文字标注与选项配置
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2434" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        24.3.4 高阶场与自适应可视化
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2435" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        24.3.5 保存与启动
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#244-model-based-x4cpp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        24.4 Model-based 视图编程（基于 x4.cpp）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="24.4 Model-based 视图编程（基于 x4.cpp）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2441" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        24.4.1 创建模型与手动网格
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2442-nodedata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        24.4.2 添加 NodeData（连续场）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2443-elementnodedata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        24.4.3 添加 ElementNodeData（间断场）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2444" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        24.4.4 跨模型多步动画
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2445-addmodeldata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        24.4.5 addModelData() 处理非均匀数据
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2446" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        24.4.6 保存
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#245" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        24.5 完整可运行代码
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="24.5 完整可运行代码">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#list-based" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        示例一：List-based 视图
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#model-based" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        示例二：Model-based 视图
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#246-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        24.6 关键 API 速查表
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="24.6 关键 API 速查表">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        视图创建与管理
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#list-based_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        List-based 数据导入
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#model-based_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Model-based 数据导入
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#viewoption" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        视图选项（view::option 命名空间）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        常用视图选项名称
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#247" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        24.7 小结
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch25/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第25章 几何求值——参数化法向量与曲率
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第26章 积分点雅可比矩阵基函数与内部边面
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#241" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        24.1 学习目标
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#242" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        24.2 核心概念说明
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="24.2 核心概念说明">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2421-view-plugin" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        24.2.1 View 与 Plugin 的分工
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2422" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        24.2.2 两种视图对比
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2423" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        24.2.3 元素形状字符串速查
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2424-model-based" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        24.2.4 Model-based 的三种数据类型
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#243-list-based-x3cpp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        24.3 List-based 视图编程（基于 x3.cpp）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="24.3 List-based 视图编程（基于 x3.cpp）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2431" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        24.3.1 创建视图并导入三角形标量场
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2432" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        24.3.2 导入线段矢量场
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2433" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        24.3.3 添加文字标注与选项配置
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2434" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        24.3.4 高阶场与自适应可视化
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2435" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        24.3.5 保存与启动
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#244-model-based-x4cpp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        24.4 Model-based 视图编程（基于 x4.cpp）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="24.4 Model-based 视图编程（基于 x4.cpp）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2441" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        24.4.1 创建模型与手动网格
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2442-nodedata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        24.4.2 添加 NodeData（连续场）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2443-elementnodedata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        24.4.3 添加 ElementNodeData（间断场）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2444" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        24.4.4 跨模型多步动画
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2445-addmodeldata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        24.4.5 addModelData() 处理非均匀数据
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2446" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        24.4.6 保存
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#245" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        24.5 完整可运行代码
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="24.5 完整可运行代码">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#list-based" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        示例一：List-based 视图
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#model-based" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        示例二：Model-based 视图
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#246-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        24.6 关键 API 速查表
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="24.6 关键 API 速查表">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        视图创建与管理
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#list-based_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        List-based 数据导入
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#model-based_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Model-based 数据导入
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#viewoption" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        视图选项（view::option 命名空间）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        常用视图选项名称
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#247" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        24.7 小结
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="24-viewlist-based-model-based">第24章 后处理视图（View）：List-based 与 Model-based 数据导入</h1>
+<hr />
+<h2 id="241">24.1 学习目标</h2>
+<ul>
+<li>理解 Gmsh 后处理的两大数据类型：<strong>基于列表的视图（List-based View）</strong>和<strong>基于模型的视图（Model-based View）</strong>，以及各自的适用场景</li>
+<li>掌握 <code>view::add()</code> 创建视图、<code>view::addListData()</code> 用展平数组导入自定义坐标+场值数据，理解元素形状字符串（"ST"、"VL"、"SQ"等）的命名规则</li>
+<li>掌握 <code>view::addHomogeneousModelData()</code> 与 <code>view::addModelData()</code> 将求解器输出绑定到模型网格节点/单元</li>
+<li>理解 step（时间步）参数在多步动画和跨模型切换中的作用</li>
+<li>学会 <code>view::addListDataString()</code> 添加文字标注、<code>view::probe()</code> 探针采样、高阶场的自适应可视化配置</li>
+</ul>
+<hr />
+<h2 id="242">24.2 核心概念说明</h2>
+<h3 id="2421-view-plugin">24.2.1 View 与 Plugin 的分工</h3>
+<p>后处理（Post-Processing）由两个组件协作完成：</p>
+<pre><code>View (视图) ─── 本章内容 ─── 数据的容器
+├── List-based: 独立于任何模型与网格，自包含坐标+场值
+└── Model-based: 绑定到特定模型实体与网格节点
+Plugin (插件) ─── 见第20章 ─── 对 View 进行运算与变换
+</code></pre>
+<p><strong>View</strong> 存储标量场（Scalar Field）、矢量场（Vector Field）或张量场（Tensor Field）的数据及渲染选项。GUI 可同时显示多个视图，每个独立控制可见性、时间步和显示模式。</p>
+<h3 id="2422">24.2.2 两种视图对比</h3>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>List-based</th>
+<th>Model-based</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>数据来源</td>
+<td>用户自定义坐标+场值</td>
+<td>绑定模型网格节点/单元</td>
+</tr>
+<tr>
+<td>独立性</td>
+<td>完全独立，无需模型</td>
+<td>必须依赖已有模型</td>
+</tr>
+<tr>
+<td>数据结构</td>
+<td>逐元素展平列表</td>
+<td>逐节点/逐单元数组</td>
+</tr>
+<tr>
+<td>多步支持</td>
+<td>定长，各步结构相同</td>
+<td>每步可绑定不同模型</td>
+</tr>
+<tr>
+<td>典型用途</td>
+<td>传感器读数、解析解可视化</td>
+<td>求解器输出(应力/位移/温度)</td>
+</tr>
+<tr>
+<td>文件格式</td>
+<td><code>.pos</code></td>
+<td><code>.msh</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="2423">24.2.3 元素形状字符串速查</h3>
+<p><code>addListData()</code> 第二个参数为两字符字符串：首字符=场类型，次字符=元素形状。</p>
+<p><strong>场类型（首字符）</strong>：<code>S</code>=标量(1分量)、<code>V</code>=矢量(3分量)、<code>T</code>=张量(9分量)</p>
+<p><strong>元素形状（次字符）</strong>：<code>P</code>=点(1节点)、<code>L</code>=线(2)、<code>T</code>=三角形(3)、<code>Q</code>=四边形(4)、<code>S</code>=四面体(4)、<code>H</code>=六面体(8)、<code>I</code>=三棱柱(6)、<code>Y</code>=金字塔(5)</p>
+<p>示例：<code>"ST"</code>=三角形标量场(每单元3值)，<code>"VL"</code>=线矢量场(每节点3分量，共6值)。</p>
+<h3 id="2424-model-based">24.2.4 Model-based 的三种数据类型</h3>
+<table>
+<thead>
+<tr>
+<th>dataType</th>
+<th>含义</th>
+<th>场连续性</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>"NodeData"</code></td>
+<td>节点数据，每节点一个值</td>
+<td><strong>连续场</strong>（节点间插值）</td>
+</tr>
+<tr>
+<td><code>"ElementData"</code></td>
+<td>单元数据，每单元一个常数值</td>
+<td><strong>分片常值场</strong></td>
+</tr>
+<tr>
+<td><code>"ElementNodeData"</code></td>
+<td>单元节点数据，每单元的每节点一个值</td>
+<td><strong>间断场</strong>（单元边界可跳变）</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="243-list-based-x3cpp">24.3 List-based 视图编程（基于 x3.cpp）</h2>
+<h3 id="2431">24.3.1 创建视图并导入三角形标量场</h3>
+<pre><code class="language-cpp">#include &lt;set&gt;
+#include &lt;iostream&gt;
+#include &lt;gmsh.h&gt;
+
+int main(int argc, char **argv)
+{
+  gmsh::initialize(argc, argv);
+
+  // 创建视图: view::add(name) 返回视图的整数 tag
+  int t1 = gmsh::view::add(&quot;A list-based view&quot;);
+</code></pre>
+<p>List-based 数据组织方式：每个元素的坐标（先全部 x、再全部 y、最后全部 z），随后追加各时间步的场值。以下构建两个一阶三角形（各3节点），并填充10个时间步的标量数据：</p>
+<pre><code class="language-cpp">  // 三角形1和三角形2的坐标（x集合 + y集合 + z集合，各3个值）
+  std::vector&lt;double&gt; triangle1 = {
+    0., 1., 1.,  0., 0., 1.,  0., 0., 0.};
+  std::vector&lt;double&gt; triangle2 = {
+    0., 1., 0.,  0., 1., 1.,  0., 0., 0.};
+
+  // 为每个三角形追加 10 个时间步的场值（每步3个标量值）
+  for(int step = 0; step &lt; 10; step++) {
+    triangle1.insert(triangle1.end(), {10., 11. - step, 12.});
+    triangle2.insert(triangle2.end(), {11., 12., 13. + step});
+  }
+
+  // 拼接两个三角形数据并导入
+  std::vector&lt;double&gt; triangles(triangle1);
+  triangles.insert(triangles.end(), triangle2.begin(), triangle2.end());
+  // 参数: viewTag, &quot;ST&quot;=标量三角形, 2个元素, 展平数据
+  gmsh::view::addListData(t1, &quot;ST&quot;, 2, triangles);
+</code></pre>
+<p>总数据量 = 2<em>3</em>3(坐标) + 10<em>2</em>3(场值) = 78 个 double。<code>addListData</code> 根据元素类型和数量自动推断数据长度。</p>
+<h3 id="2432">24.3.2 导入线段矢量场</h3>
+<p>矢量场每节点需3个分量 (vx, vy, vz)。以一条线段（"VL"）为例：</p>
+<pre><code class="language-cpp">  // 线段: 2节点坐标（x集合 + y集合 + z集合）
+  std::vector&lt;double&gt; line = {0., 1.,  1.2, 1.2,  0., 0.};
+  for(int step = 0; step &lt; 10; step++)
+    // 每步: 2节点 x 3分量 = 6个值
+    line.insert(line.end(), {10. + step, 0., 0., 10. + step, 0., 0.});
+  gmsh::view::addListData(t1, &quot;VL&quot;, 1, line);
+</code></pre>
+<h3 id="2433">24.3.3 添加文字标注与选项配置</h3>
+<pre><code class="language-cpp">  // 2D 标注（屏幕坐标，原点=窗口中心，正y朝上）和 3D 标注（世界坐标）
+  gmsh::view::addListDataString(t1, {20., -20.}, {&quot;Created with Gmsh&quot;});
+  gmsh::view::addListDataString(t1, {0.5, 1.5, 0.},
+    {&quot;A multi-step list-based view&quot;},
+    {&quot;Align&quot;, &quot;Center&quot;, &quot;Font&quot;, &quot;Helvetica&quot;});
+
+  // 视图显示选项
+  gmsh::view::option::setNumber(t1, &quot;TimeStep&quot;, 5);       // 显示第5步
+  gmsh::view::option::setNumber(t1, &quot;IntervalsType&quot;, 3);  // 3=连续色谱
+
+  // 探针采样: 在 (0.9, 0.1, 0) 获取插值后的场值
+  std::vector&lt;double&gt; val;
+  double dist;
+  gmsh::view::probe(t1, 0.9, 0.1, 0, val, dist);
+  std::cout &lt;&lt; &quot;Value at (0.9, 0.1, 0):&quot;;
+  for(auto v : val) std::cout &lt;&lt; &quot; &quot; &lt;&lt; v;
+  std::cout &lt;&lt; std::endl;
+</code></pre>
+<p>常用视图选项：<code>"TimeStep"</code>(当前步)、<code>"IntervalsType"</code>(1=等值线,2=填充,3=连续色谱)、<code>"NbIso"</code>(等值线数量)、<code>"RangeType"</code>(1=按步,2=跨步,3=自定义)、<code>"ShowScale"</code>(显示色条)。</p>
+<h3 id="2434">24.3.4 高阶场与自适应可视化</h3>
+<p>高阶场需通过 <code>setInterpolationMatrices()</code> 定义基函数的系数矩阵 c 和指数矩阵 e：</p>
+<pre><code class="language-cpp">  int t2 = gmsh::view::add(&quot;Second order quad&quot;);
+  // 4节点四边形的坐标 + 9个场值（支持二阶9节点插值）
+  std::vector&lt;double&gt; quad = {
+    0.,1.,1.,0.,  -1.2,-1.2,-0.2,-0.2,  0.,0.,0.,0.};
+  quad.insert(quad.end(), {1.,1.,1.,1., 3.,3.,3.,3., -3.});
+
+  // 基函数: f[i](u,v,w) = sum_j c[i][j] * u^e[j][0] * v^e[j][1] * w^e[j][2]
+  gmsh::view::setInterpolationMatrices(
+    t2, &quot;Quadrangle&quot;, 9,
+    { /* 9x9 系数矩阵 c, 行优先 */ },
+    { /* 9x3 指数矩阵 e, 行优先 */ });
+
+  gmsh::view::addListData(t2, &quot;SQ&quot;, 1, quad);
+
+  // 启用自适应可视化网格（AMR驱动渲染）
+  gmsh::view::option::setNumber(t2, &quot;AdaptVisualizationGrid&quot;, 1);
+  gmsh::view::option::setNumber(t2, &quot;TargetError&quot;, 1e-2);
+  gmsh::view::option::setNumber(t2, &quot;MaxRecursionLevel&quot;, 5);
+</code></pre>
+<p>Gmsh 根据 <code>TargetError</code> 自动细分单元直到插值误差达标或达到 <code>MaxRecursionLevel</code>。细分后的数据可通过 <code>view::getListData()</code> 取回（设置 <code>returnAdaptive=true</code>）。</p>
+<h3 id="2435">24.3.5 保存与启动</h3>
+<pre><code class="language-cpp">  gmsh::view::write(t1, &quot;x3.pos&quot;);  // 保存为 .pos 文件
+
+  std::set&lt;std::string&gt; args(argv, argv + argc);
+  if(!args.count(&quot;-nopopup&quot;)) gmsh::fltk::run();
+  gmsh::finalize();
+  return 0;
+}
+</code></pre>
+<hr />
+<h2 id="244-model-based-x4cpp">24.4 Model-based 视图编程（基于 x4.cpp）</h2>
+<h3 id="2441">24.4.1 创建模型与手动网格</h3>
+<p>Model-based 视图必须绑定到模型。首先创建模型并手动构建网格：</p>
+<pre><code class="language-cpp">#include &lt;set&gt;
+#include &lt;gmsh.h&gt;
+
+int main(int argc, char **argv)
+{
+  gmsh::initialize(argc, argv);
+
+  gmsh::model::add(&quot;simple model&quot;);
+  int surf = gmsh::model::addDiscreteEntity(2);  // 离散面，无几何描述
+
+  // 添加4个节点: {标签}, 展平坐标(xyz xyz xyz xyz)
+  gmsh::model::mesh::addNodes(2, surf, {1,2,3,4},
+    {0.,0.,0.,  1.,0.,0.,  1.,1.,0.,  0.,1.,0.});
+  // 添加2个三角形(element type=2): {单元标签}, {连通性}
+  gmsh::model::mesh::addElementsByType(surf, 2, {1,2}, {1,2,3,  1,3,4});
+</code></pre>
+<p><code>addDiscreteEntity(2)</code> 创建维度2的离散实体，无需 OCC 几何，纯粹由用户定义的网格填充，适用于只需后处理的"裸网格"场景。</p>
+<h3 id="2442-nodedata">24.4.2 添加 NodeData（连续场）</h3>
+<pre><code class="language-cpp">  int t1 = gmsh::view::add(&quot;Continuous&quot;);
+  for(int step = 0; step &lt; 10; step++) {
+    gmsh::view::addHomogeneousModelData(
+      t1, step, &quot;simple model&quot;, &quot;NodeData&quot;,
+      {1, 2, 3, 4},                          // 节点标签列表
+      {10., 10., 12. + step, 13. + step});   // 逐节点场值（4个）
+  }
+</code></pre>
+<p><code>addHomogeneousModelData()</code> 参数：viewTag、step（0-based时间步）、modelName（须与 <code>model::add()</code> 一致）、dataType、tags 列表、data 展平数组。<code>"NodeData"</code> 产生连续场，Gmsh 在节点间线性插值。</p>
+<h3 id="2443-elementnodedata">24.4.3 添加 ElementNodeData（间断场）</h3>
+<pre><code class="language-cpp">  int t2 = gmsh::view::add(&quot;Discontinuous&quot;);
+  for(int step = 0; step &lt; 10; step++) {
+    gmsh::view::addHomogeneousModelData(
+      t2, step, &quot;simple model&quot;, &quot;ElementNodeData&quot;,
+      {1, 2},                                // 单元标签列表
+      {10., 10., 12. + step,                 // 单元1的3个节点值
+       14., 15., 13. + step});               // 单元2的3个节点值
+  }
+</code></pre>
+<p>对于2个三角形（各3节点），每步需 2*3=6 个值。<code>"ElementNodeData"</code> 容许单元边界上值不连续（如节点3处单元1值为12+step、单元2值为14），呈现颜色跳变。<code>"ElementData"</code> 更简单：每单元仅一个常量值。</p>
+<h3 id="2444">24.4.4 跨模型多步动画</h3>
+<p>Model-based 视图的核心优势是<strong>不同时间步可绑定到不同模型</strong>，支持网格重划分后的无缝可视化：</p>
+<pre><code class="language-cpp">  // 创建第二个模型: OCC 立方体 + 自动四面体剖分
+  gmsh::model::add(&quot;another model&quot;);
+  gmsh::model::occ::addBox(0, 0, 0, 1, 1, 1);
+  gmsh::model::occ::synchronize();
+  gmsh::model::mesh::generate(3);  // 三维网格
+
+  // 获取新模型的所有节点
+  std::vector&lt;std::size_t&gt; nodes;
+  std::vector&lt;double&gt; coord, coordParam;
+  gmsh::model::mesh::getNodes(nodes, coord, coordParam);
+
+  // 在同一个视图 t1 中添加 step 11-19，绑定到新模型
+  for(int step = 11; step &lt; 20; step++) {
+    std::vector&lt;double&gt; val;
+    for(std::size_t i = 0; i &lt; coord.size(); i += 3)
+      val.push_back(step * coord[i]);  // 场值 = step * x
+    gmsh::view::addHomogeneousModelData(t1, step, &quot;another model&quot;,
+                                        &quot;NodeData&quot;, nodes, val);
+  }
+</code></pre>
+<p>视图 <code>t1</code> 的 step 0-9 基于粗网格（4节点2三角形），step 11-19 基于细网格（OCC立方体）。在 GUI 中播放动画时自动切换。这对动态裂纹扩展等需要网格重划分的时变求解器尤为重要。</p>
+<h3 id="2445-addmodeldata">24.4.5 addModelData() 处理非均匀数据</h3>
+<p>当需要混合不同类型元素时（如三角形+四边形混合网格），应使用更通用的 <code>addModelData()</code>：</p>
+<pre><code class="language-cpp">gmsh::view::addModelData(viewTag, step, modelName, dataType,
+  {tag1, tag2, ...},    // 实体标签列表
+  data,                 // 展平数据 (double*)
+  numComponents,        // 每实体分量数（如标量=1，矢量=3）
+  numEntities);         // 实体总数
+  // 可选参数 partitionSize[]: 指定每个实体各自的数据长度
+</code></pre>
+<p>它通过 <code>partitionSize</code> 数组支持每个实体拥有不同的节点/值数量，适用于混合网格场景。</p>
+<h3 id="2446">24.4.6 保存</h3>
+<pre><code class="language-cpp">  gmsh::view::write(t1, &quot;x4_t1.msh&quot;);
+  gmsh::view::write(t2, &quot;x4_t2.msh&quot;);
+  // 跨模型视图会自动生成多个文件
+
+  std::set&lt;std::string&gt; args(argv, argv + argc);
+  if(!args.count(&quot;-nopopup&quot;)) gmsh::fltk::run();
+  gmsh::finalize();
+  return 0;
+}
+</code></pre>
+<p>若设置 <code>gmsh::option::setNumber("PostProcessing.SaveMesh", 1)</code>，<code>write()</code> 将同时保存网格几何；否则仅保存场值。</p>
+<hr />
+<h2 id="245">24.5 完整可运行代码</h2>
+<h3 id="list-based">示例一：List-based 视图</h3>
+<pre><code class="language-cpp">// ch24_list_based.cpp
+#include &lt;set&gt;
+#include &lt;iostream&gt;
+#include &lt;gmsh.h&gt;
+
+int main(int argc, char **argv)
+{
+  gmsh::initialize(argc, argv);
+
+  // ---- 1. 三角形标量场 (10步) ----
+  int t1 = gmsh::view::add(&quot;List-based triangles + lines&quot;);
+  std::vector&lt;double&gt; tri1 = {0.,1.,1., 0.,0.,1., 0.,0.,0.};
+  std::vector&lt;double&gt; tri2 = {0.,1.,0., 0.,1.,1., 0.,0.,0.};
+  for(int s = 0; s &lt; 10; s++) {
+    tri1.insert(tri1.end(), {10., 11.-s, 12.});
+    tri2.insert(tri2.end(), {11., 12., 13.+s});
+  }
+  tri1.insert(tri1.end(), tri2.begin(), tri2.end());
+  gmsh::view::addListData(t1, &quot;ST&quot;, 2, tri1);
+
+  // ---- 2. 线段矢量场 (10步) ----
+  std::vector&lt;double&gt; line = {0.,1., 1.2,1.2, 0.,0.};
+  for(int s = 0; s &lt; 10; s++)
+    line.insert(line.end(), {10.+s,0.,0., 10.+s,0.,0.});
+  gmsh::view::addListData(t1, &quot;VL&quot;, 1, line);
+
+  // ---- 3. 文字标注 ----
+  gmsh::view::addListDataString(t1, {20.,-20.}, {&quot;Created with Gmsh&quot;});
+  gmsh::view::addListDataString(t1, {0.5,1.5,0.},
+    {&quot;A multi-step list-based view&quot;},
+    {&quot;Align&quot;,&quot;Center&quot;,&quot;Font&quot;,&quot;Helvetica&quot;});
+
+  // ---- 4. 选项与探针 ----
+  gmsh::view::option::setNumber(t1, &quot;TimeStep&quot;, 5);
+  gmsh::view::option::setNumber(t1, &quot;IntervalsType&quot;, 3);
+  std::vector&lt;double&gt; val;
+  double dist;
+  gmsh::view::probe(t1, 0.9, 0.1, 0, val, dist);
+  std::cout &lt;&lt; &quot;Probe at (0.9,0.1,0):&quot;;
+  for(auto v : val) std::cout &lt;&lt; &quot; &quot; &lt;&lt; v;
+  std::cout &lt;&lt; std::endl;
+
+  // ---- 5. 二阶四边形 + 自适应可视化 ----
+  int t2 = gmsh::view::add(&quot;Second order quad&quot;);
+  std::vector&lt;double&gt; quad = {
+    0.,1.,1.,0., -1.2,-1.2,-0.2,-0.2, 0.,0.,0.,0.};
+  quad.insert(quad.end(), {1.,1.,1.,1., 3.,3.,3.,3., -3.});
+
+  gmsh::view::setInterpolationMatrices(
+    t2, &quot;Quadrangle&quot;, 9,
+    {0,0,0.25,0,0,-0.25,-0.25,0,0.25, 0,0,0.25,0,0,-0.25,0.25,0,-0.25,
+     0,0,0.25,0,0,0.25,0,0,0.25,     -0.25,0,-0.25,0,0,-0.5,0.5,0,0.5,
+     0,-0.5,0,0,0.5,-0.5,0,0.5,-0.5, 0,0.5,0,-0.5,0,0,0,0,-0.5,
+     0.5,0,-0.5,0,0.5,0,0,0.5,-0.5,  0,0.5,0,0,1,-1,1,-1,0,0,0,0,0},
+    {0,0,0,2,0,0,2,2,0, 0,2,0,1,0,0,2,1,0,1,
+     2,0,0,1,0,1,1,0});
+  gmsh::view::addListData(t2, &quot;SQ&quot;, 1, quad);
+
+  gmsh::view::option::setNumber(t2, &quot;AdaptVisualizationGrid&quot;, 1);
+  gmsh::view::option::setNumber(t2, &quot;TargetError&quot;, 1e-2);
+  gmsh::view::option::setNumber(t2, &quot;MaxRecursionLevel&quot;, 5);
+
+  std::set&lt;std::string&gt; args(argv, argv + argc);
+  if(!args.count(&quot;-nopopup&quot;)) gmsh::fltk::run();
+  gmsh::finalize();
+  return 0;
+}
+</code></pre>
+<h3 id="model-based">示例二：Model-based 视图</h3>
+<pre><code class="language-cpp">// ch24_model_based.cpp
+#include &lt;set&gt;
+#include &lt;gmsh.h&gt;
+
+int main(int argc, char **argv)
+{
+  gmsh::initialize(argc, argv);
+
+  // ---- 1. 构建手动网格（离散面 + 4节点 + 2个三角形） ----
+  gmsh::model::add(&quot;simple model&quot;);
+  int surf = gmsh::model::addDiscreteEntity(2);
+  gmsh::model::mesh::addNodes(2, surf, {1,2,3,4},
+    {0.,0.,0., 1.,0.,0., 1.,1.,0., 0.,1.,0.});
+  gmsh::model::mesh::addElementsByType(surf, 2, {1,2}, {1,2,3, 1,3,4});
+
+  // ---- 2. NodeData（连续场） ----
+  int t1 = gmsh::view::add(&quot;Continuous NodeData&quot;);
+  for(int s = 0; s &lt; 10; s++)
+    gmsh::view::addHomogeneousModelData(
+      t1, s, &quot;simple model&quot;, &quot;NodeData&quot;,
+      {1,2,3,4}, {10., 10., 12.+s, 13.+s});
+
+  // ---- 3. ElementNodeData（间断场） ----
+  int t2 = gmsh::view::add(&quot;Discontinuous ElementNodeData&quot;);
+  for(int s = 0; s &lt; 10; s++)
+    gmsh::view::addHomogeneousModelData(
+      t2, s, &quot;simple model&quot;, &quot;ElementNodeData&quot;,
+      {1,2}, {10., 10., 12.+s, 14., 15., 13.+s});
+
+  // ---- 4. 第二个模型（OCC立方体）跨模型追加步 ----
+  gmsh::model::add(&quot;another model&quot;);
+  gmsh::model::occ::addBox(0,0,0, 1,1,1);
+  gmsh::model::occ::synchronize();
+  gmsh::model::mesh::generate(3);
+
+  std::vector&lt;std::size_t&gt; nodes;
+  std::vector&lt;double&gt; coords, params;
+  gmsh::model::mesh::getNodes(nodes, coords, params);
+  for(int s = 11; s &lt; 20; s++) {
+    std::vector&lt;double&gt; v;
+    for(std::size_t i = 0; i &lt; coords.size(); i += 3)
+      v.push_back(s * coords[i]);
+    gmsh::view::addHomogeneousModelData(t1, s, &quot;another model&quot;,
+                                        &quot;NodeData&quot;, nodes, v);
+  }
+
+  // ---- 5. 保存 ----
+  gmsh::view::write(t1, &quot;ch24_t1.msh&quot;);
+  gmsh::view::write(t2, &quot;ch24_t2.msh&quot;);
+
+  std::set&lt;std::string&gt; args(argv, argv + argc);
+  if(!args.count(&quot;-nopopup&quot;)) gmsh::fltk::run();
+  gmsh::finalize();
+  return 0;
+}
+</code></pre>
+<hr />
+<h2 id="246-api">24.6 关键 API 速查表</h2>
+<h3 id="_1">视图创建与管理</h3>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>int gmsh::view::add(name)</code></td>
+<td>创建新视图，返回 tag</td>
+</tr>
+<tr>
+<td><code>void gmsh::view::remove(tag)</code></td>
+<td>删除指定视图</td>
+</tr>
+<tr>
+<td><code>void gmsh::view::write(tag, filename)</code></td>
+<td>保存视图（list-based为.pos，model-based为.msh）</td>
+</tr>
+<tr>
+<td><code>void gmsh::view::probe(tag, x, y, z, val, dist)</code></td>
+<td>在(x,y,z)处采样场值</td>
+</tr>
+</tbody>
+</table>
+<h3 id="list-based_1">List-based 数据导入</h3>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>void gmsh::view::addListData(tag, type, numElems, data)</code></td>
+<td>导入展平列表数据</td>
+</tr>
+<tr>
+<td><code>void gmsh::view::addListDataString(tag, coords, strings, options)</code></td>
+<td>添加2D/3D文字标注</td>
+</tr>
+<tr>
+<td><code>void gmsh::view::setInterpolationMatrices(tag, type, d, c, e)</code></td>
+<td>设置高阶场插值矩阵</td>
+</tr>
+<tr>
+<td><code>void gmsh::view::getListData(tag, type, numElems, data)</code></td>
+<td>读取视图中的列表数据</td>
+</tr>
+</tbody>
+</table>
+<h3 id="model-based_1">Model-based 数据导入</h3>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>void gmsh::view::addHomogeneousModelData(tag, step, model, type, tags, data)</code></td>
+<td>同构数据导入（简化版）</td>
+</tr>
+<tr>
+<td><code>void gmsh::view::addModelData(tag, step, model, type, tags, data, comp, nEnts)</code></td>
+<td>通用数据导入（支持非均匀数据）</td>
+</tr>
+<tr>
+<td><code>void gmsh::view::getModelData(tag, step, model, type, tags, data)</code></td>
+<td>取回模型绑定数据</td>
+</tr>
+</tbody>
+</table>
+<h3 id="viewoption">视图选项（view::option 命名空间）</h3>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>void gmsh::view::option::setNumber(tag, option, value)</code></td>
+<td>设置数值选项</td>
+</tr>
+<tr>
+<td><code>void gmsh::view::option::getNumber(tag, option, value)</code></td>
+<td>获取数值选项</td>
+</tr>
+<tr>
+<td><code>void gmsh::view::option::setString(tag, option, value)</code></td>
+<td>设置字符串选项</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_2">常用视图选项名称</h3>
+<table>
+<thead>
+<tr>
+<th>选项名</th>
+<th>类型</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>"TimeStep"</code></td>
+<td>Number</td>
+<td>当前显示时间步</td>
+</tr>
+<tr>
+<td><code>"NbTimeStep"</code></td>
+<td>Number</td>
+<td>总时间步数（只读）</td>
+</tr>
+<tr>
+<td><code>"IntervalsType"</code></td>
+<td>Number</td>
+<td>1=等值线, 2=填充, 3=连续色谱</td>
+</tr>
+<tr>
+<td><code>"NbIso"</code></td>
+<td>Number</td>
+<td>等值线/填充数量</td>
+</tr>
+<tr>
+<td><code>"RangeType"</code></td>
+<td>Number</td>
+<td>1=按步, 2=跨步, 3=自定义</td>
+</tr>
+<tr>
+<td><code>"CustomMin"</code> / <code>"CustomMax"</code></td>
+<td>Number</td>
+<td>自定义色条范围</td>
+</tr>
+<tr>
+<td><code>"ShowScale"</code></td>
+<td>Number</td>
+<td>0=隐藏色条, 1=显示</td>
+</tr>
+<tr>
+<td><code>"ArrowSizeMax"</code> / <code>"ArrowSizeMin"</code></td>
+<td>Number</td>
+<td>矢量箭头尺寸范围</td>
+</tr>
+<tr>
+<td><code>"AdaptVisualizationGrid"</code></td>
+<td>Number</td>
+<td>0=关闭, 1=开启自适应可视化</td>
+</tr>
+<tr>
+<td><code>"TargetError"</code></td>
+<td>Number</td>
+<td>自适应细分误差阈值</td>
+</tr>
+<tr>
+<td><code>"MaxRecursionLevel"</code></td>
+<td>Number</td>
+<td>自适应细分最大层级</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="247">24.7 小结</h2>
+<ul>
+<li><strong>List-based 视图</strong>：数据与网格解耦，通过 <code>view::addListData()</code> 直接提供坐标和场值。元素类型由两字符标识符决定（如 "ST"、"VL"）。适合外部数据、传感器读数、解析解的可视化。</li>
+<li><strong>Model-based 视图</strong>：数据绑定到模型网格实体，三种数据类型覆盖有限元结果输出：<code>"NodeData"</code>（连续插值云图）、<code>"ElementData"</code>（分片常值）、<code>"ElementNodeData"</code>（单元间间断场）。跨模型步功能使网格重划分动画成为可能。</li>
+<li><strong>高阶可视化</strong>：通过 <code>setInterpolationMatrices()</code> 定义基函数，配合 <code>AdaptVisualizationGrid</code> 等选项实现 AMR 驱动的自适应渲染。</li>
+<li><strong>视图管理</strong>：<code>view::option</code> 控制显示参数，<code>view::probe()</code> 支持任意点采样，<code>view::write()</code> 支持持久化输出（.pos / .msh）。</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

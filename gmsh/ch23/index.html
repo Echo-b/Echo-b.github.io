@@ -1,0 +1,3445 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../ch22/">
+      
+      
+        <link rel="next" href="../ch24/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>第23章 离散实体与混合模型——地形网格实战 - Echo-b's Tech Notes</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#23-discrete-entity" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Echo-b&#39;s Tech Notes" class="md-header__button md-logo" aria-label="Echo-b's Tech Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Echo-b's Tech Notes
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              第23章 离散实体与混合模型——地形网格实战
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Echo-b&#39;s Tech Notes" class="md-nav__button md-logo" aria-label="Echo-b's Tech Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Echo-b's Tech Notes
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VTK 教程
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    VTK 教程
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    入门篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    入门篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-01-vtk-overview-and-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第一章 VTK概述与环境搭建
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-02-visualization-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二章 可视化管线
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-03-data-model-basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第三章 数据模型基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-04-geometry-and-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第四章 基本几何体与数据源
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-05-rendering-and-interactor/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第五章 渲染与交互机
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-06-volume1-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第六章 入门篇综合实战——3D几何画廊
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    实战篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    实战篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-07-polydata/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第七章 PolyData详解
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-08-unstructured-grid/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第八章 非结构化网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-09-structured-data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第九章 结构化数据
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-10-data-io/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十章 数据I/O
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-11-common-filters/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十一章 常用过滤器
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-12-color-mapping/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十二章 颜色映射与标量可视化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-13-advanced-rendering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十三章 高级渲染技术
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-14-multi-dataset/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十四章 多个数据集处理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-15-volume2-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十五章 实战篇综合实战——CFD后处理可视化工具
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    进阶篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    进阶篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-16-volume-rendering-basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十六章 体渲染基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-17-volume-rendering-advanced/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十七章 体渲染高级技术
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-18-charts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十八章 2D图表系统
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-19-annotation-and-widgets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十九章 三维标注与交互组件
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-20-custom-interaction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十章 自定义交互与Widget
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-21-qt-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十一章 Qt集成
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-22-smp-parallel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十二章 SMP并行入门
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-23-volume3-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十三章 进阶篇综合实战
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GMSH 教程
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    GMSH 教程
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1" id="__nav_3_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    基础篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    基础篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第1章 Gmsh概述与C++ SDK配置
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第2章 几何基础——点线面曲线环与物理组
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第3章 变换与拉伸几何
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第4章 高级几何构建——内置函数孔洞注释与颜色
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第5章 三维网格控制——尺寸场体孔洞与网格算法
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch06/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第6章 网格控制进阶——Transfinite分布与结构化网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch07/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第7章 背景网格——用已有网格指导网格尺寸
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch08/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第8章 网格尺寸场
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    进阶篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    进阶篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch09/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第9章 四边形网格重组
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch10/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第10章 复合实体——跨面一致网格划分
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch11/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第11章 STL重网格——无CAD模型的表面重构
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch12/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第12章 同调与上同调计算
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch13/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第13章 嵌入实体——在网格中强制生成共形节点
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch14/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第14章 各向异性网格——方向感知的网格生成
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch15/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第15章 周期性网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch16/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第16章 OpenCASCADE内核与构造实体几何
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch17/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第17章 高级实体建模——断面扫掠圆角管道与曲率自适应网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch18/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第18章 STEP导入与几何分割
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    应用篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    应用篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch19/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第19章 后处理视图与动画
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch20/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第20章 后处理插件——视图数据运算与变换
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch21/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第21章 网格分区与区域分解
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch22/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第22章 遍历模型与网格数据——前处理查询API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第23章 离散实体与混合模型——地形网格实战
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第23章 离散实体与混合模型——地形网格实战
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#231" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        23.1 学习目标
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#232" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        23.2 核心概念说明
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="23.2 核心概念说明">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2321-vs-cad" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        23.2.1 离散实体 vs CAD 实体
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2322" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        23.2.2 单元类型编号速览
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2323" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        23.2.3 混合模型原理
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2324" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        23.2.4 边界方向约定与工作流
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#233-c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        23.3 C++ 代码逐段讲解
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="23.3 C++ 代码逐段讲解">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2331" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        23.3.1 头文件、初始化与数据准备
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2332" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        23.3.2 创建离散实体拓扑
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2333" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        23.3.3 注入网格数据
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2334" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        23.3.4 节点重分类与几何参数化
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2335-cad" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        23.3.5 构建 CAD 下卧层（混合模型）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2336" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        23.3.6 网格剖分策略
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#234" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        23.4 完整可运行代码
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#235-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        23.5 关键 API 速查表
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="23.5 关键 API 速查表">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2351" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        23.5.1 离散实体创建与管理
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2352" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        23.5.2 网格数据注入
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2353" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        23.5.3 常用单元类型编号
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2354-geo-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        23.5.4 混合模型相关 geo API
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2355-transfinite" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        23.5.5 Transfinite 网格控制
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#236" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        23.6 注意事项与最佳实践
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch24/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第24章 后处理视图——List-based与Model-based数据导入
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch25/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第25章 几何求值——参数化法向量与曲率
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第26章 积分点雅可比矩阵基函数与内部边面
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#231" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        23.1 学习目标
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#232" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        23.2 核心概念说明
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="23.2 核心概念说明">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2321-vs-cad" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        23.2.1 离散实体 vs CAD 实体
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2322" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        23.2.2 单元类型编号速览
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2323" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        23.2.3 混合模型原理
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2324" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        23.2.4 边界方向约定与工作流
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#233-c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        23.3 C++ 代码逐段讲解
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="23.3 C++ 代码逐段讲解">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2331" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        23.3.1 头文件、初始化与数据准备
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2332" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        23.3.2 创建离散实体拓扑
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2333" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        23.3.3 注入网格数据
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2334" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        23.3.4 节点重分类与几何参数化
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2335-cad" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        23.3.5 构建 CAD 下卧层（混合模型）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2336" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        23.3.6 网格剖分策略
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#234" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        23.4 完整可运行代码
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#235-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        23.5 关键 API 速查表
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="23.5 关键 API 速查表">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2351" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        23.5.1 离散实体创建与管理
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2352" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        23.5.2 网格数据注入
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2353" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        23.5.3 常用单元类型编号
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2354-geo-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        23.5.4 混合模型相关 geo API
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2355-transfinite" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        23.5.5 Transfinite 网格控制
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#236" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        23.6 注意事项与最佳实践
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="23-discrete-entity">第23章 离散实体（Discrete Entity）与混合模型：地形网格实战</h1>
+<hr />
+<h2 id="231">23.1 学习目标</h2>
+<ul>
+<li>理解<strong>离散实体（Discrete Entity）</strong>的概念：完全由网格定义的几何体（无 CAD 参数化曲面）</li>
+<li>掌握 <code>addDiscreteEntity(dim, tag, {boundaryTags})</code> 创建离散点/线/面/体，以及带符号边界标签的方向约定</li>
+<li>学会程序化注入网格数据：<code>mesh::addNodes()</code> 写入节点坐标 + <code>mesh::addElementsByType()</code> 注入单元拓扑</li>
+<li>掌握常用单元类型编号：15=点(1节点), 1=线段(2节点), 2=三角形(3节点), 3=四边形(4节点), 4=四面体(4节点), 5=六面体(8节点) 等</li>
+<li>理解 <code>mesh::reclassifyNodes()</code> 将节点从聚合实体重新分类到正确的边界实体（边/点）</li>
+<li>理解 <code>mesh::createGeometry()</code> 从网格生成几何参数化，使离散面可重新划分网格</li>
+<li>掌握<strong>混合模型（Hybrid Model）</strong>：将离散面与内置 CAD 实体组合为完整计算域（仅 <code>geo</code> 模块支持，OpenCASCADE 不支持）</li>
+<li>完整案例：从 NxN 高度数据点程序化构建三角面离散曲面并组合 CAD 下卧层体</li>
+</ul>
+<hr />
+<h2 id="232">23.2 核心概念说明</h2>
+<h3 id="2321-vs-cad">23.2.1 离散实体 vs CAD 实体</h3>
+<p>Gmsh 中有两类几何实体：</p>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>CAD 实体（Built-in / OCC）</th>
+<th>离散实体（Discrete Entity）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>几何表示</td>
+<td>参数化曲面/曲线方程（NURBS）</td>
+<td>完全由网格数据定义</td>
+</tr>
+<tr>
+<td>创建方式</td>
+<td><code>geo::addPoint/Line/Surface</code> 或 <code>occ::addBox</code></td>
+<td><code>addDiscreteEntity(dim, tag, boundaryTags)</code></td>
+</tr>
+<tr>
+<td>网格划分</td>
+<td>自动生成网格</td>
+<td>网格需程序化注入</td>
+</tr>
+<tr>
+<td>可重划网格</td>
+<td>天然支持</td>
+<td>需先调用 <code>createGeometry()</code> 生成参数化</td>
+</tr>
+<tr>
+<td>与 CAD 实体混合</td>
+<td>可以（geo 模块）</td>
+<td>可以（作为 CAD 实体的边界）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>离散实体的本质</strong>：它是一种"只存储网格、无解析几何"的实体——类似 STL 文件的三角形面片不包含底层 NURBS 曲面。Gmsh 的离散实体机制让你可以直接操作这样的纯网格几何，并与其他 CAD 实体组合。</p>
+<h3 id="2322">23.2.2 单元类型编号速览</h3>
+<p>Gmsh 使用整型编号标识单元类型，常用值如下：</p>
+<table>
+<thead>
+<tr>
+<th>编号</th>
+<th>名称</th>
+<th>维度</th>
+<th>节点数</th>
+<th>典型用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>15</td>
+<td>Point</td>
+<td>0</td>
+<td>1</td>
+<td>离散点</td>
+</tr>
+<tr>
+<td>1</td>
+<td>Line (2-node)</td>
+<td>1</td>
+<td>2</td>
+<td>离散边 / 2D 边界</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Triangle (3-node)</td>
+<td>2</td>
+<td>3</td>
+<td>离散面 / 地形表面</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Quadrangle (4-node)</td>
+<td>2</td>
+<td>4</td>
+<td>结构网格面</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Tetrahedron (4-node)</td>
+<td>3</td>
+<td>4</td>
+<td>三维体网格</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Hexahedron (8-node)</td>
+<td>3</td>
+<td>8</td>
+<td>结构体网格</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Prism (6-node)</td>
+<td>3</td>
+<td>6</td>
+<td>三棱柱（楔形）</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Pyramid (5-node)</td>
+<td>3</td>
+<td>5</td>
+<td>金字塔过渡单元</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Line3 (3-node)</td>
+<td>1</td>
+<td>3</td>
+<td>二阶线</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Triangle6 (6-node)</td>
+<td>2</td>
+<td>6</td>
+<td>二阶三角形</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2323">23.2.3 混合模型原理</h3>
+<p><strong>混合模型（Hybrid Model）</strong>是指同一计算域中同时包含离散实体和 CAD 实体，两者边界相互联结形成完整 B-rep（Boundary Representation，边界表示）。</p>
+<p>典型案例 -- 地形网格：</p>
+<pre><code>┌──────────────────────────────┐
+│  离散面 (Discrete Surface)   │  ← 程序化注入的三角网格（地形）
+│  标签: (2, 1)                │
+├──────┬──────┬──────┬──────┤
+│ 侧面3│ 侧面4│ 侧面5│ 侧面6│  ← CAD 面（geo::addPlaneSurface）
+├──────┴──────┴──────┴──────┤
+│        底面 (s1)            │  ← CAD 面
+├──────────────────────────────┤
+│  体 v1 = {s1, s3, s4,       │
+│           s5, s6, 离散面1}   │  ← 混合体：5个CAD面 + 1个离散面
+└──────────────────────────────┘
+</code></pre>
+<p>关键约束：
+- 只有 <code>gmsh::model::geo</code> 模块（内置 CAD 内核）支持混合模型
+- <code>gmsh::model::occ</code> 模块（OpenCASCADE）不支持——其面边界必须全是 OCC 曲线
+- 混合时 CAD 曲线的端点可以直接连接到离散点标签</p>
+<h3 id="2324">23.2.4 边界方向约定与工作流</h3>
+<p><code>addDiscreteEntity</code> 对于二维面，边界曲线标签通过带符号的列表指定：</p>
+<pre><code class="language-cpp">// 边界 = {1, 2, -3, -4} 的含义：
+//   +1: 沿曲线1正方向（起点→终点）   +2: 沿曲线2正方向
+//   -3: 沿曲线3负方向（终点→起点）   -4: 沿曲线4负方向
+</code></pre>
+<p>符号确保边界曲线形成一致的逆时针（CCW）环绕方向。Gmsh B-rep 约定：二维面外边界为逆时针，内边界（孔洞）为顺时针。</p>
+<p>完整工作流：</p>
+<pre><code>程序化生成节点坐标
+      │
+      ▼
+addDiscreteEntity(0/1/2, ...)    ← 创建离散点、线、面（拓扑骨架）
+      │
+      ▼
+mesh::addNodes(2, 1, ...)        ← 节点集中注入离散面
+      │
+      ▼
+mesh::addElementsByType(...)      ← 注入点、线、三角单元
+      │
+      ▼
+mesh::reclassifyNodes()          ← 节点从面重分类到正确的边/点
+      │
+      ▼
+mesh::createGeometry()           ← 从网格生成参数化（可选，但推荐）
+      │
+      ▼
+geo::addPoint/Line/Surface...    ← 创建 CAD 下卧层（混合模型）
+      │
+      ▼
+mesh::generate(3)                ← 三维网格生成
+</code></pre>
+<hr />
+<h2 id="233-c">23.3 C++ 代码逐段讲解</h2>
+<h3 id="2331">23.3.1 头文件、初始化与数据准备</h3>
+<pre><code class="language-cpp">#include &lt;set&gt;
+#include &lt;iostream&gt;
+#include &lt;gmsh.h&gt;
+
+int main(int argc, char **argv)
+{
+  gmsh::initialize();
+  gmsh::model::add(&quot;ch23&quot;);
+
+  int N = 100;  // N x N 控制点网格
+
+  // lambda: 二维索引 (i,j) → 唯一节点标签 (从1开始)
+  auto tag = [N](std::size_t i, std::size_t j) { return (N + 1) * i + j + 1; };
+
+  std::vector&lt;double&gt; coords;            // {x0,y0,z0, x1,y1,z1, ...}
+  std::vector&lt;std::size_t&gt; nodes;        // 节点标签（与 coords 对应）
+  std::vector&lt;std::size_t&gt; tris;         // 三角形连接（每3个标签1个三角）
+  std::vector&lt;std::size_t&gt; lin[4];       // 4条边界上的线段连接
+  std::size_t pnt[4] = {tag(0,0), tag(N,0), tag(N,N), tag(0,N)};  // 角点
+</code></pre>
+<p><strong>解释</strong>：<code>tag(i,j)</code> 将二维控制点索引扁平化为一维节点标签。<code>N=100</code> 定义了 101x101 的节点网格。<code>lin[4]</code> ：<code>lin[0]</code>=底边(j=0)、<code>lin[1]</code>=右边(i=N)、<code>lin[2]</code>=顶边(j=N)、<code>lin[3]</code>=左边(i=0)。<code>pnt[4]</code> 为 4 个角点标签。</p>
+<pre><code class="language-cpp">  for(std::size_t i = 0; i &lt; N + 1; i++) {
+    for(std::size_t j = 0; j &lt; N + 1; j++) {
+      nodes.push_back(tag(i, j));
+      coords.insert(coords.end(), {
+          (double)i / N,                         // x ∈ [0, 1]
+          (double)j / N,                         // y ∈ [0, 1]
+          0.05 * sin(10 * (double)(i + j) / N)   // z = 起伏高度
+      });
+</code></pre>
+<p><strong>解释</strong>：遍历 101x101 控制点网格。X/Y 均匀分布，Z 由正弦函数生成模拟地形起伏（振幅 0.05）。实际工程中可替换为 DEM（数字高程模型）数据。</p>
+<pre><code class="language-cpp">      // 每个单元格被对角线切分为 2 个三角形
+      if(i &gt; 0 &amp;&amp; j &gt; 0) {
+        tris.insert(tris.end(),
+                    {tag(i-1,j-1), tag(i,j-1), tag(i-1,j)});  // 左下三角
+        tris.insert(tris.end(),
+                    {tag(i,j-1), tag(i,j), tag(i-1,j)});      // 右上三角
+      }
+      // 边界线段：左右边界 (i==0 或 i==N) 和上下边界 (j==0 或 j==N)
+      if((i == 0 || i == N) &amp;&amp; j &gt; 0) {
+        std::size_t s = (i == 0) ? 3 : 1;
+        lin[s].insert(lin[s].end(), {tag(i, j - 1), tag(i, j)});
+      }
+      if((j == 0 || j == N) &amp;&amp; i &gt; 0) {
+        std::size_t s = (j == 0) ? 0 : 2;
+        lin[s].insert(lin[s].end(), {tag(i - 1, j), tag(i, j)});
+      }
+    }
+  }
+</code></pre>
+<p><strong>解释</strong>：每个控制网格单元 <code>[i-1,i] x [j-1,j]</code> 沿对角线 <code>(i,j-1)-(i-1,j)</code> 分为两个三角形。所有三角形的顶点顺序一致保持 CCW。边界线段在 <code>i==0</code>(右)、<code>i==N</code>(左)、<code>j==0</code>(底)、<code>j==N</code>(顶) 四条边上生成，后续作为离散曲线的网格数据注入。</p>
+<h3 id="2332">23.3.2 创建离散实体拓扑</h3>
+<pre><code class="language-cpp">  // 4 个离散点（维度 0，标签 1-4，无边界）
+  for(int i = 0; i &lt; 4; i++) gmsh::model::addDiscreteEntity(0, i + 1);
+
+  // 设置角点模型坐标（使 GUI 显示 &amp; CAD 连接可用）
+  gmsh::model::setCoordinates(1, 0, 0, coords[3 * tag(0, 0) - 1]);
+  gmsh::model::setCoordinates(2, 1, 0, coords[3 * tag(N, 0) - 1]);
+  gmsh::model::setCoordinates(3, 1, 1, coords[3 * tag(N, N) - 1]);
+  gmsh::model::setCoordinates(4, 0, 1, coords[3 * tag(0, N) - 1]);
+</code></pre>
+<p><strong>解释</strong>：<code>addDiscreteEntity(0, tag)</code> 创建离散点。标签 1-4 分别对应四个角点 (0,0)、(1,0)、(1,1)、(0,1)。<code>setCoordinates()</code> 设置模型坐标——离散点没有默认坐标，必须显式设置才能用于 GUI 显示和与 CAD 实体的连接。坐标索引 <code>3*tag-1</code> 为 Z 分量（因为 coords 中每个节点 3 个 double，从索引 0 开始）。</p>
+<pre><code class="language-cpp">  // 4 条离散曲线（维度 1，标签 1-4，以角点为端点）
+  for(int i = 0; i &lt; 4; i++)
+    gmsh::model::addDiscreteEntity(1, i + 1, {i + 1, (i &lt; 3) ? (i + 2) : 1});
+
+  // 1 张离散面（维度 2，标签 1，4条曲线为边界，CCW 定向）
+  gmsh::model::addDiscreteEntity(2, 1, {1, 2, -3, -4});
+</code></pre>
+<p><strong>解释</strong>：<code>addDiscreteEntity(1, tag, {startPoint, endPoint})</code> 创建离散曲线——曲线1(点1→点2,底边)，曲线2(点2→点3,右边)，曲线3(点3→点4,顶边)，曲线4(点4→点1,左边)。离散面的边界 <code>{1, 2, -3, -4}</code> 中，正号表示沿曲线正方向，负号表示逆方向，形成逆时针环绕。</p>
+<h3 id="2333">23.3.3 注入网格数据</h3>
+<pre><code class="language-cpp">  // 集中注入所有节点到离散面（后续由 reclassifyNodes 纠正归属）
+  gmsh::model::mesh::addNodes(2, 1, nodes, coords);
+
+  // 注入点单元（类型15, 1节点）、线段单元（类型1, 2节点）、三角形单元（类型2, 3节点）
+  for(int i = 0; i &lt; 4; i++) {
+    gmsh::model::mesh::addElementsByType(i + 1, 15, {}, {pnt[i]});
+    gmsh::model::mesh::addElementsByType(i + 1, 1, {}, lin[i]);
+  }
+  gmsh::model::mesh::addElementsByType(1, 2, {}, tris);
+</code></pre>
+<p><strong>解释</strong>：<code>mesh::addNodes(dim, tag, nodeTags, coords)</code> 将节点数据绑定到实体——这里为方便起见将所有节点（内部+边界+角点）全部注入离散面 <code>(2,1)</code>。<code>mesh::addElementsByType(entityTag, elemType, elemTags, nodeTags)</code> 注入单元：<code>elemTags={}</code> 表示自动编号单元标签，<code>nodeTags</code> 为连续排列的节点连接列表。</p>
+<h3 id="2334">23.3.4 节点重分类与几何参数化</h3>
+<pre><code class="language-cpp">  // 重分类节点：根据单元归属，将节点从面重新分配到正确的子实体
+  gmsh::model::mesh::reclassifyNodes();
+
+  // 从网格生成参数化几何：使离散面可重划网格
+  gmsh::model::mesh::createGeometry();
+</code></pre>
+<p><strong>解释</strong>：<code>reclassifyNodes()</code> 是离散实体工作流的关键。它将节点扫描所有单元的所属实体——如果某节点的全部单元都在同一条边上，该节点被重新归类到那条边；若全部单元都在同一角点上，则归类到那个点。<strong>如果跳过此步骤</strong>，后续对离散曲线的 <code>getNodes()</code> 查询将返回空。</p>
+<p><code>createGeometry()</code> 从离散实体的网格构建参数化几何：对曲线拟合 B-spline，对面构建 2D 参数域到 3D 空间的映射。执行后离散面可像普通 CAD 面一样调用 <code>mesh::setSize()</code> + <code>mesh::generate()</code> 重划网格。典型应用：STL 导入 → 离散实体 → 参数化 → 重新用四边形或优化三角形剖分。注意：对质量差的网格（极度畸变、自交），此函数可能失败。</p>
+<h3 id="2335-cad">23.3.5 构建 CAD 下卧层（混合模型）</h3>
+<pre><code class="language-cpp">  // 仅 geo 模块支持混合模型，OpenCASCADE 不支持
+
+  // 在地形面下方创建 4 个 CAD 点（底面角点，z = -0.5）
+  int p1 = gmsh::model::geo::addPoint(0, 0, -0.5);
+  int p2 = gmsh::model::geo::addPoint(1, 0, -0.5);
+  int p3 = gmsh::model::geo::addPoint(1, 1, -0.5);
+  int p4 = gmsh::model::geo::addPoint(0, 1, -0.5);
+
+  // 底面 4 条边 + 4 条垂直边（连接底面 CAD 点到地表离散角点）
+  int c1  = gmsh::model::geo::addLine(p1, p2);
+  int c2  = gmsh::model::geo::addLine(p2, p3);
+  int c3  = gmsh::model::geo::addLine(p3, p4);
+  int c4  = gmsh::model::geo::addLine(p4, p1);
+  int c10 = gmsh::model::geo::addLine(p1, 1);   // CAD点p1 → 离散点1
+  int c11 = gmsh::model::geo::addLine(p2, 2);   // CAD点p2 → 离散点2
+  int c12 = gmsh::model::geo::addLine(p3, 3);   // CAD点p3 → 离散点3
+  int c13 = gmsh::model::geo::addLine(p4, 4);   // CAD点p4 → 离散点4
+</code></pre>
+<p><strong>解释</strong>：<code>geo::addLine(startPoint, endPoint)</code> 创建 CAD 直线。垂直边 c10-c13 的第二个参数是离散点标签（1-4）——这展示了混合模型的核心机制：CAD 曲线以离散点为端点。</p>
+<pre><code class="language-cpp">  // 底面
+  int ll1 = gmsh::model::geo::addCurveLoop({c1, c2, c3, c4});
+  int s1  = gmsh::model::geo::addPlaneSurface({ll1});
+
+  // 4 个侧面：每条环 = 1底边 + 2垂直边 + 1离散曲线
+  int ll3 = gmsh::model::geo::addCurveLoop({c1, c11, -1, -c10});
+  int s3  = gmsh::model::geo::addPlaneSurface({ll3});
+  int ll4 = gmsh::model::geo::addCurveLoop({c2, c12, -2, -c11});
+  int s4  = gmsh::model::geo::addPlaneSurface({ll4});
+  int ll5 = gmsh::model::geo::addCurveLoop({c3, c13, 3, -c12});
+  int s5  = gmsh::model::geo::addPlaneSurface({ll5});
+  int ll6 = gmsh::model::geo::addCurveLoop({c4, c10, 4, -c13});
+  int s6  = gmsh::model::geo::addPlaneSurface({ll6});
+</code></pre>
+<p><strong>解释</strong>：以前侧面 s3 的曲线环 <code>{c1, c11, -1, -c10}</code> 为例：<code>+c1</code>=底边 p1→p2，<code>+c11</code>=垂直边 p2→2，<code>-1</code>=离散曲线1反向（点2→点1，沿地表），<code>-c10</code>=垂直边 p1→1 反向（点1→p1）。离散曲线1正方向是点1→点2，但侧面需要从点2回到点1，因此取负。</p>
+<pre><code class="language-cpp">  // 6 张面围成封闭空间 → 体
+  int sl1 = gmsh::model::geo::addSurfaceLoop({s1, s3, s4, s5, s6, 1});
+  int v1  = gmsh::model::geo::addVolume({sl1});
+  gmsh::model::geo::synchronize();
+</code></pre>
+<p><strong>解释</strong>：<code>addSurfaceLoop({faces})</code> 的面列表中，<code>1</code> 是离散面标签。它与 5 个 CAD 面共同构成封闭面环。<code>geo::synchronize()</code> 将所有 geo 模块实体同步到全局模型，并将 CAD 实体与离散实体的拓扑关联起来。</p>
+<h3 id="2336">23.3.6 网格剖分策略</h3>
+<pre><code class="language-cpp">  bool transfinite     = false;   // 全六面体结构网格
+  bool transfiniteAuto = false;   // 自动 Transfinite
+
+  if(transfinite) {
+    int NN = 30;
+    std::vector&lt;std::pair&lt;int, int&gt;&gt; tmp;
+    gmsh::model::getEntities(tmp, 1);
+    for(auto c : tmp) gmsh::model::mesh::setTransfiniteCurve(c.second, NN);
+    gmsh::model::getEntities(tmp, 2);
+    for(auto s : tmp) {
+      gmsh::model::mesh::setTransfiniteSurface(s.second);
+      gmsh::model::mesh::setRecombine(s.first, s.second);
+      gmsh::model::mesh::setSmoothing(s.first, s.second, 100);
+    }
+    gmsh::model::mesh::setTransfiniteVolume(v1);
+  }
+  else if(transfiniteAuto) {
+    gmsh::option::setNumber(&quot;Mesh.MeshSizeMin&quot;, 0.5);
+    gmsh::option::setNumber(&quot;Mesh.MeshSizeMax&quot;, 0.5);
+    gmsh::model::mesh::setTransfiniteAutomatic();
+  }
+  else {
+    gmsh::option::setNumber(&quot;Mesh.MeshSizeMin&quot;, 0.05);
+    gmsh::option::setNumber(&quot;Mesh.MeshSizeMax&quot;, 0.05);
+  }
+
+  gmsh::model::mesh::generate(3);
+  gmsh::write(&quot;ch23_terrain.msh&quot;);
+</code></pre>
+<p><strong>解释</strong>：三种网格策略：
+- <strong>自由四面体（默认）</strong>：通用，任意几何可剖
+- <strong>手动 Transfinite</strong>：所有曲线统一节点数 → 全六面体，适用于地下层结构网格
+- <strong>自动 Transfinite</strong>：<code>setTransfiniteAutomatic()</code> 由尺寸约束反推每条边的节点数，自动应用 Transfinite + Recombine</p>
+<p><code>mesh::generate(3)</code> 生成三维网格。因离散面已参数化，它将被作为计算域顶面重新剖分。</p>
+<pre><code class="language-cpp">  std::set&lt;std::string&gt; args(argv, argv + argc);
+  if(!args.count(&quot;-nopopup&quot;)) gmsh::fltk::run();
+
+  gmsh::finalize();
+  return 0;
+}
+</code></pre>
+<hr />
+<h2 id="234">23.4 完整可运行代码</h2>
+<pre><code class="language-cpp">// =============================================================================
+//  Chapter 23: Discrete Entities &amp; Hybrid Models — Terrain Meshing
+//
+//  功能: 演示离散实体完整工作流 + 混合模型地形网格
+//  编译: g++ -o ch23_terrain ch23_terrain.cpp -lgmsh -std=c++11
+//  运行: ./ch23_terrain (GUI)  或  ./ch23_terrain -nopopup (批处理)
+// =============================================================================
+
+#include &lt;set&gt;
+#include &lt;iostream&gt;
+#include &lt;gmsh.h&gt;
+
+int main(int argc, char **argv)
+{
+  gmsh::initialize(argc, argv);
+  gmsh::model::add(&quot;ch23&quot;);
+
+  // ===== 1. 数据准备：N x N 地形控制点 =====
+  int N = 100;
+
+  auto tag = [N](std::size_t i, std::size_t j) {
+    return (N + 1) * i + j + 1;
+  };
+
+  std::vector&lt;double&gt; coords;
+  std::vector&lt;std::size_t&gt; nodes;
+  std::vector&lt;std::size_t&gt; tris;
+  std::vector&lt;std::size_t&gt; lin[4];
+  std::size_t pnt[4] = {tag(0,0), tag(N,0), tag(N,N), tag(0,N)};
+
+  for(std::size_t i = 0; i &lt; N + 1; i++) {
+    for(std::size_t j = 0; j &lt; N + 1; j++) {
+      nodes.push_back(tag(i, j));
+      coords.insert(coords.end(), {
+          (double)i / N,
+          (double)j / N,
+          0.05 * sin(10 * (double)(i + j) / N)
+      });
+      if(i &gt; 0 &amp;&amp; j &gt; 0) {
+        tris.insert(tris.end(),
+                    {tag(i-1,j-1), tag(i,j-1), tag(i-1,j)});
+        tris.insert(tris.end(),
+                    {tag(i,j-1), tag(i,j), tag(i-1,j)});
+      }
+      if((i == 0 || i == N) &amp;&amp; j &gt; 0) {
+        std::size_t s = (i == 0) ? 3 : 1;
+        lin[s].insert(lin[s].end(), {tag(i, j - 1), tag(i, j)});
+      }
+      if((j == 0 || j == N) &amp;&amp; i &gt; 0) {
+        std::size_t s = (j == 0) ? 0 : 2;
+        lin[s].insert(lin[s].end(), {tag(i - 1, j), tag(i, j)});
+      }
+    }
+  }
+
+  // ===== 2. 创建离散实体拓扑 =====
+  for(int i = 0; i &lt; 4; i++)
+    gmsh::model::addDiscreteEntity(0, i + 1);
+
+  gmsh::model::setCoordinates(1, 0, 0, coords[3 * tag(0, 0) - 1]);
+  gmsh::model::setCoordinates(2, 1, 0, coords[3 * tag(N, 0) - 1]);
+  gmsh::model::setCoordinates(3, 1, 1, coords[3 * tag(N, N) - 1]);
+  gmsh::model::setCoordinates(4, 0, 1, coords[3 * tag(0, N) - 1]);
+
+  for(int i = 0; i &lt; 4; i++)
+    gmsh::model::addDiscreteEntity(1, i + 1,
+                                   {i + 1, (i &lt; 3) ? (i + 2) : 1});
+
+  gmsh::model::addDiscreteEntity(2, 1, {1, 2, -3, -4});
+
+  // ===== 3. 注入网格数据 =====
+  gmsh::model::mesh::addNodes(2, 1, nodes, coords);
+
+  for(int i = 0; i &lt; 4; i++) {
+    gmsh::model::mesh::addElementsByType(i + 1, 15, {}, {pnt[i]});
+    gmsh::model::mesh::addElementsByType(i + 1, 1, {}, lin[i]);
+  }
+  gmsh::model::mesh::addElementsByType(1, 2, {}, tris);
+
+  // ===== 4. 重分类节点 &amp; 生成几何参数化 =====
+  gmsh::model::mesh::reclassifyNodes();
+  gmsh::model::mesh::createGeometry();
+
+  // ===== 5. 构建 CAD 下卧层（混合模型） =====
+  int p1 = gmsh::model::geo::addPoint(0, 0, -0.5);
+  int p2 = gmsh::model::geo::addPoint(1, 0, -0.5);
+  int p3 = gmsh::model::geo::addPoint(1, 1, -0.5);
+  int p4 = gmsh::model::geo::addPoint(0, 1, -0.5);
+
+  int c1  = gmsh::model::geo::addLine(p1, p2);
+  int c2  = gmsh::model::geo::addLine(p2, p3);
+  int c3  = gmsh::model::geo::addLine(p3, p4);
+  int c4  = gmsh::model::geo::addLine(p4, p1);
+  int c10 = gmsh::model::geo::addLine(p1, 1);
+  int c11 = gmsh::model::geo::addLine(p2, 2);
+  int c12 = gmsh::model::geo::addLine(p3, 3);
+  int c13 = gmsh::model::geo::addLine(p4, 4);
+
+  int ll1 = gmsh::model::geo::addCurveLoop({c1, c2, c3, c4});
+  int s1  = gmsh::model::geo::addPlaneSurface({ll1});
+  int ll3 = gmsh::model::geo::addCurveLoop({c1, c11, -1, -c10});
+  int s3  = gmsh::model::geo::addPlaneSurface({ll3});
+  int ll4 = gmsh::model::geo::addCurveLoop({c2, c12, -2, -c11});
+  int s4  = gmsh::model::geo::addPlaneSurface({ll4});
+  int ll5 = gmsh::model::geo::addCurveLoop({c3, c13, 3, -c12});
+  int s5  = gmsh::model::geo::addPlaneSurface({ll5});
+  int ll6 = gmsh::model::geo::addCurveLoop({c4, c10, 4, -c13});
+  int s6  = gmsh::model::geo::addPlaneSurface({ll6});
+
+  int sl1 = gmsh::model::geo::addSurfaceLoop({s1, s3, s4, s5, s6, 1});
+  int v1  = gmsh::model::geo::addVolume({sl1});
+  gmsh::model::geo::synchronize();
+
+  // ===== 6. 网格剖分 =====
+  bool transfinite     = false;
+  bool transfiniteAuto = false;
+
+  if(transfinite) {
+    int NN = 30;
+    std::vector&lt;std::pair&lt;int, int&gt;&gt; tmp;
+    gmsh::model::getEntities(tmp, 1);
+    for(auto c : tmp)
+      gmsh::model::mesh::setTransfiniteCurve(c.second, NN);
+    gmsh::model::getEntities(tmp, 2);
+    for(auto s : tmp) {
+      gmsh::model::mesh::setTransfiniteSurface(s.second);
+      gmsh::model::mesh::setRecombine(s.first, s.second);
+      gmsh::model::mesh::setSmoothing(s.first, s.second, 100);
+    }
+    gmsh::model::mesh::setTransfiniteVolume(v1);
+  }
+  else if(transfiniteAuto) {
+    gmsh::option::setNumber(&quot;Mesh.MeshSizeMin&quot;, 0.5);
+    gmsh::option::setNumber(&quot;Mesh.MeshSizeMax&quot;, 0.5);
+    gmsh::model::mesh::setTransfiniteAutomatic();
+  }
+  else {
+    gmsh::option::setNumber(&quot;Mesh.MeshSizeMin&quot;, 0.05);
+    gmsh::option::setNumber(&quot;Mesh.MeshSizeMax&quot;, 0.05);
+  }
+
+  gmsh::model::mesh::generate(3);
+  gmsh::write(&quot;ch23_terrain.msh&quot;);
+
+  // ===== 7. 启动 GUI =====
+  std::set&lt;std::string&gt; args(argv, argv + argc);
+  if(!args.count(&quot;-nopopup&quot;)) gmsh::fltk::run();
+
+  gmsh::finalize();
+  return 0;
+}
+</code></pre>
+<hr />
+<h2 id="235-api">23.5 关键 API 速查表</h2>
+<h3 id="2351">23.5.1 离散实体创建与管理</h3>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gmsh::model::addDiscreteEntity(dim, tag)</code></td>
+<td>创建无边界离散实体（用于 dim=0 的点）</td>
+</tr>
+<tr>
+<td><code>gmsh::model::addDiscreteEntity(dim, tag, boundaryTags)</code></td>
+<td>创建带边界的离散实体：线(dim=1,端点列表)、面(dim=2,带符号曲线列表)、体(dim=3,面列表)</td>
+</tr>
+<tr>
+<td><code>gmsh::model::setCoordinates(tag, x, y, z)</code></td>
+<td>设置离散点的模型坐标（用于 GUI 显示和 CAD 连接）</td>
+</tr>
+<tr>
+<td><code>gmsh::model::getType(dim, tag, type)</code></td>
+<td>获取实体类型字符串（如 <code>"Discrete Surface"</code>）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2352">23.5.2 网格数据注入</h3>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gmsh::model::mesh::addNodes(dim, tag, nodeTags, coords)</code></td>
+<td>向实体注入节点；<code>coords</code> 为 <code>{x0,y0,z0, x1,y1,z1,...}</code> 交错格式</td>
+</tr>
+<tr>
+<td><code>gmsh::model::mesh::addElementsByType(entityTag, elemType, elemTags, nodeTags)</code></td>
+<td>向实体注入同类型单元；<code>elemTags={}</code> 表示自动编号</td>
+</tr>
+<tr>
+<td><code>gmsh::model::mesh::addElements(entityTag, elemTypes, elemTags, nodeTags)</code></td>
+<td>向实体注入混合类型单元</td>
+</tr>
+<tr>
+<td><code>gmsh::model::mesh::reclassifyNodes()</code></td>
+<td>将节点从聚合实体重分类到正确的边界实体（基于单元归属）</td>
+</tr>
+<tr>
+<td><code>gmsh::model::mesh::createGeometry()</code></td>
+<td>从离散实体网格生成参数化几何（使离散面可重划网格）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2353">23.5.3 常用单元类型编号</h3>
+<table>
+<thead>
+<tr>
+<th>编号</th>
+<th>名称</th>
+<th>维度</th>
+<th>节点数</th>
+<th>编号</th>
+<th>名称</th>
+<th>维度</th>
+<th>节点数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>15</td>
+<td>Point</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>Line (2-node)</td>
+<td>1</td>
+<td>2</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Line3 (3-node)</td>
+<td>1</td>
+<td>3</td>
+<td>2</td>
+<td>Triangle (3-node)</td>
+<td>2</td>
+<td>3</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Triangle6 (6-node)</td>
+<td>2</td>
+<td>6</td>
+<td>3</td>
+<td>Quadrangle (4-node)</td>
+<td>2</td>
+<td>4</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Tetrahedron (4-node)</td>
+<td>3</td>
+<td>4</td>
+<td>5</td>
+<td>Hexahedron (8-node)</td>
+<td>3</td>
+<td>8</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Prism (6-node)</td>
+<td>3</td>
+<td>6</td>
+<td>7</td>
+<td>Pyramid (5-node)</td>
+<td>3</td>
+<td>5</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2354-geo-api">23.5.4 混合模型相关 geo API</h3>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gmsh::model::geo::addPoint(x, y, z)</code></td>
+<td>创建 CAD 点，返回标签（端点可连接离散点）</td>
+</tr>
+<tr>
+<td><code>gmsh::model::geo::addLine(startTag, endTag)</code></td>
+<td>创建 CAD 直线，端点可为离散点标签</td>
+</tr>
+<tr>
+<td><code>gmsh::model::geo::addCurveLoop(curveTags)</code></td>
+<td>创建闭合曲线环（有向边界）</td>
+</tr>
+<tr>
+<td><code>gmsh::model::geo::addPlaneSurface(wireTags)</code></td>
+<td>以闭合环为边界创建平面面</td>
+</tr>
+<tr>
+<td><code>gmsh::model::geo::addSurfaceLoop(faceTags)</code></td>
+<td>以封闭面集合创建面环</td>
+</tr>
+<tr>
+<td><code>gmsh::model::geo::addVolume(surfaceLoopTags)</code></td>
+<td>以封闭面环创建体</td>
+</tr>
+<tr>
+<td><code>gmsh::model::geo::synchronize()</code></td>
+<td>同步 geo 模块实体到 Gmsh 全局模型</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2355-transfinite">23.5.5 Transfinite 网格控制</h3>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gmsh::model::mesh::setTransfiniteCurve(tag, nPoints)</code></td>
+<td>设置曲线结构网格点数</td>
+</tr>
+<tr>
+<td><code>gmsh::model::mesh::setTransfiniteSurface(tag)</code></td>
+<td>对面应用 Transfinite 剖分</td>
+</tr>
+<tr>
+<td><code>gmsh::model::mesh::setTransfiniteVolume(tag)</code></td>
+<td>对体应用 Transfinite 剖分</td>
+</tr>
+<tr>
+<td><code>gmsh::model::mesh::setRecombine(dim, tag)</code></td>
+<td>对面/体启用四边形/六面体重组</td>
+</tr>
+<tr>
+<td><code>gmsh::model::mesh::setTransfiniteAutomatic()</code></td>
+<td>自动 Transfinite（由尺寸约束推断分割数，全重组）</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="236">23.6 注意事项与最佳实践</h2>
+<ol>
+<li>
+<p><strong>仅 <code>geo</code> 模块支持混合模型</strong>：<code>gmsh::model::occ</code>（OpenCASCADE）不支持其边界实体为离散实体。如果已通过 OCC 构建几何，需转用 <code>geo</code> 模块重新构建或仅用 <code>geo</code> 完成混合部分。</p>
+</li>
+<li>
+<p><strong><code>reclassifyNodes()</code> 不可省略</strong>：跳过此步骤，所有节点将保留在首次 <code>addNodes()</code> 指定的实体上，后续对离散曲线/点的节点查询返回空，<code>createGeometry()</code> 可能产生不正确结果。</p>
+</li>
+<li>
+<p><strong><code>createGeometry()</code> 的质量依赖</strong>：参数化几何的质量取决于输入网格质量。极度狭长或反转的三角形可能导致参数化失败。建议调用前对网格进行质量检查。</p>
+</li>
+<li>
+<p><strong>边界标签的符号约定</strong>：二维面边界中正号=沿曲线正方向，负号=逆方向。错误符号导致面法向反转，影响体定义和网格生成。CCW 环绕是基本原则。</p>
+</li>
+<li>
+<p><strong>离散实体与分区实体的区别</strong>：两者都存储为 "Discrete *" 类型，但分区实体（<code>mesh::partition()</code> 生成）额外携带分区索引和父实体信息（通过 <code>getPartitions()/getParent()</code> 查询）。</p>
+</li>
+<li>
+<p><strong>节点和单元标签全局唯一</strong>：<code>addNodes()</code> 和 <code>addElementsByType()</code> 中的标签必须在整个模型中唯一。</p>
+</li>
+<li>
+<p><strong>从外部文件导入网格的替代方案</strong>：除程序化注入外，可通过 <code>gmsh::merge("file.stl")</code> 导入 STL，然后调用 <code>mesh::classifySurfaces(angle, boundary, curveAngle)</code> 自动创建离散实体和拓扑。</p>
+</li>
+<li>
+<p><strong>地形数据真实来源</strong>：实际工程中地形数据通常来自 GIS/DEM 文件，只需将 <code>coords</code> 的 Z 分量替换为真实海拔，其余流程完全一致。</p>
+</li>
+</ol>
+<hr />
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

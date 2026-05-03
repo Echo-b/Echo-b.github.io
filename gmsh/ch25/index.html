@@ -1,0 +1,3517 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../ch24/">
+      
+      
+        <link rel="next" href="../ch26/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>第25章 几何求值——参数化法向量与曲率 - Echo-b's Tech Notes</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#25-geometry-evaluation" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Echo-b&#39;s Tech Notes" class="md-header__button md-logo" aria-label="Echo-b's Tech Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Echo-b's Tech Notes
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              第25章 几何求值——参数化法向量与曲率
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Echo-b&#39;s Tech Notes" class="md-nav__button md-logo" aria-label="Echo-b's Tech Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Echo-b's Tech Notes
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VTK 教程
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    VTK 教程
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    入门篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    入门篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-01-vtk-overview-and-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第一章 VTK概述与环境搭建
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-02-visualization-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二章 可视化管线
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-03-data-model-basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第三章 数据模型基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-04-geometry-and-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第四章 基本几何体与数据源
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-05-rendering-and-interactor/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第五章 渲染与交互机
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-06-volume1-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第六章 入门篇综合实战——3D几何画廊
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    实战篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    实战篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-07-polydata/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第七章 PolyData详解
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-08-unstructured-grid/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第八章 非结构化网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-09-structured-data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第九章 结构化数据
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-10-data-io/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十章 数据I/O
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-11-common-filters/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十一章 常用过滤器
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-12-color-mapping/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十二章 颜色映射与标量可视化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-13-advanced-rendering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十三章 高级渲染技术
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-14-multi-dataset/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十四章 多个数据集处理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-15-volume2-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十五章 实战篇综合实战——CFD后处理可视化工具
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    进阶篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    进阶篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-16-volume-rendering-basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十六章 体渲染基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-17-volume-rendering-advanced/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十七章 体渲染高级技术
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-18-charts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十八章 2D图表系统
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-19-annotation-and-widgets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十九章 三维标注与交互组件
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-20-custom-interaction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十章 自定义交互与Widget
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-21-qt-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十一章 Qt集成
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-22-smp-parallel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十二章 SMP并行入门
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-23-volume3-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十三章 进阶篇综合实战
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GMSH 教程
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    GMSH 教程
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1" id="__nav_3_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    基础篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    基础篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第1章 Gmsh概述与C++ SDK配置
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第2章 几何基础——点线面曲线环与物理组
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第3章 变换与拉伸几何
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第4章 高级几何构建——内置函数孔洞注释与颜色
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第5章 三维网格控制——尺寸场体孔洞与网格算法
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch06/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第6章 网格控制进阶——Transfinite分布与结构化网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch07/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第7章 背景网格——用已有网格指导网格尺寸
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch08/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第8章 网格尺寸场
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    进阶篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    进阶篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch09/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第9章 四边形网格重组
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch10/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第10章 复合实体——跨面一致网格划分
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch11/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第11章 STL重网格——无CAD模型的表面重构
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch12/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第12章 同调与上同调计算
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch13/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第13章 嵌入实体——在网格中强制生成共形节点
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch14/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第14章 各向异性网格——方向感知的网格生成
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch15/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第15章 周期性网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch16/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第16章 OpenCASCADE内核与构造实体几何
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch17/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第17章 高级实体建模——断面扫掠圆角管道与曲率自适应网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch18/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第18章 STEP导入与几何分割
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    应用篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    应用篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch19/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第19章 后处理视图与动画
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch20/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第20章 后处理插件——视图数据运算与变换
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch21/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第21章 网格分区与区域分解
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch22/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第22章 遍历模型与网格数据——前处理查询API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第23章 离散实体与混合模型——地形网格实战
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch24/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第24章 后处理视图——List-based与Model-based数据导入
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第25章 几何求值——参数化法向量与曲率
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第25章 几何求值——参数化法向量与曲率
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#251" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        25.1 学习目标
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#252" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        25.2 核心概念说明
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="25.2 核心概念说明">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2521-surface-parametrization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        25.2.1 曲面参数化（Surface Parametrization）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2522-normalcurvature" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        25.2.2 法向量（Normal）与曲率（Curvature）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2523-curve-evaluation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        25.2.3 曲线求值（Curve Evaluation）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2524-cae" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        25.2.4 CAE 应用场景
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#253-c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        25.3 C++ 代码逐段讲解
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="25.3 C++ 代码逐段讲解">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2531" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        25.3.1 头文件与初始化
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2532" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        25.3.2 创建融合几何体并生成曲面网格
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2533" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        25.3.3 获取曲面网格节点及其参数坐标
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2534" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        25.3.4 获取曲面法向量
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2535" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        25.3.5 获取曲面主曲率
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2536" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        25.3.6 整理法向量与曲率数据用于后处理显示
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2537" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        25.3.7 创建后处理视图
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2538" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        25.3.8 曲线参数化边界与求值
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2539" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        25.3.9 曲线导数与二阶导数
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#25310-reparametrization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        25.3.10 曲线在曲面上的重参数化（Reparametrization）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#25311" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        25.3.11 物理坐标到参数坐标的反向映射
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#25312-gui" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        25.3.12 GUI 启动
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#254" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        25.4 完整可运行代码
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#255-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        25.5 关键 API 速查表
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="25.5 关键 API 速查表">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2551-surface-evaluation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        25.5.1 曲面求值（Surface Evaluation）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2552-curve-evaluation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        25.5.2 曲线求值（Curve Evaluation）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2553-surface-evaluation-dim2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        25.5.3 曲面求值（Surface Evaluation）— dim=2 时的导数
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2554-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        25.5.4 API 签名风格对比（重要）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#256" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        25.6 注意事项与最佳实践
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#257" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        25.7 本章小结
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第26章 积分点雅可比矩阵基函数与内部边面
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#251" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        25.1 学习目标
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#252" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        25.2 核心概念说明
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="25.2 核心概念说明">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2521-surface-parametrization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        25.2.1 曲面参数化（Surface Parametrization）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2522-normalcurvature" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        25.2.2 法向量（Normal）与曲率（Curvature）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2523-curve-evaluation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        25.2.3 曲线求值（Curve Evaluation）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2524-cae" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        25.2.4 CAE 应用场景
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#253-c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        25.3 C++ 代码逐段讲解
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="25.3 C++ 代码逐段讲解">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2531" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        25.3.1 头文件与初始化
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2532" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        25.3.2 创建融合几何体并生成曲面网格
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2533" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        25.3.3 获取曲面网格节点及其参数坐标
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2534" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        25.3.4 获取曲面法向量
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2535" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        25.3.5 获取曲面主曲率
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2536" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        25.3.6 整理法向量与曲率数据用于后处理显示
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2537" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        25.3.7 创建后处理视图
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2538" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        25.3.8 曲线参数化边界与求值
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2539" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        25.3.9 曲线导数与二阶导数
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#25310-reparametrization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        25.3.10 曲线在曲面上的重参数化（Reparametrization）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#25311" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        25.3.11 物理坐标到参数坐标的反向映射
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#25312-gui" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        25.3.12 GUI 启动
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#254" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        25.4 完整可运行代码
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#255-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        25.5 关键 API 速查表
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="25.5 关键 API 速查表">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2551-surface-evaluation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        25.5.1 曲面求值（Surface Evaluation）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2552-curve-evaluation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        25.5.2 曲线求值（Curve Evaluation）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2553-surface-evaluation-dim2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        25.5.3 曲面求值（Surface Evaluation）— dim=2 时的导数
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2554-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        25.5.4 API 签名风格对比（重要）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#256" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        25.6 注意事项与最佳实践
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#257" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        25.7 本章小结
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="25-geometry-evaluation">第25章 几何求值（Geometry Evaluation）：参数化、法向量与曲率</h1>
+<hr />
+<h2 id="251">25.1 学习目标</h2>
+<ul>
+<li>理解曲面参数化（Surface Parametrization）的概念：CAD 几何中每个曲面自带 (u,v) 参数坐标系，掌握 <code>getParametrization()</code> 在物理坐标与参数坐标之间建立双向映射</li>
+<li>掌握通过 <code>getNormal()</code> 获取曲面上任意参数坐标处的单位法向量（Unit Normal），理解其与 <code>(dim,tag)</code> 实体对 API（如 <code>getCurvature</code>）在参数签名上的关键区别</li>
+<li>学会使用 <code>getPrincipalCurvatures()</code> 获取主曲率（Principal Curvatures）及其主方向（Principal Directions），理解曲率在自适应网格细化中的判据作用</li>
+<li>掌握曲线求值 API 族：<code>getValue()</code>（坐标）、<code>getDerivative()</code>（切向量）、<code>getSecondDerivative()</code>（二阶导），以及 <code>reparametrizeOnSurface()</code> 曲线-曲面联合求值</li>
+<li>了解上述 API 在 CAE 中的典型应用：压力载荷施加（需法向）、自适应网格细化（需曲率）、边界条件位置计算（需参数化）</li>
+</ul>
+<hr />
+<h2 id="252">25.2 核心概念说明</h2>
+<h3 id="2521-surface-parametrization">25.2.1 曲面参数化（Surface Parametrization）</h3>
+<p>在 CAD 内核中，每张曲面（Surface）都定义了一个从二维参数域 <code>(u,v)</code> 到三维物理空间 <code>(x,y,z)</code> 的映射：</p>
+<pre><code>S(u,v) = (x(u,v), y(u,v), z(u,v))
+其中 (u,v) 属于参数定义域 [u_min, u_max] x [v_min, v_max]
+</code></pre>
+<p>参数域范围因几何类型而异：平面和裁剪曲面（Trimmed Surface）的参数域通常受裁剪边界限制，球面和圆柱面等周期曲面则可能覆盖 <code>[0, 2*pi]</code> 范围。</p>
+<p>Gmsh 通过两个 API 实现物理坐标与参数坐标的双向转换：</p>
+<table>
+<thead>
+<tr>
+<th>方向</th>
+<th>API</th>
+<th>输入</th>
+<th>输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>物理 -&gt; 参数</td>
+<td><code>getParametrization(dim, tag, coord, paramCoord)</code></td>
+<td>(x,y,z)</td>
+<td>(u,v) 或 t</td>
+</tr>
+<tr>
+<td>参数 -&gt; 物理</td>
+<td><code>getValue(dim, tag, paramCoord, coord)</code></td>
+<td>(u,v) 或 t</td>
+<td>(x,y,z)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2522-normalcurvature">25.2.2 法向量（Normal）与曲率（Curvature）</h3>
+<p>曲面上一点的法向量和曲率是 CAE 前处理中最重要的微分几何量：</p>
+<ul>
+<li><strong>法向量（Normal）</strong>：垂直于曲面切平面的单位向量。在有限元分析中用于施加压力载荷（压力沿法向作用）、接触检测、壳单元局部坐标系建立。</li>
+<li><strong>主曲率（Principal Curvatures）</strong>：曲面上一点沿不同方向的弯曲程度不同，存在一对正交方向使弯曲程度达到极值，分别称为最大主曲率 <code>k1</code> 和最小主曲率 <code>k2</code>。</li>
+<li>高斯曲率（Gaussian Curvature）<code>K = k1 * k2</code>：判断曲面局部形状（K&gt;0 椭圆点, K&lt;0 双曲点, K=0 抛物点）</li>
+<li>平均曲率（Mean Curvature）<code>H = (k1 + k2) / 2</code>：用于曲率自适应网格细化判据</li>
+</ul>
+<p><strong>API 签名关键差异</strong>：Gmsh API 中存在不一致——<code>getNormal()</code> 和 <code>getPrincipalCurvatures()</code> 仅接收曲面标签（<code>tag</code>），而 <code>getCurvature()</code> 接收 <code>(dim, tag)</code> 对。这是 Gmsh API 的历史遗留问题，使用时务必注意。</p>
+<h3 id="2523-curve-evaluation">25.2.3 曲线求值（Curve Evaluation）</h3>
+<p>对于一维曲线实体，Gmsh 提供三个层次的求值 API：</p>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>返回</th>
+<th>数学含义</th>
+<th>典型用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>getValue(dim, tag, t, xyz)</code></td>
+<td>坐标</td>
+<td><code>C(t) = (x,y,z)</code></td>
+<td>边界条件位置计算</td>
+</tr>
+<tr>
+<td><code>getDerivative(dim, tag, t, deriv)</code></td>
+<td>切向量</td>
+<td><code>C'(t) = (dx/dt, dy/dt, dz/dt)</code></td>
+<td>切向载荷、流线方向</td>
+</tr>
+<tr>
+<td><code>getSecondDerivative(dim, tag, t, deriv2)</code></td>
+<td>二阶导</td>
+<td><code>C''(t)</code></td>
+<td>曲率计算、弯管应力估算</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2524-cae">25.2.4 CAE 应用场景</h3>
+<ol>
+<li><strong>压力载荷施加</strong>：<code>p * n</code> 需要曲面上每个积分点的单位法向量 <code>n</code>。从网格节点获取参数坐标后，通过 <code>getNormal()</code> 获取精确的 CAD 法向（而非网格近似法向），避免网格粗糙时法向误差导致的载荷方向偏差。</li>
+<li><strong>自适应网格细化</strong>：在曲率大的区域（如倒角根部、小孔边缘）加密网格。通过 <code>getPrincipalCurvatures()</code> 评估局部曲率，设定曲率阈值触发局部细化。</li>
+<li><strong>边界条件位置计算</strong>：利用 <code>getValue()</code> 在曲线参数坐标上精确计算约束施加点或载荷施加点的物理坐标，适用于参数化边界条件脚本。</li>
+</ol>
+<hr />
+<h2 id="253-c">25.3 C++ 代码逐段讲解</h2>
+<h3 id="2531">25.3.1 头文件与初始化</h3>
+<pre><code class="language-cpp">#include &lt;set&gt;
+#include &lt;vector&gt;
+#include &lt;cmath&gt;
+#include &lt;numeric&gt;
+#include &lt;gmsh.h&gt;
+
+int main(int argc, char **argv)
+{
+  gmsh::initialize(argc, argv);
+  gmsh::model::add(&quot;ch25&quot;);
+</code></pre>
+<p><strong>解释</strong>：<code>&lt;numeric&gt;</code> 用于 <code>std::iota</code> 等序列生成，<code>&lt;cmath&gt;</code> 提供 <code>std::sqrt</code>、<code>std::abs</code> 等数学函数。<code>gmsh::model::add("ch25")</code> 为模型命名。</p>
+<hr />
+<h3 id="2532">25.3.2 创建融合几何体并生成曲面网格</h3>
+<pre><code class="language-cpp">  // ---- 1. 创建球与立方体的融合几何 ----
+  int s = gmsh::model::occ::addSphere(0, 0, 0, 1);     // 单位球
+  int b = gmsh::model::occ::addBox(0.5, 0, 0, 1.3, 2, 3); // 与球相交的盒子
+  std::vector&lt;std::pair&lt;int, int&gt;&gt; ov;
+  std::vector&lt;std::vector&lt;std::pair&lt;int, int&gt;&gt;&gt; ovv;
+  gmsh::model::occ::fuse({{3, s}}, {{3, b}}, ov, ovv);
+  gmsh::model::occ::synchronize();
+
+  // 生成二维面网格（仅曲面）
+  gmsh::model::mesh::generate(2);
+</code></pre>
+<p><strong>解释</strong>：球和长方体做布尔融合（Boolean Union），产生一个既有球面区域又有平面区域的复合几何体。这种"曲面+平面"的组合最能体现法向量和曲率 API 的价值：球面区域的法向量处处变化且曲率非零，平面区域法向量恒定且曲率为零。<code>mesh::generate(2)</code> 仅生成面网格，不生成体网格，以节省计算量。</p>
+<hr />
+<h3 id="2533">25.3.3 获取曲面网格节点及其参数坐标</h3>
+<pre><code class="language-cpp">  // ---- 2. 遍历所有面，获取网格节点及参数坐标 ----
+  std::vector&lt;std::pair&lt;int, int&gt;&gt; entities;
+  gmsh::model::getEntities(entities, 2); // dim=2: 面
+
+  std::vector&lt;double&gt; allNormals;   // 用于后处理显示: 法向量
+  std::vector&lt;double&gt; allCurvatures; // 用于后处理显示: 最大主曲率
+
+  for(auto e : entities) {
+    int surfaceTag = e.second;
+
+    // 获取面上的网格节点
+    // includeBoundary=true: 边界节点会被重新参数化到当前面上
+    std::vector&lt;std::size_t&gt; nodeTags;
+    std::vector&lt;double&gt; coord, paramCoord;
+    gmsh::model::mesh::getNodes(nodeTags, coord, paramCoord,
+                                2, surfaceTag, true);
+</code></pre>
+<p><strong>解释</strong>：<code>getNodes()</code> 的最后一个参数 <code>includeBoundary=true</code> 至关重要。内部节点（interior nodes）存储了参数坐标，但边界节点（boundary nodes）属于多个面共有——当设为 <code>true</code> 时，Gmsh 会将边界节点重新参数化（reparametrize）到当前面上，从而获得在该面上的 <code>(u,v)</code> 坐标。如果设为 <code>false</code>，则边界节点的 <code>paramCoord</code> 为空。</p>
+<p><code>coord</code> 的数据布局为 <code>[x1,y1,z1, x2,y2,z2, ...]</code>，<code>paramCoord</code> 的布局为 <code>[u1,v1, u2,v2, ...]</code>，两者按节点一一对应。</p>
+<hr />
+<h3 id="2534">25.3.4 获取曲面法向量</h3>
+<pre><code class="language-cpp">    // ---- 3. 获取面上各节点参数坐标处的精确法向量 ----
+    std::vector&lt;double&gt; normals;
+    gmsh::model::getNormal(surfaceTag, paramCoord, normals);
+    // 注意: getNormal() 的第一个参数是曲面标签(tag)，不是(dim,tag)对
+    // 这与 getCurvature(dim, tag, ...) 的签名不同！
+</code></pre>
+<p><strong>解释</strong>：<code>getNormal(tag, parametricCoord, normals)</code> —— <strong>第一个参数是面标签（整数），不是 <code>(dim, tag)</code> 对</strong>。这是 Gmsh API 中的关键不一致点，也是 CAE 开发者最常见的错误来源。</p>
+<p><code>normals</code> 返回的单位法向量布局为 <code>[nx1,ny1,nz1, nx2,ny2,nz2, ...]</code>，与输入的 <code>paramCoord</code> 按点一一对应。法向量的方向遵循右手定则（基于曲面的 (u,v) 参数化方向 <code>Su x Sv</code>）。</p>
+<p><strong>这里的法向量是直接从 CAD 几何求值得到的精确法向，而非从网格三角面片计算的法向近似值</strong>。在压力载荷施加场景中，使用 <code>getNormal()</code> 的法向可以避免网格粗糙时法向偏差导致的载荷方向错误。</p>
+<hr />
+<h3 id="2535">25.3.5 获取曲面主曲率</h3>
+<pre><code class="language-cpp">    // ---- 4. 获取主曲率及主方向 ----
+    std::vector&lt;double&gt; curvMax, curvMin, dirMax, dirMin;
+    gmsh::model::getPrincipalCurvatures(surfaceTag, paramCoord,
+                                         curvMax, curvMin, dirMax, dirMin);
+    // getPrincipalCurvatures(tag, ...) 同样仅使用面标签，不使用(dim,tag)对
+</code></pre>
+<p><strong>解释</strong>：<code>getPrincipalCurvatures(tag, parametricCoord, curvatureMax, curvatureMin, directionMax, directionMin)</code> 在一次调用中返回四个向量：</p>
+<table>
+<thead>
+<tr>
+<th>输出向量</th>
+<th>长度 (N个点)</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>curvatureMax</code></td>
+<td>N</td>
+<td>每个点的最大主曲率 k1（正值=凸，负值=凹）</td>
+</tr>
+<tr>
+<td><code>curvatureMin</code></td>
+<td>N</td>
+<td>每个点的最小主曲率 k2</td>
+</tr>
+<tr>
+<td><code>directionMax</code></td>
+<td>3N</td>
+<td>k1 对应的主方向单位向量 <code>[dx1,dy1,dz1, dx2,dy2,dz2, ...]</code></td>
+</tr>
+<tr>
+<td><code>directionMin</code></td>
+<td>3N</td>
+<td>k2 对应的主方向单位向量</td>
+</tr>
+</tbody>
+</table>
+<p>两个主方向始终正交。对于球面，<code>k1 = k2 = 1/R</code>（脐点，任意两个正交方向都可视为主方向）。对于平面，<code>k1 = k2 = 0</code>。对于圆柱面，<code>k1 = 1/R</code>（周向），<code>k2 = 0</code>（轴向）。</p>
+<p><strong>注意</strong>：还有一个简化 API <code>getCurvature(dim, tag, parametricCoord, curvatures)</code>，它只返回每个点的最大曲率（单值），且使用 <code>(dim, tag)</code> 对作为前两个参数——与 <code>getPrincipalCurvatures</code> 的签名风格不同。</p>
+<hr />
+<h3 id="2536">25.3.6 整理法向量与曲率数据用于后处理显示</h3>
+<pre><code class="language-cpp">    // ---- 5. 整理数据用于后处理视图 ----
+    for(std::size_t i = 0; i &lt; coord.size(); i += 3) {
+      std::size_t idx = i / 3; // 点索引
+      // 法向量视图: 位置 + 法向量 (VP = Vector on Points, 6个double/点)
+      allNormals.insert(allNormals.end(), {
+          coord[i], coord[i+1], coord[i+2],          // x, y, z
+          normals[i], normals[i+1], normals[i+2]      // nx, ny, nz
+      });
+      // 曲率视图: 位置 + 标量值 (SP = Scalar on Points, 4个double/点)
+      allCurvatures.insert(allCurvatures.end(), {
+          coord[i], coord[i+1], coord[i+2],           // x, y, z
+          curvMax[idx]                                 // 最大主曲率
+      });
+    }
+  } // end for each surface
+</code></pre>
+<p><strong>解释</strong>：将数据组织为 list-based 后处理视图格式：
+- <code>"VP"</code> (Vector on Points)：每个数据条目 6 个 double — (x,y,z, vx,vy,vz)
+- <code>"SP"</code> (Scalar on Points)：每个数据条目 4 个 double — (x,y,z, scalar)</p>
+<p>这里选择了最大主曲率 <code>curvMax</code> 作为标量场显示；也可以选择平均曲率 <code>(curvMax + curvMin) / 2</code> 或高斯曲率 <code>curvMax * curvMin</code> 作为细化判据。</p>
+<hr />
+<h3 id="2537">25.3.7 创建后处理视图</h3>
+<pre><code class="language-cpp">  // ---- 6. 创建法向量矢量视图 ----
+  int vn = gmsh::view::add(&quot;Surface normals&quot;);
+  gmsh::view::addListData(vn, &quot;VP&quot;, allNormals.size() / 6, allNormals);
+  gmsh::view::option::setNumber(vn, &quot;ShowScale&quot;, 0);     // 不显示色标
+  gmsh::view::option::setNumber(vn, &quot;ArrowSizeMax&quot;, 30); // 箭头最大 30 像素
+  gmsh::view::option::setNumber(vn, &quot;ColormapNumber&quot;, 19);
+
+  // ---- 7. 创建曲率标量视图 ----
+  int vc = gmsh::view::add(&quot;Principal curvatures (max)&quot;);
+  gmsh::view::addListData(vc, &quot;SP&quot;, allCurvatures.size() / 4, allCurvatures);
+  gmsh::view::option::setNumber(vc, &quot;ShowScale&quot;, 1);
+  gmsh::view::option::setNumber(vc, &quot;IntervalsType&quot;, 2); // 连续色带
+</code></pre>
+<p><strong>解释</strong>：<code>addListData()</code> 创建独立于网格的 list-based 视图。<code>"VP"</code> 格式将法向量渲染为带箭头的矢量线；<code>"SP"</code> 格式将曲率值渲染为着色点云。这些视图可在 Gmsh GUI 中独立开关、叠加显示。</p>
+<hr />
+<h3 id="2538">25.3.8 曲线参数化边界与求值</h3>
+<pre><code class="language-cpp">  // ---- 8. 获取某条曲线的参数化边界并等距采样求值 ----
+  // 以曲线 5 为例（融合后自动生成的边）
+  std::vector&lt;double&gt; tMin, tMax;
+  gmsh::model::getParametrizationBounds(1, 5, tMin, tMax);
+  // 对于曲线(dim=1): tMin/tMax 各含1个值，分别为参数 t 的下界和上界
+
+  int N = 15; // 采样点数
+  std::vector&lt;double&gt; tSamples, xyz1;
+  for(int i = 0; i &lt; N; i++) {
+    double t = tMin[0] + i * (tMax[0] - tMin[0]) / (N - 1);
+    tSamples.push_back(t);
+  }
+  gmsh::model::getValue(1, 5, tSamples, xyz1);
+  // xyz1 布局: [x1,y1,z1, x2,y2,z2, ...], 共 N 个点
+</code></pre>
+<p><strong>解释</strong>：<code>getParametrizationBounds(1, 5, tMin, tMax)</code> 返回曲线参数 t 的定义域 <code>[t_min, t_max]</code>。对于 dim=1 的曲线，<code>tMin</code> 和 <code>tMax</code> 各为一个元素的向量；对于 dim=2 的曲面，<code>tMin=[u_min, v_min]</code>，<code>tMax=[u_max, v_max]</code>。</p>
+<p><code>getValue(1, 5, tSamples, xyz1)</code> 在曲线上等距采样 15 个参数点，计算对应的三维坐标。输出的 <code>xyz1</code> 包含 <code>3*N</code> 个 double。</p>
+<hr />
+<h3 id="2539">25.3.9 曲线导数与二阶导数</h3>
+<pre><code class="language-cpp">  // ---- 9. 获取曲线在采样点的切向量（一阶导）和二阶导 ----
+  std::vector&lt;double&gt; deriv1, deriv2;
+  gmsh::model::getDerivative(1, 5, tSamples, deriv1);
+  // deriv1 布局: [dx/dt, dy/dt, dz/dt, ...], 每点 3 个分量
+  gmsh::model::getSecondDerivative(1, 5, tSamples, deriv2);
+  // deriv2 布局: [d2x/dt2, d2y/dt2, d2z/dt2, ...], 每点 3 个分量
+
+  // 计算第一个采样点处的切向量模长和曲线曲率
+  double dx = deriv1[0], dy = deriv1[1], dz = deriv1[2];
+  double ds = std::sqrt(dx*dx + dy*dy + dz*dz);     // 切向量模长 = |C'(t)|
+  double ddx = deriv2[0], ddy = deriv2[1], ddz = deriv2[2];
+  // 曲线曲率: kappa = |C' x C''| / |C'|^3
+  double crossX = dy*ddz - dz*ddy;
+  double crossY = dz*ddx - dx*ddz;
+  double crossZ = dx*ddy - dy*ddx;
+  double kappa = std::sqrt(crossX*crossX + crossY*crossY + crossZ*crossZ)
+                 / (ds * ds * ds);
+  gmsh::logger::write(&quot;Curve 5 curvature at t[0] = &quot; + std::to_string(kappa));
+</code></pre>
+<p><strong>解释</strong>：<code>getDerivative()</code> 返回的是参数导数 <code>dC/dt</code>（非弧长导数）。切向量方向可直接用于局部坐标系对齐或切向载荷方向定义。结合 <code>getDerivative()</code> 和 <code>getSecondDerivative()</code> 可计算曲线的 Frenet 曲率：</p>
+<pre><code>kappa = |C'(t) x C''(t)| / |C'(t)|^3
+</code></pre>
+<p>这在 CAE 中可用于：评估弯管处的应力集中系数（曲率越大，弯管应力集中越显著）、判断曲线网格加密区域。</p>
+<hr />
+<h3 id="25310-reparametrization">25.3.10 曲线在曲面上的重参数化（Reparametrization）</h3>
+<pre><code class="language-cpp">  // ---- 10. 将曲线重参数化到曲面上，验证一致性 ----
+  // 将曲线 5 上的采样点重新参数化到面 1 上
+  std::vector&lt;double&gt; uvOnSurface, xyz2;
+  gmsh::model::reparametrizeOnSurface(1, 5, tSamples, 1, uvOnSurface);
+  // uvOnSurface 布局: [u1,v1, u2,v2, ...]  — 曲线采样点在面1上的(u,v)坐标
+
+  // 用面 1 的参数坐标重新求值
+  gmsh::model::getValue(2, 1, uvOnSurface, xyz2);
+
+  // 验证两种求值方式得到相同结果
+  double maxDiff = 0.0;
+  for(std::size_t i = 0; i &lt; xyz1.size(); i++)
+    maxDiff = std::max(maxDiff, std::abs(xyz1[i] - xyz2[i]));
+  if(maxDiff &lt; 1e-12)
+    gmsh::logger::write(&quot;Curve &amp; surface evaluation match! (max diff &lt; 1e-12)&quot;);
+  else
+    gmsh::logger::write(&quot;Mismatch: max diff = &quot; + std::to_string(maxDiff), &quot;warning&quot;);
+</code></pre>
+<p><strong>解释</strong>：<code>reparametrizeOnSurface(dim, tag, paramCoord, surfaceTag, surfaceParamCoord)</code> 实现了一条曲线（或其上的点）在指定曲面上的重新参数化。该功能仅在部分 CAD 内核中可用。</p>
+<p>这里验证了两种求值路径的一致性：
+1. 直接在曲线 5 上求值 → <code>xyz1</code>
+2. 将曲线 5 的参数坐标重参数化到面 1 → 在面 1 上求值 → <code>xyz2</code></p>
+<p>两者应得到相同的物理坐标（因为曲线 5 是面 1 的边界）。这种验证是 CAE 工作流中的良好实践——在边界条件施加时，如果曲线和曲面求值不一致，说明 CAD 模型可能存在几何不兼容问题（如边和面之间有微小间隙）。</p>
+<hr />
+<h3 id="25311">25.3.11 物理坐标到参数坐标的反向映射</h3>
+<pre><code class="language-cpp">  // ---- 11. 演示物理坐标 -&gt; 参数坐标的反向映射 ----
+  // 取第一个面（面 1）上网格的第一个节点，演示反向参数化
+  std::vector&lt;std::size_t&gt; nTags;
+  std::vector&lt;double&gt; nCoord, nParam;
+  gmsh::model::mesh::getNodes(nTags, nCoord, nParam, 2, 1, true);
+  if(nCoord.size() &gt;= 3) {
+    // 取第一个节点坐标求其参数坐标
+    std::vector&lt;double&gt; singleCoord = {nCoord[0], nCoord[1], nCoord[2]};
+    std::vector&lt;double&gt; fromCoord;
+    gmsh::model::getParametrization(2, 1, singleCoord, fromCoord);
+    // fromCoord[0] = u, fromCoord[1] = v  — 该节点在面1上的参数坐标
+    gmsh::logger::write(
+      &quot;Node &quot; + std::to_string(nTags[0]) +
+      &quot; at (&quot; + std::to_string(nCoord[0]) + &quot;,&quot; +
+                std::to_string(nCoord[1]) + &quot;,&quot; +
+                std::to_string(nCoord[2]) + &quot;)&quot; +
+      &quot; -&gt; (u=&quot; + std::to_string(fromCoord[0]) +
+      &quot;, v=&quot; + std::to_string(fromCoord[1]) + &quot;)&quot;);
+  }
+</code></pre>
+<p><strong>解释</strong>：<code>getParametrization(dim, tag, coord, parametricCoord)</code> 实现物理坐标到参数坐标的反向映射。输入物理坐标 <code>(x,y,z)</code>，输出参数坐标 <code>(u,v)</code>（曲面）或 <code>t</code>（曲线）。这个方向通常比正向映射（参数→物理）更复杂，因为需要求解非线性反问题。对于距离曲面较远的点，可能无法正确映射或返回近似值。</p>
+<p><strong>CAE 应用</strong>：在接触分析中，从节点（slave node）投影到主面（master surface）上以计算穿透量和接触力时，需要反向参数化。</p>
+<hr />
+<h3 id="25312-gui">25.3.12 GUI 启动</h3>
+<pre><code class="language-cpp">  // ---- 12. 启动 GUI 查看结果 ----
+  std::set&lt;std::string&gt; args(argv, argv + argc);
+  if(!args.count(&quot;-nopopup&quot;)) gmsh::fltk::run();
+
+  gmsh::finalize();
+  return 0;
+}
+</code></pre>
+<p><strong>解释</strong>：<code>-nopopup</code> 命令行参数支持无头批处理模式。在 GUI 模式下，法向量视图（箭头）和曲率视图（着色点云）可叠加在网格上查看。</p>
+<hr />
+<h2 id="254">25.4 完整可运行代码</h2>
+<pre><code class="language-cpp">// =============================================================================
+//  Chapter 25: Geometry Evaluation — Parametrization, Normals &amp; Curvatures
+//
+//  功能: 演示 Gmsh 几何求值 API 的完整用法，包括：
+//        曲面参数化、法向量计算、主曲率提取、曲线求值与导数、
+//        曲线-曲面重参数化、物理-参数坐标双向映射
+//
+//  编译 (需链接 Gmsh SDK):
+//    g++ -o ch25_geometry_eval ch25_geometry_eval.cpp -lgmsh -std=c++11
+//
+//  运行:
+//    ./ch25_geometry_eval              (带 GUI 交互查看法向量和曲率)
+//    ./ch25_geometry_eval -nopopup     (仅运行计算，不启动 GUI)
+// =============================================================================
+
+#include &lt;set&gt;
+#include &lt;vector&gt;
+#include &lt;cmath&gt;
+#include &lt;string&gt;
+#include &lt;algorithm&gt;
+#include &lt;gmsh.h&gt;
+
+int main(int argc, char **argv)
+{
+  gmsh::initialize(argc, argv);
+  gmsh::model::add(&quot;ch25&quot;);
+
+  // ===== 1. 创建球与立方体的融合几何 =====
+  int s = gmsh::model::occ::addSphere(0, 0, 0, 1);
+  int b = gmsh::model::occ::addBox(0.5, 0, 0, 1.3, 2, 3);
+  std::vector&lt;std::pair&lt;int, int&gt;&gt; ov;
+  std::vector&lt;std::vector&lt;std::pair&lt;int, int&gt;&gt;&gt; ovv;
+  gmsh::model::occ::fuse({{3, s}}, {{3, b}}, ov, ovv);
+  gmsh::model::occ::synchronize();
+
+  // 生成二维面网格
+  gmsh::model::mesh::generate(2);
+
+  // ===== 2. 遍历所有面，获取法向量和主曲率 =====
+  std::vector&lt;std::pair&lt;int, int&gt;&gt; entities;
+  gmsh::model::getEntities(entities, 2);
+
+  std::vector&lt;double&gt; allNormals;
+  std::vector&lt;double&gt; allCurvatures;
+
+  for(auto e : entities) {
+    int surfaceTag = e.second;
+
+    // 获取面上的网格节点（含边界节点重参数化）
+    std::vector&lt;std::size_t&gt; nodeTags;
+    std::vector&lt;double&gt; coord, paramCoord;
+    gmsh::model::mesh::getNodes(nodeTags, coord, paramCoord,
+                                2, surfaceTag, true);
+
+    // 获取精确法向量 (tag 仅用面标签，非 (dim,tag) 对)
+    std::vector&lt;double&gt; normals;
+    gmsh::model::getNormal(surfaceTag, paramCoord, normals);
+
+    // 获取主曲率 (tag 仅用面标签)
+    std::vector&lt;double&gt; curvMax, curvMin, dirMax, dirMin;
+    gmsh::model::getPrincipalCurvatures(surfaceTag, paramCoord,
+                                         curvMax, curvMin, dirMax, dirMin);
+
+    // 整理为后处理视图数据格式
+    for(std::size_t i = 0; i &lt; coord.size(); i += 3) {
+      std::size_t idx = i / 3;
+      // VP: Vector on Points (6 doubles per point)
+      allNormals.insert(allNormals.end(), {
+          coord[i], coord[i+1], coord[i+2],
+          normals[i], normals[i+1], normals[i+2]
+      });
+      // SP: Scalar on Points (4 doubles per point)
+      allCurvatures.insert(allCurvatures.end(), {
+          coord[i], coord[i+1], coord[i+2],
+          curvMax[idx]
+      });
+    }
+  }
+
+  // ===== 3. 创建后处理视图 =====
+  int vn = gmsh::view::add(&quot;Surface normals&quot;);
+  gmsh::view::addListData(vn, &quot;VP&quot;, allNormals.size() / 6, allNormals);
+  gmsh::view::option::setNumber(vn, &quot;ShowScale&quot;, 0);
+  gmsh::view::option::setNumber(vn, &quot;ArrowSizeMax&quot;, 30);
+  gmsh::view::option::setNumber(vn, &quot;ColormapNumber&quot;, 19);
+
+  int vc = gmsh::view::add(&quot;Principal curvatures (max)&quot;);
+  gmsh::view::addListData(vc, &quot;SP&quot;, allCurvatures.size() / 4, allCurvatures);
+  gmsh::view::option::setNumber(vc, &quot;ShowScale&quot;, 1);
+  gmsh::view::option::setNumber(vc, &quot;IntervalsType&quot;, 2);
+
+  // ===== 4. 曲线参数化边界与等距采样求值 =====
+  std::vector&lt;double&gt; tMin, tMax;
+  gmsh::model::getParametrizationBounds(1, 5, tMin, tMax);
+
+  int N = 15;
+  std::vector&lt;double&gt; tSamples, xyz1;
+  for(int i = 0; i &lt; N; i++) {
+    double t = tMin[0] + i * (tMax[0] - tMin[0]) / (N - 1);
+    tSamples.push_back(t);
+  }
+  gmsh::model::getValue(1, 5, tSamples, xyz1);
+
+  // ===== 5. 曲线切向量与二阶导数 =====
+  std::vector&lt;double&gt; deriv1, deriv2;
+  gmsh::model::getDerivative(1, 5, tSamples, deriv1);
+  gmsh::model::getSecondDerivative(1, 5, tSamples, deriv2);
+
+  // 计算第一个采样点的 Frenet 曲率
+  double dx = deriv1[0], dy = deriv1[1], dz = deriv1[2];
+  double ds = std::sqrt(dx*dx + dy*dy + dz*dz);
+  double ddx = deriv2[0], ddy = deriv2[1], ddz = deriv2[2];
+  double cx = dy*ddz - dz*ddy;
+  double cy = dz*ddx - dx*ddz;
+  double cz = dx*ddy - dy*ddx;
+  double kappa = std::sqrt(cx*cx + cy*cy + cz*cz) / (ds * ds * ds);
+  gmsh::logger::write(&quot;Curve 5 curvature at first sample: &quot; +
+                       std::to_string(kappa));
+
+  // ===== 6. 曲线在曲面上的重参数化与一致性验证 =====
+  std::vector&lt;double&gt; uvOnSurface, xyz2;
+  gmsh::model::reparametrizeOnSurface(1, 5, tSamples, 1, uvOnSurface);
+  gmsh::model::getValue(2, 1, uvOnSurface, xyz2);
+
+  double maxDiff = 0.0;
+  for(std::size_t i = 0; i &lt; xyz1.size(); i++)
+    maxDiff = std::max(maxDiff, std::abs(xyz1[i] - xyz2[i]));
+  if(maxDiff &lt; 1e-12)
+    gmsh::logger::write(&quot;Curve &amp; surface evaluation match! (max diff &lt; 1e-12)&quot;);
+  else
+    gmsh::logger::write(&quot;Mismatch: max diff = &quot; + std::to_string(maxDiff),
+                        &quot;warning&quot;);
+
+  // ===== 7. 物理坐标 -&gt; 参数坐标的反向映射 =====
+  std::vector&lt;std::size_t&gt; nTags;
+  std::vector&lt;double&gt; nCoord, nParam;
+  gmsh::model::mesh::getNodes(nTags, nCoord, nParam, 2, 1, true);
+  if(nCoord.size() &gt;= 3) {
+    std::vector&lt;double&gt; singleCoord = {nCoord[0], nCoord[1], nCoord[2]};
+    std::vector&lt;double&gt; fromCoord;
+    gmsh::model::getParametrization(2, 1, singleCoord, fromCoord);
+    gmsh::logger::write(
+      &quot;Node &quot; + std::to_string(nTags[0]) +
+      &quot; -&gt; (u=&quot; + std::to_string(fromCoord[0]) +
+      &quot;, v=&quot; + std::to_string(fromCoord[1]) + &quot;)&quot;);
+  }
+
+  // ===== 8. 启动 GUI =====
+  std::set&lt;std::string&gt; args(argv, argv + argc);
+  if(!args.count(&quot;-nopopup&quot;)) gmsh::fltk::run();
+
+  gmsh::finalize();
+  return 0;
+}
+</code></pre>
+<hr />
+<h2 id="255-api">25.5 关键 API 速查表</h2>
+<h3 id="2551-surface-evaluation">25.5.1 曲面求值（Surface Evaluation）</h3>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>签名</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>getParametrization</code></td>
+<td><code>(dim, tag, coord, paramCoord)</code></td>
+<td>物理坐标 -&gt; 参数坐标。dim=1 返回 <code>[t]</code>，dim=2 返回 <code>[u,v]</code></td>
+</tr>
+<tr>
+<td><code>getParametrizationBounds</code></td>
+<td><code>(dim, tag, min, max)</code></td>
+<td>获取参数域范围。dim=1: <code>min</code>/<code>max</code> 各 1 个 t 值；dim=2: 各 2 个值 <code>[u,v]</code></td>
+</tr>
+<tr>
+<td><code>getValue</code></td>
+<td><code>(dim, tag, paramCoord, coord)</code></td>
+<td>参数坐标 -&gt; 物理坐标。dim=1: <code>paramCoord=[t1,t2,...]</code>；dim=2: <code>paramCoord=[u1,v1,u2,v2,...]</code></td>
+</tr>
+<tr>
+<td><code>getNormal</code></td>
+<td><code>(tag, paramCoord, normals)</code></td>
+<td>获取曲面法向量。<strong>tag 仅为面标签（整数），不使用 <code>(dim,tag)</code> 对</strong></td>
+</tr>
+<tr>
+<td><code>getCurvature</code></td>
+<td><code>(dim, tag, paramCoord, curvatures)</code></td>
+<td>获取最大曲率（单值/点）。<strong>使用 <code>(dim,tag)</code> 对</strong></td>
+</tr>
+<tr>
+<td><code>getPrincipalCurvatures</code></td>
+<td><code>(tag, paramCoord, curvMax, curvMin, dirMax, dirMin)</code></td>
+<td>获取两个主曲率及其 3D 方向向量。<strong>tag 仅为面标签</strong></td>
+</tr>
+<tr>
+<td><code>reparametrizeOnSurface</code></td>
+<td><code>(dim, tag, paramCoord, surfaceTag, surfaceParamCoord)</code></td>
+<td>将边界实体（曲线/点）的参数坐标转换到目标曲面的参数坐标</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2552-curve-evaluation">25.5.2 曲线求值（Curve Evaluation）</h3>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>签名</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>getValue</code></td>
+<td><code>(1, tag, t, xyz)</code></td>
+<td>曲线在参数 t 处的三维坐标。t 向量: <code>[t1,t2,...]</code>，xyz: <code>[x1,y1,z1,...]</code></td>
+</tr>
+<tr>
+<td><code>getDerivative</code></td>
+<td><code>(1, tag, t, deriv)</code></td>
+<td>一阶参数导数（切向量方向）。deriv: <code>[dx/dt, dy/dt, dz/dt, ...]</code></td>
+</tr>
+<tr>
+<td><code>getSecondDerivative</code></td>
+<td><code>(1, tag, t, deriv2)</code></td>
+<td>二阶参数导数。deriv2: <code>[d2x/dt2, d2y/dt2, d2z/dt2, ...]</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="2553-surface-evaluation-dim2">25.5.3 曲面求值（Surface Evaluation）— dim=2 时的导数</h3>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>输出布局（每点）</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>getDerivative</code></td>
+<td><code>[dx/du, dy/du, dz/du, dx/dv, dy/dv, dz/dv]</code></td>
+<td>6 个分量/点：对 u 和对 v 的偏导数</td>
+</tr>
+<tr>
+<td><code>getSecondDerivative</code></td>
+<td><code>[d2x/du2, d2y/du2, d2z/du2, d2x/dv2, d2y/dv2, d2z/dv2, d2x/dudv, d2y/dudv, d2z/dudv]</code></td>
+<td>9 个分量/点：二阶纯导数和混合偏导数</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2554-api">25.5.4 API 签名风格对比（重要）</h3>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>实体标识方式</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>getNormal</code></td>
+<td>仅 <code>tag</code>（面标签）</td>
+<td><code>getNormal(5, param, norm)</code></td>
+</tr>
+<tr>
+<td><code>getPrincipalCurvatures</code></td>
+<td>仅 <code>tag</code>（面标签）</td>
+<td><code>getPrincipalCurvatures(5, param, ...)</code></td>
+</tr>
+<tr>
+<td><code>getCurvature</code></td>
+<td><code>(dim, tag)</code> 对</td>
+<td><code>getCurvature(2, 5, param, curv)</code></td>
+</tr>
+<tr>
+<td><code>getValue</code></td>
+<td><code>(dim, tag)</code> 对</td>
+<td><code>getValue(2, 5, paramCoord, xyz)</code></td>
+</tr>
+<tr>
+<td><code>getDerivative</code></td>
+<td><code>(dim, tag)</code> 对</td>
+<td><code>getDerivative(1, 5, t, deriv)</code></td>
+</tr>
+<tr>
+<td><code>getSecondDerivative</code></td>
+<td><code>(dim, tag)</code> 对</td>
+<td><code>getSecondDerivative(1, 5, t, deriv2)</code></td>
+</tr>
+<tr>
+<td><code>getParametrization</code></td>
+<td><code>(dim, tag)</code> 对</td>
+<td><code>getParametrization(2, 5, coord, param)</code></td>
+</tr>
+<tr>
+<td><code>getParametrizationBounds</code></td>
+<td><code>(dim, tag)</code> 对</td>
+<td><code>getParametrizationBounds(1, 5, min, max)</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="256">25.6 注意事项与最佳实践</h2>
+<ol>
+<li>
+<p><strong><code>getNormal</code> vs <code>getCurvature</code> 的签名不一致</strong>：<code>getNormal(tag, ...)</code> 的第一个参数是面标签（int），而 <code>getCurvature(dim, tag, ...)</code> 的第一个参数是维度（dim）。这是 Gmsh API 的历史遗留问题，混用时极易出错。建议在代码中以注释标注（如本节示例），或封装一层统一接口。</p>
+</li>
+<li>
+<p><strong>边界节点的参数坐标</strong>：<code>mesh::getNodes(..., includeBoundary=true)</code> 时，边界节点会被重新参数化（reparametrized）到当前面上。相邻两个面对同一边界节点的参数化结果通常不同（因为参数域不同），这是正常现象。</p>
+</li>
+<li>
+<p><strong>getValue 的 dim=0 特殊情况</strong>：对于点实体（dim=0），<code>getValue(0, tag, {}, coord)</code> 的 <code>parametricCoord</code> 参数为空向量 <code>{}</code>，因为点没有参数坐标。</p>
+</li>
+<li>
+<p><strong>getNormal 返回的是 CAD 精确法向</strong>：它不是从网格三角面片插值得到的近似法向，而是直接从 CAD B-rep 几何求值。因此即使在非常粗糙的网格上，法向量也是精确的。在压力载荷施加时应优先使用 <code>getNormal()</code> 而非从网格计算法向。</p>
+</li>
+<li>
+<p><strong>主曲率与主方向的正交性</strong>：<code>getPrincipalCurvatures</code> 返回的两个主方向在连续几何上严格正交。但在退化曲面（如球面极点）附近，方向可能不稳定——这是微分几何的固有特性（脐点处所有方向都是主方向）。</p>
+</li>
+<li>
+<p><strong>getDerivative 返回的是参数导数，非弧长导数</strong>：切向量 <code>C'(t)</code> 的模长通常不等于 1。需要单位切向量时，应除以 <code>|C'(t)|</code>。同理，Frenet 曲率需要额外计算 <code>|C' x C''| / |C'|^3</code>。</p>
+</li>
+<li>
+<p><strong>reparametrizeOnSurface 的可用性</strong>：该功能仅对部分 CAD 内核可用（特别是 OpenCASCADE）。使用前应检查返回值是否为空。对于不可用的实体，备选方案是通过投影或最近点搜索近似替代。</p>
+</li>
+<li>
+<p><strong>物理坐标反向映射的收敛性</strong>：<code>getParametrization()</code> 通过 Newton 迭代求解非线性反问题。如果提供的物理坐标离曲面太远（超出 CAD 容差），迭代可能失败或返回无意义值。建议在调用前确保坐标确实在面上（可通过 <code>isInside()</code> 预检）。</p>
+</li>
+<li>
+<p><strong>网格节点的参数坐标自动存储</strong>：当通过 <code>mesh::generate()</code> 生成网格后，每个网格节点自动存储了其在所属几何实体上的参数坐标。这些坐标可通过 <code>mesh::getNodes()</code> 获取，无需再次调用 <code>getParametrization()</code>（除非节点被移动或修改）。</p>
+</li>
+<li>
+<p><strong>后处理视图的性能</strong>：当网格节点数很大（如数百万）时，将所有法向量打包为单个 list-based view 可能耗尽内存。可考虑分批创建视图、使用 model-based view（依赖网格插值），或仅采样显示（每隔 N 个点取一个）。</p>
+</li>
+</ol>
+<hr />
+<h2 id="257">25.7 本章小结</h2>
+<ul>
+<li>曲面参数化 <code>(u,v) &lt;-&gt; (x,y,z)</code> 是 CAD 内核的核心功能，Gmsh 通过 <code>getParametrization()</code>（物理-&gt;参数）和 <code>getValue()</code>（参数-&gt;物理）实现双向映射，<code>getParametrizationBounds()</code> 提供定义域边界。</li>
+<li><strong><code>getNormal(tag, ...)</code> 以面标签（int）为第一参数</strong>，返回 CAD 精确单位法向量，与 <code>getCurvature(dim, tag, ...)</code> 的 <code>(dim,tag)</code> 签名不一致，是常见错误来源。</li>
+<li><code>getPrincipalCurvatures()</code> 在一次调用中返回两个主曲率值及其对应的 3D 主方向向量，是自适应网格细化最重要的几何判据来源。</li>
+<li>曲线求值 API 族（<code>getValue</code>/<code>getDerivative</code>/<code>getSecondDerivative</code>）分别提供位置、切向量和二阶导，可用于 Frenet 曲率计算和局部坐标系建立。</li>
+<li><code>reparametrizeOnSurface()</code> 实现曲线在曲面上的重参数化，多用于验证边界一致性或进行边界约束的坐标转换。</li>
+<li>所有几何求值 API 都是直接从 CAD B-rep 求值，精度独立于网格密度——这是 Gmsh 作为几何感知（geometry-aware）前处理工具的核心优势。</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

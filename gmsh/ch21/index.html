@@ -1,0 +1,3414 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../ch20/">
+      
+      
+        <link rel="next" href="../ch22/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>第21章 网格分区与区域分解 - Echo-b's Tech Notes</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#21-mesh-partitioning" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Echo-b&#39;s Tech Notes" class="md-header__button md-logo" aria-label="Echo-b's Tech Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Echo-b's Tech Notes
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              第21章 网格分区与区域分解
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Echo-b&#39;s Tech Notes" class="md-nav__button md-logo" aria-label="Echo-b's Tech Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Echo-b's Tech Notes
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VTK 教程
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    VTK 教程
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    入门篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    入门篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-01-vtk-overview-and-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第一章 VTK概述与环境搭建
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-02-visualization-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二章 可视化管线
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-03-data-model-basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第三章 数据模型基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-04-geometry-and-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第四章 基本几何体与数据源
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-05-rendering-and-interactor/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第五章 渲染与交互机
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-06-volume1-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第六章 入门篇综合实战——3D几何画廊
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    实战篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    实战篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-07-polydata/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第七章 PolyData详解
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-08-unstructured-grid/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第八章 非结构化网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-09-structured-data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第九章 结构化数据
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-10-data-io/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十章 数据I/O
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-11-common-filters/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十一章 常用过滤器
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-12-color-mapping/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十二章 颜色映射与标量可视化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-13-advanced-rendering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十三章 高级渲染技术
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-14-multi-dataset/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十四章 多个数据集处理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-15-volume2-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十五章 实战篇综合实战——CFD后处理可视化工具
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    进阶篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    进阶篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-16-volume-rendering-basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十六章 体渲染基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-17-volume-rendering-advanced/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十七章 体渲染高级技术
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-18-charts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十八章 2D图表系统
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-19-annotation-and-widgets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十九章 三维标注与交互组件
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-20-custom-interaction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十章 自定义交互与Widget
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-21-qt-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十一章 Qt集成
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-22-smp-parallel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十二章 SMP并行入门
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-23-volume3-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十三章 进阶篇综合实战
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GMSH 教程
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    GMSH 教程
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1" id="__nav_3_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    基础篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    基础篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第1章 Gmsh概述与C++ SDK配置
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第2章 几何基础——点线面曲线环与物理组
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第3章 变换与拉伸几何
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第4章 高级几何构建——内置函数孔洞注释与颜色
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第5章 三维网格控制——尺寸场体孔洞与网格算法
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch06/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第6章 网格控制进阶——Transfinite分布与结构化网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch07/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第7章 背景网格——用已有网格指导网格尺寸
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch08/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第8章 网格尺寸场
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    进阶篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    进阶篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch09/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第9章 四边形网格重组
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch10/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第10章 复合实体——跨面一致网格划分
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch11/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第11章 STL重网格——无CAD模型的表面重构
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch12/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第12章 同调与上同调计算
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch13/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第13章 嵌入实体——在网格中强制生成共形节点
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch14/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第14章 各向异性网格——方向感知的网格生成
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch15/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第15章 周期性网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch16/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第16章 OpenCASCADE内核与构造实体几何
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch17/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第17章 高级实体建模——断面扫掠圆角管道与曲率自适应网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch18/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第18章 STEP导入与几何分割
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    应用篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    应用篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch19/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第19章 后处理视图与动画
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch20/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第20章 后处理插件——视图数据运算与变换
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第21章 网格分区与区域分解
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第21章 网格分区与区域分解
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#211" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.1 学习目标
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#212" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.2 核心概念说明
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="21.2 核心概念说明">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2121" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.2.1 为什么需要网格分区
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2122-partition-entity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.2.2 分区实体（Partition Entity）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2123" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.2.3 分区器对比
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2124" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.2.4 关键分区选项
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#213-c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.3 C++ 代码逐段讲解
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="21.3 C++ 代码逐段讲解">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2131" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.3.1 几何建模与网格生成
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2132-onelab" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.3.2 ONELAB 参数定义
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2133-lambda" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.3.3 分区执行 Lambda
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2134" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.3.4 分区实体信息查询
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2135-gui" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.3.5 GUI 事件循环
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#214" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.4 完整可运行代码
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#215-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.5 关键 API 速查表
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="21.5 关键 API 速查表">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2151" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.5.1 分区执行
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2152" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.5.2 分区实体查询
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2153" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.5.3 分区选项
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2154-metis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.5.4 Metis 精细控制
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2155-simplepartition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.5.5 SimplePartition 插件参数
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2156-onelab" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.5.6 ONELAB 交互
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#216" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.6 注意事项与最佳实践
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch22/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第22章 遍历模型与网格数据——前处理查询API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第23章 离散实体与混合模型——地形网格实战
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch24/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第24章 后处理视图——List-based与Model-based数据导入
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch25/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第25章 几何求值——参数化法向量与曲率
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第26章 积分点雅可比矩阵基函数与内部边面
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#211" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.1 学习目标
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#212" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.2 核心概念说明
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="21.2 核心概念说明">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2121" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.2.1 为什么需要网格分区
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2122-partition-entity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.2.2 分区实体（Partition Entity）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2123" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.2.3 分区器对比
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2124" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.2.4 关键分区选项
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#213-c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.3 C++ 代码逐段讲解
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="21.3 C++ 代码逐段讲解">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2131" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.3.1 几何建模与网格生成
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2132-onelab" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.3.2 ONELAB 参数定义
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2133-lambda" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.3.3 分区执行 Lambda
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2134" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.3.4 分区实体信息查询
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2135-gui" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.3.5 GUI 事件循环
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#214" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.4 完整可运行代码
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#215-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.5 关键 API 速查表
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="21.5 关键 API 速查表">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2151" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.5.1 分区执行
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2152" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.5.2 分区实体查询
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2153" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.5.3 分区选项
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2154-metis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.5.4 Metis 精细控制
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2155-simplepartition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.5.5 SimplePartition 插件参数
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2156-onelab" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.5.6 ONELAB 交互
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#216" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.6 注意事项与最佳实践
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="21-mesh-partitioning">第21章 网格分区（Mesh Partitioning）与区域分解</h1>
+<hr />
+<h2 id="211">21.1 学习目标</h2>
+<ul>
+<li>理解网格分区（Mesh Partitioning）即区域分解（Domain Decomposition）的概念，及其在大规模并行有限元计算中的角色</li>
+<li>掌握 Gmsh 四种分区器的选择与配置：Metis（图分区，默认）、Simple（几何切片）、Shell（内置回退）、Scotch 和 Hilbert（空间填充曲线）</li>
+<li>学会通过 <code>mesh::partition(N)</code> 和 <code>plugin::run("SimplePartition")</code> 执行分区，以及 ONELAB 参数实现交互式分区控制</li>
+<li>理解分区实体（Partition Entity）的概念，掌握 <code>getPartitions()</code> 和 <code>getParent()</code> 查询分区标签与父子关系</li>
+<li>掌握分区网格的导出选项：拓扑构建、Ghost 单元、物理组自动创建、分离文件模式</li>
+</ul>
+<hr />
+<h2 id="212">21.2 核心概念说明</h2>
+<h3 id="2121">21.2.1 为什么需要网格分区</h3>
+<p>在并行有限元计算中，单个网格可能包含数亿个单元，必须拆分为多个子域（subdomain）分发到不同计算节点。<strong>网格分区（Mesh Partitioning）</strong>即区域分解（Domain Decomposition），其目标是：</p>
+<ol>
+<li><strong>负载均衡（Load Balancing）</strong>：各分区包含近似相等的计算代价</li>
+<li><strong>最小通信（Minimal Communication）</strong>：分区间边界面/边数尽可能少</li>
+<li><strong>拓扑完好（Topology Preservation）</strong>：分区边界表示完好，便于施加边界条件</li>
+</ol>
+<pre><code>原始网格（单域）                     分区后（N 个子域）
+┌─────────────────┐              ┌──────┬──────┬──────┐
+│    整体网格      │  ======&gt;    │Part 0│Part 1│Part 2│
+└─────────────────┘  partition   └──────┴──────┴──────┘
+</code></pre>
+<h3 id="2122-partition-entity">21.2.2 分区实体（Partition Entity）</h3>
+<p>Gmsh 分区时<strong>不修改原始网格文件</strong>，而是创建新的<strong>分区实体（Partition Entity）</strong>——一种特殊的离散基本实体（discrete elementary entity）。每个分区实体额外存储：</p>
+<ul>
+<li><strong>分区索引（Partition Index）</strong>：属于哪个分区（从 0 开始）</li>
+<li><strong>父实体标签（Parent Entity Tag）</strong>：指向分区前的原始实体</li>
+</ul>
+<pre><code>原始模型（2 个正方形，分区前）：
+  Surface 1 (dim=2, tag=1)    Surface 2 (dim=2, tag=2)
+
+3 分区后（启用拓扑）：
+  分区 0: 离散面 10 ---parent---&gt; Surface 1 的一部分
+  分区 1: 离散面 11 ---parent---&gt; Surface 1 的一部分 + Surface 2 的一部分
+  分区 2: 离散面 12 ---parent---&gt; Surface 2 的一部分
+         各分区的离散边 ---parent---&gt; 原始边
+</code></pre>
+<p>这种设计使分区后的模型仍然是完整的 B-rep 模型（如果启用 <code>Mesh.PartitionCreateTopology</code>），可继续施加边界条件、定义物理组。</p>
+<h3 id="2123">21.2.3 分区器对比</h3>
+<p>通过选项 <code>Mesh.Partitioner</code> 选择：</p>
+<table>
+<thead>
+<tr>
+<th>值</th>
+<th>分区器</th>
+<th>算法</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td><strong>Simple</strong></td>
+<td>轴对齐几何切片</td>
+<td>规则域、调试</td>
+</tr>
+<tr>
+<td>1</td>
+<td><strong>Metis</strong>（默认）</td>
+<td>图分区（多级递归二分/K-way）</td>
+<td>质量最优，需 METIS 库</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>Shell</strong></td>
+<td>时延定向图分区</td>
+<td>METIS 不可用时的内置回退</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>Scotch</strong></td>
+<td>图分区（PT-Scotch）</td>
+<td>分布式分区</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>Hilbert</strong></td>
+<td>空间填充曲线（SFC）</td>
+<td>超大规模，速度最快</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Metis 细化控制选项</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>默认</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Mesh.MetisAlgorithm</code></td>
+<td>1</td>
+<td>1=递归二分, 2=K-way</td>
+</tr>
+<tr>
+<td><code>Mesh.MetisObjective</code></td>
+<td>1</td>
+<td>1=最小边割, 2=最小通信量</td>
+</tr>
+<tr>
+<td><code>Mesh.PartitionTriWeight</code></td>
+<td>1.0</td>
+<td>三角形单元计算权重</td>
+</tr>
+<tr>
+<td><code>Mesh.PartitionQuadWeight</code></td>
+<td>1.0</td>
+<td>四边形单元计算权重</td>
+</tr>
+<tr>
+<td><code>Mesh.PartitionTetWeight</code></td>
+<td>1.0</td>
+<td>四面体单元计算权重</td>
+</tr>
+<tr>
+<td><code>Mesh.PartitionHexWeight</code></td>
+<td>1.0</td>
+<td>六面体单元计算权重</td>
+</tr>
+</tbody>
+</table>
+<p>通过调整各单元类型权重，可使分区器在负载均衡时考虑不同单元类型的计算代价差异（如六面体计算代价是四面体的 3 倍，则设 <code>HexWeight=3.0</code>）。</p>
+<h3 id="2124">21.2.4 关键分区选项</h3>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>默认</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Mesh.PartitionCreateTopology</code></td>
+<td>1</td>
+<td>为分区实体构建完整 B-rep（面、边、点）</td>
+</tr>
+<tr>
+<td><code>Mesh.PartitionCreateGhostCells</code></td>
+<td>0</td>
+<td>每个分区额外包含一层相邻分区的 Ghost 单元</td>
+</tr>
+<tr>
+<td><code>Mesh.PartitionCreatePhysicals</code></td>
+<td>0</td>
+<td>自动为分区实体创建物理组</td>
+</tr>
+<tr>
+<td><code>Mesh.PartitionOldStyleMsh2</code></td>
+<td>0</td>
+<td>MSH2 兼容（旧格式，不支持分区实体）</td>
+</tr>
+<tr>
+<td><code>Mesh.PartitionSplitMeshFiles</code></td>
+<td>0</td>
+<td>每分区输出独立文件（<code>t21_0.msh</code>, <code>t21_1.msh</code>...）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Ghost 单元</strong>：用于重叠区域分解（如 Schwarz 方法）。每个分区在边界外延一层邻接单元，避免在边界处构造特殊通信模式。非重叠方法（如 PETSc）通常不需要。</p>
+<p><strong>SimplePartition 插件</strong>：通过 <code>plugin::setNumber("SimplePartition", "NumSlicesX/Y/Z", N)</code> 设置各方向切片数，总分区数 = Nx * Ny * Nz。基于坐标而非图算法，速度快但负载均衡质量较差。</p>
+<hr />
+<h2 id="213-c">21.3 C++ 代码逐段讲解</h2>
+<h3 id="2131">21.3.1 几何建模与网格生成</h3>
+<pre><code class="language-cpp">#include &lt;set&gt;
+#include &lt;cmath&gt;
+#include &lt;iostream&gt;
+#include &lt;gmsh.h&gt;
+
+int main(int argc, char **argv)
+{
+  gmsh::initialize(argc, argv);
+  gmsh::model::add(&quot;t21&quot;);
+
+  // 创建两个相邻正方形，通过 fragment 在公共边处缝合
+  gmsh::model::occ::addRectangle(0, 0, 0, 1, 1, 1);
+  gmsh::model::occ::addRectangle(1, 0, 0, 1, 1, 2);
+  std::vector&lt;std::pair&lt;int, int&gt;&gt; ov;
+  std::vector&lt;std::vector&lt;std::pair&lt;int, int&gt;&gt;&gt; ovv;
+  gmsh::model::occ::fragment({{2, 1}}, {{2, 2}}, ov, ovv);
+  gmsh::model::occ::synchronize();
+</code></pre>
+<p><code>addRectangle(x,y,z,dx,dy,tag)</code> 创建二维矩形面。<code>fragment</code> 将两个正方形在相交处共形分割，确保后续网格在公共边上节点一一对应——这是分区前的重要准备。</p>
+<pre><code class="language-cpp">  // 设置网格尺寸并生成网格
+  std::vector&lt;std::pair&lt;int, int&gt;&gt; tmp;
+  gmsh::model::getEntities(tmp, 0);
+  gmsh::model::mesh::setSize(tmp, 0.05);
+
+  gmsh::model::addPhysicalGroup(2, {1}, 100, &quot;Left&quot;);
+  gmsh::model::addPhysicalGroup(2, {2}, 200, &quot;Right&quot;);
+  gmsh::model::mesh::generate(2);
+</code></pre>
+<p>必须先有网格才能分区。<code>getEntities(tmp, 0)</code> 获取所有 0 维实体（点），<code>mesh::setSize</code> 统一设置尺寸 0.05，然后生成二维网格。</p>
+<h3 id="2132-onelab">21.3.2 ONELAB 参数定义</h3>
+<p>ONELAB 是 Gmsh 的交互式参数框架，让用户在 GUI 中实时调整分区设置而无需重新编译：</p>
+<pre><code class="language-cpp">  gmsh::onelab::set(R&quot;( [
+  {
+    &quot;type&quot;:&quot;number&quot;,
+    &quot;name&quot;:&quot;Parameters/0Mesh partitioner&quot;,
+    &quot;values&quot;:[0],
+    &quot;choices&quot;:[0, 1],
+    &quot;valueLabels&quot;:{&quot;Metis&quot;:0, &quot;SimplePartition&quot;:1}
+  },
+  {
+    &quot;type&quot;:&quot;number&quot;,
+    &quot;name&quot;:&quot;Parameters/1Number of partitions&quot;,
+    &quot;values&quot;:[3],
+    &quot;min&quot;:1, &quot;max&quot;:256, &quot;step&quot;:1
+  },
+  {
+    &quot;type&quot;:&quot;number&quot;,
+    &quot;name&quot;:&quot;Parameters/2Create partition topology (BRep)?&quot;,
+    &quot;values&quot;:[1], &quot;choices&quot;:[0, 1]
+  },
+  {
+    &quot;type&quot;:&quot;number&quot;,
+    &quot;name&quot;:&quot;Parameters/3Create ghost cells?&quot;,
+    &quot;values&quot;:[0], &quot;choices&quot;:[0, 1]
+  },
+  {
+    &quot;type&quot;:&quot;number&quot;,
+    &quot;name&quot;:&quot;Parameters/3Create new physical groups?&quot;,
+    &quot;values&quot;:[0], &quot;choices&quot;:[0, 1]
+  },
+  {
+    &quot;type&quot;:&quot;number&quot;,
+    &quot;name&quot;:&quot;Parameters/3Write file to disk?&quot;,
+    &quot;values&quot;:[1], &quot;choices&quot;:[0, 1]
+  },
+  {
+    &quot;type&quot;:&quot;number&quot;,
+    &quot;name&quot;:&quot;Parameters/4Write one file per partition?&quot;,
+    &quot;values&quot;:[0], &quot;choices&quot;:[0, 1]
+  }
+  ] )&quot;);
+</code></pre>
+<p>7 个 ONELAB 参数覆盖了分区器选择、分区数量、拓扑构建、ghost 单元、物理组创建、文件写入和分离文件模式。前缀相同的参数（如 <code>Parameters/3*</code>）在 GUI 中自动分组为同一行。</p>
+<h3 id="2133-lambda">21.3.3 分区执行 Lambda</h3>
+<pre><code class="language-cpp">  auto partitionMesh = []()
+  {
+    std::vector&lt;double&gt; n;
+
+    // 读取 ONELAB 参数并设置 Gmsh 选项
+    gmsh::onelab::getNumber(&quot;Parameters/1Number of partitions&quot;, n);
+    int N = static_cast&lt;int&gt;(n[0]);
+
+    gmsh::onelab::getNumber(&quot;Parameters/2Create partition topology (BRep)?&quot;, n);
+    gmsh::option::setNumber(&quot;Mesh.PartitionCreateTopology&quot;, n[0]);
+
+    gmsh::onelab::getNumber(&quot;Parameters/3Create ghost cells?&quot;, n);
+    gmsh::option::setNumber(&quot;Mesh.PartitionCreateGhostCells&quot;, n[0]);
+
+    gmsh::onelab::getNumber(&quot;Parameters/3Create new physical groups?&quot;, n);
+    gmsh::option::setNumber(&quot;Mesh.PartitionCreatePhysicals&quot;, n[0]);
+
+    gmsh::option::setNumber(&quot;Mesh.PartitionOldStyleMsh2&quot;, 0);
+
+    gmsh::onelab::getNumber(&quot;Parameters/4Write one file per partition?&quot;, n);
+    gmsh::option::setNumber(&quot;Mesh.PartitionSplitMeshFiles&quot;, n[0]);
+</code></pre>
+<p><code>partitionMesh</code> 是一个 lambda 函数，封装整个分区流程。它从 ONELAB 读取用户参数，设置对应的 Gmsh 选项，然后执行分区。当用户修改 GUI 参数并触发 "check" 事件时，该函数被重新调用以重新分区。</p>
+<pre><code class="language-cpp">    // 选择分区器并执行
+    gmsh::onelab::getNumber(&quot;Parameters/0Mesh partitioner&quot;, n);
+    if(n[0] == 0) {
+      gmsh::model::mesh::partition(N);    // Metis 图分区
+    } else {
+      gmsh::plugin::setNumber(&quot;SimplePartition&quot;, &quot;NumSlicesX&quot;, N);
+      gmsh::plugin::setNumber(&quot;SimplePartition&quot;, &quot;NumSlicesY&quot;, 1);
+      gmsh::plugin::setNumber(&quot;SimplePartition&quot;, &quot;NumSlicesZ&quot;, 1);
+      gmsh::plugin::run(&quot;SimplePartition&quot;);   // 几何切片
+    }
+</code></pre>
+<p>两种分区方式：<code>mesh::partition(N)</code> 调用 Metis 图算法（分析单元邻接图找最优割）；<code>plugin::run("SimplePartition")</code> 沿 X 轴均匀切片（NumSlicesY/Z=1 使切片为一维）。</p>
+<pre><code class="language-cpp">    // 写入磁盘
+    gmsh::onelab::getNumber(&quot;Parameters/3Write file to disk?&quot;, n);
+    if(n[0]) gmsh::write(&quot;t21.msh&quot;);
+</code></pre>
+<p>若 <code>Mesh.PartitionSplitMeshFiles=1</code>，<code>write("t21.msh")</code> 会为每个分区生成独立文件：<code>t21_0.msh</code>, <code>t21_1.msh</code> 等。</p>
+<h3 id="2134">21.3.4 分区实体信息查询</h3>
+<pre><code class="language-cpp">    // 遍历所有实体，打印分区信息
+    std::vector&lt;std::pair&lt;int, int&gt;&gt; entities;
+    gmsh::model::getEntities(entities);
+
+    for(auto e : entities) {
+      std::vector&lt;int&gt; partitions;
+      gmsh::model::getPartitions(e.first, e.second, partitions);
+      if(partitions.size()) {
+        std::string type;
+        gmsh::model::getType(e.first, e.second, type);
+        std::cout &lt;&lt; &quot;Entity (&quot; &lt;&lt; e.first &lt;&lt; &quot;,&quot; &lt;&lt; e.second &lt;&lt; &quot;) &quot;
+                  &lt;&lt; &quot;of type &quot; &lt;&lt; type &lt;&lt; &quot;\n&quot;;
+        std::cout &lt;&lt; &quot; - Partition(s):&quot;;
+        for(auto p : partitions) std::cout &lt;&lt; &quot; &quot; &lt;&lt; p;
+        std::cout &lt;&lt; &quot;\n&quot;;
+
+        int pdim, ptag;
+        gmsh::model::getParent(e.first, e.second, pdim, ptag);
+        std::cout &lt;&lt; &quot; - Parent: (&quot; &lt;&lt; pdim &lt;&lt; &quot;,&quot; &lt;&lt; ptag &lt;&lt; &quot;)\n&quot;;
+
+        std::vector&lt;std::pair&lt;int, int&gt;&gt; bnd;
+        gmsh::model::getBoundary({e}, bnd);
+        std::cout &lt;&lt; &quot; - Boundary:&quot;;
+        for(auto b : bnd)
+          std::cout &lt;&lt; &quot; (&quot; &lt;&lt; b.first &lt;&lt; &quot;,&quot; &lt;&lt; b.second &lt;&lt; &quot;)&quot;;
+        std::cout &lt;&lt; &quot;\n&quot;;
+      }
+    }
+  };
+</code></pre>
+<p>三个关键 API：
+- <code>getPartitions(dim, tag, out)</code>：返回实体所属分区索引（空 = 非分区实体）
+- <code>getParent(dim, tag, parentDim, parentTag)</code>：追溯分区实体的父实体
+- <code>getBoundary({e}, bnd)</code>：获取实体边界（分区实体的边界也是分区实体）</p>
+<p>输出示例（3 分区，启用拓扑）：</p>
+<pre><code>Entity (2,10) of type Discrete Surface
+ - Partition(s): 0
+ - Parent: (2,1)
+ - Boundary: (1,30) (1,31) (1,32) (1,33)
+</code></pre>
+<p>"Discrete Surface" 说明分区实体是离散面——分区操作创建的是离散实体，不存储参数化几何。</p>
+<h3 id="2135-gui">21.3.5 GUI 事件循环</h3>
+<pre><code class="language-cpp">  partitionMesh();  // 首次执行
+
+  // ONELAB check 事件回调：参数变更后重新分区
+  auto checkForEvent = [=]() -&gt; bool {
+    std::vector&lt;std::string&gt; action;
+    gmsh::onelab::getString(&quot;ONELAB/Action&quot;, action);
+    if(action.size() &amp;&amp; action[0] == &quot;check&quot;) {
+      gmsh::onelab::setString(&quot;ONELAB/Action&quot;, {&quot;&quot;});
+      partitionMesh();
+      gmsh::graphics::draw();
+    }
+    return true;
+  };
+
+  std::set&lt;std::string&gt; args(argv, argv + argc);
+  if(!args.count(&quot;-nopopup&quot;)) {
+    gmsh::fltk::initialize();
+    while(gmsh::fltk::isAvailable() &amp;&amp; checkForEvent())
+      gmsh::fltk::wait();
+  }
+
+  gmsh::finalize();
+  return 0;
+}
+</code></pre>
+<p>ONELAB 交互机制：用户修改参数后，<code>ONELAB/Action</code> 被设为 <code>"check"</code>。<code>checkForEvent</code> 检测到后调用 <code>partitionMesh()</code> 重新分区并刷新显示。支持 <code>-nopopup</code> 命令行参数跳过 GUI。</p>
+<hr />
+<h2 id="214">21.4 完整可运行代码</h2>
+<pre><code class="language-cpp">// ch21_mesh_partitioning.cpp — 网格分区（区域分解）用于并行有限元
+// 编译: g++ -o ch21_mesh_partitioning ch21_mesh_partitioning.cpp -lgmsh
+#include &lt;set&gt;
+#include &lt;cmath&gt;
+#include &lt;iostream&gt;
+#include &lt;gmsh.h&gt;
+
+int main(int argc, char **argv)
+{
+    gmsh::initialize(argc, argv);
+    gmsh::model::add(&quot;ch21&quot;);
+
+    // ---- 1. 创建几何：两个相邻正方形 ----
+    gmsh::model::occ::addRectangle(0, 0, 0, 1, 1, 1);
+    gmsh::model::occ::addRectangle(1, 0, 0, 1, 1, 2);
+
+    // ---- 2. 共形布尔分片：缝合公共边 ----
+    std::vector&lt;std::pair&lt;int, int&gt;&gt; ov;
+    std::vector&lt;std::vector&lt;std::pair&lt;int, int&gt;&gt;&gt; ovv;
+    gmsh::model::occ::fragment({{2, 1}}, {{2, 2}}, ov, ovv);
+    gmsh::model::occ::synchronize();
+
+    // ---- 3. 设置网格尺寸并生成 ----
+    std::vector&lt;std::pair&lt;int, int&gt;&gt; tmp;
+    gmsh::model::getEntities(tmp, 0);
+    gmsh::model::mesh::setSize(tmp, 0.05);
+
+    gmsh::model::addPhysicalGroup(2, {1}, 100, &quot;Left&quot;);
+    gmsh::model::addPhysicalGroup(2, {2}, 200, &quot;Right&quot;);
+    gmsh::model::mesh::generate(2);
+
+    // ---- 4. ONELAB 参数定义 ----
+    gmsh::onelab::set(R&quot;( [
+    {
+      &quot;type&quot;:&quot;number&quot;,
+      &quot;name&quot;:&quot;Parameters/0Mesh partitioner&quot;,
+      &quot;values&quot;:[0],
+      &quot;choices&quot;:[0, 1],
+      &quot;valueLabels&quot;:{&quot;Metis&quot;:0, &quot;SimplePartition&quot;:1}
+    },
+    {
+      &quot;type&quot;:&quot;number&quot;,
+      &quot;name&quot;:&quot;Parameters/1Number of partitions&quot;,
+      &quot;values&quot;:[3],
+      &quot;min&quot;:1, &quot;max&quot;:256, &quot;step&quot;:1
+    },
+    {
+      &quot;type&quot;:&quot;number&quot;,
+      &quot;name&quot;:&quot;Parameters/2Create partition topology (BRep)?&quot;,
+      &quot;values&quot;:[1], &quot;choices&quot;:[0, 1]
+    },
+    {
+      &quot;type&quot;:&quot;number&quot;,
+      &quot;name&quot;:&quot;Parameters/3Create ghost cells?&quot;,
+      &quot;values&quot;:[0], &quot;choices&quot;:[0, 1]
+    },
+    {
+      &quot;type&quot;:&quot;number&quot;,
+      &quot;name&quot;:&quot;Parameters/3Create new physical groups?&quot;,
+      &quot;values&quot;:[0], &quot;choices&quot;:[0, 1]
+    },
+    {
+      &quot;type&quot;:&quot;number&quot;,
+      &quot;name&quot;:&quot;Parameters/3Write file to disk?&quot;,
+      &quot;values&quot;:[1], &quot;choices&quot;:[0, 1]
+    },
+    {
+      &quot;type&quot;:&quot;number&quot;,
+      &quot;name&quot;:&quot;Parameters/4Write one file per partition?&quot;,
+      &quot;values&quot;:[0], &quot;choices&quot;:[0, 1]
+    }
+    ] )&quot;);
+
+    // ---- 5. 分区执行函数 ----
+    auto partitionMesh = []()
+    {
+        std::vector&lt;double&gt; n;
+
+        gmsh::onelab::getNumber(&quot;Parameters/1Number of partitions&quot;, n);
+        int N = static_cast&lt;int&gt;(n[0]);
+
+        gmsh::onelab::getNumber(&quot;Parameters/2Create partition topology (BRep)?&quot;, n);
+        gmsh::option::setNumber(&quot;Mesh.PartitionCreateTopology&quot;, n[0]);
+
+        gmsh::onelab::getNumber(&quot;Parameters/3Create ghost cells?&quot;, n);
+        gmsh::option::setNumber(&quot;Mesh.PartitionCreateGhostCells&quot;, n[0]);
+
+        gmsh::onelab::getNumber(&quot;Parameters/3Create new physical groups?&quot;, n);
+        gmsh::option::setNumber(&quot;Mesh.PartitionCreatePhysicals&quot;, n[0]);
+
+        gmsh::option::setNumber(&quot;Mesh.PartitionOldStyleMsh2&quot;, 0);
+
+        gmsh::onelab::getNumber(&quot;Parameters/4Write one file per partition?&quot;, n);
+        gmsh::option::setNumber(&quot;Mesh.PartitionSplitMeshFiles&quot;, n[0]);
+
+        gmsh::onelab::getNumber(&quot;Parameters/0Mesh partitioner&quot;, n);
+        if(n[0] == 0) {
+            gmsh::model::mesh::partition(N);
+        } else {
+            gmsh::plugin::setNumber(&quot;SimplePartition&quot;, &quot;NumSlicesX&quot;, N);
+            gmsh::plugin::setNumber(&quot;SimplePartition&quot;, &quot;NumSlicesY&quot;, 1);
+            gmsh::plugin::setNumber(&quot;SimplePartition&quot;, &quot;NumSlicesZ&quot;, 1);
+            gmsh::plugin::run(&quot;SimplePartition&quot;);
+        }
+
+        gmsh::onelab::getNumber(&quot;Parameters/3Write file to disk?&quot;, n);
+        if(n[0]) gmsh::write(&quot;t21.msh&quot;);
+
+        // 查询并打印分区实体信息
+        std::vector&lt;std::pair&lt;int, int&gt;&gt; entities;
+        gmsh::model::getEntities(entities);
+        for(auto e : entities) {
+            std::vector&lt;int&gt; partitions;
+            gmsh::model::getPartitions(e.first, e.second, partitions);
+            if(partitions.size()) {
+                std::string type;
+                gmsh::model::getType(e.first, e.second, type);
+                std::cout &lt;&lt; &quot;Entity (&quot; &lt;&lt; e.first &lt;&lt; &quot;,&quot; &lt;&lt; e.second &lt;&lt; &quot;) &quot;
+                          &lt;&lt; &quot;of type &quot; &lt;&lt; type &lt;&lt; &quot;\n&quot;;
+                std::cout &lt;&lt; &quot; - Partition(s):&quot;;
+                for(auto p : partitions) std::cout &lt;&lt; &quot; &quot; &lt;&lt; p;
+                std::cout &lt;&lt; &quot;\n&quot;;
+
+                int pdim, ptag;
+                gmsh::model::getParent(e.first, e.second, pdim, ptag);
+                std::cout &lt;&lt; &quot; - Parent: (&quot; &lt;&lt; pdim &lt;&lt; &quot;,&quot; &lt;&lt; ptag &lt;&lt; &quot;)\n&quot;;
+
+                std::vector&lt;std::pair&lt;int, int&gt;&gt; bnd;
+                gmsh::model::getBoundary({e}, bnd);
+                std::cout &lt;&lt; &quot; - Boundary:&quot;;
+                for(auto b : bnd)
+                    std::cout &lt;&lt; &quot; (&quot; &lt;&lt; b.first &lt;&lt; &quot;,&quot; &lt;&lt; b.second &lt;&lt; &quot;)&quot;;
+                std::cout &lt;&lt; &quot;\n&quot;;
+            }
+        }
+    };
+
+    // ---- 6. 首次分区 ----
+    partitionMesh();
+
+    // ---- 7. GUI 事件循环 ----
+    auto checkForEvent = [=]() -&gt; bool {
+        std::vector&lt;std::string&gt; action;
+        gmsh::onelab::getString(&quot;ONELAB/Action&quot;, action);
+        if(action.size() &amp;&amp; action[0] == &quot;check&quot;) {
+            gmsh::onelab::setString(&quot;ONELAB/Action&quot;, {&quot;&quot;});
+            partitionMesh();
+            gmsh::graphics::draw();
+        }
+        return true;
+    };
+
+    std::set&lt;std::string&gt; args(argv, argv + argc);
+    if(!args.count(&quot;-nopopup&quot;)) {
+        gmsh::fltk::initialize();
+        while(gmsh::fltk::isAvailable() &amp;&amp; checkForEvent())
+            gmsh::fltk::wait();
+    }
+
+    gmsh::finalize();
+    return 0;
+}
+</code></pre>
+<hr />
+<h2 id="215-api">21.5 关键 API 速查表</h2>
+<h3 id="2151">21.5.1 分区执行</h3>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gmsh::model::mesh::partition(N)</code></td>
+<td>使用当前分区器（Metis/Scotch/Shell/Hilbert）划分 N 个分区</td>
+</tr>
+<tr>
+<td><code>gmsh::plugin::run("SimplePartition")</code></td>
+<td>执行 SimplePartition 插件（需先设置 NumSlicesX/Y/Z）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2152">21.5.2 分区实体查询</h3>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gmsh::model::getPartitions(dim, tag, out)</code></td>
+<td>获取实体所属分区索引列表（空 = 非分区实体）</td>
+</tr>
+<tr>
+<td><code>gmsh::model::getParent(dim, tag, parentDim, parentTag)</code></td>
+<td>获取分区实体的父实体维度和标签</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2153">21.5.3 分区选项</h3>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>默认</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Mesh.Partitioner</code></td>
+<td>1</td>
+<td>0=Simple, 1=Metis, 2=Shell, 3=Scotch, 4=Hilbert</td>
+</tr>
+<tr>
+<td><code>Mesh.PartitionCreateTopology</code></td>
+<td>1</td>
+<td>为分区实体构建 B-rep</td>
+</tr>
+<tr>
+<td><code>Mesh.PartitionCreateGhostCells</code></td>
+<td>0</td>
+<td>创建一层 Ghost 单元</td>
+</tr>
+<tr>
+<td><code>Mesh.PartitionCreatePhysicals</code></td>
+<td>0</td>
+<td>自动为分区实体创建物理组</td>
+</tr>
+<tr>
+<td><code>Mesh.PartitionOldStyleMsh2</code></td>
+<td>0</td>
+<td>MSH2 兼容模式</td>
+</tr>
+<tr>
+<td><code>Mesh.PartitionSplitMeshFiles</code></td>
+<td>0</td>
+<td>每分区输出独立文件</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2154-metis">21.5.4 Metis 精细控制</h3>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>默认</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Mesh.MetisAlgorithm</code></td>
+<td>1</td>
+<td>1=递归二分, 2=K-way</td>
+</tr>
+<tr>
+<td><code>Mesh.MetisObjective</code></td>
+<td>1</td>
+<td>1=最小边割, 2=最小通信量</td>
+</tr>
+<tr>
+<td><code>Mesh.PartitionTriWeight</code></td>
+<td>1.0</td>
+<td>三角形权重</td>
+</tr>
+<tr>
+<td><code>Mesh.PartitionQuadWeight</code></td>
+<td>1.0</td>
+<td>四边形权重</td>
+</tr>
+<tr>
+<td><code>Mesh.PartitionTetWeight</code></td>
+<td>1.0</td>
+<td>四面体权重</td>
+</tr>
+<tr>
+<td><code>Mesh.PartitionHexWeight</code></td>
+<td>1.0</td>
+<td>六面体权重</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2155-simplepartition">21.5.5 SimplePartition 插件参数</h3>
+<table>
+<thead>
+<tr>
+<th>API / 参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>plugin::setNumber("SimplePartition", "NumSlicesX", N)</code></td>
+<td>X 方向切片数</td>
+</tr>
+<tr>
+<td><code>plugin::setNumber("SimplePartition", "NumSlicesY", N)</code></td>
+<td>Y 方向切片数</td>
+</tr>
+<tr>
+<td><code>plugin::setNumber("SimplePartition", "NumSlicesZ", N)</code></td>
+<td>Z 方向切片数</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2156-onelab">21.5.6 ONELAB 交互</h3>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>onelab::set(json)</code></td>
+<td>批量定义 ONELAB 参数（类型、范围、默认值）</td>
+</tr>
+<tr>
+<td><code>onelab::getNumber(name, out)</code></td>
+<td>读取数值型参数</td>
+</tr>
+<tr>
+<td><code>onelab::getString(name, out)</code></td>
+<td>读取字符串型参数</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="216">21.6 注意事项与最佳实践</h2>
+<ol>
+<li>
+<p><strong>分区必须在网格生成后</strong>：<code>mesh::partition()</code> 和 <code>plugin::run("SimplePartition")</code> 都要求已有网格。正确顺序：几何建模 -&gt; 网格生成 -&gt; 分区。</p>
+</li>
+<li>
+<p><strong>分区后不重新生成网格</strong>：分区后调用 <code>mesh::generate()</code> 会清除分区信息。分区应是最后一步操作。</p>
+</li>
+<li>
+<p><strong>分区实体是离散实体</strong>：类型字符串以 "Discrete" 开头（如 "Discrete Surface"）。它们直接存储网格数据，无参数化几何表示。</p>
+</li>
+<li>
+<p><strong>SimplePartition 限制</strong>：仅支持轴对齐均匀切片，复杂几何优先使用 Metis。</p>
+</li>
+<li>
+<p><strong>负载均衡与单元权重</strong>：对于各向异性网格（如边界层），调整单元类型权重以真实反映计算代价——例如边界层棱柱单元计算量高，可适当提高 <code>Mesh.PartitionPriWeight</code>。</p>
+</li>
+<li>
+<p><strong>与 MPI 求解器对接</strong>：Gmsh 分区格式与大多数 MPI 并行求解器兼容。工作流：Gmsh 生成网格并分区 -&gt; 导出 MSH4 -&gt; 求解器读取每个分区的节点/单元 -&gt; 各 MPI 进程独立组装求解。</p>
+</li>
+<li>
+<p><strong>分区质量评估</strong>：可以通过 <code>getPartitions()</code> 收集各分区单元数，计算最大/最小单元数比值来评估负载均衡度。理想值趋近于 1.0。</p>
+</li>
+<li>
+<p><strong>扩展阅读</strong>：参考 <code>.geo</code> 版本 <code>t21.geo</code>；扩展教程 <code>x1.cpp</code> 包含更多分区实体的深入操作。</p>
+</li>
+</ol>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

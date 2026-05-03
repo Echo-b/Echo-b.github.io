@@ -1,0 +1,3117 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../ch13/">
+      
+      
+        <link rel="next" href="../ch15/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>第14章 各向异性网格——方向感知的网格生成 - Echo-b's Tech Notes</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#14-anisotropic-mesh" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Echo-b&#39;s Tech Notes" class="md-header__button md-logo" aria-label="Echo-b's Tech Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Echo-b's Tech Notes
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              第14章 各向异性网格——方向感知的网格生成
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Echo-b&#39;s Tech Notes" class="md-nav__button md-logo" aria-label="Echo-b's Tech Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Echo-b's Tech Notes
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VTK 教程
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    VTK 教程
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    入门篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    入门篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-01-vtk-overview-and-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第一章 VTK概述与环境搭建
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-02-visualization-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二章 可视化管线
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-03-data-model-basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第三章 数据模型基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-04-geometry-and-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第四章 基本几何体与数据源
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-05-rendering-and-interactor/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第五章 渲染与交互机
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-06-volume1-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第六章 入门篇综合实战——3D几何画廊
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    实战篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    实战篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-07-polydata/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第七章 PolyData详解
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-08-unstructured-grid/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第八章 非结构化网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-09-structured-data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第九章 结构化数据
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-10-data-io/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十章 数据I/O
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-11-common-filters/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十一章 常用过滤器
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-12-color-mapping/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十二章 颜色映射与标量可视化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-13-advanced-rendering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十三章 高级渲染技术
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-14-multi-dataset/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十四章 多个数据集处理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-15-volume2-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十五章 实战篇综合实战——CFD后处理可视化工具
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    进阶篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    进阶篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-16-volume-rendering-basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十六章 体渲染基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-17-volume-rendering-advanced/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十七章 体渲染高级技术
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-18-charts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十八章 2D图表系统
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-19-annotation-and-widgets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十九章 三维标注与交互组件
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-20-custom-interaction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十章 自定义交互与Widget
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-21-qt-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十一章 Qt集成
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-22-smp-parallel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十二章 SMP并行入门
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-23-volume3-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十三章 进阶篇综合实战
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GMSH 教程
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    GMSH 教程
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1" id="__nav_3_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    基础篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    基础篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第1章 Gmsh概述与C++ SDK配置
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第2章 几何基础——点线面曲线环与物理组
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第3章 变换与拉伸几何
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第4章 高级几何构建——内置函数孔洞注释与颜色
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第5章 三维网格控制——尺寸场体孔洞与网格算法
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch06/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第6章 网格控制进阶——Transfinite分布与结构化网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch07/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第7章 背景网格——用已有网格指导网格尺寸
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch08/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第8章 网格尺寸场
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    进阶篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    进阶篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch09/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第9章 四边形网格重组
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch10/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第10章 复合实体——跨面一致网格划分
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch11/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第11章 STL重网格——无CAD模型的表面重构
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch12/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第12章 同调与上同调计算
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch13/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第13章 嵌入实体——在网格中强制生成共形节点
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第14章 各向异性网格——方向感知的网格生成
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第14章 各向异性网格——方向感知的网格生成
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#141" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.1 学习目标
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#142" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.2 核心概念说明
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="14.2 核心概念说明">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1421-vs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.2.1 各向同性 vs 各向异性网格
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1422-metric-tensor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.2.2 度量张量（Metric Tensor）的几何意义
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1423-bamg" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.2.3 bamg：二维各向异性网格生成器
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1424-pos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.2.4 各向异性背景网格的 .pos 格式
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1425-meshfield" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.2.5 各向异性 mesh::field 定义方式
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1426-78" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.2.6 与第7章和第8章的关系
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#143-c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.3 C++ 代码逐段讲解
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="14.3 C++ 代码逐段讲解">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1431" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.3.1 创建几何体
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1432" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.3.2 加载各向异性背景网格文件
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1433" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.3.3 将视图注册为背景网格
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1434-bamg" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.3.4 配置 bamg 各向异性网格生成器
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1435" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.3.5 生成网格并输出
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#144-cae" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.4 面向 CAE 的应用场景
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="14.4 面向 CAE 的应用场景">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1441-cfd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.4.1 CFD 边界层网格
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1442" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.4.2 激波捕捉
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1443" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.4.3 复合材料界面
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#145" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.5 各向异性背景网格的生成方法
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#146-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.6 关键 API 速查表
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#147" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.7 注意事项与常见问题
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#148" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.8 完整可运行代码
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#149" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.9 本章小结
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch15/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第15章 周期性网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch16/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第16章 OpenCASCADE内核与构造实体几何
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch17/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第17章 高级实体建模——断面扫掠圆角管道与曲率自适应网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch18/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第18章 STEP导入与几何分割
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    应用篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    应用篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch19/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第19章 后处理视图与动画
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch20/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第20章 后处理插件——视图数据运算与变换
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch21/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第21章 网格分区与区域分解
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch22/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第22章 遍历模型与网格数据——前处理查询API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第23章 离散实体与混合模型——地形网格实战
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch24/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第24章 后处理视图——List-based与Model-based数据导入
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch25/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第25章 几何求值——参数化法向量与曲率
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第26章 积分点雅可比矩阵基函数与内部边面
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#141" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.1 学习目标
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#142" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.2 核心概念说明
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="14.2 核心概念说明">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1421-vs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.2.1 各向同性 vs 各向异性网格
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1422-metric-tensor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.2.2 度量张量（Metric Tensor）的几何意义
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1423-bamg" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.2.3 bamg：二维各向异性网格生成器
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1424-pos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.2.4 各向异性背景网格的 .pos 格式
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1425-meshfield" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.2.5 各向异性 mesh::field 定义方式
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1426-78" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.2.6 与第7章和第8章的关系
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#143-c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.3 C++ 代码逐段讲解
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="14.3 C++ 代码逐段讲解">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1431" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.3.1 创建几何体
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1432" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.3.2 加载各向异性背景网格文件
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1433" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.3.3 将视图注册为背景网格
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1434-bamg" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.3.4 配置 bamg 各向异性网格生成器
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1435" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.3.5 生成网格并输出
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#144-cae" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.4 面向 CAE 的应用场景
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="14.4 面向 CAE 的应用场景">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1441-cfd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.4.1 CFD 边界层网格
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1442" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.4.2 激波捕捉
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1443" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.4.3 复合材料界面
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#145" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.5 各向异性背景网格的生成方法
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#146-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.6 关键 API 速查表
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#147" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.7 注意事项与常见问题
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#148" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.8 完整可运行代码
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#149" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.9 本章小结
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="14-anisotropic-mesh">第14章 各向异性网格（Anisotropic Mesh）：方向感知的网格生成</h1>
+<hr />
+<h2 id="141">14.1 学习目标</h2>
+<ul>
+<li>理解各向同性网格（Isotropic Mesh）与各向异性网格（Anisotropic Mesh）的本质区别：标量尺寸 vs 张量度量（metric tensor）</li>
+<li>掌握通过 <code>merge()</code> 加载 <code>.pos</code> 文件作为各向异性背景网格的方法，理解 <code>TT</code>（张量三角形）格式中度量张量的含义</li>
+<li>学会使用 bamg（Bidimensional Anisotropic Mesh Generator）作为二维各向异性网格生成器，包括 <code>Mesh.Algorithm=7</code>、<code>Mesh.SmoothRatio</code>、<code>Mesh.AnisoMax</code> 等关键选项</li>
+<li>理解各向异性网格在 CAE 中的典型应用场景：CFD 边界层网格（壁面法向加密、流向稀疏）、激波捕捉、复合材料界面</li>
+<li>建立本章与第7章（背景网格）、第8章（尺寸场）的知识联系——各向异性背景网格是标量背景网格的张量推广</li>
+</ul>
+<hr />
+<h2 id="142">14.2 核心概念说明</h2>
+<h3 id="1421-vs">14.2.1 各向同性 vs 各向异性网格</h3>
+<p>在前面的章节中，我们通过点级 <code>lc</code>、标量背景网格（第7章）、尺寸场（第8章）控制的网格都是<strong>各向同性（Isotropic）</strong>的。这意味着在空间的任意一点，网格尺寸在所有方向上都相同——单元是"正三角形"（2D）或"正四面体"（3D），没有方向偏好。</p>
+<p><strong>各向异性（Anisotropic）</strong>网格则不同：在空间中的每一点，网格尺寸是一个<strong>方向相关的量</strong>。不同方向允许不同的网格边长。例如，在 CFD 壁面附近：
+- 垂直于壁面的方向需要极细的网格（捕捉边界层速度梯度）
+- 平行于壁面的方向可以用较粗的网格（流向变化缓慢）</p>
+<p>这种方向依赖性无法用单一的标量值描述，而需要一个 <strong>2x2（二维）或 3x3（三维）对称正定的度量张量（Metric Tensor）</strong>。</p>
+<table>
+<thead>
+<tr>
+<th>网格类型</th>
+<th>尺寸描述</th>
+<th>单元形状</th>
+<th>典型场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>各向同性（Isotropic）</td>
+<td>标量 <code>h(x,y,z)</code></td>
+<td>正三角形/正四面体</td>
+<td>通用结构分析、无方向偏好的均匀细化</td>
+</tr>
+<tr>
+<td>各向异性（Anisotropic）</td>
+<td>度量张量 <code>M(x,y,z)</code> ∈ R^(dxd)</td>
+<td>拉伸三角形/四面体</td>
+<td>CFD 边界层、激波、复合材料</td>
+</tr>
+</tbody>
+</table>
+<h3 id="1422-metric-tensor">14.2.2 度量张量（Metric Tensor）的几何意义</h3>
+<p>在二维空间中，度量张量 <code>M</code> 是一个 2x2 对称正定矩阵。它可以谱分解为：</p>
+<pre><code>M = R^T * diag(1/h1^2, 1/h2^2) * R
+</code></pre>
+<p>其中：
+- <code>h1</code> 和 <code>h2</code> 是两个正交主方向上的期望网格边长
+- <code>R</code> 是旋转矩阵，描述主方向在空间中的朝向
+- 当 <code>h1 = h2</code> 时，退化为各向同性情况；当 <code>h1 &lt;&lt; h2</code> 时，实现强各向异性（在一个方向上极度加密）</p>
+<p>Gmsh 内部使用该度量张量来计算任意两点之间的各向异性距离，并据此驱动网格生成器构造拉伸单元。</p>
+<h3 id="1423-bamg">14.2.3 bamg：二维各向异性网格生成器</h3>
+<p>Gmsh 内置的默认二维网格生成器 <code>Mesh.Algorithm=6</code>（Frontal-Delaunay）主要面向各向同性网格。对于各向异性二维网格，Gmsh 调用 <strong>bamg</strong>（Bidimensional Anisotropic Mesh Generator），通过设置 <code>Mesh.Algorithm=7</code> 启用。bamg 是一个基于 Delaunay 的各向异性网格生成器，能够根据度量张量场生成高质量的各向异性三角形。</p>
+<p>关键选项：</p>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>含义</th>
+<th>建议值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Mesh.Algorithm</code></td>
+<td>二维网格算法</td>
+<td><code>7</code> = bamg</td>
+</tr>
+<tr>
+<td><code>Mesh.SmoothRatio</code></td>
+<td>平滑比，控制相邻单元尺寸变化的剧烈程度</td>
+<td>1.2 ~ 3.0</td>
+</tr>
+<tr>
+<td><code>Mesh.AnisoMax</code></td>
+<td>最大各向异性比（最长边/最短边）</td>
+<td>100 ~ 10000（视边界层需求）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="1424-pos">14.2.4 各向异性背景网格的 <code>.pos</code> 格式</h3>
+<p>与第7章使用的标量 <code>.pos</code> 格式（<code>ST</code> 标量三角形）不同，各向异性背景网格使用的是 <code>TT</code>（Tensor Triangle，张量三角形）格式：</p>
+<pre><code>View &quot;nodalMetric&quot; {
+TT(x1,y1,z1, x2,y2,z2, x3,y3,z3){m11,m12,m13, m21,m22,m23, m31,m32,m33, ...};
+};
+</code></pre>
+<ul>
+<li>前三个括号：三角形三个顶点的坐标（共9个值）</li>
+<li>花括号内：每个顶点上的 <strong>3x3 度量张量</strong>（对称矩阵，共9个值），三个顶点共27个值</li>
+<li>对于二维问题（z=0），度量张量的第3行/列退化为 <code>(0, 0, 1)</code>，实际生效的是左上角 2x2 子矩阵</li>
+</ul>
+<p>在 <code>t17_bgmesh.pos</code> 中，度量张量在方块的左半部分值较小（网格较粗），右上角区域值很大（网格较细），且张量表现出明显的方向性（非对角线元素非零），引导生成拉伸方向的三角形。</p>
+<h3 id="1425-meshfield">14.2.5 各向异性 mesh::field 定义方式</h3>
+<p>除了加载 <code>.pos</code> 文件作为背景网格外，Gmsh 也支持通过 <code>gmsh::model::mesh::field</code> API 程序化地定义各向异性尺寸场。使用 <code>F</code>（MathEval）场的矩阵表达式或通过 <code>setNumber</code> 设置矩阵参数的方式可构建自定义度量场，但通常 <code>.pos</code> 文件方式更为实用——它可以由外部求解器（如误差估计器）生成，并在 Gmsh 中直接用于网格重剖。</p>
+<h3 id="1426-78">14.2.6 与第7章和第8章的关系</h3>
+<p>本章内容与第7章和第8章形成递进关系：</p>
+<pre><code>第7章: 标量背景网格（ST 格式）—— 每点一个标量尺寸 h
+   ↓ 推广
+第8章: 尺寸场（Distance/MathEval/Box 等）—— 参数化控制标量尺寸
+   ↓ 推广
+第14章: 各向异性背景网格（TT 格式）—— 每点一个度量张量 M（方向+尺寸）
+</code></pre>
+<p>三者共享 <code>setAsBackgroundMesh()</code> 的统一接口，差异仅在于数据本身是标量还是张量。当背景网格提供的是张量数据时，Gmsh 自动将其作为各向异性度量场处理。</p>
+<hr />
+<h2 id="143-c">14.3 C++ 代码逐段讲解</h2>
+<h3 id="1431">14.3.1 创建几何体</h3>
+<p>首先创建一个 4x4 的二维方块作为计算域：</p>
+<pre><code class="language-cpp">#include &lt;set&gt;
+#include &lt;cmath&gt;
+#include &lt;gmsh.h&gt;
+
+int main(int argc, char **argv)
+{
+  gmsh::initialize();
+  gmsh::model::add(&quot;t14_anisotropic&quot;);
+
+  // 创建一个 4x4 的二维方块，左下角 (-2, -2)，边长 4
+  gmsh::model::occ::addRectangle(-2, -2, 0, 4, 4);
+  gmsh::model::occ::synchronize();
+</code></pre>
+<p><strong>解释</strong>：通过 OpenCASCADE 内核创建一个 <code>[-2, 2] x [-2, 2]</code> 的正方形平面区域。<code>synchronize()</code> 将 CAD 模型同步到 Gmsh 内部数据结构。该区域将作为各向异性网格的剖分域。</p>
+<hr />
+<h3 id="1432">14.3.2 加载各向异性背景网格文件</h3>
+<pre><code class="language-cpp">  // 加载包含各向异性度量张量的后处理视图
+  try {
+    gmsh::merge(&quot;../t17_bgmesh.pos&quot;);
+  } catch(...) {
+    gmsh::logger::write(&quot;无法加载各向异性背景网格文件: 退出!&quot;);
+    gmsh::finalize();
+    return 0;
+  }
+</code></pre>
+<p><strong>解释</strong>：<code>gmsh::merge()</code> 加载外部后处理文件。这里加载的 <code>t17_bgmesh.pos</code> 文件包含一个名为 <code>"nodalMetric"</code> 的后处理视图，其中每个三角形的每个顶点都携带一个 3x3 度量张量。文件中的 <code>TT</code> 条目定义了张量场在空间中的分布：在域的不同位置度量张量的大小和方向各不相同，从而实现空间变化的方向性网格控制。</p>
+<p>该文件通常由外部工具（如误差估计器、自适应求解器、或 Python 脚本）生成，覆盖整个计算域。对于实际 CAE 工作流，你可以用自己的求解器输出替换此文件。</p>
+<hr />
+<h3 id="1433">14.3.3 将视图注册为背景网格</h3>
+<pre><code class="language-cpp">  // 将加载的后处理视图注册为各向异性背景网格
+  int bgField = gmsh::model::mesh::field::add(&quot;PostView&quot;);
+  gmsh::model::mesh::field::setNumber(bgField, &quot;ViewIndex&quot;, 0);
+  gmsh::model::mesh::field::setAsBackgroundMesh(bgField);
+</code></pre>
+<p><strong>解释</strong>：这是将外部数据关联到网格生成管线的关键三步：</p>
+<ol>
+<li><code>field::add("PostView")</code> 创建一个 <code>PostView</code> 类型的尺寸场。<code>PostView</code> 场类型从已加载的后处理视图中读取尺寸信息。</li>
+<li><code>field::setNumber(bgField, "ViewIndex", 0)</code> 指定使用第 0 号视图（即 <code>merge()</code> 加载的第一个视图）。如果 <code>.pos</code> 文件包含多个视图，可通过改变此索引选择不同视图。</li>
+<li><code>field::setAsBackgroundMesh(bgField)</code> 将该场设为<strong>全局背景网格</strong>，所有后续网格生成操作都将查询此场中的度量张量。</li>
+</ol>
+<p><code>PostView</code> 场能自动区分标量视图（<code>ST</code>，生成各向同性网格）和张量视图（<code>TT</code>，生成各向异性网格），无需手动指定。</p>
+<hr />
+<h3 id="1434-bamg">14.3.4 配置 bamg 各向异性网格生成器</h3>
+<pre><code class="language-cpp">  // 配置 bamg 各向异性二维网格生成器
+  gmsh::option::setNumber(&quot;Mesh.SmoothRatio&quot;, 3);
+  gmsh::option::setNumber(&quot;Mesh.AnisoMax&quot;, 1000);
+  gmsh::option::setNumber(&quot;Mesh.Algorithm&quot;, 7);
+</code></pre>
+<p><strong>解释</strong>：三个选项协同配置 bamg 的行为：</p>
+<ul>
+<li><code>Mesh.Algorithm = 7</code>：显式选择 bamg 作为二维网格生成器。Gmsh 的默认算法（Frontal-Delaunay, 算法 6）不能生成各向异性网格——如果不设此项，Gmsh 会从度量张量中提取各向同性尺寸（取主方向最大尺寸），仅生成各向同性网格。</li>
+<li><code>Mesh.SmoothRatio = 3</code>：控制相邻单元之间的尺寸过渡平滑度。该值越大，网格尺寸变化越剧烈。bamg 需要对梯度合理的度量场才能收敛，若场中的尺寸变化过于剧烈，需调小此值。</li>
+<li><code>Mesh.AnisoMax = 1000</code>：允许的最大各向异性比（最长边与最短边之比）。此处设 1000，允许在边界层区域产生极度拉伸的三角形。实际值应根据物理需求设定——CFD 边界层通常需要 100~10000 的比值。</li>
+</ul>
+<blockquote>
+<p><strong>注意</strong>：<code>Mesh.SmoothRatio</code> 对 bamg 的作用与对各向同性生成器不同。bamg 用它在度量空间中进行梯度限制（gradient limiting），防止度量张量在空间上变化过快导致网格质量恶化。</p>
+</blockquote>
+<hr />
+<h3 id="1435">14.3.5 生成网格并输出</h3>
+<pre><code class="language-cpp">  // 生成二维各向异性网格
+  gmsh::model::mesh::generate(2);
+
+  // 保存为 .msh 文件
+  gmsh::write(&quot;t14_anisotropic.msh&quot;);
+
+  // 启动 GUI 查看结果（如未指定 -nopopup）
+  std::set&lt;std::string&gt; args(argv, argv + argc);
+  if(!args.count(&quot;-nopopup&quot;)) gmsh::fltk::run();
+
+  gmsh::finalize();
+  return 0;
+}
+</code></pre>
+<p><strong>解释</strong>：<code>mesh::generate(2)</code> 生成二维网格，Gmsh 内部调用 bamg 的库函数，依据度量张量场在各处生成尺寸和方向匹配的三角形。生成后通过 <code>gmsh::write()</code> 导出为标准 <code>.msh</code> 格式文件，可直接用于后续 CAE 求解器。<code>fltk::run()</code> 打开 Gmsh 的图形界面，供用户可视化检查各向异性网格效果。</p>
+<hr />
+<h2 id="144-cae">14.4 面向 CAE 的应用场景</h2>
+<h3 id="1441-cfd">14.4.1 CFD 边界层网格</h3>
+<p>在计算流体力学（CFD）中，壁面附近的边界层具有极强的速度梯度，需要在<strong>壁面法向</strong>布置极细的网格，而<strong>流向</strong>（平行于壁面）则可以粗糙得多。各向异性网格天然适合此场景：</p>
+<ul>
+<li>度量张量的主轴在壁面法向上对应极小尺寸 <code>h_n</code>（如 0.001mm）</li>
+<li>壁面切向对应较大尺寸 <code>h_t</code>（如 1mm）</li>
+<li>各向异性比 <code>h_t / h_n</code> 可达 1000 以上</li>
+</ul>
+<p>传统方法通过<strong>结构化边界层网格</strong>（棱柱层）实现，而 bamg + 各向异性背景网格提供了<strong>非结构化</strong>替代方案，能更好地处理复杂几何。</p>
+<h3 id="1442">14.4.2 激波捕捉</h3>
+<p>在高超声速流动中，激波是一个极薄的区域（几倍分子平均自由程），需要用极细的网格解析。激波的法向需要加密，而激波面内的方向可以粗糙。自适应求解器可在激波位置输出各向异性度量张量，迭代生成对齐激波方向的拉伸网格。</p>
+<h3 id="1443">14.4.3 复合材料界面</h3>
+<p>复合材料（如纤维增强层合板）中，基体与纤维的界面处应力梯度在<strong>界面法向</strong>远大于切向。各向异性网格可以在不显著增加总单元数的前提下，在界面法向提高分辨率。</p>
+<hr />
+<h2 id="145">14.5 各向异性背景网格的生成方法</h2>
+<p>在实际 CAE 工作流中，各向异性背景网格通常不由手工编写，而是通过以下途径自动生成：</p>
+<ol>
+<li><strong>自适应误差估计</strong>：在粗网格上求解，计算每个单元的误差指示器（如 Hessian recovery），然后根据 Hessian 矩阵的特征值和特征向量构造各向异性度量张量，导出为 <code>.pos</code> 文件</li>
+<li><strong>解析度量场</strong>：对于简单几何和已知解特征的问题，可通过 Python/MATLAB 脚本根据几何位置直接计算度量张量并写入 <code>.pos</code></li>
+<li><strong>CFD 求解器内置输出</strong>：某些求解器（如 SU2、Code_Saturne）支持直接输出 Gmsh 格式的各向异性度量场</li>
+</ol>
+<p>以下是一个简单的 Python 片段示意如何生成 <code>.pos</code> 文件中的各向异性数据：</p>
+<pre><code class="language-python"># 示意: 生成壁面法向加密的各向异性度量张量 .pos 文件
+# 实际使用时需要根据几何计算每个节点的位置和度量张量
+
+import numpy as np
+
+def metric_at(x, y):
+    &quot;&quot;&quot;在壁面 y=0 附近，法向(y)加密，切向(x)稀疏&quot;&quot;&quot;
+    dist = y  # 到壁面距离
+    h_normal = 0.001 + 0.1 * dist        # 壁面法向: 0.001 ~ 远场 0.1
+    h_tangential = 0.1                    # 壁面切向: 恒为 0.1
+    # 度量张量 M = diag(1/h_x^2, 1/h_y^2)
+    return np.array([[1/h_tangential**2, 0],
+                     [0, 1/h_normal**2]])
+
+# 输出为 .pos TT 格式...
+</code></pre>
+<hr />
+<h2 id="146-api">14.6 关键 API 速查表</h2>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>用途</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gmsh::merge(filename)</code></td>
+<td>加载后处理视图文件</td>
+<td>支持 <code>.pos</code> 格式，自动解析 <code>ST</code>/<code>TT</code> 等单元类型</td>
+</tr>
+<tr>
+<td><code>gmsh::model::mesh::field::add("PostView")</code></td>
+<td>创建 PostView 尺寸场</td>
+<td>将已加载视图的内容注册为可用的尺寸场</td>
+</tr>
+<tr>
+<td><code>gmsh::model::mesh::field::setNumber(f, "ViewIndex", idx)</code></td>
+<td>选择视图索引</td>
+<td>指定使用 merge 加载的第几个视图（从 0 开始）</td>
+</tr>
+<tr>
+<td><code>gmsh::model::mesh::field::setAsBackgroundMesh(f)</code></td>
+<td>设为背景网格</td>
+<td>全局生效，所有后续 <code>generate()</code> 均受其控制</td>
+</tr>
+<tr>
+<td><code>option::setNumber("Mesh.Algorithm", 7)</code></td>
+<td>选择 bamg 算法</td>
+<td>二维各向异性网格的必要条件</td>
+</tr>
+<tr>
+<td><code>option::setNumber("Mesh.SmoothRatio", v)</code></td>
+<td>度量梯度平滑比</td>
+<td>控制 bamg 对度量张量空间变化的平滑程度</td>
+</tr>
+<tr>
+<td><code>option::setNumber("Mesh.AnisoMax", v)</code></td>
+<td>最大各向异性比</td>
+<td>允许的最大边长比，防止过度拉伸导致数值问题</td>
+</tr>
+<tr>
+<td><code>gmsh::model::mesh::generate(2)</code></td>
+<td>生成二维网格</td>
+<td>在 Mesh.Algorithm=7 时调用 bamg</td>
+</tr>
+<tr>
+<td><code>gmsh::write("file.msh")</code></td>
+<td>输出网格文件</td>
+<td>标准 Gmsh 网格格式，包含节点、单元及度量数据</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="147">14.7 注意事项与常见问题</h2>
+<ol>
+<li>
+<p><strong>bamg 仅支持二维</strong>：<code>Mesh.Algorithm=7</code> 对三维网格无效。对于三维各向异性网格，需使用 Gmsh 与外部库（如 MMG3D）的集成，或分步骤生成（先生成二维边界层，再向三维拉伸）。</p>
+</li>
+<li>
+<p><strong>度量张量必须光滑</strong>：bamg 对度量张量的空间连续性有要求。若 <code>.pos</code> 文件中相邻三角形的度量值差异过大，需增大 <code>Mesh.SmoothRatio</code> 或先在外部对度量场进行平滑处理。</p>
+</li>
+<li>
+<p><strong>文件中不能混用 ST 和 TT</strong>：作为各向异性背景网格的视图应全部使用 <code>TT</code> 类型。如果使用 <code>ST</code>，Gmsh 将退化为各向同性处理。</p>
+</li>
+<li>
+<p><strong>三维张量格式</strong>：即使做二维问题，<code>.pos</code> 文件中的度量张量仍然是 3x3 格式。对于 z=0 平面上的二维问题，第三行/列通常为 <code>(0, 0, 1)</code>。</p>
+</li>
+<li>
+<p><strong>与其他尺寸约束的冲突</strong>：如第8章所述，Gmsh 多层尺寸优先级链的各层取最小值。如果几何点上有极小的 <code>lc</code> 值，它会盖过背景网格的度量张量。如需纯粹依赖背景网格，应关闭 <code>Mesh.MeshSizeFromPoints</code> 等其他来源：</p>
+</li>
+</ol>
+<p><code>cpp
+   gmsh::option::setNumber("Mesh.MeshSizeFromPoints", 0);
+   gmsh::option::setNumber("Mesh.MeshSizeFromCurvature", 0);
+   gmsh::option::setNumber("Mesh.MeshSizeExtendFromBoundary", 0);</code></p>
+<hr />
+<h2 id="148">14.8 完整可运行代码</h2>
+<pre><code class="language-cpp">// -----------------------------------------------------------------------------
+//  Chapter 14: Anisotropic Mesh — Direction-Aware Mesh Generation
+//
+//  功能: 加载各向异性背景网格 (.pos)，使用 bamg 在方块上生成各向异性二维网格
+//
+//  编译 (需链接 Gmsh SDK):
+//    g++ -o ch14_aniso ch14_aniso.cpp -lgmsh
+//
+//  运行:
+//    ./ch14_aniso          (带 GUI 查看)
+//    ./ch14_aniso -nopopup  (仅生成 .msh 文件)
+// -----------------------------------------------------------------------------
+
+#include &lt;set&gt;
+#include &lt;cmath&gt;
+#include &lt;gmsh.h&gt;
+
+int main(int argc, char **argv)
+{
+  gmsh::initialize();
+  gmsh::model::add(&quot;ch14_anisotropic&quot;);
+
+  // ---- 1. 创建几何体 ----
+  // 创建一个 4x4 的二维方块，左下角 (-2, -2)
+  gmsh::model::occ::addRectangle(-2, -2, 0, 4, 4);
+  gmsh::model::occ::synchronize();
+
+  // ---- 2. 加载各向异性背景网格 ----
+  // t17_bgmesh.pos 中包含 TT（张量三角形）数据，定义了度量张量场
+  try {
+    gmsh::merge(&quot;../t17_bgmesh.pos&quot;);
+  } catch(...) {
+    gmsh::logger::write(&quot;Could not load anisotropic background mesh; exiting.&quot;);
+    gmsh::finalize();
+    return 0;
+  }
+
+  // ---- 3. 将后处理视图注册为背景网格 ----
+  int bgField = gmsh::model::mesh::field::add(&quot;PostView&quot;);
+  gmsh::model::mesh::field::setNumber(bgField, &quot;ViewIndex&quot;, 0);
+  gmsh::model::mesh::field::setAsBackgroundMesh(bgField);
+
+  // ---- 4. 配置 bamg 各向异性二维网格生成器 ----
+  gmsh::option::setNumber(&quot;Mesh.SmoothRatio&quot;, 3);
+  gmsh::option::setNumber(&quot;Mesh.AnisoMax&quot;, 1000);
+  gmsh::option::setNumber(&quot;Mesh.Algorithm&quot;, 7);
+
+  // ---- 5. 生成二维各向异性网格 ----
+  gmsh::model::mesh::generate(2);
+
+  // ---- 6. 输出网格 ----
+  gmsh::write(&quot;ch14_anisotropic.msh&quot;);
+
+  // ---- 7. 可选 GUI 查看 ----
+  std::set&lt;std::string&gt; args(argv, argv + argc);
+  if(!args.count(&quot;-nopopup&quot;)) gmsh::fltk::run();
+
+  gmsh::finalize();
+  return 0;
+}
+</code></pre>
+<hr />
+<h2 id="149">14.9 本章小结</h2>
+<ul>
+<li>各向异性网格通过<strong>度量张量（Metric Tensor）</strong>在每一点同时描述网格尺寸和方向偏好，突破各向同性网格"所有方向同尺寸"的限制。</li>
+<li><code>.pos</code> 文件中的 <code>TT</code>（张量三角形）格式携带每个顶点上的 3x3 度量张量，是各向异性背景网格的数据载体。</li>
+<li><code>PostView</code> 场类型 + <code>setAsBackgroundMesh()</code> 将外部度量数据路由到 Gmsh 网格生成管线。</li>
+<li><code>Mesh.Algorithm=7</code> 启用 bamg 是生成二维各向异性网格的必要条件；<code>Mesh.AnisoMax</code> 控制各向异性比的物理上限。</li>
+<li>本章内容与第7章和第8章构成完整递进：标量尺寸 -&gt; 标量尺寸场 -&gt; 张量度量场（各向异性）。</li>
+<li>在 CAE 实践中，CFD 边界层、激波捕捉和复合材料界面是各向异性网格的三个核心应用场景。</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,3583 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../ch08/">
+      
+      
+        <link rel="next" href="../ch10/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>第9章 四边形网格重组 - Echo-b's Tech Notes</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#9-unstructured-quad-meshing-via-recombination" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Echo-b&#39;s Tech Notes" class="md-header__button md-logo" aria-label="Echo-b's Tech Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Echo-b's Tech Notes
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              第9章 四边形网格重组
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Echo-b&#39;s Tech Notes" class="md-nav__button md-logo" aria-label="Echo-b's Tech Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Echo-b's Tech Notes
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VTK 教程
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    VTK 教程
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    入门篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    入门篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-01-vtk-overview-and-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第一章 VTK概述与环境搭建
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-02-visualization-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二章 可视化管线
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-03-data-model-basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第三章 数据模型基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-04-geometry-and-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第四章 基本几何体与数据源
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-05-rendering-and-interactor/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第五章 渲染与交互机
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-06-volume1-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第六章 入门篇综合实战——3D几何画廊
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    实战篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    实战篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-07-polydata/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第七章 PolyData详解
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-08-unstructured-grid/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第八章 非结构化网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-09-structured-data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第九章 结构化数据
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-10-data-io/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十章 数据I/O
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-11-common-filters/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十一章 常用过滤器
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-12-color-mapping/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十二章 颜色映射与标量可视化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-13-advanced-rendering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十三章 高级渲染技术
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-14-multi-dataset/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十四章 多个数据集处理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-15-volume2-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十五章 实战篇综合实战——CFD后处理可视化工具
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    进阶篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    进阶篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-16-volume-rendering-basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十六章 体渲染基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-17-volume-rendering-advanced/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十七章 体渲染高级技术
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-18-charts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十八章 2D图表系统
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-19-annotation-and-widgets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十九章 三维标注与交互组件
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-20-custom-interaction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十章 自定义交互与Widget
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-21-qt-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十一章 Qt集成
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-22-smp-parallel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十二章 SMP并行入门
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-23-volume3-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十三章 进阶篇综合实战
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GMSH 教程
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    GMSH 教程
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1" id="__nav_3_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    基础篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    基础篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第1章 Gmsh概述与C++ SDK配置
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第2章 几何基础——点线面曲线环与物理组
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第3章 变换与拉伸几何
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第4章 高级几何构建——内置函数孔洞注释与颜色
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第5章 三维网格控制——尺寸场体孔洞与网格算法
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch06/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第6章 网格控制进阶——Transfinite分布与结构化网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch07/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第7章 背景网格——用已有网格指导网格尺寸
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch08/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第8章 网格尺寸场
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    进阶篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    进阶篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第9章 四边形网格重组
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第9章 四边形网格重组
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#91" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.1 学习目标
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#92" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.2 核心概念说明
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9.2 核心概念说明">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#921" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.2.1 为什么需要四边形网格
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#922-recombination" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.2.2 Recombination（重组）原理
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#923" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.2.3 三种重组算法
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#924-vs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.2.4 全局 vs 局部重组
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#925-frontal-delaunay-for-quads-8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.2.5 Frontal-Delaunay for Quads (算法 8)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#926" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.2.6 混合网格与细分
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#93-c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.3 C++ 代码逐段讲解
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9.3 C++ 代码逐段讲解">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#931" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.3.1 头文件与初始化
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#932" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.3.2 带孔矩形板几何建模
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#933-recombineall" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.3.3 全局重组（RecombineAll）方案
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#934-setrecombine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.3.4 局部重组（setRecombine）方案
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#935" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.3.5 重组算法选择
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#936-frontal-delaunay-for-quads-8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.3.6 可选：Frontal-Delaunay for Quads (算法 8)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#937" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.3.7 网格生成与显式重组
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#938" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.3.8 网格质量统计输出
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#939" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.3.9 孔周围细化控制
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#9310" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.3.10 输出与可视化
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#94" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.4 完整可运行代码
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9.4 完整可运行代码">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        运行方式
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        关键变量切换建议
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#95-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.5 关键 API 速查表
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9.5 关键 API 速查表">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        重组控制
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        网格操作
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        相关选项
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        核心几何建模（本章使用）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        网格查询
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#96" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.6 常见问题与注意事项
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch10/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第10章 复合实体——跨面一致网格划分
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch11/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第11章 STL重网格——无CAD模型的表面重构
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch12/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第12章 同调与上同调计算
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch13/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第13章 嵌入实体——在网格中强制生成共形节点
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch14/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第14章 各向异性网格——方向感知的网格生成
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch15/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第15章 周期性网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch16/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第16章 OpenCASCADE内核与构造实体几何
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch17/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第17章 高级实体建模——断面扫掠圆角管道与曲率自适应网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch18/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第18章 STEP导入与几何分割
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    应用篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    应用篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch19/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第19章 后处理视图与动画
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch20/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第20章 后处理插件——视图数据运算与变换
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch21/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第21章 网格分区与区域分解
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch22/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第22章 遍历模型与网格数据——前处理查询API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第23章 离散实体与混合模型——地形网格实战
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch24/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第24章 后处理视图——List-based与Model-based数据导入
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch25/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第25章 几何求值——参数化法向量与曲率
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第26章 积分点雅可比矩阵基函数与内部边面
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#91" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.1 学习目标
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#92" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.2 核心概念说明
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9.2 核心概念说明">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#921" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.2.1 为什么需要四边形网格
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#922-recombination" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.2.2 Recombination（重组）原理
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#923" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.2.3 三种重组算法
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#924-vs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.2.4 全局 vs 局部重组
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#925-frontal-delaunay-for-quads-8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.2.5 Frontal-Delaunay for Quads (算法 8)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#926" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.2.6 混合网格与细分
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#93-c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.3 C++ 代码逐段讲解
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9.3 C++ 代码逐段讲解">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#931" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.3.1 头文件与初始化
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#932" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.3.2 带孔矩形板几何建模
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#933-recombineall" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.3.3 全局重组（RecombineAll）方案
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#934-setrecombine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.3.4 局部重组（setRecombine）方案
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#935" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.3.5 重组算法选择
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#936-frontal-delaunay-for-quads-8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.3.6 可选：Frontal-Delaunay for Quads (算法 8)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#937" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.3.7 网格生成与显式重组
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#938" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.3.8 网格质量统计输出
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#939" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.3.9 孔周围细化控制
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#9310" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.3.10 输出与可视化
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#94" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.4 完整可运行代码
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9.4 完整可运行代码">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        运行方式
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        关键变量切换建议
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#95-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.5 关键 API 速查表
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9.5 关键 API 速查表">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        重组控制
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        网格操作
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        相关选项
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        核心几何建模（本章使用）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        网格查询
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#96" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.6 常见问题与注意事项
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="9-unstructured-quad-meshing-via-recombination">第9章 四边形网格重组 (Unstructured Quad Meshing via Recombination)</h1>
+<hr />
+<h2 id="91">9.1 学习目标</h2>
+<ul>
+<li>理解 Gmsh 中 Recombination（重组）的基本原理：将三角形网格的相邻三角对合并为四边形，以及其背后的 Blossom 完美匹配算法</li>
+<li>掌握全局重组 (<code>Mesh.RecombineAll</code>) 与局部重组 (<code>mesh::setRecombine</code>) 两种控制方式，能针对多面几何选择性生成四边形网格</li>
+<li>了解三种重组算法（Simple / Blossom / Full-Quad）的区别与适用场景，能根据几何复杂度选择合适的算法</li>
+<li>理解 Mesh.Algorithm = 8（Frontal-Delaunay for Quads）作为替代四边形网格生成路径的工作机制</li>
+<li>掌握四边形网格质量评估方法，以及处理混合网格（四边形+三角形过渡区）的策略</li>
+</ul>
+<hr />
+<h2 id="92">9.2 核心概念说明</h2>
+<h3 id="921">9.2.1 为什么需要四边形网格</h3>
+<p>在有限元分析中，四边形（Quadrilateral，简称 Quad）和六面体（Hexahedron）网格相比三角形/四面体网格具有显著优势：</p>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>三角形/四面体</th>
+<th>四边形/六面体</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>精度</strong></td>
+<td>常应变单元，弯曲变形下"过硬"（shear locking）</td>
+<td>双线性插值，弯曲表现更优</td>
+</tr>
+<tr>
+<td><strong>单元数量</strong></td>
+<td>同等精度需要更多单元</td>
+<td>1 个四边形等效于约 2 个三角形</td>
+</tr>
+<tr>
+<td><strong>收敛速度</strong></td>
+<td>较慢</td>
+<td>较快（h/p-refinement 表现更好）</td>
+</tr>
+<tr>
+<td><strong>边界层</strong></td>
+<td>难以构建规则排列</td>
+<td>天然适合边界层网格（结构化排列）</td>
+</tr>
+<tr>
+<td><strong>计算效率</strong></td>
+<td>单元数多，矩阵规模大</td>
+<td>单元数少，矩阵规模小，求解快</td>
+</tr>
+</tbody>
+</table>
+<p>在 CFD 边界层网格、结构分析的应力集中区、以及复合材料层合板建模等场景中，四边形网格是必不可少的。</p>
+<h3 id="922-recombination">9.2.2 Recombination（重组）原理</h3>
+<p>Gmsh 采用<strong>间接法</strong>生成非结构化四边形网格：首先生成全三角形网格，然后通过<strong>完美匹配算法（Perfect Matching）</strong>将相邻三角形两两合并为四边形。这一过程称为 Recombination（重组）。</p>
+<pre><code>生成三角形网格 (Delaunay / Frontal)
+        |
+        v
+构建无向图: 节点=三角形, 边=相邻关系, 权值=合并后的四边形质量
+        |
+        v
+求解最小代价完美匹配 (Blossom 算法)
+        |
+        v
+将匹配成功的三角形对合并为四边形
+未匹配的三角形保留（若允许混合网格）或通过细分消除
+</code></pre>
+<p>核心概念：
+- <strong>图模型</strong>：每个三角形是一个节点，两个相邻三角形之间存在一条边。边的权值（cost）反映合并后四边形的质量——质量越好，权值越低。
+- <strong>完美匹配</strong>：选取一组边，使得每个节点恰好被连接一次，且被选边的总权值最小。
+- <strong>Blossom 算法</strong>：解决一般图（非二部图）上最小代价完美匹配问题的经典组合优化算法，由 Jack Edmonds 于 1965 年提出。Gmsh 使用的 Blossom-Quad 变体针对四边形网格生成做了专门优化（参见 Remacle 等人 2012 年的论文）。</p>
+<h3 id="923">9.2.3 三种重组算法</h3>
+<p>Gmsh 提供三种重组算法，通过 <code>Mesh.RecombinationAlgorithm</code> 选项控制：</p>
+<table>
+<thead>
+<tr>
+<th>算法 ID</th>
+<th>名称</th>
+<th>行为</th>
+<th>混合网格</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>0</strong></td>
+<td>Simple (简单)</td>
+<td>暴力贪心合并：遍历所有相邻三角形对，检查是否满足角度准则，满足即合并</td>
+<td>自然产生</td>
+<td>简单几何，速度优先，质量要求不高</td>
+</tr>
+<tr>
+<td><strong>1</strong> (默认)</td>
+<td>Blossom (开花)</td>
+<td>先 Delaunay 三角剖分，再通过最小代价完美匹配合并为四边形</td>
+<td>允许保留三角形</td>
+<td>通用场景，平衡质量与自动化程度</td>
+</tr>
+<tr>
+<td><strong>2</strong></td>
+<td>Full-Quad (全四边形)</td>
+<td>在 Blossom 基础上增加自动粗化-重组-光滑-细分级联</td>
+<td>不允许（全部转为四边形）</td>
+<td>严格要求全四边形网格的场合</td>
+</tr>
+<tr>
+<td><strong>3</strong></td>
+<td>Full-Quad (全四边形)</td>
+<td>与算法 2 类似，但采用不同的细分策略</td>
+<td>不允许</td>
+<td>算法 2 的替代选项</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Simple 算法的角度准则</strong>：<code>mesh::setRecombine(dim, tag, angle)</code> 中 <code>angle</code> 参数的默认值为 45 度。当两个三角形的公共边两侧内角之和超过此阈值时，Simple 算法拒绝合并这对三角形。这是因为合并后四边形的内角偏离 90 度太远会导致严重的单元畸变。</p>
+<h3 id="924-vs">9.2.4 全局 vs 局部重组</h3>
+<p>Gmsh 支持两种粒度的重组控制：</p>
+<table>
+<thead>
+<tr>
+<th>方式</th>
+<th>API</th>
+<th>作用范围</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>全局</strong></td>
+<td><code>option::setNumber("Mesh.RecombineAll", 1)</code></td>
+<td>模型中所有 2D 面（PlaneSurface / Surface）</td>
+</tr>
+<tr>
+<td><strong>局部</strong></td>
+<td><code>mesh::setRecombine(2, surfaceTag, angle)</code></td>
+<td>指定标签的单个面，可单独控制 angle 阈值</td>
+</tr>
+</tbody>
+</table>
+<p>两者的典型使用策略：</p>
+<pre><code>全局 RecombineAll = 1
+    + 在不需要四边形的面上显式关闭（或不设置 mesh::setRecombine）
+    → 适合大多数面需要四边形，少数面保留三角形的场景
+
+局部 mesh::setRecombine(2, tag)
+    + 仅对关心的面设置
+    → 适合大多数面需要三角形，少数关键面需要四边形的场景
+</code></pre>
+<h3 id="925-frontal-delaunay-for-quads-8">9.2.5 Frontal-Delaunay for Quads (算法 8)</h3>
+<p>除了三角形后重组的方式，Gmsh 还提供实验性的 <code>Mesh.Algorithm = 8</code>：直接生成适应于四边形重组的直角三角形网格。该算法基于 L-inf 范数的 Frontal-Delaunay 方法，刻意生成直角占主导的三角形网格，使得后续重组几乎不产生低质量四边形。论文参考：Remacle 等人，"A Frontal Delaunay Quad Mesh Generator Using the L-inf Norm"，IJNME, 2013。</p>
+<pre><code class="language-cpp">gmsh::option::setNumber(&quot;Mesh.Algorithm&quot;, 8);  // 实验性四边形专用算法
+</code></pre>
+<p>注意：该算法消耗内存较多，且可能在某些复杂几何上不够稳定，适合对四边形质量要求极高的场景。</p>
+<h3 id="926">9.2.6 混合网格与细分</h3>
+<p>重组过程不可避免地会留下一些"无法重组"的三角形——这些三角形的相邻三角形已被剔除或合并后会导致极差形状的四边形。Gmsh 提供两种处理策略：</p>
+<ol>
+<li><strong>保留混合网格</strong>（默认）：允许最终网格包含三角形。对于大多数工程分析，三角形-四边形混合网格（Hybrid Mesh）完全可接受，且避免了为强行消除三角形而引入劣质四边形。</li>
+<li><strong>全四边形细分</strong>（<code>Mesh.SubdivisionAlgorithm = 1</code>）：对混合网格中所有单元（包括四边形和三角形）进行 Catmull-Clark 式细分，将每个三角形细分为 3 个四边形，每个四边形细分为 4 个四边形。结果是一个全四边形网格，但单元数会显著增加。</li>
+</ol>
+<pre><code class="language-cpp">// 先剖分，再重组（显式两步法）
+gmsh::model::mesh::generate(2);
+gmsh::model::mesh::recombine();                // 显式执行重组
+
+// 然后细分以获得全四边形网格
+gmsh::option::setNumber(&quot;Mesh.SubdivisionAlgorithm&quot;, 1);
+gmsh::model::mesh::refine();                   // 执行细分
+</code></pre>
+<hr />
+<h2 id="93-c">9.3 C++ 代码逐段讲解</h2>
+<p>本章示例构建一个带圆孔的矩形板（Plate with Hole），这是 CAE 中经典的应力集中问题。我们先将整块板剖分为三角形，再通过重组生成主导四边形网格。此外，代码还比较了不同重组算法在孔周围三角形过渡区的表现。</p>
+<h3 id="931">9.3.1 头文件与初始化</h3>
+<pre><code class="language-cpp">#include &lt;set&gt;
+#include &lt;cmath&gt;
+#include &lt;gmsh.h&gt;
+
+int main(int argc, char **argv) {
+  gmsh::initialize(argc, argv);
+  gmsh::model::add(&quot;ch09&quot;);
+</code></pre>
+<p>与之前章节一致：<code>gmsh::initialize</code> 初始化 Gmsh 引擎，<code>gmsh::model::add</code> 创建命名模型。</p>
+<h3 id="932">9.3.2 带孔矩形板几何建模</h3>
+<p>用几何内核构建一个 10 x 6 的矩形板，中心开一个半径 1 的圆孔。这需要在矩形四边上各插入一个点以分段构建闭合环：</p>
+<pre><code class="language-cpp">  // ---- 几何参数 ----
+  double L = 10.0, H = 6.0;          // 板的长和宽
+  double R = 1.0;                    // 中心圆孔的半径
+  double lc = 0.5;                   // 基础网格尺寸
+
+  // ---- 外边界点（矩形四角）----
+  int p1 = gmsh::model::geo::addPoint(0,    0,    0, lc, 1);
+  int p2 = gmsh::model::geo::addPoint(L,    0,    0, lc, 2);
+  int p3 = gmsh::model::geo::addPoint(L,    H,    0, lc, 3);
+  int p4 = gmsh::model::geo::addPoint(0,    H,    0, lc, 4);
+
+  // ---- 圆孔上的四个控制点（顺时针方向，用于构建内边界环）----
+  double cx = L / 2.0, cy = H / 2.0;  // 圆心坐标
+  int pc1 = gmsh::model::geo::addPoint(cx - R, cy,     0, lc, 5);
+  int pc2 = gmsh::model::geo::addPoint(cx,     cy + R, 0, lc, 6);
+  int pc3 = gmsh::model::geo::addPoint(cx + R, cy,     0, lc, 7);
+  int pc4 = gmsh::model::geo::addPoint(cx,     cy - R, 0, lc, 8);
+
+  // ---- 圆心点（可选，用作细化控制）----
+  int pc  = gmsh::model::geo::addPoint(cx, cy, 0, lc * 0.5, 9);
+</code></pre>
+<p>CAE 要点：孔周围布置更多几何控制点是常见做法。这里用 4 个点控制圆孔弧线，并在圆心额外放置一个点（<code>pc</code>），其 <code>lc</code> 为基础值的一半，使得孔周围网格自然细化——应力集中区需要更高网格分辨率。</p>
+<pre><code class="language-cpp">  // ---- 外边界直线 ----
+  int l1 = gmsh::model::geo::addLine(p1, p2, 1);
+  int l2 = gmsh::model::geo::addLine(p2, p3, 2);
+  int l3 = gmsh::model::geo::addLine(p3, p4, 3);
+  int l4 = gmsh::model::geo::addLine(p4, p1, 4);
+
+  // ---- 内孔圆弧（圆心角各 90 度）----
+  int a1 = gmsh::model::geo::addCircleArc(pc1, pc, pc2, 5);
+  int a2 = gmsh::model::geo::addCircleArc(pc2, pc, pc3, 6);
+  int a3 = gmsh::model::geo::addCircleArc(pc3, pc, pc4, 7);
+  int a4 = gmsh::model::geo::addCircleArc(pc4, pc, pc1, 8);
+</code></pre>
+<p><code>addCircleArc(start, center, end, tag)</code> 创建从 <code>start</code> 到 <code>end</code> 的逆时针圆弧，圆心为 <code>center</code>。四条圆弧拼成一个完整的圆孔边界。</p>
+<pre><code class="language-cpp">  // ---- 外边界闭环和内孔闭环 ----
+  int outerLoop = gmsh::model::geo::addCurveLoop({l1, l2, l3, l4}, 11);
+  int innerLoop = gmsh::model::geo::addCurveLoop({a1, a2, a3, a4}, 12);
+
+  // ---- 带孔平面面（plane surface with hole）----
+  int plate = gmsh::model::geo::addPlaneSurface({outerLoop, innerLoop}, 100);
+</code></pre>
+<p><code>addPlaneSurface({outerLoop, innerLoop}, ...)</code> 中传入两个闭环——第一个定义外边界（所有点围成的区域），第二个定义内边界（从该区域中挖去）。Gmsh 自动处理孔洞拓扑。</p>
+<pre><code class="language-cpp">  gmsh::model::geo::synchronize();
+</code></pre>
+<h3 id="933-recombineall">9.3.3 全局重组（RecombineAll）方案</h3>
+<p>最简方式——一行代码使所有 2D 面尝试三角形转四边形重组：</p>
+<pre><code class="language-cpp">  // ---- 方案 A：全局重组（适用于所有面）----
+  bool useGlobalRecombine = true;  // 切换此变量对比效果
+
+  if (useGlobalRecombine) {
+    gmsh::option::setNumber(&quot;Mesh.RecombineAll&quot;, 1);
+    // RecombineAll 对所有面开启重组，使用默认 Blossom 算法 (algorithm=1)
+  }
+</code></pre>
+<p><code>Mesh.RecombineAll = 1</code> 是全局布尔开关。不需要逐个面调用 <code>mesh::setRecombine</code>。这是最快捷的方式，适合所有面都需要四边形的场景。</p>
+<h3 id="934-setrecombine">9.3.4 局部重组（setRecombine）方案</h3>
+<p>如果只希望在特定面上生成四边形（例如仅关心主板应力分布，而夹具面可以用三角形），则应使用局部方式：</p>
+<pre><code class="language-cpp">  // ---- 方案 B：局部重组（仅对指定面生效）----
+  if (!useGlobalRecombine) {
+    gmsh::model::mesh::setRecombine(2, plate, 45.0);
+    // 参数: dim=2 (面), tag=100 (plate面), angle=45° (Simple算法阈值)
+  }
+</code></pre>
+<p><code>mesh::setRecombine(dim, tag, angle)</code>：
+- <code>dim</code>：实体维度。目前仅支持 <code>dim=2</code>（将三角形重组为四边形）
+- <code>tag</code>：目标面实体的标签。在多面模型中，可以对不同面使用不同标签
+- <code>angle</code>：阈值角度（仅对 Simple 算法有效）。对于 Blossom 算法（默认），此参数被忽略</p>
+<p>三种典型的局部重组组合策略：</p>
+<pre><code class="language-cpp">// 策略 1：板面重组为四边形，孔周围保留三角形过渡
+gmsh::model::mesh::setRecombine(2, plate, 45.0);
+// plate 之外的区域不设置重组，保留三角形
+
+// 策略 2：多个面分别控制
+gmsh::model::mesh::setRecombine(2, surfaceA, 30.0); // 严格角度阈值
+gmsh::model::mesh::setRecombine(2, surfaceB, 60.0); // 宽松角度阈值
+
+// 策略 3：全局开启后对个别面关闭
+gmsh::option::setNumber(&quot;Mesh.RecombineAll&quot;, 1);
+// 不支持直接&quot;关闭&quot;；要豁免某个面，不应使用全局开关，改用逐面 setRecombine
+</code></pre>
+<h3 id="935">9.3.5 重组算法选择</h3>
+<pre><code class="language-cpp">  // ---- 选择重组算法 ----
+  // 0 = Simple (贪心)   : 速度最快，质量一般，适合预览
+  // 1 = Blossom (默认)  : 最小代价完美匹配，质量最好，推荐日常使用
+  // 2 = Full-Quad       : Blossom + 粗化-重组-光滑-细分级联
+  // 3 = Full-Quad 变体  : 算法 2 的替代细分策略
+  gmsh::option::setNumber(&quot;Mesh.RecombinationAlgorithm&quot;, 1);
+</code></pre>
+<h3 id="936-frontal-delaunay-for-quads-8">9.3.6 可选：Frontal-Delaunay for Quads (算法 8)</h3>
+<p>如果想绕开三角形-重组的两步路径，可以直接使用四边形专用的 Frontal-Delaunay 算法：</p>
+<pre><code class="language-cpp">  // ---- 若需尝试实验性算法 8，取消以下注释 ----
+  // gmsh::option::setNumber(&quot;Mesh.Algorithm&quot;, 8);
+  // 注意：算法 8 会在内部自动调用重组逻辑，不需 setRecombine
+</code></pre>
+<p>当同时设置 <code>Mesh.Algorithm = 8</code> 和 <code>mesh::setRecombine</code> 时，算法 8 拥有优先权——Gmsh 直接使用该算法生成适合重组的三角形网格，然后内部重组。</p>
+<h3 id="937">9.3.7 网格生成与显式重组</h3>
+<pre><code class="language-cpp">  // ---- 生成 2D 网格 ----
+  gmsh::model::mesh::generate(2);
+</code></pre>
+<p><code>generate(2)</code> 执行完整的 2D 网格生成流水线：1D 边界网格 -&gt; 2D 面网格 -&gt; 重组（如果已设置重组标志）。这是最常见的一体化调用方式。</p>
+<p>也可以拆分执行，以便在中间步骤检查或修改：</p>
+<pre><code class="language-cpp">  // ---- 显式两步法（等价于上面的一体化过程）----
+  // gmsh::model::mesh::generate(2);
+  // gmsh::model::mesh::recombine();  // 显式执行重组步骤
+
+  // ---- 进一步：细分获得全四边形网格 ----
+  // gmsh::option::setNumber(&quot;Mesh.SubdivisionAlgorithm&quot;, 1);
+  // gmsh::model::mesh::refine();
+</code></pre>
+<p><code>mesh::recombine()</code> 对已生成网格的所有设置了重组标志的面执行重组。<code>mesh::refine()</code> 在设置了 <code>Mesh.SubdivisionAlgorithm</code> 后对混合网格进行细分以消除所有三角形。</p>
+<h3 id="938">9.3.8 网格质量统计输出</h3>
+<p>四边形网格生成后，评估其质量是 CAE 前处理中不可或缺的步骤。Gmsh 不直接提供质量统计 API，但可以通过遍历单元坐标手动计算。这里展示一种简化的四边形质量评估方法——基于雅可比行列式（Scaled Jacobian）：</p>
+<pre><code class="language-cpp">  // ---- 统计四边形/三角形数量 ----
+  std::vector&lt;std::size_t&gt; elemTypes;
+  std::vector&lt;std::vector&lt;std::size_t&gt;&gt; elemTags;
+  std::vector&lt;std::vector&lt;std::size_t&gt;&gt; nodeTags;
+  gmsh::model::mesh::getElements(elemTypes, elemTags, nodeTags, 2);
+  // getElements 返回二维单元的类型列表、标签列表和节点列表
+
+  int nTri = 0, nQuad = 0;
+  for (std::size_t i = 0; i &lt; elemTypes.size(); ++i) {
+    if (elemTypes[i] == 2)       // 2 节点三角形
+      nTri += elemTags[i].size();
+    else if (elemTypes[i] == 3)  // 3 节点四边形
+      nQuad += elemTags[i].size();
+  }
+  gmsh::logger::write(&quot;=== 网格统计 ===&quot;);
+  gmsh::logger::write(&quot;三角形数量: &quot; + std::to_string(nTri));
+  gmsh::logger::write(&quot;四边形数量: &quot; + std::to_string(nQuad));
+  if (nTri + nQuad &gt; 0)
+    gmsh::logger::write(&quot;四边形占比: &quot; +
+      std::to_string(100.0 * nQuad / (nTri + nQuad)) + &quot;%&quot;);
+</code></pre>
+<p>Gmsh 单元类型编号（2D）：
+| 类型编号 | 含义 |
+|----------|------|
+| 2 | 3 节点三角形（TRI3） |
+| 3 | 4 节点四边形（QUAD4） |
+| 9 | 6 节点三角形（TRI6，二阶） |
+| 16 | 8 节点四边形（QUAD8，二阶） |</p>
+<h3 id="939">9.3.9 孔周围细化控制</h3>
+<p>CAE 分析中孔周围应力梯度大，需要局部细化。此处使用第 8 章学过的尺寸场技术——通过 Distance + Threshold 场在孔周围施加更小的网格尺寸：</p>
+<pre><code class="language-cpp">  // ---- 孔周围尺寸场（可选，若需要更精细的孔周网格）----
+  bool useSizeField = true;
+  if (useSizeField) {
+    gmsh::model::mesh::field::add(&quot;Distance&quot;, 1);
+    gmsh::model::mesh::field::setNumbers(1, &quot;CurvesList&quot;, {5, 6, 7, 8});
+    // 计算到四条孔圆弧的距离 (曲线标签 5-8)
+
+    gmsh::model::mesh::field::add(&quot;Threshold&quot;, 2);
+    gmsh::model::mesh::field::setNumber(2, &quot;InField&quot;, 1);
+    gmsh::model::mesh::field::setNumber(2, &quot;SizeMin&quot;, lc * 0.2);
+    gmsh::model::mesh::field::setNumber(2, &quot;SizeMax&quot;, lc);
+    gmsh::model::mesh::field::setNumber(2, &quot;DistMin&quot;, 0.5);
+    gmsh::model::mesh::field::setNumber(2, &quot;DistMax&quot;, 2.0);
+    // 距孔 0.5 以内: 尺寸 = 0.1 ; 距孔 2.0 以外: 尺寸 = 0.5
+
+    gmsh::model::mesh::field::setAsBackgroundMesh(2);
+
+    // 关闭点级 lc 和曲率自适应，使尺寸完全由场控制
+    gmsh::option::setNumber(&quot;Mesh.MeshSizeFromPoints&quot;, 0);
+    gmsh::option::setNumber(&quot;Mesh.MeshSizeFromCurvature&quot;, 0);
+    gmsh::option::setNumber(&quot;Mesh.MeshSizeExtendFromBoundary&quot;, 0);
+  }
+</code></pre>
+<p>尺寸场与重组独立运作——场控制单元大小，重组控制单元形状（三角转四边形）。两者结合可在孔周围同时获得<strong>高密度</strong>和<strong>四边形主导</strong>的网格，这是高质量 CAE 前处理的典型目标。</p>
+<h3 id="9310">9.3.10 输出与可视化</h3>
+<pre><code class="language-cpp">  // ---- 保存网格 ----
+  gmsh::write(&quot;ch09_plate.msh&quot;);
+
+  // ---- 启动 GUI ----
+  std::set&lt;std::string&gt; args(argv, argv + argc);
+  if (!args.count(&quot;-nopopup&quot;)) gmsh::fltk::run();
+
+  gmsh::finalize();
+  return 0;
+}
+</code></pre>
+<p>在 GUI 中可以直观对比三角形网格和重组后的四边形网格：菜单 <code>Tools -&gt; Options -&gt; Mesh -&gt; Visibility</code> 中切换 2D 元素显示，或在命令行模式下使用 <code>gmsh ch09_plate.msh</code> 打开查看。</p>
+<hr />
+<h2 id="94">9.4 完整可运行代码</h2>
+<pre><code class="language-cpp">// ============================================================================
+// 第 9 章完整示例：四边形网格重组 (Quad Mesh via Recombination)
+//
+// 几何: 带中心圆孔的矩形板 (Plate with Hole) — 经典 CAE 应力集中案例
+//
+// 编译:
+//   g++ -o ch09 ch09.cpp -I/path/to/gmsh/include -L/path/to/gmsh/lib -lgmsh
+//
+// 运行:
+//   ./ch09              # 打开 GUI 查看结果
+//   ./ch09 -nopopup     # 仅生成 ch09_plate.msh，不打开 GUI
+// ============================================================================
+
+#include &lt;set&gt;
+#include &lt;cmath&gt;
+#include &lt;string&gt;
+#include &lt;gmsh.h&gt;
+
+int main(int argc, char **argv) {
+  gmsh::initialize(argc, argv);
+  gmsh::model::add(&quot;ch09&quot;);
+
+  // ======================== 1. 几何参数 ========================
+  double L = 10.0, H = 6.0;
+  double R = 1.0;
+  double lc = 0.5;
+  double cx = L / 2.0, cy = H / 2.0;          // 圆心
+
+  // ======================== 2. 构建几何点 ========================
+  // 外边界四角
+  int p1 = gmsh::model::geo::addPoint(0,    0,    0, lc, 1);
+  int p2 = gmsh::model::geo::addPoint(L,    0,    0, lc, 2);
+  int p3 = gmsh::model::geo::addPoint(L,    H,    0, lc, 3);
+  int p4 = gmsh::model::geo::addPoint(0,    H,    0, lc, 4);
+
+  // 圆孔控制点 (顺时针)
+  int pc1 = gmsh::model::geo::addPoint(cx - R, cy,     0, lc, 5);
+  int pc2 = gmsh::model::geo::addPoint(cx,     cy + R, 0, lc, 6);
+  int pc3 = gmsh::model::geo::addPoint(cx + R, cy,     0, lc, 7);
+  int pc4 = gmsh::model::geo::addPoint(cx,     cy - R, 0, lc, 8);
+
+  // 圆心 (细化用)
+  int pc  = gmsh::model::geo::addPoint(cx, cy, 0, lc * 0.5, 9);
+
+  // ======================== 3. 构建曲线 ========================
+  // 外边界直线
+  int l1 = gmsh::model::geo::addLine(p1, p2, 1);
+  int l2 = gmsh::model::geo::addLine(p2, p3, 2);
+  int l3 = gmsh::model::geo::addLine(p3, p4, 3);
+  int l4 = gmsh::model::geo::addLine(p4, p1, 4);
+
+  // 内孔圆弧 (四个 90 度圆弧)
+  int a1 = gmsh::model::geo::addCircleArc(pc1, pc, pc2, 5);
+  int a2 = gmsh::model::geo::addCircleArc(pc2, pc, pc3, 6);
+  int a3 = gmsh::model::geo::addCircleArc(pc3, pc, pc4, 7);
+  int a4 = gmsh::model::geo::addCircleArc(pc4, pc, pc1, 8);
+
+  // ======================== 4. 构建带孔面 ========================
+  int outerLoop = gmsh::model::geo::addCurveLoop({l1, l2, l3, l4}, 11);
+  int innerLoop = gmsh::model::geo::addCurveLoop({a1, a2, a3, a4}, 12);
+  int plate = gmsh::model::geo::addPlaneSurface({outerLoop, innerLoop}, 100);
+  gmsh::model::geo::synchronize();
+
+  // ======================== 5. 重组设置 ========================
+  // ---- 选择重组方案 (二选一) ----
+  bool useGlobal = true;  // true: 全局重组 ; false: 局部重组
+  if (useGlobal) {
+    gmsh::option::setNumber(&quot;Mesh.RecombineAll&quot;, 1);
+  } else {
+    gmsh::model::mesh::setRecombine(2, plate, 45.0);
+  }
+
+  // ---- 选择重组算法 ----
+  // 0=Simple, 1=Blossom(默认), 2=Full-Quad, 3=Full-Quad变体
+  gmsh::option::setNumber(&quot;Mesh.RecombinationAlgorithm&quot;, 1);
+
+  // ======================== 6. 孔周围尺寸场（可选） ========================
+  bool useSizeField = true;
+  if (useSizeField) {
+    // Distance 场: 到孔圆弧的距离
+    gmsh::model::mesh::field::add(&quot;Distance&quot;, 1);
+    gmsh::model::mesh::field::setNumbers(1, &quot;CurvesList&quot;, {5, 6, 7, 8});
+
+    // Threshold 场: 将距离映射为尺寸
+    gmsh::model::mesh::field::add(&quot;Threshold&quot;, 2);
+    gmsh::model::mesh::field::setNumber(2, &quot;InField&quot;, 1);
+    gmsh::model::mesh::field::setNumber(2, &quot;SizeMin&quot;, lc * 0.2);
+    gmsh::model::mesh::field::setNumber(2, &quot;SizeMax&quot;, lc);
+    gmsh::model::mesh::field::setNumber(2, &quot;DistMin&quot;, 0.5);
+    gmsh::model::mesh::field::setNumber(2, &quot;DistMax&quot;, 2.0);
+
+    gmsh::model::mesh::field::setAsBackgroundMesh(2);
+
+    // 关闭干扰项，尺寸完全由场决定
+    gmsh::option::setNumber(&quot;Mesh.MeshSizeFromPoints&quot;, 0);
+    gmsh::option::setNumber(&quot;Mesh.MeshSizeFromCurvature&quot;, 0);
+    gmsh::option::setNumber(&quot;Mesh.MeshSizeExtendFromBoundary&quot;, 0);
+  }
+
+  // ======================== 7. 生成网格 ========================
+  gmsh::model::mesh::generate(2);
+
+  // ======================== 8. 网格统计 ========================
+  {
+    std::vector&lt;std::size_t&gt; elemTypes;
+    std::vector&lt;std::vector&lt;std::size_t&gt;&gt; elemTags;
+    std::vector&lt;std::vector&lt;std::size_t&gt;&gt; nodeTags;
+    gmsh::model::mesh::getElements(elemTypes, elemTags, nodeTags, 2);
+
+    int nTri = 0, nQuad = 0;
+    for (std::size_t i = 0; i &lt; elemTypes.size(); ++i) {
+      if (elemTypes[i] == 2)       // 3 节点三角形
+        nTri += elemTags[i].size();
+      else if (elemTypes[i] == 3)  // 4 节点四边形
+        nQuad += elemTags[i].size();
+    }
+    gmsh::logger::write(&quot;=== 网格统计 ===&quot;);
+    gmsh::logger::write(&quot;三角形数量: &quot; + std::to_string(nTri));
+    gmsh::logger::write(&quot;四边形数量: &quot; + std::to_string(nQuad));
+    if (nTri + nQuad &gt; 0) {
+      gmsh::logger::write(&quot;四边形占比: &quot; +
+        std::to_string(100.0 * nQuad / (nTri + nQuad)) + &quot;%&quot;);
+      gmsh::logger::write(&quot;总单元数: &quot; + std::to_string(nTri + nQuad));
+    }
+  }
+
+  // ======================== 9. 输出与 GUI ========================
+  gmsh::write(&quot;ch09_plate.msh&quot;);
+
+  std::set&lt;std::string&gt; cmdArgs(argv, argv + argc);
+  if (!cmdArgs.count(&quot;-nopopup&quot;)) gmsh::fltk::run();
+
+  gmsh::finalize();
+  return 0;
+}
+</code></pre>
+<h3 id="_1">运行方式</h3>
+<pre><code class="language-bash"># 编译
+g++ -o ch09 ch09.cpp -I/path/to/gmsh/include -L/path/to/gmsh/lib -lgmsh
+
+# 运行（打开 GUI）
+./ch09
+
+# 仅生成 .msh 文件
+./ch09 -nopopup
+</code></pre>
+<h3 id="_2">关键变量切换建议</h3>
+<table>
+<thead>
+<tr>
+<th>变量</th>
+<th>默认值</th>
+<th>切换后效果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>useGlobal</code></td>
+<td><code>true</code></td>
+<td>改为 <code>false</code> 使用局部重组（仅对 plate 面生效）</td>
+</tr>
+<tr>
+<td><code>Mesh.RecombinationAlgorithm</code></td>
+<td><code>1</code></td>
+<td>改为 <code>0</code> 体验 Simple 贪心算法速度；改为 <code>2</code> 获得全四边形网格</td>
+</tr>
+<tr>
+<td><code>useSizeField</code></td>
+<td><code>true</code></td>
+<td>改为 <code>false</code> 关闭孔周细化，观察均匀尺寸下的四边形质量</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="95-api">9.5 关键 API 速查表</h2>
+<h3 id="_3">重组控制</h3>
+<table>
+<thead>
+<tr>
+<th>函数 / 选项</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gmsh::option::setNumber("Mesh.RecombineAll", 1)</code></td>
+<td>全局开启重组（对所有 2D 面生效）</td>
+</tr>
+<tr>
+<td><code>gmsh::model::mesh::setRecombine(2, tag, angle)</code></td>
+<td>局部重组，仅对 <code>dim=2</code> 且指定 <code>tag</code> 的面生效。<code>angle</code> 为 Simple 算法的角度阈值（默认 45 度）</td>
+</tr>
+<tr>
+<td><code>gmsh::option::setNumber("Mesh.RecombinationAlgorithm", algo)</code></td>
+<td>选择重组算法：0=Simple, 1=Blossom, 2/3=Full-Quad</td>
+</tr>
+<tr>
+<td><code>gmsh::option::setNumber("Mesh.SubdivisionAlgorithm", 1)</code></td>
+<td>开启全四边形细分（与 <code>mesh::refine()</code> 配合使用）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_4">网格操作</h3>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gmsh::model::mesh::generate(dim)</code></td>
+<td>生成 dim 维网格（内部含重组步骤，若有重组标志）</td>
+</tr>
+<tr>
+<td><code>gmsh::model::mesh::recombine()</code></td>
+<td>显式执行三角形-&gt;四边形重组</td>
+</tr>
+<tr>
+<td><code>gmsh::model::mesh::refine()</code></td>
+<td>按 <code>Mesh.SubdivisionAlgorithm</code> 执行网格细分</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_5">相关选项</h3>
+<table>
+<thead>
+<tr>
+<th>选项名</th>
+<th>类型</th>
+<th>默认值</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Mesh.RecombineAll</code></td>
+<td>integer</td>
+<td>0</td>
+<td>全局重组开关（0=关闭，1=开启）</td>
+</tr>
+<tr>
+<td><code>Mesh.RecombinationAlgorithm</code></td>
+<td>integer</td>
+<td>1</td>
+<td>重组算法：0=Simple, 1=Blossom, 2/3=Full-Quad</td>
+</tr>
+<tr>
+<td><code>Mesh.SubdivisionAlgorithm</code></td>
+<td>integer</td>
+<td>0</td>
+<td>细分算法：0=无，1=全四边形细分</td>
+</tr>
+<tr>
+<td><code>Mesh.Algorithm</code></td>
+<td>integer</td>
+<td>6</td>
+<td>2D 网格算法：8=Frontal-Delaunay for Quads（实验性）</td>
+</tr>
+<tr>
+<td><code>Mesh.Smoothing</code></td>
+<td>integer</td>
+<td>—</td>
+<td>网格光滑迭代次数（重组后光滑可改善四边形质量）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_6">核心几何建模（本章使用）</h3>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gmsh::model::geo::addCircleArc(start, center, end, tag)</code></td>
+<td>创建圆弧（圆心角由三点位置隐式决定）</td>
+</tr>
+<tr>
+<td><code>gmsh::model::geo::addPlaneSurface({outerLoop, innerLoop}, tag)</code></td>
+<td>创建带孔平面面（多个闭环：第一个=外边界，后续=内孔）</td>
+</tr>
+<tr>
+<td><code>gmsh::model::geo::synchronize()</code></td>
+<td>将几何从 geo 模块同步到核心模型</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_7">网格查询</h3>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gmsh::model::mesh::getElements(types, tags, nodes, dim)</code></td>
+<td>按维度获取单元信息（类型编号：2=TRI3, 3=QUAD4, 9=TRI6, 16=QUAD8）</td>
+</tr>
+<tr>
+<td><code>gmsh::model::mesh::getElementTypes(types)</code></td>
+<td>获取模型中所有单元类型</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="96">9.6 常见问题与注意事项</h2>
+<ol>
+<li>
+<p><strong>Simple 算法的 angle 参数仅在 algorithm=0 时生效</strong>：当 <code>Mesh.RecombinationAlgorithm</code> 设为 1（Blossom，默认）或 2/3 时，<code>setRecombine(dim, tag, angle)</code> 中的 <code>angle</code> 参数被忽略。此时 Gmsh 由 Blossom 算法内部的四边形质量代价函数自行决定是否合并一对三角形。</p>
+</li>
+<li>
+<p><strong>Blossom 算法可能保留三角形</strong>：这是设计行为，不是 bug。Blossom 的核心思想是"合并不如不合并好时就保留三角形"。如果需要 100% 四边形，请使用算法 2（Full-Quad）或开启 <code>Mesh.SubdivisionAlgorithm = 1</code> 后执行 <code>mesh::refine()</code>。</p>
+</li>
+<li>
+<p><strong>几何复杂度对重组成功率的影响</strong>：当几何包含极锐角、极短边或复杂拓扑时，Blossom 算法的匹配成功率下降。对此类几何，建议先用 <code>Mesh.Algorithm = 8</code> 或减小 <code>lc</code> 增加三角形数量，为重组提供更优质的输入三角网格。</p>
+</li>
+<li>
+<p><strong>重组不可逆</strong>：<code>mesh::recombine()</code> 修改的是网格数据（将三角形替换为四边形），调用后无法恢复原三角形网格。如需保留原始三角剖分，请在重组前通过 <code>gmsh::write()</code> 保存副本。</p>
+</li>
+<li>
+<p><strong>与 transfinite 的关系</strong>：第 3、6 章中的 <code>transfinite</code> + <code>Recombine</code> 生成的是结构化四边形网格；本章的 <code>setRecombine</code> + 非结构化剖分生成的是非结构化四边形网格。两种方式截然不同——transfinite 通过映射生成，recombination 通过对三角形网格的后处理生成。</p>
+</li>
+<li>
+<p><strong>性能提示</strong>：Blossom 算法的最小代价完美匹配在单元数极大（&gt;100K 三角形）时可能消耗较多时间。Simple 算法的 O(N) 贪心策略在此规模下明显更快，但质量稍低。对于超大规模模型，建议先在部分区域用 Simple 算法做快速预览，再以 Blossom 做最终网格。</p>
+</li>
+<li>
+<p><strong>二阶单元的重组</strong>：如果先剖分一阶三角形网格再将其提升为二阶（通过 <code>Mesh.SecondOrderLinear</code> 等选项），重组操作建议在提升至二阶之前完成。二阶三角形（TRI6, 6 节点）的相邻拓扑关系与一阶一致，但 Blossom 算法的代价函数是为一阶单元设计的。</p>
+</li>
+</ol>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

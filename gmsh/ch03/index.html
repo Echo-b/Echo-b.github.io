@@ -1,0 +1,3455 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../ch02/">
+      
+      
+        <link rel="next" href="../ch04/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>第3章 变换与拉伸几何 - Echo-b's Tech Notes</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#3" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Echo-b&#39;s Tech Notes" class="md-header__button md-logo" aria-label="Echo-b's Tech Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Echo-b's Tech Notes
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              第3章 变换与拉伸几何
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Echo-b&#39;s Tech Notes" class="md-nav__button md-logo" aria-label="Echo-b's Tech Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Echo-b's Tech Notes
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VTK 教程
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    VTK 教程
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    入门篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    入门篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-01-vtk-overview-and-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第一章 VTK概述与环境搭建
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-02-visualization-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二章 可视化管线
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-03-data-model-basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第三章 数据模型基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-04-geometry-and-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第四章 基本几何体与数据源
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-05-rendering-and-interactor/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第五章 渲染与交互机
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-06-volume1-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第六章 入门篇综合实战——3D几何画廊
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    实战篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    实战篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-07-polydata/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第七章 PolyData详解
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-08-unstructured-grid/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第八章 非结构化网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-09-structured-data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第九章 结构化数据
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-10-data-io/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十章 数据I/O
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-11-common-filters/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十一章 常用过滤器
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-12-color-mapping/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十二章 颜色映射与标量可视化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-13-advanced-rendering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十三章 高级渲染技术
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-14-multi-dataset/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十四章 多个数据集处理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-15-volume2-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十五章 实战篇综合实战——CFD后处理可视化工具
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    进阶篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    进阶篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-16-volume-rendering-basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十六章 体渲染基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-17-volume-rendering-advanced/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十七章 体渲染高级技术
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-18-charts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十八章 2D图表系统
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-19-annotation-and-widgets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十九章 三维标注与交互组件
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-20-custom-interaction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十章 自定义交互与Widget
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-21-qt-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十一章 Qt集成
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-22-smp-parallel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十二章 SMP并行入门
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-23-volume3-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十三章 进阶篇综合实战
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GMSH 教程
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    GMSH 教程
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3_1" id="__nav_3_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    基础篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    基础篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第1章 Gmsh概述与C++ SDK配置
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第2章 几何基础——点线面曲线环与物理组
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第3章 变换与拉伸几何
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第3章 变换与拉伸几何
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#31" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 学习目标
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#32" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 核心概念
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.2 核心概念">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#321-geometric-transformation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2.1 几何变换（Geometric Transformation）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#322-extrusion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2.2 拉伸（Extrusion）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#323-surface-loop-and-volume" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2.3 表面环与体（Surface Loop and Volume）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#33-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 基础回顾：来自第2章的模板
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#34-part-a" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 Part A：几何变换
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.4 Part A：几何变换">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#341-translate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4.1 translate() —— 平移
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#342-rotate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4.2 rotate() —— 绕轴旋转
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#343-copy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4.3 copy() —— 复制实体
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#344" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4.4 批量复制与平移面
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#345-scale-symmetrize" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4.5 scale() 与 symmetrize()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#346" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4.6 变换操作总结
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#35-surface-loop-volume" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.5 构建体积：Surface Loop 与 Volume
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#36-part-b" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.6 Part B：拉伸与网格控制
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.6 Part B：拉伸与网格控制">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#361-extrude" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.6.1 extrude() 基本用法 —— 几何拉伸
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#362-extrude" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.6.2 extrude() 高级用法 —— 带层控制的网格拉伸
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#363" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.6.3 拉伸函数的返回值
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#364-revolve" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.6.4 revolve() —— 旋转拉伸
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#365-twist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.6.5 twist() —— 扭转拉伸
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#366" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.6.6 物理组定义与网格生成
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#367-vs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.6.7 拉伸网格 vs 自由网格
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#37" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.7 完整可运行代码
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#38-t3cpp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.8 拉伸网格完整示例（t3.cpp精华）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#39-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.9 关键API速查表
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.9 关键API速查表">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#391" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.9.1 几何变换
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#392" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.9.2 拉伸操作
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#393" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.9.3 体构建
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#394" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.9.4 数据查询与选项
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#310" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.10 常见问题与注意事项
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第4章 高级几何构建——内置函数孔洞注释与颜色
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第5章 三维网格控制——尺寸场体孔洞与网格算法
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch06/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第6章 网格控制进阶——Transfinite分布与结构化网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch07/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第7章 背景网格——用已有网格指导网格尺寸
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch08/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第8章 网格尺寸场
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    进阶篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    进阶篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch09/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第9章 四边形网格重组
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch10/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第10章 复合实体——跨面一致网格划分
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch11/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第11章 STL重网格——无CAD模型的表面重构
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch12/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第12章 同调与上同调计算
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch13/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第13章 嵌入实体——在网格中强制生成共形节点
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch14/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第14章 各向异性网格——方向感知的网格生成
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch15/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第15章 周期性网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch16/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第16章 OpenCASCADE内核与构造实体几何
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch17/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第17章 高级实体建模——断面扫掠圆角管道与曲率自适应网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch18/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第18章 STEP导入与几何分割
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    应用篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    应用篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch19/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第19章 后处理视图与动画
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch20/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第20章 后处理插件——视图数据运算与变换
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch21/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第21章 网格分区与区域分解
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch22/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第22章 遍历模型与网格数据——前处理查询API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第23章 离散实体与混合模型——地形网格实战
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch24/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第24章 后处理视图——List-based与Model-based数据导入
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch25/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第25章 几何求值——参数化法向量与曲率
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第26章 积分点雅可比矩阵基函数与内部边面
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#31" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 学习目标
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#32" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 核心概念
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.2 核心概念">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#321-geometric-transformation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2.1 几何变换（Geometric Transformation）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#322-extrusion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2.2 拉伸（Extrusion）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#323-surface-loop-and-volume" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2.3 表面环与体（Surface Loop and Volume）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#33-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 基础回顾：来自第2章的模板
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#34-part-a" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 Part A：几何变换
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.4 Part A：几何变换">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#341-translate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4.1 translate() —— 平移
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#342-rotate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4.2 rotate() —— 绕轴旋转
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#343-copy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4.3 copy() —— 复制实体
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#344" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4.4 批量复制与平移面
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#345-scale-symmetrize" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4.5 scale() 与 symmetrize()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#346" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4.6 变换操作总结
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#35-surface-loop-volume" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.5 构建体积：Surface Loop 与 Volume
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#36-part-b" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.6 Part B：拉伸与网格控制
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.6 Part B：拉伸与网格控制">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#361-extrude" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.6.1 extrude() 基本用法 —— 几何拉伸
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#362-extrude" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.6.2 extrude() 高级用法 —— 带层控制的网格拉伸
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#363" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.6.3 拉伸函数的返回值
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#364-revolve" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.6.4 revolve() —— 旋转拉伸
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#365-twist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.6.5 twist() —— 扭转拉伸
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#366" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.6.6 物理组定义与网格生成
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#367-vs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.6.7 拉伸网格 vs 自由网格
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#37" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.7 完整可运行代码
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#38-t3cpp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.8 拉伸网格完整示例（t3.cpp精华）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#39-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.9 关键API速查表
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.9 关键API速查表">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#391" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.9.1 几何变换
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#392" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.9.2 拉伸操作
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#393" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.9.3 体构建
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#394" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.9.4 数据查询与选项
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#310" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.10 常见问题与注意事项
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="3">第3章 变换与拉伸几何</h1>
+<h2 id="31">3.1 学习目标</h2>
+<ul>
+<li>掌握Gmsh中几何变换（transformation）的基本操作：平移、旋转、缩放、镜像</li>
+<li>理解实体列表的(dim, tag)表示法，以及<code>copy()</code>与直接变换的区别</li>
+<li>学会通过表面环（surface loop）构建实体体积（volume）</li>
+<li>掌握<code>extrude()</code>函数：从2D面拉伸为3D体，并控制层数与网格类型</li>
+<li>理解<code>revolve()</code>旋转拉伸和<code>twist()</code>扭转拉伸的用法与适用场景</li>
+</ul>
+<h2 id="32">3.2 核心概念</h2>
+<h3 id="321-geometric-transformation">3.2.1 几何变换（Geometric Transformation）</h3>
+<p>在第2章中，我们通过逐点定义的方式构建了几何体。当需要生成规则排列的重复结构时，这种方式显得繁琐且容易出错。Gmsh提供的几何变换工具可以直接对已有实体进行操作，大幅简化复杂几何的构建过程。</p>
+<p>所有几何变换函数的第一个参数都是<strong>实体列表</strong>，表示为一个<code>std::vector&lt;std::pair&lt;int, int&gt;&gt;</code>，其中每个<code>(dim, tag)</code>对唯一标识一个实体：
+- <code>dim = 0</code>：点
+- <code>dim = 1</code>：线
+- <code>dim = 2</code>：面
+- <code>dim = 3</code>：体</p>
+<h3 id="322-extrusion">3.2.2 拉伸（Extrusion）</h3>
+<p>拉伸是将低维实体沿某个方向扩展为高维实体的操作：
+- 沿向量(dx, dy, dz)拉伸线得到面
+- 沿向量(dx, dy, dz)拉伸面得到体</p>
+<p>在网格划分阶段，拉伸不仅可以生成几何体，还可以<strong>同时控制拉伸方向的网格分布</strong>——通过指定<code>Layers</code>参数来设置层数、每层细分数量以及每层高度。</p>
+<h3 id="323-surface-loop-and-volume">3.2.3 表面环与体（Surface Loop and Volume）</h3>
+<p>Gmsh中构建体的逻辑与构建面完全类似：
+- <strong>曲线环（Curve Loop）</strong>由一系列首尾相连的曲线组成，围成一个面
+- <strong>表面环（Surface Loop）</strong>由一系列闭合的面组成，围成一个体</p>
+<h2 id="33-2">3.3 基础回顾：来自第2章的模板</h2>
+<p>本章的所有代码都建立在第2章创建的矩形面基础之上——一个位于z=0平面的矩形面（标签为1），由四个角点(0,0,0)、(0.1,0,0)、(0.1,0.3,0)、(0,0.3,0)围成，四条边的标签分别为1、2、3、4。代码片段如下（片段A）：</p>
+<pre><code class="language-cpp">  double lc = 1e-2;
+  gmsh::model::geo::addPoint(0, 0, 0, lc, 1);
+  gmsh::model::geo::addPoint(.1, 0, 0, lc, 2);
+  gmsh::model::geo::addPoint(.1, .3, 0, lc, 3);
+  gmsh::model::geo::addPoint(0, .3, 0, lc, 4);
+  gmsh::model::geo::addLine(1, 2, 1);  gmsh::model::geo::addLine(3, 2, 2);
+  gmsh::model::geo::addLine(3, 4, 3);  gmsh::model::geo::addLine(4, 1, 4);
+  gmsh::model::geo::addCurveLoop({4, 1, -2, 3}, 1);
+  gmsh::model::geo::addPlaneSurface({1}, 1);
+  gmsh::model::geo::synchronize();
+  gmsh::model::addPhysicalGroup(1, {1, 2, 4}, 5);
+  gmsh::model::addPhysicalGroup(2, {1}, -1, &quot;My surface&quot;);
+</code></pre>
+<p>本章后续所有代码片段都从<strong>片段A之后</strong>继续编写，不再重复上述部分。完整代码见3.7节。</p>
+<h2 id="34-part-a">3.4 Part A：几何变换</h2>
+<h3 id="341-translate">3.4.1 translate() —— 平移</h3>
+<p><code>translate()</code>函数将指定实体沿向量(dx, dy, dz)平移。以下代码添加新点5并将其向左平移0.02：</p>
+<pre><code class="language-cpp">  // 添加点5，然后平移到新位置
+  gmsh::model::geo::addPoint(0, .4, 0, lc, 5);
+  gmsh::model::geo::translate({{0, 5}}, -0.02, 0, 0);
+</code></pre>
+<p>这里<code>{{0, 5}}</code>表示维度为0、标签为5的点。平移后，点5的x坐标从0变为-0.02。</p>
+<blockquote>
+<p><strong>注意</strong>：Gmsh中坐标没有单位——数值本身不代表米或毫米，用户需要自行赋予物理含义。如果你在做毫米级的CAE模型，可以把1.0当作1mm。</p>
+</blockquote>
+<h3 id="342-rotate">3.4.2 rotate() —— 绕轴旋转</h3>
+<p><code>rotate()</code>的完整签名为：</p>
+<pre><code class="language-cpp">rotate({entities}, x, y, z, ax, ay, az, angle);
+</code></pre>
+<p>其中<code>(x, y, z)</code>是旋转轴上的一点，<code>(ax, ay, az)</code>是旋转轴的方向向量，<code>angle</code>是旋转角（弧度制）。</p>
+<pre><code class="language-cpp">  // 将点5绕z轴旋转 -Pi/4，旋转中心为(0, 0.3, 0)
+  gmsh::model::geo::rotate({{0, 5}}, 0, 0.3, 0, 0, 0, 1, -M_PI / 4);
+</code></pre>
+<p>这条语句将点5绕经过(0, 0.3, 0)且方向为(0, 0, 1)（即z轴）的旋转轴旋转-45度。</p>
+<p><strong>API速记</strong>：旋转角度为正时按右手定则绕轴正方向旋转。若旋转角度大于Pi，请使用OpenCASCADE几何内核（第4章介绍），内置geo内核仅支持角度小于Pi的旋转。</p>
+<h3 id="343-copy">3.4.3 copy() —— 复制实体</h3>
+<p><code>copy()</code>是一个非常重要的函数。与直接变换不同，它<strong>复制一份</strong>实体，返回新实体的标签，而原实体保持不变。</p>
+<pre><code class="language-cpp">  // 复制点3并沿y轴平移0.05
+  std::vector&lt;std::pair&lt;int, int&gt;&gt; ov;
+  gmsh::model::geo::copy({{0, 3}}, ov);
+  gmsh::model::geo::translate(ov, 0, 0.05, 0);
+
+  // ov[0].second 就是新点的标签，可以用它来创建线
+  gmsh::model::geo::addLine(3, ov[0].second, 7);
+  gmsh::model::geo::addLine(ov[0].second, 5, 8);
+  gmsh::model::geo::addCurveLoop({5, -8, -7, 3}, 10);
+  gmsh::model::geo::addPlaneSurface({10}, 11);
+</code></pre>
+<p>这段代码的工作流是：
+1. <code>copy()</code>复制点3，结果写入<code>ov</code>（out vector，输出向量）
+2. <code>translate()</code>将副本沿y轴平移0.05
+3. 使用<code>ov[0].second</code>获取新点标签，连接新线
+4. 用新线围成面11</p>
+<blockquote>
+<p><strong>关键点</strong>：<code>copy()</code>的返回值<code>ov</code>是一个<code>vector&lt;pair&lt;int,int&gt;&gt;</code>，每个元素的<code>.first</code>是维度，<code>.second</code>是标签。始终使用<code>.second</code>获取新标签。</p>
+</blockquote>
+<h3 id="344">3.4.4 批量复制与平移面</h3>
+<p><code>copy()</code>可以一次复制多个实体，<code>translate()</code>也能一次变换多个实体：</p>
+<pre><code class="language-cpp">  // 同时复制面1和面11，然后沿x轴平移0.12
+  gmsh::model::geo::copy({{2, 1}, {2, 11}}, ov);
+  gmsh::model::geo::translate(ov, 0.12, 0, 0);
+
+  printf(&quot;New surfaces '%d' and '%d'\n&quot;, ov[0].second, ov[1].second);
+</code></pre>
+<p>输出向量<code>ov</code>中元素的顺序与输入实体的顺序一致：<code>ov[0]</code>对应面1的副本，<code>ov[1]</code>对应面11的副本。</p>
+<h3 id="345-scale-symmetrize">3.4.5 scale() 与 symmetrize()</h3>
+<p>虽然本章的示例代码中没有直接使用，但这两个函数同样常用：</p>
+<p><strong>scale() —— 缩放</strong>（以某点为中心对实体进行缩放任缩）：</p>
+<pre><code class="language-cpp">// scale({entities}, cx, cy, cz, sx, sy, sz)
+// (cx, cy, cz) 是缩放中心，(sx, sy, sz) 是各方向缩放因子
+gmsh::model::geo::scale({{0, 1}}, 0, 0, 0, 2.0, 2.0, 1.0);
+// 以原点为中心，点1的x、y坐标放大2倍，z不变
+</code></pre>
+<p><strong>symmetrize() —— 镜像</strong>（关于平面 ax+by+cz+d=0 进行镜像）：</p>
+<pre><code class="language-cpp">// symmetrize({entities}, a, b, c, d)
+// 关于平面 ax+by+cz+d=0 做镜像
+gmsh::model::geo::symmetrize({{2, 1}}, 1, 0, 0, 0);
+// 关于平面 x=0 (即yz平面) 镜像面1
+</code></pre>
+<h3 id="346">3.4.6 变换操作总结</h3>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>作用</th>
+<th style="text-align: center;">原实体是否保留</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>translate()</code></td>
+<td>平移实体</td>
+<td style="text-align: center;">实体本身移动</td>
+</tr>
+<tr>
+<td><code>rotate()</code></td>
+<td>绕轴旋转</td>
+<td style="text-align: center;">实体本身旋转</td>
+</tr>
+<tr>
+<td><code>scale()</code></td>
+<td>缩放</td>
+<td style="text-align: center;">实体本身缩放</td>
+</tr>
+<tr>
+<td><code>symmetrize()</code></td>
+<td>镜像</td>
+<td style="text-align: center;">实体本身镜像</td>
+</tr>
+<tr>
+<td><code>copy()</code> + 变换</td>
+<td>复制后变换</td>
+<td style="text-align: center;">原实体保留，返回新实体标签</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>最佳实践</strong>：在构建复杂几何时，通常先创建基础几何，然后用<code>copy()</code> + 变换组合来"繁衍"出整个结构。这样代码更简洁，且便于参数化调整。</p>
+</blockquote>
+<h2 id="35-surface-loop-volume">3.5 构建体积：Surface Loop 与 Volume</h2>
+<p>体积（volume）是Gmsh中的第四种基本实体类型（前三种为点、线、面）。构建体积的方式与构建面完全对应：</p>
+<pre><code>面 = 曲线环(Curve Loop) → 由闭合曲线序列定义
+体 = 表面环(Surface Loop) → 由闭合面序列定义
+</code></pre>
+<p>以下代码手动构建一个六面体（由6个面围成）：</p>
+<pre><code class="language-cpp">  // 在z=0.12平面创建四个新点
+  gmsh::model::geo::addPoint(0., 0.3, 0.12, lc, 100);
+  gmsh::model::geo::addPoint(0.1, 0.3, 0.12, lc, 101);
+  gmsh::model::geo::addPoint(0.1, 0.35, 0.12, lc, 102);
+
+  // 通过API查询点5的坐标，用于创建点103
+  gmsh::model::geo::synchronize();
+  std::vector&lt;double&gt; xyz;
+  gmsh::model::getValue(0, 5, {}, xyz);
+  gmsh::model::geo::addPoint(xyz[0], xyz[1], 0.12, lc, 103);
+</code></pre>
+<blockquote>
+<p><strong>说明</strong>：<code>gmsh::model::getValue(0, 5, {}, xyz)</code>查询点5的坐标。<code>synchronize()</code>的调用确保几何数据已同步到Gmsh内部模型，这是调用<code>getValue()</code>的前提条件。</p>
+</blockquote>
+<p>接下来连接各点形成侧面、顶面，最终包围成一个体：</p>
+<pre><code class="language-cpp">  // 连接竖直方向的棱线
+  gmsh::model::geo::addLine(4, 100, 110);   gmsh::model::geo::addLine(3, 101, 111);
+  gmsh::model::geo::addLine(6, 102, 112);   gmsh::model::geo::addLine(5, 103, 113);
+  // 连接顶面四边
+  gmsh::model::geo::addLine(103, 100, 114); gmsh::model::geo::addLine(100, 101, 115);
+  gmsh::model::geo::addLine(101, 102, 116); gmsh::model::geo::addLine(102, 103, 117);
+
+  // 构建四个侧面
+  gmsh::model::geo::addCurveLoop({115, -111, 3, 110}, 118);
+  gmsh::model::geo::addPlaneSurface({118}, 119);
+  gmsh::model::geo::addCurveLoop({111, 116, -112, -7}, 120);
+  gmsh::model::geo::addPlaneSurface({120}, 121);
+  gmsh::model::geo::addCurveLoop({112, 117, -113, -8}, 122);
+  gmsh::model::geo::addPlaneSurface({122}, 123);
+  gmsh::model::geo::addCurveLoop({114, -110, 5, 113}, 124);
+  gmsh::model::geo::addPlaneSurface({124}, 125);
+  // 构建顶面
+  gmsh::model::geo::addCurveLoop({115, 116, 117, 114}, 126);
+  gmsh::model::geo::addPlaneSurface({126}, 127);
+
+  // 将6个面包围成体：顶面+四个侧面+底面(原有的面11)
+  gmsh::model::geo::addSurfaceLoop({127, 119, 121, 123, 125, 11}, 128);
+  gmsh::model::geo::addVolume({128}, 129);
+</code></pre>
+<p><strong>重要规则</strong>：<code>addSurfaceLoop()</code>中面的朝向必须一致（全部指向体外或全部指向体内）。Gmsh会根据面的实际朝向自动判断。如果某面的朝向不正确（即面的法向量指向体内而非体外），该面在表面环中的标签应取负值。</p>
+<h2 id="36-part-b">3.6 Part B：拉伸与网格控制</h2>
+<h3 id="361-extrude">3.6.1 extrude() 基本用法 —— 几何拉伸</h3>
+<p>手动构建体的过程非常繁琐。<code>extrude()</code>函数可以一步完成：沿指定方向拉伸面，自动生成所需的全部点、线、面，并返回新实体的标签。</p>
+<pre><code class="language-cpp">  // 将之前复制的面(ov[1])沿z轴拉伸0.12，生成体
+  std::vector&lt;std::pair&lt;int, int&gt;&gt; ov2;
+  gmsh::model::geo::extrude({ov[1]}, 0, 0, 0.12, ov2);
+</code></pre>
+<p>这条语句将<code>ov[1]</code>（面11的副本）沿z轴正方向拉伸0.12，创建的新体标签存储在<code>ov2</code>中。</p>
+<h3 id="362-extrude">3.6.2 extrude() 高级用法 —— 带层控制的网格拉伸</h3>
+<p><code>extrude()</code>最强大的功能是可以同时控制拉伸方向的网格分布。以下代码创建了带分层控制的拉伸：</p>
+<pre><code class="language-cpp">  double h = 0.1;
+  std::vector&lt;std::pair&lt;int, int&gt;&gt; ov;
+  // 拉伸面1，总高度h，分2层：
+  //   第1层：8个细分，高度到总高的0.5（即0.05）
+  //   第2层：2个细分，高度到总高的1.0（即0.1）
+  gmsh::model::geo::extrude({{2, 1}}, 0, 0, h, ov,
+                            {8, 2},     // 每层的单元数量
+                            {0.5, 1});  // 每层结束时的归一化高度
+</code></pre>
+<p><strong>参数解读</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>{{2, 1}}</code></td>
+<td>被拉伸的实体列表（面1）</td>
+</tr>
+<tr>
+<td><code>0, 0, h</code></td>
+<td>拉伸向量(0, 0, 0.1)</td>
+</tr>
+<tr>
+<td><code>ov</code></td>
+<td>输出：返回新创建的实体标签列表</td>
+</tr>
+<tr>
+<td><code>{8, 2}</code></td>
+<td>第1层8个单元，第2层2个单元</td>
+</tr>
+<tr>
+<td><code>{0.5, 1}</code></td>
+<td>第1层结束于总高度的0.5处，第2层结束于总高度的1.0处</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>注意</strong>：高度值使用归一化坐标：<code>0.5</code>表示总高度的一半（即0.05），<code>1.0</code>表示总高度（即0.1）。每层的实际高度 = 该层结束高度 - 上一层结束高度。因此第1层实际高度为0.05，第2层也为0.05。</p>
+</blockquote>
+<h3 id="363">3.6.3 拉伸函数的返回值</h3>
+<p>所有拉伸函数（<code>extrude</code>、<code>revolve</code>、<code>twist</code>）返回的<code>ov</code>列表具有固定的结构：</p>
+<table>
+<thead>
+<tr>
+<th>索引</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ov[0]</code></td>
+<td>拉伸产生的"顶面"（top surface）</td>
+</tr>
+<tr>
+<td><code>ov[1]</code></td>
+<td>拉伸产生的"体"（new volume）</td>
+</tr>
+<tr>
+<td><code>ov[2], ov[3], ...</code></td>
+<td>拉伸产生的各"侧面"（lateral surfaces）</td>
+</tr>
+</tbody>
+</table>
+<p>这个结构可以用于后续操作，例如引用新生成的体来定义物理组。</p>
+<h3 id="364-revolve">3.6.4 revolve() —— 旋转拉伸</h3>
+<p><code>revolve()</code>沿圆弧路径拉伸实体，适用于生成旋转对称结构：</p>
+<pre><code class="language-cpp">  // 将面28绕轴旋转 -Pi/2 生成体
+  // 轴点：(-0.1, 0, 0.1)，轴方向：(0, 1, 0)
+  // 分7个单元，并重组为棱柱(prism)
+  gmsh::model::geo::revolve({{2, 28}}, -0.1, 0, 0.1, 0, 1, 0, -M_PI / 2, ov,
+                            {7});
+</code></pre>
+<p><strong>参数说明</strong>：前三个参数<code>(-0.1, 0, 0.1)</code>是旋转轴上的一点，接着三个参数<code>(0, 1, 0)</code>是旋转轴方向（这里绕y轴旋转），<code>-M_PI/2</code>是旋转角度。<code>{7}</code>表示沿旋转方向划分为7个单元。</p>
+<blockquote>
+<p><strong>限制</strong>：使用内置geo内核时，单次旋转角度必须<strong>小于Pi</strong>（180度）。若要实现完整一周的旋转，需要至少分3次调用。OpenCASCADE内核没有此限制。</p>
+</blockquote>
+<h3 id="365-twist">3.6.5 twist() —— 扭转拉伸</h3>
+<p><code>twist()</code>将平移和旋转组合在一起，实现"扭转"效果：</p>
+<pre><code class="language-cpp">  // 获取ONELAB参数定义的角度值
+  std::vector&lt;double&gt; angle;
+  gmsh::onelab::getNumber(&quot;Parameters/Twisting angle&quot;, angle);
+
+  // 扭转拉伸面50：沿x方向平移-0.2，同时绕x轴旋转指定角度
+  gmsh::model::geo::twist({{2, 50}},         // 被拉伸的面
+                          0, 0.15, 0.25,      // 旋转轴点
+                          -2 * h, 0, 0,       // 平移向量
+                          1, 0, 0,             // 旋转轴方向（x轴）
+                          angle[0] * M_PI / 180., // 旋转角（度转弧度）
+                          ov,                  // 输出
+                          {10},                // 10个细分
+                          {},                  // 无额外高度控制
+                          true);               // 重组为棱柱
+</code></pre>
+<p><code>twist()</code>可以理解为：实体在平移的同时绕指定轴旋转。这在工程中有很多应用，例如螺纹、螺旋叶片、扭转梁等。</p>
+<p><strong>参数详细说明</strong>：
+- 轴点 <code>(0, 0.15, 0.25)</code> 和轴方向 <code>(1, 0, 0)</code> 定义旋转轴
+- 平移向量 <code>(-2*h, 0, 0)</code> 即 <code>(-0.2, 0, 0)</code>
+- 总旋转角 = 预设角度 x Pi/180
+- 最后一个参数 <code>true</code> 表示将生成的四面体重组（recombine）为棱柱</p>
+<h3 id="366">3.6.6 物理组定义与网格生成</h3>
+<p>完成几何构建后，将体加入物理组并生成网格：</p>
+<pre><code class="language-cpp">  // 同步几何数据
+  gmsh::model::geo::synchronize();
+
+  // 将体129和由extrude生成的体加入物理组&quot;1&quot;，命名为&quot;The volume&quot;
+  gmsh::model::addPhysicalGroup(3, {129, 130}, 1, &quot;The volume&quot;);
+
+  // 生成3D网格
+  gmsh::model::mesh::generate(3);
+  gmsh::write(&quot;t2.msh&quot;);
+</code></pre>
+<h3 id="367-vs">3.6.7 拉伸网格 vs 自由网格</h3>
+<p>理解"拉伸网格（extruded mesh）"与"自由网格（free mesh）"的差异对于网格质量控制非常重要：</p>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>拉伸网格</th>
+<th>自由网格</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>生成方式</td>
+<td>由2D网格沿指定方向扩展</td>
+<td>在3D域内自动填充</td>
+</tr>
+<tr>
+<td>单元类型</td>
+<td>棱柱（prism）/六面体（hex）</td>
+<td>四面体（tetra）为主</td>
+</tr>
+<tr>
+<td>方向性</td>
+<td>具有明确的层状结构</td>
+<td>各向同性</td>
+</tr>
+<tr>
+<td>适用场景</td>
+<td>薄壁结构、流体边界层</td>
+<td>任意复杂几何</td>
+</tr>
+<tr>
+<td>网格质量控制</td>
+<td>通过层数和高度参数</td>
+<td>通过尺寸场控制</td>
+</tr>
+</tbody>
+</table>
+<p>拉伸网格特别适合于：
+- <strong>CFD边界层网格</strong>：在壁面附近使用高度渐变的层，第一层极薄以捕捉粘性效应
+- <strong>薄壁结构</strong>：如钣金件，厚度方向使用少量单元
+- <strong>复合材料层合板</strong>：每层代表一个铺层</p>
+<h2 id="37">3.7 完整可运行代码</h2>
+<p>将本章各节代码片段按顺序拼接（片段A + 3.4.1~3.4.4 + 3.5 + 3.6.1），得到的完整程序即为官方教程的 <code>t2.cpp</code>。关键拼接要点：</p>
+<ul>
+<li><strong>片段A（3.3节）</strong> 提供矩形面和物理组</li>
+<li><strong>3.4.1~3.4.4节</strong> 在片段A之后追加变换操作（<code>translate</code>、<code>rotate</code>、<code>copy</code>）</li>
+<li><strong>3.5节</strong> 在z=0.12平面手动构建六面体体129</li>
+<li><strong>3.6.1节</strong> 用<code>extrude()</code>将面拉伸为体130</li>
+<li>最后统一<code>synchronize()</code>、添加物理组、生成3D网格</li>
+</ul>
+<p>完整源码见官方文件 <code>gmsh-4.15.2-source/tutorials/c++/t2.cpp</code>，或参考本章各节代码片段的自然拼接。</p>
+<h2 id="38-t3cpp">3.8 拉伸网格完整示例（t3.cpp精华）</h2>
+<p>以下代码展示带层控制的<code>extrude</code>、绕轴旋转的<code>revolve</code>和扭转的<code>twist</code>的完整用法。该程序在片段A创建的矩形面基础上，依次执行三次拉伸。</p>
+<p>核心逻辑如下（完整源码见官方文件 <code>gmsh-4.15.2-source/tutorials/c++/t3.cpp</code>）：</p>
+<pre><code class="language-cpp">  // --- 片段A：基础矩形面（同3.3节） ---
+  // ... addPoint ×4, addLine ×4, addCurveLoop, addPlaneSurface ...
+  double h = 0.1;
+
+  // --- 带层控制的网格拉伸：2层，第一层8单元，第二层2单元 ---
+  std::vector&lt;std::pair&lt;int, int&gt;&gt; ov;
+  gmsh::model::geo::extrude({{2, 1}}, 0, 0, h, ov,
+                            {8, 2}, {0.5, 1});
+  // 结果：ov[0]为顶面28，ov[1]为体1
+
+  // --- 旋转拉伸面28：绕y轴旋转-Pi/2，7个细分 ---
+  gmsh::model::geo::revolve({{2, 28}}, -0.1, 0, 0.1, 0, 1, 0, -M_PI / 2, ov,
+                            {7});
+  // 结果：ov[0]为顶面50，ov[1]为体2
+
+  // --- 扭转拉伸面50：沿x平移-0.2 + 绕x轴旋转90度，重组为棱柱 ---
+  gmsh::model::geo::twist({{2, 50}}, 0, 0.15, 0.25, -2 * h, 0, 0, 1, 0, 0,
+                          90.0 * M_PI / 180., ov, {10}, {}, true);
+
+  gmsh::model::geo::synchronize();
+  gmsh::model::addPhysicalGroup(3, {1, 2, ov[1].second}, 101);
+  gmsh::model::mesh::generate(3);
+  gmsh::write(&quot;t3.msh&quot;);
+</code></pre>
+<h2 id="39-api">3.9 关键API速查表</h2>
+<h3 id="391">3.9.1 几何变换</h3>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>签名</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>geo::translate</code></td>
+<td><code>(vector&lt;pair&lt;int,int&gt;&gt;, dx, dy, dz)</code></td>
+<td>平移实体</td>
+</tr>
+<tr>
+<td><code>geo::rotate</code></td>
+<td><code>(vector&lt;pair&lt;int,int&gt;&gt;, x, y, z, ax, ay, az, angle)</code></td>
+<td>绕轴旋转，角度为弧度</td>
+</tr>
+<tr>
+<td><code>geo::scale</code></td>
+<td><code>(vector&lt;pair&lt;int,int&gt;&gt;, cx, cy, cz, sx, sy, sz)</code></td>
+<td>以(cx,cy,cz)为中心缩放</td>
+</tr>
+<tr>
+<td><code>geo::symmetrize</code></td>
+<td><code>(vector&lt;pair&lt;int,int&gt;&gt;, a, b, c, d)</code></td>
+<td>关于平面ax+by+cz+d=0镜像</td>
+</tr>
+<tr>
+<td><code>geo::copy</code></td>
+<td><code>(vector&lt;pair&lt;int,int&gt;&gt;, &amp;out)</code></td>
+<td>复制实体，返回新标签</td>
+</tr>
+</tbody>
+</table>
+<h3 id="392">3.9.2 拉伸操作</h3>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>签名</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>geo::extrude</code></td>
+<td><code>(entities, dx, dy, dz, &amp;out, [layers], [heights])</code></td>
+<td>沿向量拉伸，可选层控制</td>
+</tr>
+<tr>
+<td><code>geo::revolve</code></td>
+<td><code>(entities, px, py, pz, ax, ay, az, angle, &amp;out, [layers])</code></td>
+<td>绕轴旋转拉伸</td>
+</tr>
+<tr>
+<td><code>geo::twist</code></td>
+<td><code>(entities, px, py, pz, dx, dy, dz, ax, ay, az, angle, &amp;out, [layers], [heights], [recombine])</code></td>
+<td>平移+旋转组合拉伸</td>
+</tr>
+</tbody>
+</table>
+<h3 id="393">3.9.3 体构建</h3>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>签名</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>geo::addSurfaceLoop</code></td>
+<td><code>({surfaceTags}, tag)</code></td>
+<td>由面序列定义表面环</td>
+</tr>
+<tr>
+<td><code>geo::addVolume</code></td>
+<td><code>({surfaceLoopTags}, tag)</code></td>
+<td>由表面环定义体</td>
+</tr>
+</tbody>
+</table>
+<h3 id="394">3.9.4 数据查询与选项</h3>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>签名</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>model::getValue</code></td>
+<td><code>(dim, tag, {}, &amp;out)</code></td>
+<td>查询实体坐标（需先synchronize）</td>
+</tr>
+<tr>
+<td><code>geo::mesh::setSize</code></td>
+<td><code>(entities, size)</code></td>
+<td>批量设置点的网格尺寸</td>
+</tr>
+<tr>
+<td><code>geo::synchronize</code></td>
+<td><code>()</code></td>
+<td>同步geo内核数据到Gmsh模型</td>
+</tr>
+<tr>
+<td><code>option::setNumber</code></td>
+<td><code>(name, val)</code></td>
+<td>设置数值型选项</td>
+</tr>
+<tr>
+<td><code>option::setColor</code></td>
+<td><code>(name, r, g, b)</code></td>
+<td>设置颜色选项</td>
+</tr>
+</tbody>
+</table>
+<h2 id="310">3.10 常见问题与注意事项</h2>
+<ol>
+<li>
+<p><strong>synchronize() 的时机</strong>：在调用<code>getValue()</code>查询实体坐标之前，必须先调用<code>geo::synchronize()</code>。几何构建过程中不需要频繁同步。</p>
+</li>
+<li>
+<p><strong>旋转角度限制</strong>：内置geo内核的单次旋转角度必须小于Pi。若需要更大角度，分段旋转或切换到OpenCASCADE内核。</p>
+</li>
+<li>
+<p><strong>copy() vs 直接变换</strong>：<code>copy()</code>复制实体并返回新标签，原实体保持不变。直接<code>translate()</code>、<code>rotate()</code>等会修改实体本身。构建对称或重复结构时，先用<code>copy()</code>再变换是推荐模式。</p>
+</li>
+<li>
+<p><strong>表面环的面朝向</strong>：<code>addSurfaceLoop()</code>要求所有参与面的法向量一致朝外（或一致朝内）。如果某面朝向不正确，在列表中对该面的标签取负值即可。</p>
+</li>
+<li>
+<p><strong>拉伸的Layers参数</strong>：<code>{8, 2}</code>表示第一层8个单元、第二层2个单元；<code>{0.5, 1}</code>表示第一层结束于总高度的一半、第二层结束于总高度。两者长度必须相等。</p>
+</li>
+<li>
+<p><strong>返回值结构</strong>：<code>extrude()</code>/<code>revolve()</code>/<code>twist()</code>返回的向量中，<code>ov[0]</code>是顶面，<code>ov[1]</code>是新体，<code>ov[2..n]</code>是侧面。这个约定在所有拉伸函数中保持一致。</p>
+</li>
+</ol>
+<hr />
+<blockquote>
+<p><strong>下一章预告</strong>：第4章将介绍OpenCASCADE几何内核的使用，包括布尔运算、倒角圆角、以及更复杂的CAD特征建模。</p>
+</blockquote>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

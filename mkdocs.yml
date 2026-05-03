@@ -1,0 +1,65 @@
+site_name: Echo-b's Tech Notes
+theme:
+  name: material
+  features:
+    - navigation.sections
+    - search.highlight
+nav:
+  - Home: index.md
+  - VTK 教程:
+    - 入门篇:
+      - 第一章 VTK概述与环境搭建: vtk/chapter-01-vtk-overview-and-setup.md
+      - 第二章 可视化管线: vtk/chapter-02-visualization-pipeline.md
+      - 第三章 数据模型基础: vtk/chapter-03-data-model-basics.md
+      - 第四章 基本几何体与数据源: vtk/chapter-04-geometry-and-sources.md
+      - 第五章 渲染与交互机: vtk/chapter-05-rendering-and-interactor.md
+      - 第六章 入门篇综合实战——3D几何画廊: vtk/chapter-06-volume1-capstone.md
+    - 实战篇:
+      - 第七章 PolyData详解: vtk/chapter-07-polydata.md
+      - 第八章 非结构化网格: vtk/chapter-08-unstructured-grid.md
+      - 第九章 结构化数据: vtk/chapter-09-structured-data.md
+      - 第十章 数据I/O: vtk/chapter-10-data-io.md
+      - 第十一章 常用过滤器: vtk/chapter-11-common-filters.md
+      - 第十二章 颜色映射与标量可视化: vtk/chapter-12-color-mapping.md
+      - 第十三章 高级渲染技术: vtk/chapter-13-advanced-rendering.md
+      - 第十四章 多个数据集处理: vtk/chapter-14-multi-dataset.md
+      - 第十五章 实战篇综合实战——CFD后处理可视化工具: vtk/chapter-15-volume2-capstone.md
+    - 进阶篇:
+      - 第十六章 体渲染基础: vtk/chapter-16-volume-rendering-basics.md
+      - 第十七章 体渲染高级技术: vtk/chapter-17-volume-rendering-advanced.md
+      - 第十八章 2D图表系统: vtk/chapter-18-charts.md
+      - 第十九章 三维标注与交互组件: vtk/chapter-19-annotation-and-widgets.md
+      - 第二十章 自定义交互与Widget: vtk/chapter-20-custom-interaction.md
+      - 第二十一章 Qt集成: vtk/chapter-21-qt-integration.md
+      - 第二十二章 SMP并行入门: vtk/chapter-22-smp-parallel.md
+      - 第二十三章 进阶篇综合实战: vtk/chapter-23-volume3-capstone.md
+  - GMSH 教程:
+    - 基础篇:
+      - 第1章 Gmsh概述与C++ SDK配置: gmsh/ch01.md
+      - 第2章 几何基础——点线面曲线环与物理组: gmsh/ch02.md
+      - 第3章 变换与拉伸几何: gmsh/ch03.md
+      - 第4章 高级几何构建——内置函数孔洞注释与颜色: gmsh/ch04.md
+      - 第5章 三维网格控制——尺寸场体孔洞与网格算法: gmsh/ch05.md
+      - 第6章 网格控制进阶——Transfinite分布与结构化网格: gmsh/ch06.md
+      - 第7章 背景网格——用已有网格指导网格尺寸: gmsh/ch07.md
+      - 第8章 网格尺寸场: gmsh/ch08.md
+    - 进阶篇:
+      - 第9章 四边形网格重组: gmsh/ch09.md
+      - 第10章 复合实体——跨面一致网格划分: gmsh/ch10.md
+      - 第11章 STL重网格——无CAD模型的表面重构: gmsh/ch11.md
+      - 第12章 同调与上同调计算: gmsh/ch12.md
+      - 第13章 嵌入实体——在网格中强制生成共形节点: gmsh/ch13.md
+      - 第14章 各向异性网格——方向感知的网格生成: gmsh/ch14.md
+      - 第15章 周期性网格: gmsh/ch15.md
+      - 第16章 OpenCASCADE内核与构造实体几何: gmsh/ch16.md
+      - 第17章 高级实体建模——断面扫掠圆角管道与曲率自适应网格: gmsh/ch17.md
+      - 第18章 STEP导入与几何分割: gmsh/ch18.md
+    - 应用篇:
+      - 第19章 后处理视图与动画: gmsh/ch19.md
+      - 第20章 后处理插件——视图数据运算与变换: gmsh/ch20.md
+      - 第21章 网格分区与区域分解: gmsh/ch21.md
+      - 第22章 遍历模型与网格数据——前处理查询API: gmsh/ch22.md
+      - 第23章 离散实体与混合模型——地形网格实战: gmsh/ch23.md
+      - 第24章 后处理视图——List-based与Model-based数据导入: gmsh/ch24.md
+      - 第25章 几何求值——参数化法向量与曲率: gmsh/ch25.md
+      - 第26章 积分点雅可比矩阵基函数与内部边面: gmsh/ch26.md

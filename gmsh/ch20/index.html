@@ -1,0 +1,3803 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../ch19/">
+      
+      
+        <link rel="next" href="../ch21/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>第20章 后处理插件——视图数据运算与变换 - Echo-b's Tech Notes</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#20-plugin" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Echo-b&#39;s Tech Notes" class="md-header__button md-logo" aria-label="Echo-b's Tech Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Echo-b's Tech Notes
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              第20章 后处理插件——视图数据运算与变换
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Echo-b&#39;s Tech Notes" class="md-nav__button md-logo" aria-label="Echo-b's Tech Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Echo-b's Tech Notes
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VTK 教程
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    VTK 教程
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    入门篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    入门篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-01-vtk-overview-and-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第一章 VTK概述与环境搭建
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-02-visualization-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二章 可视化管线
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-03-data-model-basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第三章 数据模型基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-04-geometry-and-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第四章 基本几何体与数据源
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-05-rendering-and-interactor/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第五章 渲染与交互机
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-06-volume1-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第六章 入门篇综合实战——3D几何画廊
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    实战篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    实战篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-07-polydata/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第七章 PolyData详解
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-08-unstructured-grid/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第八章 非结构化网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-09-structured-data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第九章 结构化数据
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-10-data-io/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十章 数据I/O
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-11-common-filters/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十一章 常用过滤器
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-12-color-mapping/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十二章 颜色映射与标量可视化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-13-advanced-rendering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十三章 高级渲染技术
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-14-multi-dataset/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十四章 多个数据集处理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-15-volume2-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十五章 实战篇综合实战——CFD后处理可视化工具
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    进阶篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    进阶篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-16-volume-rendering-basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十六章 体渲染基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-17-volume-rendering-advanced/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十七章 体渲染高级技术
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-18-charts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十八章 2D图表系统
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-19-annotation-and-widgets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十九章 三维标注与交互组件
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-20-custom-interaction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十章 自定义交互与Widget
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-21-qt-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十一章 Qt集成
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-22-smp-parallel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十二章 SMP并行入门
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-23-volume3-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十三章 进阶篇综合实战
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GMSH 教程
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    GMSH 教程
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1" id="__nav_3_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    基础篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    基础篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第1章 Gmsh概述与C++ SDK配置
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第2章 几何基础——点线面曲线环与物理组
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第3章 变换与拉伸几何
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第4章 高级几何构建——内置函数孔洞注释与颜色
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第5章 三维网格控制——尺寸场体孔洞与网格算法
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch06/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第6章 网格控制进阶——Transfinite分布与结构化网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch07/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第7章 背景网格——用已有网格指导网格尺寸
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch08/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第8章 网格尺寸场
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    进阶篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    进阶篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch09/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第9章 四边形网格重组
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch10/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第10章 复合实体——跨面一致网格划分
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch11/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第11章 STL重网格——无CAD模型的表面重构
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch12/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第12章 同调与上同调计算
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch13/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第13章 嵌入实体——在网格中强制生成共形节点
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch14/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第14章 各向异性网格——方向感知的网格生成
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch15/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第15章 周期性网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch16/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第16章 OpenCASCADE内核与构造实体几何
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch17/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第17章 高级实体建模——断面扫掠圆角管道与曲率自适应网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch18/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第18章 STEP导入与几何分割
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    应用篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    应用篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch19/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第19章 后处理视图与动画
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第20章 后处理插件——视图数据运算与变换
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第20章 后处理插件——视图数据运算与变换
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#201" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.1 学习目标
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#202" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.2 核心概念说明
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="20.2 核心概念说明">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2021-plugin" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.2.1 插件（Plugin）是什么
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2022" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.2.2 常用内置插件速览
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.2.3 插件参数系统
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2024-cae" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.2.4 CAE 中的应用场景
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#203-c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.3 C++ 代码逐段讲解
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="20.3 C++ 代码逐段讲解">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2031" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.3.1 头文件与初始化
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2032" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.3.2 加载预置三维标量视图
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2033" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.3.3 创建演示几何体与网格（用于构建矢量视图）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2034-model-based-view" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.3.4 从网格数据创建标量视图（Model-Based View）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2035" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.3.5 从网格数据创建矢量视图（用于流线演示）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2036-isosurface" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.3.6 Isosurface 等值面提取
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2037-cutplane-cutmap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.3.7 CutPlane 截面与 CutMap 截面映射
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2038-skin" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.3.8 Skin 表面提取
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2039-streamlines" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.3.9 StreamLines 流线追踪
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#20310-probe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.3.10 Probe 探针采样
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#20311-modifycomponents-annotate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.3.11 ModifyComponents 分量变换与 Annotate 标注
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#20312-gui" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.3.12 视图可视化选项与 GUI 启动
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#204" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.4 完整可运行代码
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#205-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.5 关键 API 速查表
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#206" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.6 内置插件参数速查
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="20.6 内置插件参数速查">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#isosurface" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Isosurface（等值面）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cutplane-cutmap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CutPlane / CutMap（截面）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#streamlines" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        StreamLines（流线）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#skin" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Skin（表面提取）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#probe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Probe（探针）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modifycomponents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ModifyComponents（分量修改）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#annotate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Annotate（文本标注）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#207" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.7 本章小结
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#208" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.8 注意事项
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch21/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第21章 网格分区与区域分解
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch22/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第22章 遍历模型与网格数据——前处理查询API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第23章 离散实体与混合模型——地形网格实战
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch24/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第24章 后处理视图——List-based与Model-based数据导入
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch25/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第25章 几何求值——参数化法向量与曲率
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第26章 积分点雅可比矩阵基函数与内部边面
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#201" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.1 学习目标
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#202" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.2 核心概念说明
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="20.2 核心概念说明">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2021-plugin" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.2.1 插件（Plugin）是什么
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2022" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.2.2 常用内置插件速览
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.2.3 插件参数系统
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2024-cae" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.2.4 CAE 中的应用场景
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#203-c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.3 C++ 代码逐段讲解
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="20.3 C++ 代码逐段讲解">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2031" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.3.1 头文件与初始化
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2032" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.3.2 加载预置三维标量视图
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2033" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.3.3 创建演示几何体与网格（用于构建矢量视图）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2034-model-based-view" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.3.4 从网格数据创建标量视图（Model-Based View）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2035" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.3.5 从网格数据创建矢量视图（用于流线演示）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2036-isosurface" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.3.6 Isosurface 等值面提取
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2037-cutplane-cutmap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.3.7 CutPlane 截面与 CutMap 截面映射
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2038-skin" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.3.8 Skin 表面提取
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2039-streamlines" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.3.9 StreamLines 流线追踪
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#20310-probe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.3.10 Probe 探针采样
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#20311-modifycomponents-annotate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.3.11 ModifyComponents 分量变换与 Annotate 标注
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#20312-gui" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.3.12 视图可视化选项与 GUI 启动
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#204" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.4 完整可运行代码
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#205-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.5 关键 API 速查表
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#206" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.6 内置插件参数速查
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="20.6 内置插件参数速查">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#isosurface" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Isosurface（等值面）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cutplane-cutmap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CutPlane / CutMap（截面）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#streamlines" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        StreamLines（流线）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#skin" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Skin（表面提取）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#probe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Probe（探针）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modifycomponents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ModifyComponents（分量修改）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#annotate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Annotate（文本标注）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#207" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.7 本章小结
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#208" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20.8 注意事项
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="20-plugin">第20章 后处理插件（Plugin）：视图数据运算与变换</h1>
+<hr />
+<h2 id="201">20.1 学习目标</h2>
+<ul>
+<li>理解 Gmsh 插件系统（Plugin）的定位：对后处理视图（View）数据进行运算、变换与可视化增强的模块化工具集</li>
+<li>掌握 <code>plugin::setNumber()</code> / <code>plugin::setString()</code> 设置插件参数、<code>plugin::run()</code> 执行插件并生成新视图的标准工作流</li>
+<li>熟练使用六种常用内置插件：等值面（Isosurface）、切平面（CutPlane）、二维截面映射（CutMap）、表面提取（Skin）、流线图（StreamLines）与探针采样（Probe）</li>
+<li>理解插件运行结果自动产生新 View 的机制，以及多插件串联构建后处理流水线的思路</li>
+<li>了解插件在 CAE 中的典型应用场景：截面应力云图、流场流线可视化、参数化分析中的标量场批量提取</li>
+</ul>
+<hr />
+<h2 id="202">20.2 核心概念说明</h2>
+<h3 id="2021-plugin">20.2.1 插件（Plugin）是什么</h3>
+<p>在 Gmsh 的架构中，前处理（几何建模 + 网格划分）由 <code>model</code> 命名空间负责，而后处理（Post-Processing）则由 <strong>View（视图）</strong> 和 <strong>Plugin（插件）</strong> 两部分协作完成。</p>
+<p><strong>View（视图）</strong>：后处理数据的容器，包含标量场（Scalar Field）、矢量场（Vector Field）或张量场（Tensor Field），可以是基于列表的（list-based，独立于网格）或基于模型的（model-based，绑定到特定网格）。</p>
+<p><strong>Plugin（插件）</strong>：对 View 中的数据进行运算或变换的模块。一个插件读取一个或多个源 View，执行特定算法，输出一个新的 View。例如：
+- 从三维标量场中提取等值面
+- 在指定平面上截取截面云图
+- 从矢量场中追踪流线</p>
+<p>插件的运行流程可以概括为：</p>
+<pre><code>源 View (Source) ──→ [Plugin: setNumber/setString 配置参数] ──→ plugin::run() ──→ 新 View (Result)
+</code></pre>
+<h3 id="2022">20.2.2 常用内置插件速览</h3>
+<p>Gmsh 静态链接了数十个内置插件，以下是 CAE 后处理中最常用的六个：</p>
+<table>
+<thead>
+<tr>
+<th>插件名</th>
+<th>功能</th>
+<th>适用场景</th>
+<th>输入要求</th>
+<th>输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Isosurface</strong></td>
+<td>从3D标量场提取等值面</td>
+<td>应力/温度等值面可视化</td>
+<td>3D 标量 View</td>
+<td>2D 曲面 View</td>
+</tr>
+<tr>
+<td><strong>CutPlane</strong></td>
+<td>用平面截取3D视图</td>
+<td>任意角度截面云图</td>
+<td>3D View（标量/矢量）</td>
+<td>2D 截面 View</td>
+</tr>
+<tr>
+<td><strong>CutMap</strong></td>
+<td>将3D标量场在截平面上的值展平为2D彩色图</td>
+<td>截面应力分布精确判读</td>
+<td>3D 标量 View</td>
+<td>2D 彩色图 View</td>
+</tr>
+<tr>
+<td><strong>Skin</strong></td>
+<td>提取3D视图的外表面</td>
+<td>仅关心表面场分布时</td>
+<td>3D View</td>
+<td>2D 表面 View</td>
+</tr>
+<tr>
+<td><strong>StreamLines</strong></td>
+<td>从矢量场追踪流线/迹线</td>
+<td>流场、磁场、热通量方向</td>
+<td>3D 矢量 View</td>
+<td>1D 线 View</td>
+</tr>
+<tr>
+<td><strong>Probe</strong></td>
+<td>在指定坐标点采样场值</td>
+<td>参数化分析、监控点提取</td>
+<td>任意 View</td>
+<td>终端输出 + 可选 View</td>
+</tr>
+</tbody>
+</table>
+<p>此外还有 <strong>ModifyComponents</strong>（修改/交换矢量或张量分量）、<strong>Annotate</strong>（添加文字标注）、<strong>Smooth</strong>（场值平滑）、<strong>Transform</strong>（视图几何变换）等辅助插件。</p>
+<h3 id="2023">20.2.3 插件参数系统</h3>
+<p>所有插件都通过统一的参数接口进行配置：</p>
+<pre><code class="language-cpp">gmsh::plugin::setNumber(&quot;PluginName&quot;, &quot;ParameterName&quot;, value);  // 数值参数
+gmsh::plugin::setString(&quot;PluginName&quot;, &quot;ParameterName&quot;, &quot;value&quot;); // 字符串参数
+int newViewTag = gmsh::plugin::run(&quot;PluginName&quot;);               // 执行并返回新View标签
+</code></pre>
+<p>关键点：
+- 参数名是大小写敏感的（"Value" 不等于 "value"）
+- <code>setNumber</code> 和 <code>setString</code> 设置的是<strong>全局状态</strong>，<code>run()</code> 执行前所有参数必须设置完毕
+- <code>run()</code> 返回新生成的 View 标签（整数），可用于后续的 <code>view::option::setNumber()</code> 调整显示属性
+- 如果想覆盖已有 View 而非生成新 View，可设置参数 <code>"View"</code> 为负数（表示不生成新视图）</p>
+<h3 id="2024-cae">20.2.4 CAE 中的应用场景</h3>
+<ol>
+<li><strong>截面应力云图</strong>：有限元求解得到3D应力场后，用 CutPlane/CutMap 截取关键截面（如螺栓孔剖面）的应力分布，用于强度校核报告</li>
+<li><strong>流场流线可视化</strong>：CFD 求解得到速度场后，用 StreamLines 追踪流体质点轨迹，辅助判断涡流、回流区域</li>
+<li><strong>等值面包络分析</strong>：用 Isosurface 提取温度场中某一温度值的包络面，判断热影响区范围</li>
+<li><strong>参数化分析</strong>：批量改变求解参数后，用 Probe 在固定监控点自动采样场值，绘制参数-响应曲线</li>
+</ol>
+<hr />
+<h2 id="203-c">20.3 C++ 代码逐段讲解</h2>
+<h3 id="2031">20.3.1 头文件与初始化</h3>
+<pre><code class="language-cpp">#include &lt;set&gt;
+#include &lt;cmath&gt;
+#include &lt;vector&gt;
+#include &lt;gmsh.h&gt;
+
+int main(int argc, char **argv)
+{
+  gmsh::initialize(argc, argv);
+  gmsh::model::add(&quot;ch20_plugins&quot;);
+</code></pre>
+<p><strong>解释</strong>：<code>&lt;set&gt;</code> 用于命令行参数判断（是否启动 GUI），<code>&lt;cmath&gt;</code> 提供 <code>M_PI</code> 等常量，<code>&lt;vector&gt;</code> 用于容纳节点和单元数据。<code>gmsh::model::add()</code> 为当前模型命名。</p>
+<hr />
+<h3 id="2032">20.3.2 加载预置三维标量视图</h3>
+<pre><code class="language-cpp">  // ---- 1. 加载 Gmsh 教程自带的 3D 标量场视图 ----
+  try {
+    gmsh::merge(&quot;../view3.pos&quot;);
+  } catch(...) {
+    gmsh::logger::write(&quot;Could not load post-processing views: bye!&quot;);
+    gmsh::finalize();
+    return 0;
+  }
+
+  std::vector&lt;int&gt; v;
+  gmsh::view::getTags(v);
+  if(v.size() != 1) {
+    gmsh::logger::write(&quot;Wrong number of views!&quot;, &quot;error&quot;);
+    gmsh::finalize();
+    return 1;
+  }
+</code></pre>
+<p><strong>解释</strong>：<code>gmsh::merge()</code> 加载后处理数据文件。<code>view3.pos</code> 是 Gmsh 教程提供的三维标量场（一个简单的结构应力模拟数据）。<code>view::getTags()</code> 获取当前模型中的所有 View 标签，此处预期只加载了一个 View。</p>
+<p>使用 try-catch 包裹加载操作：<code>.pos</code> 文件可能不存在、格式损坏或路径错误，捕获异常后优雅退出是工程中的良好实践。</p>
+<hr />
+<h3 id="2033">20.3.3 创建演示几何体与网格（用于构建矢量视图）</h3>
+<pre><code class="language-cpp">  // ---- 2. 创建演示几何体并生成网格 ----
+  // 创建一个立方体作为矢量场的物理域
+  gmsh::model::occ::addBox(0, 0, 0, 2, 2, 2, 1);
+  gmsh::model::occ::synchronize();
+  gmsh::model::mesh::generate(3);
+</code></pre>
+<p><strong>解释</strong>：创建一个 2x2x2 的立方体并生成三维四面体网格。这个网格将作为后续<strong>基于模型的视图</strong>（model-based view）的数据源——我们将从网格节点坐标计算矢量场值，构建一个旋转矢量场 <code>v = (-y, x, 0)</code>，用于演示 StreamLines 插件。</p>
+<hr />
+<h3 id="2034-model-based-view">20.3.4 从网格数据创建标量视图（Model-Based View）</h3>
+<pre><code class="language-cpp">  // ---- 3. 创建基于模型的标量视图 (Model-Based View) ----
+  // 获取所有节点坐标
+  std::vector&lt;std::size_t&gt; nodeTags;
+  std::vector&lt;double&gt; nodeCoords, nodeParams;
+  gmsh::model::mesh::getNodes(nodeTags, nodeCoords, nodeParams, 3);
+
+  // 对每个节点计算标量值: f(x,y,z) = sqrt(x^2 + y^2) —— 到Z轴的距离
+  std::vector&lt;double&gt; scalarData;
+  for(std::size_t i = 0; i &lt; nodeCoords.size(); i += 3) {
+    double d = std::sqrt(nodeCoords[i] * nodeCoords[i] +
+                         nodeCoords[i + 1] * nodeCoords[i + 1]);
+    scalarData.push_back(d);
+  }
+
+  // 创建标量视图并填充 NodeData
+  int vScalar = gmsh::view::add(&quot;scalar_distance_to_z&quot;);
+  gmsh::view::addHomogeneousModelData(
+      vScalar, 0,                     // viewTag, step
+      &quot;ch20_plugins&quot;,                 // modelName
+      &quot;NodeData&quot;,                     // dataType: 节点数据 → 连续场
+      nodeTags, scalarData,           // tags + data
+      0.0,                            // time
+      1);                             // numComponents = 1 (标量)
+</code></pre>
+<p><strong>解释</strong>：这里展示了创建<strong>基于模型的视图</strong>（model-based view）的完整流程。<code>mesh::getNodes()</code> 获取所有三维节点（dim=3）的标签和坐标。对每个节点计算到 Z 轴的距离作为标量值，模拟一个轴对称的温度场或应力幅值场。</p>
+<p><code>view::addHomogeneousModelData()</code> 是该流程的核心 API：
+- 参数 <code>"NodeData"</code> 表示数据定义在节点上（Gmsh 会用节点形函数进行连续插值）
+- <code>nodeTags</code> 必须与 <code>scalarData</code> 按顺序一一对应
+- <code>numComponents=1</code> 表示标量场；<code>numComponents=3</code> 表示矢量场；<code>numComponents=9</code> 表示张量场</p>
+<hr />
+<h3 id="2035">20.3.5 从网格数据创建矢量视图（用于流线演示）</h3>
+<pre><code class="language-cpp">  // ---- 4. 创建基于模型的矢量视图 ----
+  // 矢量场 v = (-y, x, 0)  —— 绕 Z 轴的旋转场
+  std::vector&lt;double&gt; vectorData;
+  for(std::size_t i = 0; i &lt; nodeCoords.size(); i += 3) {
+    double x = nodeCoords[i];
+    double y = nodeCoords[i + 1];
+    vectorData.push_back(-y);    // vx
+    vectorData.push_back( x);    // vy
+    vectorData.push_back( 0.0);  // vz
+  }
+
+  int vVector = gmsh::view::add(&quot;vector_rotational&quot;);
+  gmsh::view::addHomogeneousModelData(
+      vVector, 0, &quot;ch20_plugins&quot;, &quot;NodeData&quot;,
+      nodeTags, vectorData,
+      0.0,    // time
+      3);     // numComponents = 3 (矢量)
+</code></pre>
+<p><strong>解释</strong>：<code>numComponents=3</code> 将数据标记为矢量场。<code>vectorData</code> 的存储顺序为 <code>vx1, vy1, vz1, vx2, vy2, vz2, ...</code>（分量交错存储）。该旋转矢量场 <code>v = (-y, x, 0)</code> 在 XY 平面形成围绕 Z 轴的逆时针旋转，非常适合演示 StreamLines 插件的流线追踪效果。</p>
+<hr />
+<h3 id="2036-isosurface">20.3.6 Isosurface 等值面提取</h3>
+<pre><code class="language-cpp">  // ---- 5. Isosurface 等值面提取 ----
+  // 从 view[0]（view3.pos 加载的标量场）中提取 Value=0.67 的等值面
+  gmsh::plugin::setNumber(&quot;Isosurface&quot;, &quot;Value&quot;, 0.67);
+  gmsh::plugin::setNumber(&quot;Isosurface&quot;, &quot;View&quot;, 0);   // View[0] 为数据源
+  int vIso = gmsh::plugin::run(&quot;Isosurface&quot;);
+</code></pre>
+<p><strong>解释</strong>：<code>Isosurface</code> 插件在三维标量场中寻找所有等于 <code>Value</code> 的点的集合，并以曲面形式输出。<code>"View"</code> 参数指定源 View 的<strong>索引</strong>（注意：是索引号而非标签号——View[0] 指 <code>view::getTags()</code> 返回列表中的第一个标签）。</p>
+<p><strong>CAE 应用示例</strong>：在温度场中提取 <code>T=800</code> 摄氏度的等值面，判断热影响区（HAZ）边界。</p>
+<hr />
+<h3 id="2037-cutplane-cutmap">20.3.7 CutPlane 截面与 CutMap 截面映射</h3>
+<pre><code class="language-cpp">  // ---- 6. CutPlane 截面 ----
+  // 平面方程: A*x + B*y + C*z + D = 0
+  // 此处: 0*x + 0.2*y + 1*z + 0 = 0  → z = -0.2*y（倾斜平面）
+  gmsh::plugin::setNumber(&quot;CutPlane&quot;, &quot;A&quot;, 0);
+  gmsh::plugin::setNumber(&quot;CutPlane&quot;, &quot;B&quot;, 0.2);
+  gmsh::plugin::setNumber(&quot;CutPlane&quot;, &quot;C&quot;, 1);
+  gmsh::plugin::setNumber(&quot;CutPlane&quot;, &quot;D&quot;, 0);
+  gmsh::plugin::setNumber(&quot;CutPlane&quot;, &quot;View&quot;, 0);
+  int vCut = gmsh::plugin::run(&quot;CutPlane&quot;);
+
+  // ---- 7. CutMap 2D 截面映射 ----
+  // 将标量场在 XY 平面 (z=0) 上的值展平为彩色二维图
+  gmsh::plugin::setNumber(&quot;CutMap&quot;, &quot;A&quot;, 0);
+  gmsh::plugin::setNumber(&quot;CutMap&quot;, &quot;B&quot;, 0);
+  gmsh::plugin::setNumber(&quot;CutMap&quot;, &quot;C&quot;, 1);
+  gmsh::plugin::setNumber(&quot;CutMap&quot;, &quot;D&quot;, -0.5);  // z = 0.5
+  gmsh::plugin::setNumber(&quot;CutMap&quot;, &quot;View&quot;, 0);
+  int vMap = gmsh::plugin::run(&quot;CutMap&quot;);
+</code></pre>
+<p><strong>解释</strong>：</p>
+<ul>
+<li>
+<p><strong>CutPlane</strong>：用任意位姿的平面 <code>A*x + B*y + C*z + D = 0</code> 截取三维视图。向量 <code>(A, B, C)</code> 为平面法向，<code>D</code> 控制平面沿法向的偏置距离。结果是一个二维截面上的场分布视图。</p>
+</li>
+<li>
+<p><strong>CutMap</strong>：与 CutPlane 类似，但将截面上的标量值"平展"为一张彩色的二维矩形图。截面位于 <code>z = -D/C = 0.5</code>。CutMap 比 CutPlane 更直观——它去除了三维透视效应，便于精确判读截面上的数值分布（如截面最大应力值的位置和大小）。</p>
+</li>
+</ul>
+<p><strong>CutPlane vs CutMap 的工程选型</strong>：
+| 特性 | CutPlane | CutMap |
+|------|----------|--------|
+| 输出 | 3D 空间中的截面 | 展平的 2D 彩色图 |
+| 适用场景 | 综合性可视化 | 精确数值判读 |
+| 多截面叠加 | 可叠加显示 | 独立成图 |</p>
+<hr />
+<h3 id="2038-skin">20.3.8 Skin 表面提取</h3>
+<pre><code class="language-cpp">  // ---- 8. Skin 表面提取 ----
+  // 从 Isosurface 的结果中提取外表面
+  gmsh::plugin::setNumber(&quot;Skin&quot;, &quot;View&quot;, vIso);
+  int vSkin = gmsh::plugin::run(&quot;Skin&quot;);
+</code></pre>
+<p><strong>解释</strong>：<code>Skin</code> 插件提取三维视图的<strong>外表面</strong>（outward-facing surface），去除内部结构。当源 View 是封闭等值面时，Skin 结果等于源 View 本身；当源 View 包含内部网格时，Skin 仅保留可见的外部面，可用于生成轻量化的外表面包络。</p>
+<p><strong>多插件串联示例</strong>：<code>原始标量场 → Isosurface → Skin</code>。这种串联是构建后处理流水线的核心模式。</p>
+<hr />
+<h3 id="2039-streamlines">20.3.9 StreamLines 流线追踪</h3>
+<pre><code class="language-cpp">  // ---- 9. StreamLines 流线追踪 ----
+  // 从矢量视图中，在多个起点追踪流线
+  // 流线起点：在 XY 平面均匀分布 4 个种子点
+  for(int i = 0; i &lt; 4; i++) {
+    double seedX = 1.0;
+    double seedY = 0.5 + i * 0.5;
+    double seedZ = 1.0;
+    gmsh::plugin::setNumber(&quot;StreamLines&quot;, &quot;X0&quot;, seedX);
+    gmsh::plugin::setNumber(&quot;StreamLines&quot;, &quot;Y0&quot;, seedY);
+    gmsh::plugin::setNumber(&quot;StreamLines&quot;, &quot;Z0&quot;, seedZ);
+    gmsh::plugin::setString(&quot;StreamLines&quot;, &quot;View&quot;, std::to_string(vVector));
+    gmsh::plugin::setNumber(&quot;StreamLines&quot;, &quot;TimeStep&quot;, 0.05);
+    gmsh::plugin::setNumber(&quot;StreamLines&quot;, &quot;MaxRecursion&quot;, 2000);
+    int vSL = gmsh::plugin::run(&quot;StreamLines&quot;);
+  }
+</code></pre>
+<p><strong>解释</strong>：<code>StreamLines</code> 插件从指定的起始点 <code>(X0, Y0, Z0)</code> 出发，沿矢量场方向（前向和后向）追踪流线。核心参数：
+- <code>"TimeStep"</code>：积分步长，越小精度越高但计算量越大
+- <code>"MaxRecursion"</code>：最大积分步数，限制流线长度
+- <code>"View"</code> 参数接受<strong>字符串</strong>形式的 View 标签（此处用 <code>std::to_string</code> 转换），而非索引</p>
+<p>此处 4 个种子点沿 X=1 线均匀分布，由于矢量场是绕 Z 轴的旋转场，流线将呈现同心圆弧。</p>
+<p><strong>CAE 应用</strong>：在 CFD 速度场中放置种子点追踪流线，直观显示回流区、涡旋结构；在电磁场中追踪磁力线。</p>
+<hr />
+<h3 id="20310-probe">20.3.10 Probe 探针采样</h3>
+<pre><code class="language-cpp">  // ---- 10. Probe 探针采样 ----
+  // 在指定坐标采样标量场和矢量场的值
+  gmsh::plugin::setNumber(&quot;Probe&quot;, &quot;X&quot;, 1.0);
+  gmsh::plugin::setNumber(&quot;Probe&quot;, &quot;Y&quot;, 0.5);
+  gmsh::plugin::setNumber(&quot;Probe&quot;, &quot;Z&quot;, 1.0);
+  gmsh::plugin::setString(&quot;Probe&quot;, &quot;View&quot;, std::to_string(vVector));
+  gmsh::plugin::run(&quot;Probe&quot;);  // 结果输出到终端控制台
+</code></pre>
+<p><strong>解释</strong>：<code>Probe</code> 插件在指定空间坐标 <code>(X, Y, Z)</code> 处对源 View 进行采样，将结果（场值及到最近单元的距离）打印到终端控制台。采样使用源 View 的插值方法，因此 <code>"NodeData"</code> 类型的视图在任意点都有插值结果。</p>
+<p><strong>CAE 应用</strong>：在参数化分析中，在固定监控点（如焊点位置、最大应力预期位置）用 Probe 批量采样，配合脚本绘制参数-响应曲线。</p>
+<hr />
+<h3 id="20311-modifycomponents-annotate">20.3.11 ModifyComponents 分量变换与 Annotate 标注</h3>
+<pre><code class="language-cpp">  // ---- 11. ModifyComponents 修改矢量分量 ----
+  // 将矢量场的三个分量交换：(vx, vy, vz) → (vy, vx, vz)
+  // 使用表达式映射: 新分量 = f(旧分量)
+  gmsh::plugin::setNumber(&quot;ModifyComponents&quot;, &quot;View&quot;, vVector);
+  gmsh::plugin::setNumber(&quot;ModifyComponents&quot;, &quot;NewView&quot;, -1);
+  gmsh::plugin::setString(&quot;ModifyComponents&quot;, &quot;Expression0&quot;, &quot;v1&quot;);
+  gmsh::plugin::setString(&quot;ModifyComponents&quot;, &quot;Expression1&quot;, &quot;v0&quot;);
+  gmsh::plugin::setString(&quot;ModifyComponents&quot;, &quot;Expression2&quot;, &quot;v2&quot;);
+  int vMod = gmsh::plugin::run(&quot;ModifyComponents&quot;);
+
+  // ---- 12. Annotate 文本标注 ----
+  gmsh::plugin::setString(&quot;Annotate&quot;, &quot;Text&quot;, &quot;Gmsh Plugin Demo&quot;);
+  gmsh::plugin::setNumber(&quot;Annotate&quot;, &quot;X&quot;, 1.e5);       // &gt;99999 = 窗口居中
+  gmsh::plugin::setNumber(&quot;Annotate&quot;, &quot;Y&quot;, 50);
+  gmsh::plugin::setString(&quot;Annotate&quot;, &quot;Font&quot;, &quot;Times-BoldItalic&quot;);
+  gmsh::plugin::setNumber(&quot;Annotate&quot;, &quot;FontSize&quot;, 28);
+  gmsh::plugin::setString(&quot;Annotate&quot;, &quot;Align&quot;, &quot;Center&quot;);
+  gmsh::plugin::setNumber(&quot;Annotate&quot;, &quot;View&quot;, 0);
+  gmsh::plugin::run(&quot;Annotate&quot;);
+</code></pre>
+<p><strong>解释</strong>：</p>
+<ul>
+<li>
+<p><strong>ModifyComponents</strong>：通过对原始分量应用数学表达式来生成新的矢量场。<code>v0</code>, <code>v1</code>, <code>v2</code> 是内置变量，代表源场的三个分量。<code>Expression0 = "v1"</code> 表示新场 x 分量取源场 y 分量值，实现了分量交换。<code>NewView = -1</code> 表示不创建新 View（就地覆盖）。支持任意数学表达式，如 <code>"sqrt(v0^2 + v1^2)"</code> 可提取矢量幅值。</p>
+</li>
+<li>
+<p><strong>Annotate</strong>：在指定窗口中添加文字标注。坐标 <code>X &gt; 99999</code> 是 Gmsh 的约定——表示窗口水平居中。<code>"Center"</code> 对齐方式使文本以坐标点为中心。<code>"View"</code> 参数指定标注添加到哪个 View 的显示中。</p>
+</li>
+</ul>
+<hr />
+<h3 id="20312-gui">20.3.12 视图可视化选项与 GUI 启动</h3>
+<pre><code class="language-cpp">  // ---- 13. 设置视图可视化选项 ----
+  // 对原始标量视图: 开启光照、等值线显示
+  gmsh::view::option::setNumber(v[0], &quot;Light&quot;, 1);
+  gmsh::view::option::setNumber(v[0], &quot;IntervalsType&quot;, 1);  // 等值线
+  gmsh::view::option::setNumber(v[0], &quot;NbIso&quot;, 6);           // 6条等值线
+  gmsh::view::option::setNumber(v[0], &quot;SmoothNormals&quot;, 1);   // 法向光滑
+
+  // 对等值面和截面视图: 连续色带
+  gmsh::view::option::setNumber(vIso, &quot;IntervalsType&quot;, 2);   // 连续
+  gmsh::view::option::setNumber(vCut, &quot;IntervalsType&quot;, 2);
+
+  // 对流线视图: 设置箭头大小
+  gmsh::view::option::setNumber(vVector, &quot;ArrowSizeMax&quot;, 30);
+  gmsh::view::option::setNumber(vVector, &quot;ShowScale&quot;, 0);
+
+  // 对 CutMap 视图: 显示标尺
+  gmsh::view::option::setNumber(vMap, &quot;ShowScale&quot;, 1);
+
+  // ---- 14. 启动 GUI 查看结果 ----
+  std::set&lt;std::string&gt; args(argv, argv + argc);
+  if(!args.count(&quot;-nopopup&quot;)) gmsh::fltk::run();
+
+  gmsh::finalize();
+  return 0;
+}
+</code></pre>
+<p><strong>解释</strong>：<code>view::option::setNumber(viewTag, optionName, value)</code> 设置单个 View 的显示属性。常用选项：</p>
+<table>
+<thead>
+<tr>
+<th>选项名</th>
+<th>含义</th>
+<th>典型值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Light</code></td>
+<td>是否开启光照渲染</td>
+<td>0=关闭, 1=开启</td>
+</tr>
+<tr>
+<td><code>IntervalsType</code></td>
+<td>色带类型</td>
+<td>1=等值线, 2=连续渐变, 3=离散色块</td>
+</tr>
+<tr>
+<td><code>NbIso</code></td>
+<td>等值线条数</td>
+<td>正整数</td>
+</tr>
+<tr>
+<td><code>SmoothNormals</code></td>
+<td>法向量光滑（视觉）</td>
+<td>0=关闭, 1=开启</td>
+</tr>
+<tr>
+<td><code>ShowScale</code></td>
+<td>是否显示色标尺</td>
+<td>0=关闭, 1=开启</td>
+</tr>
+<tr>
+<td><code>ArrowSizeMax</code></td>
+<td>矢量箭头最大尺寸（像素）</td>
+<td>正整数</td>
+</tr>
+<tr>
+<td><code>ColormapNumber</code></td>
+<td>色图编号</td>
+<td>0-22（共23种内置色图）</td>
+</tr>
+</tbody>
+</table>
+<p>通过 <code>-nopopup</code> 命令行参数可以跳过 GUI 直接执行插件（适用于批处理脚本）。</p>
+<hr />
+<h2 id="204">20.4 完整可运行代码</h2>
+<pre><code class="language-cpp">// =============================================================================
+//  Chapter 20: Post-Processing Plugins
+//
+//  功能: 演示 Gmsh 常用后处理插件的使用，包括等值面、切平面、
+//        截面映射、表面提取、流线追踪、探针采样、分量变换和文本标注
+//
+//  编译 (需链接 Gmsh SDK):
+//    g++ -o ch20_plugins ch20_plugins.cpp -lgmsh -std=c++11
+//
+//  运行:
+//    ./ch20_plugins              (带 GUI 交互查看)
+//    ./ch20_plugins -nopopup     (仅运行插件，不启动 GUI)
+//
+//  依赖文件:
+//    view3.pos   (Gmsh 教程自带的 3D 标量视图数据文件)
+// =============================================================================
+
+#include &lt;set&gt;
+#include &lt;cmath&gt;
+#include &lt;vector&gt;
+#include &lt;string&gt;
+#include &lt;gmsh.h&gt;
+
+int main(int argc, char **argv)
+{
+  gmsh::initialize(argc, argv);
+  gmsh::model::add(&quot;ch20_plugins&quot;);
+
+  // ===== 1. 加载预置 3D 标量视图 =====
+  try {
+    gmsh::merge(&quot;../view3.pos&quot;);
+  } catch(...) {
+    gmsh::logger::write(&quot;Could not load post-processing views: bye!&quot;);
+    gmsh::finalize();
+    return 0;
+  }
+
+  std::vector&lt;int&gt; v;
+  gmsh::view::getTags(v);
+  if(v.size() != 1) {
+    gmsh::logger::write(&quot;Wrong number of views!&quot;, &quot;error&quot;);
+    gmsh::finalize();
+    return 1;
+  }
+
+  // ===== 2. 创建演示几何体与网格（用于构建矢量视图） =====
+  gmsh::model::occ::addBox(0, 0, 0, 2, 2, 2, 1);
+  gmsh::model::occ::synchronize();
+  gmsh::model::mesh::generate(3);
+
+  // ===== 3. 创建基于模型的标量视图 (Model-Based View) =====
+  std::vector&lt;std::size_t&gt; nodeTags;
+  std::vector&lt;double&gt; nodeCoords, nodeParams;
+  gmsh::model::mesh::getNodes(nodeTags, nodeCoords, nodeParams, 3);
+
+  std::vector&lt;double&gt; scalarData;
+  for(std::size_t i = 0; i &lt; nodeCoords.size(); i += 3) {
+    double d = std::sqrt(nodeCoords[i] * nodeCoords[i] +
+                         nodeCoords[i + 1] * nodeCoords[i + 1]);
+    scalarData.push_back(d);
+  }
+
+  int vScalar = gmsh::view::add(&quot;scalar_distance_to_z&quot;);
+  gmsh::view::addHomogeneousModelData(
+      vScalar, 0, &quot;ch20_plugins&quot;, &quot;NodeData&quot;,
+      nodeTags, scalarData, 0.0, 1);
+
+  // ===== 4. 创建基于模型的矢量视图 =====
+  std::vector&lt;double&gt; vectorData;
+  for(std::size_t i = 0; i &lt; nodeCoords.size(); i += 3) {
+    double x = nodeCoords[i], y = nodeCoords[i + 1];
+    vectorData.push_back(-y);   // vx
+    vectorData.push_back( x);   // vy
+    vectorData.push_back( 0.0); // vz
+  }
+
+  int vVector = gmsh::view::add(&quot;vector_rotational&quot;);
+  gmsh::view::addHomogeneousModelData(
+      vVector, 0, &quot;ch20_plugins&quot;, &quot;NodeData&quot;,
+      nodeTags, vectorData, 0.0, 3);
+
+  // ===== 5. Isosurface 等值面提取 =====
+  gmsh::plugin::setNumber(&quot;Isosurface&quot;, &quot;Value&quot;, 0.67);
+  gmsh::plugin::setNumber(&quot;Isosurface&quot;, &quot;View&quot;, 0);
+  int vIso = gmsh::plugin::run(&quot;Isosurface&quot;);
+
+  // ===== 6. CutPlane 切平面 =====
+  gmsh::plugin::setNumber(&quot;CutPlane&quot;, &quot;A&quot;, 0);
+  gmsh::plugin::setNumber(&quot;CutPlane&quot;, &quot;B&quot;, 0.2);
+  gmsh::plugin::setNumber(&quot;CutPlane&quot;, &quot;C&quot;, 1);
+  gmsh::plugin::setNumber(&quot;CutPlane&quot;, &quot;D&quot;, 0);
+  gmsh::plugin::setNumber(&quot;CutPlane&quot;, &quot;View&quot;, 0);
+  int vCut = gmsh::plugin::run(&quot;CutPlane&quot;);
+
+  // ===== 7. CutMap 2D 截面映射 =====
+  gmsh::plugin::setNumber(&quot;CutMap&quot;, &quot;A&quot;, 0);
+  gmsh::plugin::setNumber(&quot;CutMap&quot;, &quot;B&quot;, 0);
+  gmsh::plugin::setNumber(&quot;CutMap&quot;, &quot;C&quot;, 1);
+  gmsh::plugin::setNumber(&quot;CutMap&quot;, &quot;D&quot;, -0.5);
+  gmsh::plugin::setNumber(&quot;CutMap&quot;, &quot;View&quot;, 0);
+  int vMap = gmsh::plugin::run(&quot;CutMap&quot;);
+
+  // ===== 8. Skin 表面提取 (从等值面结果) =====
+  gmsh::plugin::setNumber(&quot;Skin&quot;, &quot;View&quot;, vIso);
+  int vSkin = gmsh::plugin::run(&quot;Skin&quot;);
+
+  // ===== 9. StreamLines 流线追踪 =====
+  for(int i = 0; i &lt; 4; i++) {
+    gmsh::plugin::setNumber(&quot;StreamLines&quot;, &quot;X0&quot;, 1.0);
+    gmsh::plugin::setNumber(&quot;StreamLines&quot;, &quot;Y0&quot;, 0.5 + i * 0.5);
+    gmsh::plugin::setNumber(&quot;StreamLines&quot;, &quot;Z0&quot;, 1.0);
+    gmsh::plugin::setString(&quot;StreamLines&quot;, &quot;View&quot;, std::to_string(vVector));
+    gmsh::plugin::setNumber(&quot;StreamLines&quot;, &quot;TimeStep&quot;, 0.05);
+    gmsh::plugin::setNumber(&quot;StreamLines&quot;, &quot;MaxRecursion&quot;, 2000);
+    gmsh::plugin::run(&quot;StreamLines&quot;);
+  }
+
+  // ===== 10. Probe 探针采样 =====
+  gmsh::plugin::setNumber(&quot;Probe&quot;, &quot;X&quot;, 1.0);
+  gmsh::plugin::setNumber(&quot;Probe&quot;, &quot;Y&quot;, 0.5);
+  gmsh::plugin::setNumber(&quot;Probe&quot;, &quot;Z&quot;, 1.0);
+  gmsh::plugin::setString(&quot;Probe&quot;, &quot;View&quot;, std::to_string(vVector));
+  gmsh::plugin::run(&quot;Probe&quot;);
+
+  // ===== 11. ModifyComponents 分量变换 =====
+  gmsh::plugin::setNumber(&quot;ModifyComponents&quot;, &quot;View&quot;, vVector);
+  gmsh::plugin::setNumber(&quot;ModifyComponents&quot;, &quot;NewView&quot;, -1);
+  gmsh::plugin::setString(&quot;ModifyComponents&quot;, &quot;Expression0&quot;, &quot;v1&quot;);
+  gmsh::plugin::setString(&quot;ModifyComponents&quot;, &quot;Expression1&quot;, &quot;v0&quot;);
+  gmsh::plugin::setString(&quot;ModifyComponents&quot;, &quot;Expression2&quot;, &quot;v2&quot;);
+  int vMod = gmsh::plugin::run(&quot;ModifyComponents&quot;);
+
+  // ===== 12. Annotate 文本标注 =====
+  gmsh::plugin::setString(&quot;Annotate&quot;, &quot;Text&quot;, &quot;Gmsh Plugin Demo&quot;);
+  gmsh::plugin::setNumber(&quot;Annotate&quot;, &quot;X&quot;, 1.e5);
+  gmsh::plugin::setNumber(&quot;Annotate&quot;, &quot;Y&quot;, 50);
+  gmsh::plugin::setString(&quot;Annotate&quot;, &quot;Font&quot;, &quot;Times-BoldItalic&quot;);
+  gmsh::plugin::setNumber(&quot;Annotate&quot;, &quot;FontSize&quot;, 28);
+  gmsh::plugin::setString(&quot;Annotate&quot;, &quot;Align&quot;, &quot;Center&quot;);
+  gmsh::plugin::setNumber(&quot;Annotate&quot;, &quot;View&quot;, 0);
+  gmsh::plugin::run(&quot;Annotate&quot;);
+
+  // ===== 13. 视图可视化选项 =====
+  gmsh::view::option::setNumber(v[0], &quot;Light&quot;, 1);
+  gmsh::view::option::setNumber(v[0], &quot;IntervalsType&quot;, 1);
+  gmsh::view::option::setNumber(v[0], &quot;NbIso&quot;, 6);
+  gmsh::view::option::setNumber(v[0], &quot;SmoothNormals&quot;, 1);
+  gmsh::view::option::setNumber(vIso, &quot;IntervalsType&quot;, 2);
+  gmsh::view::option::setNumber(vCut, &quot;IntervalsType&quot;, 2);
+  gmsh::view::option::setNumber(vVector, &quot;ArrowSizeMax&quot;, 30);
+  gmsh::view::option::setNumber(vVector, &quot;ShowScale&quot;, 0);
+  gmsh::view::option::setNumber(vMap, &quot;ShowScale&quot;, 1);
+
+  // ===== 14. 启动 GUI =====
+  std::set&lt;std::string&gt; args(argv, argv + argc);
+  if(!args.count(&quot;-nopopup&quot;)) gmsh::fltk::run();
+
+  gmsh::finalize();
+  return 0;
+}
+</code></pre>
+<hr />
+<h2 id="205-api">20.5 关键 API 速查表</h2>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>函数签名</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>plugin::setNumber</code></td>
+<td><code>(pluginName, paramName, value)</code></td>
+<td>设置插件的数值型参数（浮点数或整数）</td>
+</tr>
+<tr>
+<td><code>plugin::setString</code></td>
+<td><code>(pluginName, paramName, value)</code></td>
+<td>设置插件的字符串型参数</td>
+</tr>
+<tr>
+<td><code>plugin::run</code></td>
+<td><code>(pluginName)</code> → <code>int</code></td>
+<td>执行插件，返回新生成的 View 标签（整数）</td>
+</tr>
+<tr>
+<td><code>view::add</code></td>
+<td><code>(viewName)</code> → <code>int</code></td>
+<td>创建一个新 View，返回其标签</td>
+</tr>
+<tr>
+<td><code>view::getTags</code></td>
+<td><code>(tags)</code></td>
+<td>获取当前模型中的所有 View 标签列表</td>
+</tr>
+<tr>
+<td><code>view::addHomogeneousModelData</code></td>
+<td><code>(viewTag, step, modelName, dataType, tags, data, time, numComp)</code></td>
+<td>添加基于模型的数据（均匀类型——所有元素节点数相同）</td>
+</tr>
+<tr>
+<td><code>view::addModelData</code></td>
+<td><code>(viewTag, step, modelName, dataType, tags, data, time, numComp, partition)</code></td>
+<td>添加基于模型的数据（支持混合网格——元素节点数可变化）</td>
+</tr>
+<tr>
+<td><code>view::addListData</code></td>
+<td><code>(viewTag, dataType, numElems, data)</code></td>
+<td>添加基于列表的数据（独立于网格，如 "ST"=标量三角形）</td>
+</tr>
+<tr>
+<td><code>view::option::setNumber</code></td>
+<td><code>(viewTag, optionName, value)</code></td>
+<td>设置单个 View 的可视化选项（如 Light, IntervalsType, NbIso）</td>
+</tr>
+<tr>
+<td><code>view::option::setString</code></td>
+<td><code>(viewTag, optionName, value)</code></td>
+<td>设置单个 View 的字符串选项</td>
+</tr>
+<tr>
+<td><code>view::probe</code></td>
+<td><code>(viewTag, x, y, z, values, distance)</code></td>
+<td>在指定空间点探测 View 的场值（API 方式，不依赖插件）</td>
+</tr>
+<tr>
+<td><code>view::write</code></td>
+<td><code>(viewTag, filename)</code></td>
+<td>将 View 保存到 <code>.pos</code> 或 <code>.msh</code> 文件</td>
+</tr>
+<tr>
+<td><code>model::mesh::getNodes</code></td>
+<td><code>(nodeTags, coord, param, dim, tag, includeBoundary)</code></td>
+<td>获取网格节点标签和坐标（dim=-1 获取所有维度的节点）</td>
+</tr>
+<tr>
+<td><code>gmsh::merge</code></td>
+<td><code>(filename)</code></td>
+<td>合并/加载外部文件（几何、网格或后处理视图）</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="206">20.6 内置插件参数速查</h2>
+<h3 id="isosurface">Isosurface（等值面）</h3>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Value</code></td>
+<td>number</td>
+<td>等值面的标量值</td>
+</tr>
+<tr>
+<td><code>View</code></td>
+<td>number</td>
+<td>源 View 的<strong>索引号</strong>（非标签号），View[-1] 为当前 View</td>
+</tr>
+<tr>
+<td><code>ExtractVolume</code></td>
+<td>number</td>
+<td>是否提取体积（0=否, &gt;0=是）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="cutplane-cutmap">CutPlane / CutMap（截面）</h3>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>A</code>, <code>B</code>, <code>C</code>, <code>D</code></td>
+<td>number</td>
+<td>平面方程系数: <code>A*x + B*y + C*z + D = 0</code>。(A,B,C) 为法向量</td>
+</tr>
+<tr>
+<td><code>View</code></td>
+<td>number</td>
+<td>源 View 索引</td>
+</tr>
+<tr>
+<td><code>RecurLevel</code></td>
+<td>number</td>
+<td>递归次数（用于自适应细分）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="streamlines">StreamLines（流线）</h3>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>View</code></td>
+<td>string</td>
+<td>源 View 标签的字符串形式（如 <code>"0"</code>）</td>
+</tr>
+<tr>
+<td><code>X0</code>, <code>Y0</code>, <code>Z0</code></td>
+<td>number</td>
+<td>流线起始点坐标</td>
+</tr>
+<tr>
+<td><code>TimeStep</code></td>
+<td>number</td>
+<td>积分步长</td>
+</tr>
+<tr>
+<td><code>MaxRecursion</code></td>
+<td>number</td>
+<td>最大积分步数</td>
+</tr>
+<tr>
+<td><code>Direction</code></td>
+<td>string</td>
+<td>追踪方向：<code>"Forward"</code>, <code>"Backward"</code>, <code>"Both"</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="skin">Skin（表面提取）</h3>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>View</code></td>
+<td>number</td>
+<td>源 View 标签/索引</td>
+</tr>
+<tr>
+<td><code>VisibleOnly</code></td>
+<td>number</td>
+<td>是否仅提取可见面（0=全部表面, 1=仅可见）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="probe">Probe（探针）</h3>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>X</code>, <code>Y</code>, <code>Z</code></td>
+<td>number</td>
+<td>采样点坐标</td>
+</tr>
+<tr>
+<td><code>View</code></td>
+<td>string</td>
+<td>源 View 标签的字符串形式</td>
+</tr>
+<tr>
+<td><code>Interpolation</code></td>
+<td>number</td>
+<td>插值方法（0=默认）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="modifycomponents">ModifyComponents（分量修改）</h3>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>View</code></td>
+<td>number</td>
+<td>源 View 标签</td>
+</tr>
+<tr>
+<td><code>Expression0</code> ~ <code>Expression9</code></td>
+<td>string</td>
+<td>各分量的数学表达式。内置变量 <code>v0</code>~<code>v8</code> 代表源场分量</td>
+</tr>
+<tr>
+<td><code>NewView</code></td>
+<td>number</td>
+<td>-1=覆盖源View, 0=创建新View</td>
+</tr>
+</tbody>
+</table>
+<h3 id="annotate">Annotate（文本标注）</h3>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Text</code></td>
+<td>string</td>
+<td>文本内容</td>
+</tr>
+<tr>
+<td><code>X</code>, <code>Y</code> (2D), <code>X</code>, <code>Y</code>, <code>Z</code> (3D)</td>
+<td>number</td>
+<td>坐标位置（X&gt;99999=窗口居中）</td>
+</tr>
+<tr>
+<td><code>Font</code></td>
+<td>string</td>
+<td>字体名（如 "Times-BoldItalic", "Helvetica"）</td>
+</tr>
+<tr>
+<td><code>FontSize</code></td>
+<td>number</td>
+<td>字号</td>
+</tr>
+<tr>
+<td><code>Align</code></td>
+<td>string</td>
+<td>对齐方式："Left", "Center", "Right"</td>
+</tr>
+<tr>
+<td><code>View</code></td>
+<td>number</td>
+<td>目标 View 索引</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="207">20.7 本章小结</h2>
+<ul>
+<li><strong>View（视图）</strong> 是 Gmsh 后处理数据的容器，支持标量/矢量/张量场，分为 list-based（独立于网格）和 model-based（绑定到网格）两种。</li>
+<li><strong>Plugin（插件）</strong> 对 View 进行运算或变换，通过 <code>setNumber()</code>/<code>setString()</code> 配置参数，<code>run()</code> 执行并生成新 View。</li>
+<li>六大常用插件：<strong>Isosurface</strong>（等值面）、<strong>CutPlane</strong>（3D 截面）、<strong>CutMap</strong>（2D 截面图）、<strong>Skin</strong>（提取表面）、<strong>StreamLines</strong>（流线追踪）、<strong>Probe</strong>（探针采样）。</li>
+<li>插件可以串联使用（如 <code>标量场 → Isosurface → Skin</code>），构建自动化后处理流水线。</li>
+<li><code>view::addHomogeneousModelData()</code> 与 <code>view::addListData()</code> 分别是创建 model-based 和 list-based 视图的两种方式；前者绑定到网格，后者独立存在。</li>
+<li><code>view::option::setNumber()</code> 控制单个 View 的显示属性（光照、色带类型、等值线条数等），是生成出版级后处理图的关键。</li>
+</ul>
+<hr />
+<h2 id="208">20.8 注意事项</h2>
+<ol>
+<li>
+<p><strong>View 索引 vs 标签</strong>：<code>Isosurface</code>、<code>CutPlane</code>、<code>Annotate</code> 等插件的 <code>"View"</code> 参数使用<strong>索引号</strong>（从 0 开始），而 <code>StreamLines</code> 和 <code>Probe</code> 的 <code>"View"</code> 参数使用<strong>标签号的字符串形式</strong>。这是 Gmsh 插件接口的历史遗留不一致，使用时务必查阅对应插件的文档。</p>
+</li>
+<li>
+<p><strong>插件参数残留</strong>：<code>plugin::setNumber()</code> 和 <code>plugin::setString()</code> 设置的是<strong>全局状态</strong>。同一个插件的参数在前一次 <code>run()</code> 后仍保留。如果第二次调用同一插件但不重新设置全部参数，前次的参数值可能仍生效。建议每次 <code>run()</code> 前显式设置所有关键参数。</p>
+</li>
+<li>
+<p><strong><code>IntervalsType</code> 含义</strong>：1=等值线（iso-lines, 连续曲线），2=连续色带（continuous, 渐变色填充），3=离散色块（discrete, 按区间分段着色）。选择不当可能导致视图在 GUI 中完全不可见。</p>
+</li>
+<li>
+<p><strong>StreamLines 的 View 参数</strong>：该插件的 <code>"View"</code> 参数类型为 <code>string</code>（字符串），而非 <code>number</code>。如果用 <code>setNumber()</code> 设置将不会生效。必须使用 <code>setString()</code> 并传入标签的字符串形式。</p>
+</li>
+<li>
+<p><strong>Probe 的输出</strong>：<code>Probe</code> 插件将结果打印到 Gmsh 日志/终端，如果需要编程方式获取采样值，应使用 <code>view::probe()</code> API 而非 Probe 插件。详见 x3.cpp 中的 <code>gmsh::view::probe()</code> 用法。</p>
+</li>
+<li>
+<p><strong>model-based view 对网格变化的响应</strong>：model-based view 依赖网格拓扑。如果后续对几何做 <code>fragment</code>、<code>removeEntities</code> 等改变网格的操作，之前创建的 model-based view 数据可能失效（节点/单元标签不再对应）。应在网格最终确定后再创建 model-based views。</p>
+</li>
+<li>
+<p><strong>插件结果的 View 标签管理</strong>：<code>plugin::run()</code> 每次调用都生成<strong>新 View</strong>（标签递增）。在批量运行时如不管理，会累积大量 View。可通过设置 <code>"View"</code> 为负数使插件覆盖指定 View，或定期调用 <code>view::remove()</code> 清理不需要的 View。</p>
+</li>
+</ol>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

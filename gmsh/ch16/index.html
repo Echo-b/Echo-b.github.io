@@ -1,0 +1,3522 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../ch15/">
+      
+      
+        <link rel="next" href="../ch17/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>第16章 OpenCASCADE内核与构造实体几何 - Echo-b's Tech Notes</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#16-opencascade-csg" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Echo-b&#39;s Tech Notes" class="md-header__button md-logo" aria-label="Echo-b's Tech Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Echo-b's Tech Notes
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              第16章 OpenCASCADE内核与构造实体几何
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Echo-b&#39;s Tech Notes" class="md-nav__button md-logo" aria-label="Echo-b's Tech Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Echo-b's Tech Notes
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VTK 教程
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    VTK 教程
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    入门篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    入门篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-01-vtk-overview-and-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第一章 VTK概述与环境搭建
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-02-visualization-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二章 可视化管线
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-03-data-model-basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第三章 数据模型基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-04-geometry-and-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第四章 基本几何体与数据源
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-05-rendering-and-interactor/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第五章 渲染与交互机
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-06-volume1-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第六章 入门篇综合实战——3D几何画廊
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    实战篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    实战篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-07-polydata/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第七章 PolyData详解
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-08-unstructured-grid/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第八章 非结构化网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-09-structured-data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第九章 结构化数据
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-10-data-io/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十章 数据I/O
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-11-common-filters/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十一章 常用过滤器
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-12-color-mapping/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十二章 颜色映射与标量可视化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-13-advanced-rendering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十三章 高级渲染技术
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-14-multi-dataset/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十四章 多个数据集处理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-15-volume2-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十五章 实战篇综合实战——CFD后处理可视化工具
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    进阶篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    进阶篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-16-volume-rendering-basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十六章 体渲染基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-17-volume-rendering-advanced/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十七章 体渲染高级技术
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-18-charts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十八章 2D图表系统
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-19-annotation-and-widgets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第十九章 三维标注与交互组件
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-20-custom-interaction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十章 自定义交互与Widget
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-21-qt-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十一章 Qt集成
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-22-smp-parallel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十二章 SMP并行入门
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vtk/chapter-23-volume3-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第二十三章 进阶篇综合实战
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GMSH 教程
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    GMSH 教程
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1" id="__nav_3_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    基础篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    基础篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第1章 Gmsh概述与C++ SDK配置
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第2章 几何基础——点线面曲线环与物理组
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第3章 变换与拉伸几何
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第4章 高级几何构建——内置函数孔洞注释与颜色
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第5章 三维网格控制——尺寸场体孔洞与网格算法
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch06/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第6章 网格控制进阶——Transfinite分布与结构化网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch07/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第7章 背景网格——用已有网格指导网格尺寸
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch08/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第8章 网格尺寸场
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    进阶篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    进阶篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch09/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第9章 四边形网格重组
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch10/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第10章 复合实体——跨面一致网格划分
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch11/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第11章 STL重网格——无CAD模型的表面重构
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch12/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第12章 同调与上同调计算
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch13/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第13章 嵌入实体——在网格中强制生成共形节点
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch14/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第14章 各向异性网格——方向感知的网格生成
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch15/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第15章 周期性网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第16章 OpenCASCADE内核与构造实体几何
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第16章 OpenCASCADE内核与构造实体几何
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#161" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.1 学习目标
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#162" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.2 核心概念说明
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="16.2 核心概念说明">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1621-gmsh" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.2.1 Gmsh 的两种几何内核
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1622-csg" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.2.2 构造实体几何（CSG）与布尔运算
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1623-fragment-vs-cut" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.2.3 fragment vs cut：多材料建模的关键区别
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1624" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.2.4 布尔运算后的实体标签管理
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1625-5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.2.5 与第5章内容的对应关系
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#163-c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.3 C++ 代码逐段讲解
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="16.3 C++ 代码逐段讲解">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1631" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.3.1 初始化与日志启动
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1632-occ" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.3.2 使用 occ 内核创建基本体
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1633-cut" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.3.3 布尔差运算（cut）：挖去八分之一角
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1634-fragment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.3.4 创建球形夹杂并使用 fragment 共形布点
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1635-fragment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.3.5 分析 fragment 的输出
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1636" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.3.6 同步与物理组定义
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1637-getclosestentities" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.3.7 实体查找技巧（一）：getClosestEntities 找面
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1638-getentitiesinboundingbox" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.3.8 实体查找技巧（二）：getEntitiesInBoundingBox 找点
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1639" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.3.9 网格尺寸设置与生成
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#16310-gui" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.3.10 日志检索与 GUI 启动
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#164" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.4 完整可运行代码
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#165-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.5 关键 API 速查表
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="16.5 关键 API 速查表">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1651" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.5.1 基本体创建
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1652" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.5.2 布尔运算
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1653" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.5.3 实体查询
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1654" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.5.4 网格尺寸
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1655" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.5.5 日志
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#166" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.6 注意事项
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#167-built-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.7 与 built-in 内核的代码量对比
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch17/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第17章 高级实体建模——断面扫掠圆角管道与曲率自适应网格
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch18/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第18章 STEP导入与几何分割
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    应用篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    应用篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch19/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第19章 后处理视图与动画
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch20/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第20章 后处理插件——视图数据运算与变换
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch21/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第21章 网格分区与区域分解
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch22/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第22章 遍历模型与网格数据——前处理查询API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第23章 离散实体与混合模型——地形网格实战
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch24/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第24章 后处理视图——List-based与Model-based数据导入
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch25/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第25章 几何求值——参数化法向量与曲率
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第26章 积分点雅可比矩阵基函数与内部边面
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#161" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.1 学习目标
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#162" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.2 核心概念说明
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="16.2 核心概念说明">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1621-gmsh" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.2.1 Gmsh 的两种几何内核
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1622-csg" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.2.2 构造实体几何（CSG）与布尔运算
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1623-fragment-vs-cut" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.2.3 fragment vs cut：多材料建模的关键区别
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1624" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.2.4 布尔运算后的实体标签管理
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1625-5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.2.5 与第5章内容的对应关系
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#163-c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.3 C++ 代码逐段讲解
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="16.3 C++ 代码逐段讲解">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1631" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.3.1 初始化与日志启动
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1632-occ" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.3.2 使用 occ 内核创建基本体
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1633-cut" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.3.3 布尔差运算（cut）：挖去八分之一角
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1634-fragment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.3.4 创建球形夹杂并使用 fragment 共形布点
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1635-fragment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.3.5 分析 fragment 的输出
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1636" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.3.6 同步与物理组定义
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1637-getclosestentities" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.3.7 实体查找技巧（一）：getClosestEntities 找面
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1638-getentitiesinboundingbox" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.3.8 实体查找技巧（二）：getEntitiesInBoundingBox 找点
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1639" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.3.9 网格尺寸设置与生成
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#16310-gui" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.3.10 日志检索与 GUI 启动
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#164" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.4 完整可运行代码
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#165-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.5 关键 API 速查表
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="16.5 关键 API 速查表">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1651" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.5.1 基本体创建
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1652" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.5.2 布尔运算
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1653" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.5.3 实体查询
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1654" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.5.4 网格尺寸
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1655" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.5.5 日志
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#166" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.6 注意事项
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#167-built-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.7 与 built-in 内核的代码量对比
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="16-opencascade-csg">第16章 OpenCASCADE 内核与构造实体几何（CSG）</h1>
+<hr />
+<h2 id="161">16.1 学习目标</h2>
+<ul>
+<li>理解 Gmsh 两种几何内核的本质区别：built-in 内核（自底向上）与 OpenCASCADE 内核（自顶向下，B-rep）</li>
+<li>掌握使用 OpenCASCADE（occ）命名空间直接创建基本体：<code>addBox</code>、<code>addSphere</code>、<code>addCylinder</code>、<code>addCone</code>、<code>addTorus</code></li>
+<li>学会 CSG（Construction Solid Geometry）布尔运算：<code>cut</code>（差）、<code>fuse</code>（并）、<code>intersect</code>（交）、<code>fragment</code>（共形布尔分片）</li>
+<li>理解 <code>cut</code> 与 <code>fragment</code> 的核心差异：删减 vs 共形保留，以及各自适用的仿真场景</li>
+<li>掌握布尔运算后的实体查找技巧：<code>getEntities</code>、<code>getBoundary</code>、<code>getEntitiesInBoundingBox</code>、<code>getClosestEntities</code></li>
+<li>学会通过 <code>mesh::setSize</code> 对实体列表批量设置网格尺寸，替代点级 <code>lc</code> 约束</li>
+<li>使用 <code>gmsh::logger</code> 记录和检索运行日志</li>
+</ul>
+<hr />
+<h2 id="162">16.2 核心概念说明</h2>
+<h3 id="1621-gmsh">16.2.1 Gmsh 的两种几何内核</h3>
+<p>Gmsh 提供两套几乎完全对应的几何建模 API，位于不同的命名空间下：</p>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>built-in 内核（<code>gmsh::model::geo</code>）</th>
+<th>OpenCASCADE 内核（<code>gmsh::model::occ</code>）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>建模方式</strong></td>
+<td>自底向上（bottom-up）：点 -&gt; 线 -&gt; 面 -&gt; 体</td>
+<td>自顶向下（top-down）：直接创建体，通过布尔运算组合</td>
+</tr>
+<tr>
+<td><strong>几何表示</strong></td>
+<td>边界表示（B-rep），但构造过程需逐级建立拓扑</td>
+<td>完整的 B-rep 表示，直接提供高级实体 API</td>
+</tr>
+<tr>
+<td><strong>实体创建</strong></td>
+<td><code>addPoint</code> -&gt; <code>addLine</code> -&gt; <code>addCurveLoop</code> -&gt; <code>addPlaneSurface</code> -&gt; <code>addSurfaceLoop</code> -&gt; <code>addVolume</code></td>
+<td><code>addBox</code> / <code>addSphere</code> / <code>addCylinder</code> / <code>addCone</code> / <code>addTorus</code> 一步创建</td>
+</tr>
+<tr>
+<td><strong>布尔运算</strong></td>
+<td>通过 <code>geo::translate</code> + 手动布尔操作间接实现</td>
+<td>原生支持：<code>cut</code> / <code>fuse</code> / <code>intersect</code> / <code>fragment</code></td>
+</tr>
+<tr>
+<td><strong>CAD 导入</strong></td>
+<td>不支持</td>
+<td>支持 STEP、IGES 等工业标准格式</td>
+</tr>
+<tr>
+<td><strong>适用场景</strong></td>
+<td>简单参数化几何、纯程序化建模</td>
+<td>复杂 CAD 模型、CSG 组合、多材料界面、CAD 导入后处理</td>
+</tr>
+<tr>
+<td><strong>复杂度</strong></td>
+<td>简单几何代码量大，复杂几何代码量急剧膨胀</td>
+<td>简单几何极简，复杂几何通过布尔运算可组合</td>
+</tr>
+</tbody>
+</table>
+<p><strong>选择建议</strong>：对于 CAE 前处理中的绝大多数场景，优先选择 OpenCASCADE 内核。built-in 内核主要用于参数化研究的简单模型或对拓扑有精确控制需求的场景。</p>
+<h3 id="1622-csg">16.2.2 构造实体几何（CSG）与布尔运算</h3>
+<p><strong>CSG（Constructive Solid Geometry）</strong> 是一种通过基本体（primitive）之间的布尔运算来构建复杂几何的方法论。其核心操作包括：</p>
+<ul>
+<li><strong>并运算（Union / Fuse）</strong>：A + B，保留两个体的全部材料</li>
+<li><strong>差运算（Cut / Difference）</strong>：A - B，从 A 中减去 B 占据的空间</li>
+<li><strong>交运算（Intersection）</strong>：A 交 B，只保留 A 和 B 共同占据的空间</li>
+<li><strong>共形布尔分片（Fragment）</strong>：A 与 B 在相交处被分割成独立实体，所有交界面被"缝合"为共享面——这是多材料网格的关键操作</li>
+</ul>
+<p>Gmsh 中四个操作的 API 原型完全一致：</p>
+<pre><code class="language-cpp">void occ::cut(    objectDimTags, toolDimTags, out, outMap, tag, removeObject=true, removeTool=true);
+void occ::fuse(   objectDimTags, toolDimTags, out, outMap, tag, removeObject=true, removeTool=true);
+void occ::intersect(objectDimTags, toolDimTags, out, outMap, tag, removeObject=true, removeTool=true);
+void occ::fragment(objectDimTags, toolDimTags, out, outMap, tag, removeObject=true, removeTool=true);
+</code></pre>
+<p>参数说明：
+- <code>objectDimTags</code>：目标实体列表（主操作对象），类型 <code>std::vector&lt;std::pair&lt;int,int&gt;&gt;</code>
+- <code>toolDimTags</code>：工具实体列表（用于布尔操作），类型同上
+- <code>out</code>：输出参数，返回生成的所有实体（与输入实体同维度）
+- <code>outMap</code>：输出参数，返回每个输入实体与其子实体的映射关系（父-子关系表）
+- <code>tag</code>：可为结果实体指定标签，传 -1 表示自动分配
+- <code>removeObject</code>：是否删除目标原始实体（默认 <code>true</code>）
+- <code>removeTool</code>：是否删除工具原始实体（默认 <code>true</code>）</p>
+<h3 id="1623-fragment-vs-cut">16.2.3 fragment vs cut：多材料建模的关键区别</h3>
+<p>这是初学者最容易混淆的地方。考虑一个立方体中嵌入一个球体：</p>
+<p><strong>使用 <code>cut</code> 的结果</strong>：</p>
+<pre><code>立方体 - 球体 = 带球形空腔的立方体
+</code></pre>
+<p>球体被完全移除，得到一个内部有空腔的单一体。适用于需要挖孔的场景（如螺丝穿过板）。</p>
+<p><strong>使用 <code>fragment</code> 的结果</strong>：</p>
+<pre><code>立方体 + 球体 = 立方体在球体处被分割为多个实体（立方体外部 + 球体 + 立方体内部被球占据的部分消失）
+</code></pre>
+<p>所有实体在交界面处被共形分割，交界面成为共享面（而不是重复面）。这确保了在生成网格时，不同材料的网格在界面上<strong>节点一一对应</strong>，对于复合材料、生物力学、地质建模等多材料仿真至关重要。</p>
+<pre><code>cut 示意图：                fragment 示意图：
+
+  ┌─────────┐               ┌─────────┐
+  │  cube   │               │cube_out │
+  │         │               │    ┌────┤
+  │  cavity │&lt;-- 空腔        │    │ball│
+  │         │               │    └────┤
+  └─────────┘               └─────────┘
+  单一体                    多个共形实体
+</code></pre>
+<h3 id="1624">16.2.4 布尔运算后的实体标签管理</h3>
+<p>OpenCASCADE 的布尔运算<strong>总是创建新实体</strong>。当 <code>removeObject</code> 或 <code>removeTool</code> 设为 <code>true</code> 时，原始实体会被删除。Gmsh 的行为受以下选项控制：</p>
+<ul>
+<li><strong><code>Geometry.OCCBooleanPreserveNumbering</code></strong>（默认 <code>true</code>）：当布尔操作导致实体的简单修改时（如简单切割一个立方体），Gmsh 尝试将新实体赋予与原始实体相同的标签。这使得在物理组定义时可以"预测"某些标签。</li>
+</ul>
+<p>然而，这个机制并不可靠——对于复杂操作（如 fragment），标签会重新分配。<strong>稳妥做法</strong>：通过 <code>out</code> 和 <code>outMap</code> 返回值动态获取布尔运算后的实体标签。</p>
+<h3 id="1625-5">16.2.5 与第5章内容的对应关系</h3>
+<p>本章使用 OpenCASCADE 内核重现了第5章中 built-in 内核构建的"立方体减去八分之一 + 五个球形夹杂"模型。第5章通过手动构建点、线、面、体实现了该模型，代码量极大；本章通过 CSG 布尔运算仅用少量 API 调用即完成相同几何。这是两种内核在代码效率上最直观的对比。</p>
+<hr />
+<h2 id="163-c">16.3 C++ 代码逐段讲解</h2>
+<h3 id="1631">16.3.1 初始化与日志启动</h3>
+<pre><code class="language-cpp">#include &lt;set&gt;
+#include &lt;iostream&gt;
+#include &lt;gmsh.h&gt;
+
+int main(int argc, char **argv)
+{
+  gmsh::initialize(argc, argv);
+  gmsh::model::add(&quot;t16&quot;);
+
+  // 启动日志记录：所有 Gmsh 内部消息都会被日志系统捕获
+  // 可用于后续排查问题或获取布尔运算的详细信息
+  gmsh::logger::start();
+</code></pre>
+<p><code>gmsh::logger::start()</code> 启动日志记录器，此后所有 Gmsh 内部消息（信息、警告、错误）都会被捕获到内存缓冲区中。配合本章末的 <code>gmsh::logger::get()</code> 可以检索日志内容——这在调试复杂布尔操作时非常有价值。</p>
+<h3 id="1632-occ">16.3.2 使用 occ 内核创建基本体</h3>
+<pre><code class="language-cpp">  // 创建两个立方体（分别赋予标签 1 和 2）
+  // addBox(x, y, z, dx, dy, dz, tag)
+  // (x,y,z) 为立方体左下角坐标，(dx,dy,dz) 为各方向延伸长度
+  try {
+    gmsh::model::occ::addBox(0, 0, 0, 1, 1, 1, 1);   // 标签1: 单位立方体
+    gmsh::model::occ::addBox(0, 0, 0, 0.5, 0.5, 0.5, 2); // 标签2: 1/8角落小立方体
+  } catch(...) {
+    gmsh::logger::write(&quot;Could not create OpenCASCADE shapes: bye!&quot;);
+    return 0;
+  }
+</code></pre>
+<p><code>occ::addBox(x, y, z, dx, dy, dz, tag)</code> 一步创建六面体。这与 built-in 内核中需要依次创建 8 个点、12 条线、6 个面、1 个体形成了鲜明对比。</p>
+<p>其他常用基本体 API：</p>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>addBox(x,y,z,dx,dy,dz,tag)</code></td>
+<td>角点+长宽高</td>
+<td>轴对齐长方体</td>
+</tr>
+<tr>
+<td><code>addSphere(xc,yc,zc,r,tag)</code></td>
+<td>球心+半径</td>
+<td>球体</td>
+</tr>
+<tr>
+<td><code>addSphere(xc,yc,zc,r,angle1,angle2,angle3,tag)</code></td>
+<td>球心+半径+三个角度</td>
+<td>球面片</td>
+</tr>
+<tr>
+<td><code>addCylinder(xc,yc,zc,dx,dy,dz,r,tag)</code></td>
+<td>底面圆心+轴向+半径</td>
+<td>圆柱体</td>
+</tr>
+<tr>
+<td><code>addCone(xc,yc,zc,dx,dy,dz,r1,r2,tag)</code></td>
+<td>底面圆心+轴向+两半径</td>
+<td>圆台/圆锥</td>
+</tr>
+<tr>
+<td><code>addTorus(xc,yc,zc,r1,r2,tag)</code></td>
+<td>中心+主半径+管半径</td>
+<td>圆环体</td>
+</tr>
+<tr>
+<td><code>addWedge(x,y,z,dx,dy,dz,tag)</code></td>
+<td>角点+长宽高</td>
+<td>楔形体</td>
+</tr>
+</tbody>
+</table>
+<h3 id="1633-cut">16.3.3 布尔差运算（cut）：挖去八分之一角</h3>
+<pre><code class="language-cpp">  // 布尔差运算: 立方体1 - 小立方体2 = 去掉一角的立方体
+  // ov 用于接收产生的体积实体
+  // ovv 用于接收父-子关系映射
+  std::vector&lt;std::pair&lt;int, int&gt;&gt; ov;          // 输出体积列表
+  std::vector&lt;std::vector&lt;std::pair&lt;int, int&gt;&gt;&gt; ovv; // 每个输入实体的子实体列表
+  gmsh::model::occ::cut({{3, 1}},    // objectDimTags: 体积3, 标签1（主对象）
+                         {{3, 2}},    // toolDimTags:  体积3, 标签2（工具）
+                         ov, ovv, 3); // out, outMap, tag=-3(指定结果标签)
+</code></pre>
+<p>要点拆解：
+- <code>std::pair&lt;int,int&gt;</code> 的格式为 <code>{维度, 标签}</code>，如 <code>{3, 1}</code> 表示"3D 实体，标签为 1"（即一个体积）。用 <code>dimTag</code> 描述实体是 Gmsh 的统一约定。
+- 由于 <code>removeObject</code> 和 <code>removeTool</code> 默认为 <code>true</code>，此操作后标签 1 和 2 的原始立方体被删除，标签 3 成为新的带缺角的 L 型立方体。
+- <code>ov</code> 将包含 1 个元素：<code>{3, 3}</code>，即体积 3。
+- <code>ovv</code> 包含 2 个子列表，分别对应标签 1 和标签 2 的原始实体产生的子实体。</p>
+<h3 id="1634-fragment">16.3.4 创建球形夹杂并使用 fragment 共形布点</h3>
+<pre><code class="language-cpp">  // 在 L 型立方体的对角线上均匀放置 5 个球体
+  double x = 0, y = 0.75, z = 0, r = 0.09;
+  std::vector&lt;std::pair&lt;int, int&gt;&gt; holes;   // 存储 5 个球体的 dimTag
+  for(int t = 1; t &lt;= 5; t++) {
+    x += 0.166;
+    z += 0.166;
+    gmsh::model::occ::addSphere(x, y, z, r, 3 + t); // 标签 4~8
+    holes.push_back({3, 3 + t});  // {维度3, 标签4} ... {维度3, 标签8}
+  }
+
+  // =============== 关键决策点 ===============
+  // 如果这里用 cut({{3,3}}, holes, ov, ovv)，结果将是：
+  //   一个 L 型立方体，内部有 5 个球形空腔（空洞）
+  //
+  // 但我们需要的是：5 个球体作为独立的材料夹杂保留，且
+  // 球体表面网格与立方体网格共形（节点一一对应）
+  //
+  // 因此使用 fragment：
+  gmsh::model::occ::fragment({{3, 3}},  // object: L 型立方体
+                              holes,     // tools:  5 个球体
+                              ov, ovv); // 输出参数
+</code></pre>
+<p><strong>为什么不用 <code>cut</code></strong>：<code>cut</code> 会删除球体，立方体上留下空洞——这适用于模拟螺钉穿过板的情况。而这里要模拟的是复合材料中的球形夹杂（inclusion），球体材料与基体不同，二者在界面上需要共形网格。<code>fragment</code> 将球体与立方体在相交处分割，交界面被合并为共享面，保证网格节点一一对应。</p>
+<h3 id="1635-fragment">16.3.5 分析 fragment 的输出</h3>
+<pre><code class="language-cpp">  // ov 包含 fragment 产生的所有体积实体（与输入同维度）
+  gmsh::logger::write(&quot;fragment produced volumes:&quot;);
+  for(auto e : ov)
+    gmsh::logger::write(&quot;(&quot; + std::to_string(e.first) + &quot;,&quot; +
+                        std::to_string(e.second) + &quot;)&quot;);
+
+  // ovv 包含父-子关系：ovv[i] 是第 i 个输入实体产生的子实体列表
+  // ovv[0] = 原始体积3（立方体）的子实体
+  // ovv[1] = holes[0]（球体4）的子实体
+  // ovv[2] = holes[1]（球体5）的子实体 ... 以此类推
+  gmsh::logger::write(&quot;before/after volume relations:&quot;);
+  std::vector&lt;std::pair&lt;int, int&gt;&gt; in(1, std::pair&lt;int, int&gt;(3, 3));
+  in.insert(in.end(), holes.begin(), holes.end());
+  for(std::size_t i = 0; i &lt; in.size(); i++) {
+    std::string s = &quot;parent (&quot; + std::to_string(in[i].first) + &quot;,&quot; +
+                    std::to_string(in[i].second) + &quot;) -&gt; child&quot;;
+    for(std::size_t j = 0; j &lt; ovv[i].size(); j++) {
+      s += &quot; (&quot; + std::to_string(ovv[i][j].first) + &quot;,&quot; +
+           std::to_string(ovv[i][j].second) + &quot;)&quot;;
+    }
+    gmsh::logger::write(s);
+  }
+</code></pre>
+<p><code>gmsh::logger::write(msg)</code> 将自定义消息写入日志缓冲区。这对于查看布尔运算后的实体标签变化非常有用——你不需要在 GUI 中手工查找，日志会精确告诉你每个父子关系。</p>
+<h3 id="1636">16.3.6 同步与物理组定义</h3>
+<pre><code class="language-cpp">  // 将 OpenCASCADE 内核中的几何同步到 Gmsh 模型中
+  // 在所有 occ 操作完成后、物理组定义/网格生成前，必须调用此函数
+  gmsh::model::occ::synchronize();
+</code></pre>
+<p><strong><code>synchronize()</code> 的作用</strong>：OpenCASCADE 内核维护自己的几何数据库，<code>synchronize()</code> 将 occ 内核中的所有实体"拉取"到 Gmsh 的通用模型数据库中。此后才能进行物理组定义、网格生成等操作。这是一个容易遗漏但至关重要的步骤。</p>
+<pre><code class="language-cpp">  // 定义物理组
+  // 由于 OCCBooleanPreserveNumbering 选项的作用，
+  // 5 个球体的标签在 fragment 后被保留（4, 5, 6, 7, 8）
+  for(int i = 1; i &lt;= 5; i++)
+    gmsh::model::addPhysicalGroup(3, {3 + i}, i); // 物理组标签 1~5
+
+  // 立方体的标签在 fragment 后会改变，需从 ov 中动态获取
+  // ov[0] 是 fragment 产生的第一个体积（原立方体的残体）
+  gmsh::model::addPhysicalGroup(3, {ov[0].second}, 10); // 物理组标签 10
+</code></pre>
+<p>这里体现了动态获取布尔输出标签的重要性：5 个球体标签得以保留（因为 <code>OCCBooleanPreserveNumbering</code> 默认开启），但立方体标签 <strong>不会</strong> 保留——必须从 <code>ov</code> 中获取。</p>
+<h3 id="1637-getclosestentities">16.3.7 实体查找技巧（一）：getClosestEntities 找面</h3>
+<pre><code class="language-cpp">  // 目标：找到模型的所有边界面中，
+  //       距离点 (1, 1, 0.5) 最近的 2 个面 → 即顶部面和右侧面
+  gmsh::model::getEntities(ov, 3);       // 获取所有体积实体
+  std::vector&lt;std::pair&lt;int, int&gt;&gt; ov2;
+  gmsh::model::getBoundary(ov, ov2);     // 获取这些体积的所有边界面
+  std::vector&lt;double&gt; dist, coord;
+  // 在所有边界面中，找到距离点(1,1,0.5)最近的 2 个面
+  gmsh::model::occ::getClosestEntities(1, 1, 0.5,  // 查询点坐标
+                                        ov2,        // 候选实体列表
+                                        ov,         // 输出：最近实体 dimTag
+                                        dist,       // 输出：对应的距离
+                                        coord,      // 输出：实体上的最近点坐标
+                                        2);         // 返回数量 N=2
+  // ov 现在包含 2 个 dimTag：{2, surfaceTag}, {2, surfaceTag}
+  gmsh::model::addPhysicalGroup(2, {ov[0].second, ov[1].second}, 100,
+                                &quot;Top &amp; right surfaces&quot;);
+</code></pre>
+<p><code>occ::getClosestEntities(x, y, z, candidates, out, dist, coord, N)</code> 是一个强大的几何查询工具，它对候选实体列表中的每个实体计算到查询点的最近距离，返回距离最小的 N 个实体。在上述代码中，我们首先通过 <code>getBoundary</code> 获取边界面的全集，然后通过 <code>getClosestEntities</code> 筛选出距离 (1,1,0.5) 最近的两个面——这正是顶部面（z=1）和右侧面（x=1）。</p>
+<h3 id="1638-getentitiesinboundingbox">16.3.8 实体查找技巧（二）：getEntitiesInBoundingBox 找点</h3>
+<pre><code class="language-cpp">  double eps = 1e-3;
+  // 在包围盒中搜索：中心 (0.5, 0.5, 0.5)，半边长 eps
+  // 这将找到 L 形立方体的凹角点（原小立方体被切位置的对角点）
+  gmsh::model::getEntitiesInBoundingBox(
+      0.5 - eps, 0.5 - eps, 0.5 - eps,  // xmin, ymin, zmin
+      0.5 + eps, 0.5 + eps, 0.5 + eps,  // xmax, ymax, zmax
+      ov, 0);  // out: 存放找到的实体；dim=0 表示只找 0 维实体（点）
+</code></pre>
+<p><code>getEntitiesInBoundingBox(xmin, ymin, zmin, xmax, ymax, zmax, out, dim)</code> 在指定的轴对齐包围盒内查找指定维度的实体。这里用于精确定位一个几何特征点（L 形拐角处）——该点附近需要较高的网格密度以捕捉几何细节。</p>
+<h3 id="1639">16.3.9 网格尺寸设置与生成</h3>
+<pre><code class="language-cpp">  double lcar1 = .1;     // 全局默认尺寸
+  double lcar2 = .0005;  // 拐角点极细尺寸
+  double lcar3 = .055;   // 球体表面中等尺寸
+
+  // 为所有点设置默认尺寸
+  gmsh::model::getEntities(ov, 0);      // 获取所有 0D 实体（点）
+  gmsh::model::mesh::setSize(ov, lcar1); // 统一设为 0.1
+
+  // 覆盖球体上的点：使用更细的尺寸
+  gmsh::model::getBoundary(holes, ov, false, false, true);
+  //                          ↑    ↑     ↑      ↑     ↑
+  //                        输入 输出  合并  定向 仅返回低维
+  //  参数说明：
+  //    combined=false   — 不合并相邻实体
+  //    oriented=false   — 不需要方向信息
+  //    recursive=true   — 递归获取所有低维边界（包括本维度及以下）
+  gmsh::model::mesh::setSize(ov, lcar3); // 球体点尺寸 0.055
+
+  // 拐角点特殊加密
+  gmsh::model::getEntitiesInBoundingBox(0.5 - eps, 0.5 - eps, 0.5 - eps,
+                                         0.5 + eps, 0.5 + eps, 0.5 + eps,
+                                         ov, 0);
+  gmsh::model::mesh::setSize(ov, lcar2); // 拐角点尺寸 0.0005
+
+  gmsh::model::mesh::generate(3);
+  gmsh::write(&quot;t16.msh&quot;);
+</code></pre>
+<p><code>mesh::setSize(entities, size)</code> 是 <code>mesh::setSize(dimTags, size)</code> 的重载形式，对实体列表中的所有实体施加统一的网格尺寸约束。这与第4章中通过点级 <code>lc</code> 参数控制尺寸本质相同，但 <code>mesh::setSize</code> 更加灵活——你可以对任意实体列表（点、线、面）批量设置，适用于布尔运算后不知道点标签的场景。</p>
+<p><code>getBoundary</code> 的 <code>recursive=true</code> 参数允许从体积递归获取所有边界点，省去了先获取面再获取线再获取点的繁琐过程。</p>
+<h3 id="16310-gui">16.3.10 日志检索与 GUI 启动</h3>
+<pre><code class="language-cpp">  // 检索并输出日志
+  std::vector&lt;std::string&gt; log;
+  gmsh::logger::get(log);
+  std::cout &lt;&lt; &quot;Logger has recorded &quot; &lt;&lt; log.size() &lt;&lt; &quot; lines&quot; &lt;&lt; std::endl;
+  gmsh::logger::stop();
+
+  // 启动 GUI（可通过 -nopopup 参数禁止）
+  std::set&lt;std::string&gt; args(argv, argv + argc);
+  if(!args.count(&quot;-nopopup&quot;)) gmsh::fltk::run();
+
+  gmsh::finalize();
+  return 0;
+}
+</code></pre>
+<p>日志系统 API：
+- <code>gmsh::logger::start()</code> — 开始记录
+- <code>gmsh::logger::write(msg)</code> — 写入一条消息
+- <code>gmsh::logger::get(log)</code> — 获取所有已记录的消息
+- <code>gmsh::logger::stop()</code> — 停止记录</p>
+<hr />
+<h2 id="164">16.4 完整可运行代码</h2>
+<pre><code class="language-cpp">// ch16_occ_csg.cpp — OpenCASCADE 内核与 CSG 布尔运算
+// 编译: g++ -o ch16_occ_csg ch16_occ_csg.cpp -lgmsh
+#include &lt;set&gt;
+#include &lt;iostream&gt;
+#include &lt;gmsh.h&gt;
+
+int main(int argc, char **argv)
+{
+    gmsh::initialize(argc, argv);
+    gmsh::model::add(&quot;ch16&quot;);
+
+    // ---- 1. 启动日志 ----
+    gmsh::logger::start();
+
+    // ---- 2. 创建基本体（OpenCASCADE 一步完成） ----
+    try {
+        // addBox(x, y, z, dx, dy, dz, tag)
+        gmsh::model::occ::addBox(0, 0, 0, 1, 1, 1, 1);       // 标签1: 单位立方体
+        gmsh::model::occ::addBox(0, 0, 0, 0.5, 0.5, 0.5, 2); // 标签2: 1/8角小立方体
+    } catch(...) {
+        gmsh::logger::write(&quot;Could not create OpenCASCADE shapes!&quot;);
+        return 0;
+    }
+
+    // ---- 3. 布尔差：挖去八分之一角 ----
+    std::vector&lt;std::pair&lt;int, int&gt;&gt; ov;
+    std::vector&lt;std::vector&lt;std::pair&lt;int, int&gt;&gt;&gt; ovv;
+    // cut: 立方体1 - 小立方体2, 结果标签设为3
+    gmsh::model::occ::cut({{3, 1}}, {{3, 2}}, ov, ovv, 3);
+
+    // ---- 4. 创建 5 个球体（球形夹杂） ----
+    double x = 0, y = 0.75, z = 0, r = 0.09;
+    std::vector&lt;std::pair&lt;int, int&gt;&gt; holes;
+    for(int t = 1; t &lt;= 5; t++) {
+        x += 0.166;
+        z += 0.166;
+        gmsh::model::occ::addSphere(x, y, z, r, 3 + t);
+        holes.push_back({3, 3 + t});
+    }
+
+    // ---- 5. 共形布尔分片：保留球体 + 保证共形界面 ----
+    gmsh::model::occ::fragment({{3, 3}}, holes, ov, ovv);
+
+    // 打印 fragment 的输出信息
+    gmsh::logger::write(&quot;fragment produced volumes:&quot;);
+    for(auto e : ov)
+        gmsh::logger::write(&quot;  (&quot; + std::to_string(e.first) + &quot;,&quot;
+                            + std::to_string(e.second) + &quot;)&quot;);
+
+    // ---- 6. 同步几何 ----
+    gmsh::model::occ::synchronize();
+
+    // ---- 7. 定义物理组 ----
+    // 球体标签 4~8 在 fragment 后保留（OCCBooleanPreserveNumbering）
+    for(int i = 1; i &lt;= 5; i++)
+        gmsh::model::addPhysicalGroup(3, {3 + i}, i);
+
+    // 立方体标签变化，从 ov[0] 动态获取
+    gmsh::model::addPhysicalGroup(3, {ov[0].second}, 10);
+
+    // ---- 8. 实体查找：找到顶部面和右侧面 ----
+    gmsh::model::getEntities(ov, 3);                // 所有体积
+    std::vector&lt;std::pair&lt;int, int&gt;&gt; ov2;
+    gmsh::model::getBoundary(ov, ov2);              // 所有边界面
+    std::vector&lt;double&gt; dist, coord;
+    gmsh::model::occ::getClosestEntities(1, 1, 0.5, // 查询点
+                                          ov2,       // 候选集合
+                                          ov,        // 输出: 最近2个面
+                                          dist, coord, 2);
+    gmsh::model::addPhysicalGroup(2, {ov[0].second, ov[1].second},
+                                  100, &quot;Top &amp; right surfaces&quot;);
+
+    // ---- 9. 设置网格尺寸 ----
+    double lcar1 = .1;     // 全局默认
+    double lcar2 = .0005;  // 拐角加密
+    double lcar3 = .055;   // 球体表面
+
+    // 所有点默认尺寸
+    gmsh::model::getEntities(ov, 0);
+    gmsh::model::mesh::setSize(ov, lcar1);
+
+    // 球体上的点用中等尺寸覆盖
+    gmsh::model::getBoundary(holes, ov, false, false, true);
+    gmsh::model::mesh::setSize(ov, lcar3);
+
+    // 拐角点特殊加密（包围盒查找）
+    double eps = 1e-3;
+    gmsh::model::getEntitiesInBoundingBox(
+        0.5 - eps, 0.5 - eps, 0.5 - eps,
+        0.5 + eps, 0.5 + eps, 0.5 + eps, ov, 0);
+    gmsh::model::mesh::setSize(ov, lcar2);
+
+    // ---- 10. 生成网格 ----
+    gmsh::model::mesh::generate(3);
+    gmsh::write(&quot;ch16_occ_csg.msh&quot;);
+
+    // ---- 11. 检索日志 ----
+    std::vector&lt;std::string&gt; log;
+    gmsh::logger::get(log);
+    std::cout &lt;&lt; &quot;Logger has recorded &quot; &lt;&lt; log.size() &lt;&lt; &quot; lines&quot; &lt;&lt; std::endl;
+    gmsh::logger::stop();
+
+    // ---- 12. GUI ----
+    std::set&lt;std::string&gt; args(argv, argv + argc);
+    if(!args.count(&quot;-nopopup&quot;)) gmsh::fltk::run();
+
+    gmsh::finalize();
+    return 0;
+}
+</code></pre>
+<hr />
+<h2 id="165-api">16.5 关键 API 速查表</h2>
+<h3 id="1651">16.5.1 基本体创建</h3>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>签名</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>occ::addBox</code></td>
+<td><code>(x,y,z,dx,dy,dz,tag)</code></td>
+<td>轴对齐长方体</td>
+</tr>
+<tr>
+<td><code>occ::addSphere</code></td>
+<td><code>(xc,yc,zc,r,tag)</code></td>
+<td>球体</td>
+</tr>
+<tr>
+<td><code>occ::addCylinder</code></td>
+<td><code>(xc,yc,zc,dx,dy,dz,r,tag)</code></td>
+<td>圆柱体（任意轴向）</td>
+</tr>
+<tr>
+<td><code>occ::addCone</code></td>
+<td><code>(xc,yc,zc,dx,dy,dz,r1,r2,tag)</code></td>
+<td>圆台/圆锥（r2=0）</td>
+</tr>
+<tr>
+<td><code>occ::addTorus</code></td>
+<td><code>(xc,yc,zc,r1,r2,tag)</code></td>
+<td>圆环体（r1 主半径, r2 管半径）</td>
+</tr>
+<tr>
+<td><code>occ::addWedge</code></td>
+<td><code>(x,y,z,dx,dy,dz,tag)</code></td>
+<td>楔形体</td>
+</tr>
+<tr>
+<td><code>occ::addRectangle</code></td>
+<td><code>(x,y,z,dx,dy,tag)</code></td>
+<td>二维矩形面</td>
+</tr>
+<tr>
+<td><code>occ::addDisk</code></td>
+<td><code>(xc,yc,zc,rx,ry,tag)</code></td>
+<td>二维圆/椭圆盘</td>
+</tr>
+<tr>
+<td><code>occ::addPlaneSurface</code></td>
+<td><code>(wireTags,tag)</code></td>
+<td>由线框生成填充面</td>
+</tr>
+</tbody>
+</table>
+<h3 id="1652">16.5.2 布尔运算</h3>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>签名</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>occ::cut</code></td>
+<td><code>(objDimTags,toolDimTags,out,outMap,tag,removeObj,removeTool)</code></td>
+<td>差运算 A - B</td>
+</tr>
+<tr>
+<td><code>occ::fuse</code></td>
+<td><code>(objDimTags,toolDimTags,out,outMap,tag,removeObj,removeTool)</code></td>
+<td>并运算 A + B</td>
+</tr>
+<tr>
+<td><code>occ::intersect</code></td>
+<td><code>(objDimTags,toolDimTags,out,outMap,tag,removeObj,removeTool)</code></td>
+<td>交运算 A 交 B</td>
+</tr>
+<tr>
+<td><code>occ::fragment</code></td>
+<td><code>(objDimTags,toolDimTags,out,outMap,tag,removeObj,removeTool)</code></td>
+<td>共形布尔分片</td>
+</tr>
+</tbody>
+</table>
+<h3 id="1653">16.5.3 实体查询</h3>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>getEntities(out, dim)</code></td>
+<td>获取指定维度的所有实体</td>
+</tr>
+<tr>
+<td><code>getBoundary(in, out, combined, oriented, recursive)</code></td>
+<td>获取边界实体。<code>recursive=true</code> 递归获取所有低维边界</td>
+</tr>
+<tr>
+<td><code>getEntitiesInBoundingBox(xmin,ymin,zmin,xmax,ymax,zmax,out,dim)</code></td>
+<td>包围盒查找指定维度实体</td>
+</tr>
+<tr>
+<td><code>occ::getClosestEntities(x,y,z,candidates,out,dist,coord,N)</code></td>
+<td>在候选列表中找距离(x,y,z)最近的 N 个实体</td>
+</tr>
+</tbody>
+</table>
+<h3 id="1654">16.5.4 网格尺寸</h3>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mesh::setSize(dimTags, size)</code></td>
+<td>对实体列表设置统一网格尺寸</td>
+</tr>
+<tr>
+<td><code>mesh::setSizeAtParametricPoints(dim, tag, parametricCoord, sizes)</code></td>
+<td>对指定实体的参数化坐标设置变尺寸（与 <code>Transfinite</code> 配合）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="1655">16.5.5 日志</h3>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>logger::start()</code></td>
+<td>开始记录日志</td>
+</tr>
+<tr>
+<td><code>logger::write(msg)</code></td>
+<td>写入一条日志消息</td>
+</tr>
+<tr>
+<td><code>logger::get(log)</code></td>
+<td>获取所有日志条目</td>
+</tr>
+<tr>
+<td><code>logger::stop()</code></td>
+<td>停止日志记录</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="166">16.6 注意事项</h2>
+<ol>
+<li>
+<p><strong>必须 synchronize</strong>：在所有 OCC 操作完成后、模型查询或网格生成前，必须调用 <code>occ::synchronize()</code>。忘记此调用将导致物理组定义找不到实体或网格生成失败。</p>
+</li>
+<li>
+<p><strong>标签不稳定的问题</strong>：不要假设布尔运算后的实体标签。始终通过 <code>out</code> 参数或实体查询函数动态获取标签。<code>OCCBooleanPreserveNumbering</code> 选项提供的标签保留行为不是普遍保证的。</p>
+</li>
+<li>
+<p><strong>fragment 的性能考虑</strong>：<code>fragment</code> 需要在所有交界面处进行精确的面分割和缝合，计算成本高于 <code>cut</code> 或 <code>fuse</code>。仅在确实需要共形界面（多材料）时使用 <code>fragment</code>，简单减操作使用 <code>cut</code>。</p>
+</li>
+<li>
+<p><strong>实体维度一致性</strong>：<code>{3, tag}</code> 中的维度号必须与实体的实际维度匹配。不能将 2D 面传入期望 3D 体积的布尔运算参数中。</p>
+</li>
+<li>
+<p><strong>removeObject/removeTool 的默认值</strong>：注意默认均为 <code>true</code>，意味着原始实体会被删除。如需保留原始实体（如作为后续操作的参考），显式传入 <code>false</code>。</p>
+</li>
+<li>
+<p><strong>try-catch 保护</strong>：OCC 操作可能因为自相交几何、精度问题等原因抛出异常。对于关键操作使用 <code>try-catch</code> 包裹，避免程序直接崩溃。</p>
+</li>
+<li>
+<p><strong>扩展阅读</strong>：<code>t18.cpp</code>、<code>t19.cpp</code>、<code>t20.cpp</code> 提供了更多 OCC 高级用法示例（螺纹、倒角、STEP 导入等），建议在掌握本章内容后继续学习。</p>
+</li>
+</ol>
+<hr />
+<h2 id="167-built-in">16.7 与 built-in 内核的代码量对比</h2>
+<p>以下是使用两种内核创建相同模型（L 形立方体 + 5 个球形夹杂）的代码对比：</p>
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>built-in 内核（第5章风格）</th>
+<th>OpenCASCADE 内核（本章）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>创建立方体</td>
+<td>8 点 + 12 线 + 6 面 + 1 体 ≈ 30+ 行</td>
+<td><code>addBox(...)</code> 1 行</td>
+</tr>
+<tr>
+<td>挖去一角</td>
+<td>需手动构建边界再拼接实体</td>
+<td><code>cut(...)</code> 1 行</td>
+</tr>
+<tr>
+<td>5 个球体</td>
+<td>无法直接创建（需逐面构建或导入）</td>
+<td><code>addSphere(...)</code> 循环 5 行</td>
+</tr>
+<tr>
+<td>共形界面</td>
+<td>极度繁琐（手动构建接触面拓扑）</td>
+<td><code>fragment(...)</code> 1 行</td>
+</tr>
+<tr>
+<td><strong>总计</strong></td>
+<td><strong>100+ 行</strong></td>
+<td><strong>约 50 行</strong></td>
+</tr>
+</tbody>
+</table>
+<p>这个对比清楚地展示了 OpenCASCADE 内核在复杂几何建模中的压倒性优势。对于 CAE 前处理工程师而言，掌握 OCC 内核和 CSG 方法是进入复杂模型处理的门槛技能。</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
